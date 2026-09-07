@@ -156,6 +156,108 @@ fn mutation_counts(out: &[Mutation]) -> Value {
         "append_transitions":usize::from(matches!(out,[Mutation::Text(_)])),
         "erase_transitions":usize::from(out.iter().any(|m|matches!(m,Mutation::ClearLine)))})
 }
+// Supplement: move over the Unicode grapheme itself, not corpus padding.
+fn directed_movement(h: &Harness, sizes: &[usize]) {
+    for &(class, unit) in CLASSES {
+        for &size in sizes {
+            let text = text_at(size, unit);
+            let graphemes: Vec<_> = text
+                .grapheme_indices(true)
+                .filter(|(_, g)| class == "ascii" || !g.is_ascii())
+                .collect();
+            if graphemes.is_empty() {
+                continue;
+            }
+            for (place, target) in [
+                ("near_end", *graphemes.last().unwrap()),
+                (
+                    "middle",
+                    *graphemes
+                        .iter()
+                        .find(|(i, _)| *i >= size / 2)
+                        .unwrap_or_else(|| graphemes.last().unwrap()),
+                ),
+            ] {
+                let (offset, g) = target;
+                for direction in ["left", "right"] {
+                    let (from, to) = if direction == "left" {
+                        (offset + g.len(), offset)
+                    } else {
+                        (offset, offset + g.len())
+                    };
+                    h.measure(spec("movement",&format!("{direction}_{place}"),size,class,0),
+                        ||editor(&text,from),|e|if direction=="left"{e.left()}else{e.right()},
+                        |e,_|{assert_eq!(e.text(),text);assert_eq!(e.cursor(),to);
+                            json!({"cursor_before":from,"cursor_after":to,"traversed_grapheme_bytes":g.len(),"traversed_non_ascii":!g.is_ascii()})});
+                }
+            }
+        }
+    }
+    // A bounded but deliberately extreme single grapheme distinguishes document
+    // length from grapheme complexity. It does not increase Editor's byte limit.
+    for &size in sizes.iter().filter(|n| **n >= 64) {
+        let marks = (size - 1) / 2;
+        let mut text = "e".to_string();
+        text.push_str(&"\u{301}".repeat(marks));
+        let end = text.len();
+        text.push_str(&"x".repeat(size - end));
+        assert_eq!(text.len(), size);
+        for direction in ["left", "right"] {
+            let (from, to) = if direction == "left" {
+                (end, 0)
+            } else {
+                (0, end)
+            };
+            h.measure(
+                spec("movement", direction, size, "combining_chain", 0),
+                || editor(&text, from),
+                |e| {
+                    if direction == "left" {
+                        e.left()
+                    } else {
+                        e.right()
+                    }
+                },
+                |e, _| {
+                    assert_eq!(e.text(), text);
+                    assert_eq!(e.cursor(), to);
+                    json!({"traversed_grapheme_bytes":end,"combining_marks":marks})
+                },
+            );
+        }
+        let e = editor(&text, end);
+        let p = prompt();
+        h.measure(spec("movement","chain_layout",size,"combining_chain",80),||(),|_|Frame::new(&e,&p,80,24),
+            |_,f|{assert_eq!(f.cursor.row,0);assert_eq!(f.cursor.col,4);json!({"visible_logical_rows":f.lines.len(),"draft_graphemes":text.graphemes(true).count()})});
+    }
+}
+
+fn render_edges(h: &Harness) {
+    let p = prompt();
+    for size in [75, 76, 1836] {
+        let old = editor(&"a".repeat(size), size);
+        let mut new = editor(old.text(), size);
+        new.insert("X").unwrap();
+        h.measure(
+            spec("render_edge", "append_wrap", size, "ascii", 80),
+            || {
+                let mut r = Renderer::default();
+                r.redraw(&old, &p, (80, 24));
+                (r, Some(Frame::new(&new, &p, 80, 24)))
+            },
+            |(r, f)| r.transition(f.take().unwrap()),
+            |_, out| {
+                if size == 75 {
+                    assert_eq!(out, &vec![Mutation::Text("X".into())]);
+                } else {
+                    assert!(out.iter().any(|m| matches!(m, Mutation::ClearLine)));
+                }
+                mutation_counts(out)
+            },
+        );
+    }
+}
+
 fn main() {
     let args: Vec<_> = std::env::args().collect();
     let option = |key: &str, default: &str| {
@@ -167,7 +269,10 @@ fn main() {
     if let Some(pair) = args.windows(2).find(|v| v[0] == "--predict") {
         let c: Value = serde_json::from_slice(&std::fs::read(&pair[1]).unwrap()).unwrap();
         let initial = c["initial"].as_str().unwrap_or("");
-        let mut e = Engine::new(editor(initial, initial.len()));
+        let mut e = Engine::new(editor(
+            initial,
+            c["cursor"].as_u64().map_or(initial.len(), |n| n as usize),
+        ));
         e.editor.admit_history("history first").unwrap();
         e.editor.admit_history("history second").unwrap();
         let initial_effect = e.start(prompt(), (80, 24)).unwrap();
@@ -215,6 +320,15 @@ fn main() {
     } else {
         &[0, 8, 64, 1024, 4096, 16384, 65536, 262144, 1048576]
     };
+    directed_movement(
+        &h,
+        if smoke {
+            &[64]
+        } else {
+            &[64, 4096, 65536, 1048576]
+        },
+    );
+    render_edges(&h);
     h.measure(
         spec("control", "timer_black_box", 0, "none", 0),
         || 0usize,

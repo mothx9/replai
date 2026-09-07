@@ -43,8 +43,8 @@ def run(work, samples, smoke):
                     actual=bytes.fromhex(receipt.decode()).decode()
                     if actual!=expected:
                         failure=f'nonoverlapping semantics: expected {len(expected.encode())} bytes, received {len(actual.encode())}; exact-text check failed'
-                    byte_count=len(s.output)
                     s.finish()
+                    byte_count=len(s.output)
                     if failure:break
                     if n>=2:timings.append(elapsed);traffic.append(byte_count)
                 except (TimeoutError,RuntimeError,AssertionError) as exc:

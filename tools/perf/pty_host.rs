@@ -31,6 +31,9 @@ fn main() {
         e.admit_history(s).unwrap();
     }
     e.insert(&initial).unwrap();
+    if let Some(pos) = case["cursor"].as_u64() {
+        e.replace(pos as usize..pos as usize, "").unwrap();
+    }
     if args.iter().any(|s| s == "--middle") {
         e.home();
         for _ in 0..initial.chars().count() / 2 {

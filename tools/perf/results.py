@@ -32,7 +32,7 @@ def identity():
 
 def environment():
     def read(path):
-        try:return Path(path).read_text().strip()
+        try:return Path(path).read_text(encoding="utf-8").strip()
         except OSError:return None
     cpu=read('/proc/cpuinfo')
     # Preserve unique observed CPU identity fields without thousands of duplicates.
@@ -41,10 +41,11 @@ def environment():
     return dict(recorded_utc=time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),hostname=platform.node(),
         os=platform.platform(),kernel=platform.release(),architecture=platform.machine(),cpu=cpu_identity or command('sysctl','-n','machdep.cpu.brand_string'),
         logical_cores=os.cpu_count(),affinity=sorted(os.sched_getaffinity(0)) if hasattr(os,'sched_getaffinity') else None,
-        meminfo=read('/proc/meminfo'),governors=governors or None,loadavg=os.getloadavg(),
+        meminfo=read('/proc/meminfo'),governors=governors or None,loadavg=os.getloadavg() if hasattr(os,'getloadavg') else None,
         rust=command('rustc','-Vv'),cargo=command('cargo','-V'),c_compiler=command('cc','--version'),
         python=sys.version,clock=dict(implementation=time.get_clock_info('perf_counter').implementation,resolution_seconds=time.get_clock_info('perf_counter').resolution),
-        strace=command('strace','-V'),valgrind=command('valgrind','--version'),build_profile='release opt-level=3 debug=1 panic=unwind, no LTO or CPU-native override',
+        strace=command('strace','-V'),valgrind=command('valgrind','--version'),
+        build_environment={k:os.environ.get(k) for k in ['RUSTFLAGS','CARGO_ENCODED_RUSTFLAGS','CARGO_BUILD_TARGET','CARGO_PROFILE_RELEASE_OPT_LEVEL']},build_profile='release opt-level=3 debug=1 panic=unwind, no LTO or CPU-native override',
         host_description=os.environ.get('P0_MACHINE','unspecified: supply P0_MACHINE for an authoritative run'),
         memory_cgroup_max=read('/sys/fs/cgroup/memory.max'),cpu_cgroup_max=read('/sys/fs/cgroup/cpu.max'),
         terminal='Linux openpty 80x24, controlling TTY, xterm-256color, NO_COLOR; no terminal emulator',
@@ -107,7 +108,7 @@ def validate(data):
 def envelope(raw_files, receipt):
     rows=[]
     for path in raw_files:
-        for line in path.read_text().splitlines():
+        for line in path.read_text(encoding="utf-8").splitlines():
             if line.strip():rows.append(summarize(json.loads(line)))
     data=dict(schema_version=SCHEMA,source=receipt['source'],environment=receipt['environment'],
         methodology=dict(outlier_policy='retain all valid samples; no trimming',percentiles='nearest rank; median averages middle pair',
@@ -127,5 +128,5 @@ if __name__=='__main__':
     check=sub.add_parser('validate');check.add_argument('path',type=Path)
     a=p.parse_args()
     if a.command=='record':a.output.write_text(json.dumps(dict(source=identity(),environment=environment()),indent=2)+'\n')
-    elif a.command=='summarize':a.output.write_text(json.dumps(envelope(a.raw,json.loads(a.receipt.read_text())),separators=(',',':'))+'\n')
-    else:print(f'valid: {validate(json.loads(a.path.read_text()))} results')
+    elif a.command=='summarize':a.output.write_text(json.dumps(envelope(a.raw,json.loads(a.receipt.read_text(encoding="utf-8"))),separators=(',',':'))+'\n')
+    else:print(f'valid: {validate(json.loads(a.path.read_text(encoding="utf-8")))} results')

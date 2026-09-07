@@ -12,8 +12,8 @@ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--qualification',
 a.work.mkdir(parents=True,exist_ok=True)
 artifacts={
     'rust_example': ROOT/'target/release/examples/demo',
-    'c_static_consumer':a.qualification/'consumer/demo-static',
-    'c_shared_consumer':a.qualification/'consumer/demo-shared',
+    'c_static_consumer':a.qualification/'consumer/demo-static-release',
+    'c_shared_consumer':a.qualification/'consumer/demo-shared-release',
     'dynamic_library':a.qualification/'prefix/lib/libreplai_c.so',
     'static_archive':a.qualification/'prefix/lib/libreplai_c.a',
 }
@@ -27,4 +27,4 @@ for name,path in artifacts.items():
         stripped=output.stat().st_size
     print(json.dumps(dict(schema_version=1,id='size/'+name,component='embedding',operation=name,status='measured',mode='size',iterations=1,
         counters=dict(unstripped_bytes=path.stat().st_size,stripped_bytes=stripped),sha256=hashlib.sha256(path.read_bytes()).hexdigest(),
-        sections=command('size',str(path)),scope='absolute release artifact; C host uses qualification compiler flags (no -O), library release; static archive not final consumer size')))
+        sections=command('size',str(path)),scope='absolute release artifact; C host cc -O2 with isolated C01-C15 qualification, library release; static archive not final consumer size')))

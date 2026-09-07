@@ -2,12 +2,19 @@
 """Reject invalid timing, missing provenance, mixed instrumentation and duplicates."""
 import copy
 import unittest
+from unittest import mock
+from types import SimpleNamespace
 from results import distribution, summarize, validate
 
 class Integrity(unittest.TestCase):
     def valid(self):
         return dict(schema_version=1,source={'head':'a'*40},environment={'rust':'recorded'},methodology={'outlier_policy':'retain all valid samples; no trimming'},
             results=[dict(schema_version=1,id='test',component='test',status='measured',mode='latency',iterations=3,timing=distribution([1,2,3]))])
+    def test_environment_without_posix_load_average(self):
+        from results import environment
+        with mock.patch('results.os',SimpleNamespace(cpu_count=lambda:2,environ={})), mock.patch('results.command',return_value='unavailable'):
+            self.assertIsNone(environment()['loadavg'])
+
     def test_statistics(self):
         self.assertEqual(distribution([9,1,3,2])['median'],2.5)
         self.assertEqual(distribution(list(range(1,101)))['p95'],95)

@@ -57,7 +57,9 @@ class Session:
         remaining = deadline-time.monotonic()
         if remaining <= 0:
             raise TimeoutError(f'PTY timeout: exit={self.process.poll()}, stderr={self.receipts[-500:]!r}, output={self.output[-200:]!r}')
-        for key, _ in self.selector.select(remaining):
+        for key, events in self.selector.select(remaining):
+            if key.fd==self.master and not events & selectors.EVENT_READ:
+                continue
             try:
                 data = os.read(key.fd, 65536)
             except OSError as exc:
@@ -78,18 +80,30 @@ class Session:
     def until(self, predicate, timeout=30):
         deadline=time.monotonic()+timeout
         while not predicate():
-            if not self.selector.get_map() and self.process.poll() is not None:
+            if self.process.poll() is not None and self.control not in self.selector.get_map():
+                while True:
+                    try:
+                        data=os.read(self.master,65536)
+                        if not data:break
+                        self.output.extend(data)
+                    except BlockingIOError:break
+                if predicate():return
                 raise RuntimeError(f'PTY exited prematurely: {self.receipts[-500:]!r}')
             self.pump(deadline)
 
     def send(self, data, timeout=120):
         end=time.monotonic()+timeout
+        data=memoryview(data)
         while data:
             try:
                 n=os.write(self.master, data)
                 data=data[n:]
             except BlockingIOError:
-                self.pump(end)
+                # Paste emits nothing until the closing delimiter. Waiting only
+                # for readable output here deadlocks and expires a valid paste.
+                self.selector.modify(self.master,selectors.EVENT_READ|selectors.EVENT_WRITE)
+                try:self.pump(end)
+                finally:self.selector.modify(self.master,selectors.EVENT_READ)
 
     def ready(self, expected_initial=None, gate=False):
         self.until(lambda: b'READY\n' in self.receipts)
@@ -139,6 +153,7 @@ def cases(smoke=False):
     result=[
         dict(name='ascii_append',initial='x'*64,input='X',expected='x'*64+'X'),
         dict(name='unicode_append',initial='café 界',input='🌍',expected='café 界🌍'),
+        dict(name='middle_insert',initial='a'*64,cursor=32,input='X',expected='a'*32+'X'+'a'*32),
         dict(name='middle_edit',initial='a'*64,input='\x01'+'\x1b[C'*32+'X',expected='a'*32+'X'+'a'*32),
         dict(name='cursor_movement',initial='café 界',input='\x1b[D',expected='café 界'),
         dict(name='history',initial='unsent',input='\x1b[A',expected='history second'),
@@ -147,6 +162,9 @@ def cases(smoke=False):
         dict(name='resize',initial='draft '*20,input='',resize=20,expected='draft '*20),
         dict(name='multiline_paste',initial='',input='\x1b[200~first\n界 second\nthird\x1b[201~',expected='first\n界 second\nthird'),
     ]
+    if smoke:
+        body='a'*65536
+        result.append(dict(name='paste_backpressure_65536',initial='',input='\x1b[200~'+body+'\x1b[201~',expected=body,text_class='ascii',input_bytes=65536))
     if not smoke:
         # A single edit with cursor setup excluded, to separate it from the
         # compound navigation+edit scenario above.
@@ -235,14 +253,15 @@ def idle_and_output(work, smoke):
             session=Session([HOST,'--mode','idle','--timeout-ms',timeout,'--seconds',seconds])
             try:
                 session.ready(gate=True);start=time.monotonic()
-                stat=Path(f'/proc/{session.process.pid}/stat')
-                before=stat.read_text().split();context=Path(f'/proc/{session.process.pid}/status').read_text()
+                context=Path(f'/proc/{session.process.pid}/status').read_text()
+                rss=re.search(r'^VmRSS:\s+(\d+) kB',context,re.M)
+                resident_kib=int(rss[1]) if rss else None
                 session.until(lambda:b'"poll_calls"' in session.receipts,timeout=seconds+10)
                 # Child-reported calls provide exact waits; /proc snapshot is a
                 # coarse optional view. wait4 rusage includes startup+cleanup.
                 cpu=session.finish()
                 value=next(json.loads(x) for x in session.receipts.splitlines() if x.startswith(b'{'))
-                value.update(cpu_seconds_lifecycle=cpu,window_seconds=time.monotonic()-start)
+                value.update(cpu_seconds_lifecycle=cpu,window_seconds=time.monotonic()-start,resident_kib_at_ready=resident_kib)
                 observations.append(value)
             except BaseException:session.abort();raise
         yield dict(schema_version=1,id=f'idle/{timeout}',component='idle',operation='poll',status='measured',mode='idle',iterations=len(observations),observations=observations,
