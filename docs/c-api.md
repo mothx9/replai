@@ -249,3 +249,8 @@ Unicode width, terminal reflow, TERM=dumb, unframed paste and external-output
 limitations remain those in [interaction](interaction.md) and
 [presentation](presentation.md). No consumer integration or release is performed
 by this qualification.
+
+ABI 1 descriptor acquisition remains a POSIX-style, Linux-qualified compatibility
+contract. The underlying Rust interaction engine is platform-neutral; this does
+not make integer file descriptors a Windows terminal endpoint contract. No new
+C acquisition API or ABI identity is introduced by the architecture refoundation.

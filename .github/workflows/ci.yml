@@ -59,7 +59,7 @@ jobs:
       - run: cargo fmt --check
       - run: cargo check --workspace --all-targets
       - name: Rust core and public boundary
-        run: cargo test --workspace --lib --test core --test foundation
+        run: cargo test --workspace --lib --test core --test foundation --test architecture
       - name: Rust PTY behavior
         run: cargo test -p replai --test pty
       - name: Rust release regressions
@@ -102,3 +102,32 @@ jobs:
         run: |
           git diff --check
           test -z "$(git status --porcelain)"
+
+  portable-engine:
+    name: Portable engine (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    env:
+      RUSTFLAGS: -D warnings
+      RUSTDOCFLAGS: -D warnings
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87
+        with:
+          toolchain: stable
+          components: clippy
+      - name: Record native platform and compiler
+        run: rustc --version --verbose
+      - name: Compile platform-neutral public library
+        run: cargo check --locked -p replai --lib
+      - name: Deterministic engine, protocol, layout and virtual transport conformance
+        run: cargo test --locked -p replai --lib --test core --test architecture
+      - name: Native library lint and documentation
+        run: |
+          cargo clippy --locked -p replai --lib -- -D warnings
+          cargo test --locked -p replai --doc

@@ -22,7 +22,9 @@ Prompt fields are plain control-free text, at most 1024 bytes each. The label
 and optional literal suffix compose as `<Accent>label+suffix><Default> `;
 continuations default to `... `. No raw ANSI prompt injection is accepted.
 Style roles are Default, Strong, Accent, Dim, Success, Warning and Error. All
-SGR values have one authority in [`Theme`](../src/presentation.rs). No background color or alternate
+SGR values have one authority in the [VT encoder](../src/protocol.rs); the public
+`Theme::sequence` compatibility method delegates there. Layout retains semantic
+roles and cell geometry before encoding. No background color or alternate
 screen is set. Non-TTY output, `NO_COLOR` present (including empty), or
 `TERM=dumb` disables styling. Disabling color emits no SGR, including no reset
 residue, while preserving text. `TERM=dumb` follows the reference's color rule; it is **not** a

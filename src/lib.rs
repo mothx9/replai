@@ -1,7 +1,7 @@
 //! An embeddable terminal interaction library for line-oriented and REPL-style
 //! command interfaces.
 //!
-//! Early Rust API: deterministic Unicode editing and a Linux terminal adapter.
+//! Platform-neutral editing and interaction engine, with a Linux-qualified system façade.
 //! Hosts retain input meaning, completion discovery and history admission.
 //!
 //! ```
@@ -17,6 +17,8 @@
 //! A host owns the loop, including what to do after submission or interruption:
 //!
 //! ```no_run
+//! # #[cfg(target_os = "linux")]
+//! # fn example() -> Result<(), Box<dyn std::error::Error>> {
 //! use replai::{Editor, Event, Prompt, Interaction};
 //! use std::time::Duration;
 //! let mut terminal = Interaction::new(Editor::new(65_536, 100));
@@ -32,15 +34,40 @@
 //!         None => {}
 //!     }
 //! }
-//! # Ok::<(), Box<dyn std::error::Error>>(())
+//! # Ok(())
+//! # }
 //! ```
 
+mod capabilities;
 mod core;
+mod event;
+mod interaction;
+// Non-Linux system façades are intentionally absent. These internal components
+// compile everywhere and execute through deterministic tests on every CI OS.
+#[cfg_attr(not(target_os = "linux"), allow(dead_code))]
+mod actions;
+#[cfg_attr(not(target_os = "linux"), allow(dead_code))]
+mod engine;
+#[cfg_attr(not(target_os = "linux"), allow(dead_code))]
 mod input;
+#[cfg_attr(not(target_os = "linux"), allow(dead_code))]
+mod keymap;
+#[cfg_attr(not(target_os = "linux"), allow(dead_code))]
 mod presentation;
+#[cfg_attr(not(target_os = "linux"), allow(dead_code))]
+mod protocol;
+#[cfg_attr(not(target_os = "linux"), allow(dead_code))]
+mod render;
+#[cfg_attr(not(target_os = "linux"), allow(dead_code))]
+mod substrate;
 #[cfg(target_os = "linux")]
+mod system;
+#[cfg_attr(not(target_os = "linux"), allow(dead_code))]
 mod terminal;
 pub use core::{EditError, Editor};
+pub use event::{Error, Event};
+pub use interaction::Interaction;
 pub use presentation::{Prompt, Role, Theme};
-#[cfg(target_os = "linux")]
-pub use terminal::{Error, Event, Interaction};
+
+#[cfg(test)]
+mod conformance;

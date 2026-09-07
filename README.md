@@ -26,7 +26,7 @@ Your application supplies the prompt, decides what the input means, and keeps
 control of execution. An interpreter, database shell, debugger or developer tool
 can use the same interaction machinery with its own language and policies.
 
-**Pre-release · Linux-qualified.** The Rust API and C ABI 1 are experimental.
+**Pre-release · Linux terminal backend qualified.** The Rust API and C ABI 1 are experimental.
 Use an exact revision; no stable API/ABI or published crate release is promised.
 See [project status](ROADMAP.md) for demonstrated scope and current limits.
 
@@ -117,7 +117,10 @@ the next grapheme. The example owns these loop decisions and history admission.
 
 ## Embed in Rust
 
-An `Interaction` owns the editor and acquires a terminal only while editing.
+An `Interaction` owns a platform-neutral editing/interaction engine. Its current
+Linux system façade acquires a terminal only while editing. See the
+[architecture](docs/architecture.md) for protocol/system separation and the
+distinction between portable core tests and interactive platform qualification.
 The host polls events and decides when to open the next interaction. For example,
 this program reads one submitted input, keeping interruption and EOF distinct:
 

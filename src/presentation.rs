@@ -37,26 +37,11 @@ impl Theme {
     }
     /// Resolve styling from NO_COLOR and TERM for the supplied output capability.
     pub fn from_environment(output_is_tty: bool) -> Self {
-        Self::new(
-            output_is_tty,
-            std::env::var_os("NO_COLOR").is_some(),
-            std::env::var("TERM").ok().as_deref(),
-        )
+        crate::capabilities::environment_theme(output_is_tty)
     }
     /// Return the SGR sequence for a generic role, or empty text when color is disabled.
     pub fn sequence(self, role: Role) -> &'static str {
-        if !self.color {
-            return "";
-        }
-        match role {
-            Role::Default => "\x1b[0m",
-            Role::Strong => "\x1b[1;38;5;250m",
-            Role::Accent => "\x1b[38;5;81m",
-            Role::Dim => "\x1b[38;5;245m",
-            Role::Success => "\x1b[38;5;114m",
-            Role::Warning => "\x1b[38;5;179m",
-            Role::Error => "\x1b[38;5;203m",
-        }
+        crate::protocol::style(self.color, role)
     }
 }
 
@@ -108,31 +93,32 @@ pub(crate) struct Point {
 }
 #[derive(Debug)]
 pub(crate) struct Frame {
-    pub lines: Vec<String>,
+    pub lines: Vec<Line>,
     pub cursor: Point,
     pub end: Point,
 }
 struct Layout {
-    lines: Vec<String>,
+    lines: Vec<Line>,
     widths: Vec<usize>,
     point: Point,
     columns: usize,
-    style: &'static str,
+    style: Option<Role>,
     wrapped: bool,
 }
 impl Layout {
     fn new(columns: usize) -> Self {
         Self {
-            lines: vec![String::new()],
+            lines: vec![Line::default()],
             widths: vec![0],
             point: Point::default(),
             columns: columns.max(2),
-            style: "",
+            style: None,
             wrapped: false,
         }
     }
     fn newline(&mut self) {
-        self.lines.push(self.style.into());
+        self.lines
+            .push(Line(self.style.map(Run::Style).into_iter().collect()));
         self.widths.push(0);
         self.point.row += 1;
         self.point.col = 0;
@@ -156,7 +142,7 @@ impl Layout {
             if self.point.col + width > self.columns {
                 self.newline();
             }
-            self.lines.last_mut().unwrap().push_str(g);
+            self.lines.last_mut().unwrap().text(g);
             self.wrapped = false;
             self.point.col += width;
             *self.widths.last_mut().unwrap() = self.point.col;
@@ -167,25 +153,19 @@ impl Layout {
             }
         }
     }
-    fn sgr(&mut self, sequence: &'static str) {
-        self.style = sequence;
-        self.lines.last_mut().unwrap().push_str(sequence);
+    fn style(&mut self, role: Role) {
+        self.style = Some(role);
+        self.lines.last_mut().unwrap().0.push(Run::Style(role));
     }
 }
 impl Frame {
-    pub fn new(
-        editor: &Editor,
-        prompt: &Prompt,
-        theme: Theme,
-        columns: usize,
-        rows: usize,
-    ) -> Self {
+    pub fn new(editor: &Editor, prompt: &Prompt, columns: usize, rows: usize) -> Self {
         let mut l = Layout::new(columns);
-        l.sgr(theme.sequence(Role::Accent));
+        l.style(Role::Accent);
         l.text(&prompt.label);
         l.text(&prompt.state);
         l.text(">");
-        l.sgr(theme.sequence(Role::Default));
+        l.style(Role::Default);
         l.text(" ");
         let mut cursor = l.point;
         for (offset, g) in editor.text().grapheme_indices(true) {
@@ -214,7 +194,7 @@ impl Frame {
         let mut lines: Vec<_> = l.lines.drain(start..end).collect();
         // A viewport may begin inside a wrapped styled prompt.
         if start > 0 {
-            lines[0].insert_str(0, theme.sequence(Role::Default));
+            lines[0].0.insert(0, Run::Style(Role::Default));
         }
         let end_row = lines.len() - 1;
         Self {
@@ -229,41 +209,39 @@ impl Frame {
             lines,
         }
     }
-    pub fn erase(&self) -> String {
-        let mut out = String::from("\r");
-        if self.cursor.row > 0 {
-            out += &format!("\x1b[{}A", self.cursor.row);
+}
+
+#[derive(Debug, PartialEq)]
+pub(crate) enum Run {
+    Text(String),
+    Style(Role),
+}
+
+#[derive(Debug, Default, PartialEq)]
+pub(crate) struct Line(pub(crate) Vec<Run>);
+impl Line {
+    fn text(&mut self, text: &str) {
+        if let Some(Run::Text(previous)) = self.0.last_mut() {
+            previous.push_str(text);
+        } else {
+            self.0.push(Run::Text(text.into()));
         }
-        for row in 0..self.lines.len() {
-            out += "\x1b[2K";
-            if row + 1 < self.lines.len() {
-                out += "\x1b[1B\r";
-            }
-        }
-        if self.lines.len() > 1 {
-            out += &format!("\x1b[{}A", self.lines.len() - 1);
-        }
-        out += "\r";
-        out
     }
-    pub fn draw(&self) -> String {
-        let mut out = self.lines.join("\r\n");
-        if self.cursor == self.end {
-            return out;
+    pub fn suffix(&self, old: &Self) -> Option<&str> {
+        if self == old {
+            return Some("");
         }
-        if self.cursor.row == self.end.row && self.cursor.col < self.end.col {
-            out += &format!("\x1b[{}D", self.end.col - self.cursor.col);
-            return out;
+        if self.0.len() != old.0.len() || self.0.is_empty() {
+            return None;
         }
-        out += "\r";
-        let up = self.lines.len() - 1 - self.cursor.row;
-        if up > 0 {
-            out += &format!("\x1b[{up}A");
+        let last = self.0.len() - 1;
+        if self.0[..last] != old.0[..last] {
+            return None;
         }
-        if self.cursor.col > 0 {
-            out += &format!("\x1b[{}C", self.cursor.col);
+        if let (Run::Text(new), Run::Text(old)) = (&self.0[last], &old.0[last]) {
+            return new.strip_prefix(old);
         }
-        out
+        None
     }
 }
 
@@ -296,7 +274,6 @@ mod tests {
                 sequence
             );
             for theme in [
-                Theme::new(false, false, None),
                 Theme::new(true, true, None),
                 Theme::new(true, false, Some("dumb")),
             ] {
@@ -309,38 +286,23 @@ mod tests {
         let mut e = Editor::new(100, 1);
         e.insert("é界e\u{301}🌍").unwrap();
         e.left();
-        let f = Frame::new(
-            &e,
-            &Prompt::new("demo").unwrap(),
-            Theme::new(true, false, None),
-            80,
-            24,
-        );
+        let f = Frame::new(&e, &Prompt::new("demo").unwrap(), 80, 24);
         assert_eq!(f.cursor, Point { row: 0, col: 10 });
         assert_eq!(f.end, Point { row: 0, col: 12 });
-        assert_eq!(f.lines[0], "\x1b[38;5;81mdemo>\x1b[0m é界e\u{301}🌍");
+        assert_eq!(
+            crate::protocol::encode(&f.draw(), Theme::new(true, false, None)),
+            "\x1b[38;5;81mdemo>\x1b[0m é界e\u{301}🌍\x1b[2D"
+        );
     }
     #[test]
     fn wrapping_multiline_tabs_and_tall_drafts_have_bounded_geometry() {
         let mut e = Editor::new(100, 1);
         e.insert("界x\nq\t!").unwrap();
-        let f = Frame::new(
-            &e,
-            &Prompt::new("d").unwrap(),
-            Theme::new(false, false, None),
-            6,
-            24,
-        );
+        let f = Frame::new(&e, &Prompt::new("d").unwrap(), 6, 24);
         assert_eq!(f.cursor, Point { row: 2, col: 3 });
         e.clear();
         e.insert("1\n2\n3\n4\n5").unwrap();
-        let f = Frame::new(
-            &e,
-            &Prompt::new("d").unwrap(),
-            Theme::new(false, false, None),
-            10,
-            3,
-        );
+        let f = Frame::new(&e, &Prompt::new("d").unwrap(), 10, 3);
         assert_eq!(f.lines.len(), 2);
         assert!(f.cursor.row < 2);
         assert!(Prompt::new("bad\x1b[0m").is_err());
@@ -350,18 +312,12 @@ mod tests {
         let mut editor = Editor::new(100, 0);
         editor.insert("👩‍💻").unwrap();
         let theme = Theme::new(true, false, Some("xterm"));
-        let frame = Frame::new(&editor, &Prompt::new("demo").unwrap(), theme, 80, 24);
+        let frame = Frame::new(&editor, &Prompt::new("demo").unwrap(), 80, 24);
         assert_eq!(frame.cursor, Point { row: 0, col: 8 });
         editor.clear();
-        let frame = Frame::new(
-            &editor,
-            &Prompt::new("abcdefghijklmnop").unwrap(),
-            theme,
-            6,
-            3,
-        );
+        let frame = Frame::new(&editor, &Prompt::new("abcdefghijklmnop").unwrap(), 6, 3);
         let mut parser = vt100::Parser::new(3, 6, 0);
-        parser.process(frame.draw().as_bytes());
+        parser.process(crate::protocol::encode(&frame.draw(), theme).as_bytes());
         assert_eq!(
             parser.screen().cell(0, 0).unwrap().fgcolor(),
             vt100::Color::Idx(81)

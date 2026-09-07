@@ -15,6 +15,7 @@ over prose; summaries link to the owner instead of restating its contract.
 | How do I reconcile, validate and report a change? | [Development](development.md) |
 | Which rules must a coding agent follow? | [Agent instructions](../AGENTS.md) |
 | What is demonstrated, limited and next? | [Project status](../ROADMAP.md) |
+| What proves the F0 ownership refoundation? | [F0 engineering evidence](engineering/f0.md) |
 | What changed for a consumer? | [Changelog](../CHANGELOG.md) |
 
 Rustdoc owns method-level Rust API documentation (`cargo doc --no-deps`).

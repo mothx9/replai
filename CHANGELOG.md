@@ -6,6 +6,10 @@ next work. All entries below are unreleased and carry no compatibility promise.
 
 ## Unreleased
 
+- Made interaction state/events available independently of the Linux backend.
+  The platform-neutral engine and semantic render pipeline retain the existing
+  Linux Rust/C behavior; system acquisition outside Linux remains unimplemented.
+
 - Introduced an independent Rust terminal interaction library with bounded
   Unicode/grapheme editing, draft-preserving history, host completion, multiline
   paste, typed outcomes, Linux terminal restoration and coordinated output.

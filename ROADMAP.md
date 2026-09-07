@@ -42,15 +42,18 @@ tradeoffs rather than infer superiority from a feature list.
 | R2 — Interaction API / ABI | Completed: movable native ownership, C ABI 1, installed static/shared consumers, real PTY/layout/resource/memory qualification |
 | R3 — First consumer | Completed: YVEX consumes the qualified C boundary; product execution and cancellation remain host-owned |
 | R4 — Second consumer | Completed: YAI consumes native Rust; transient edits remain distinct from canonical conversation submission |
-| R5 — LEGACY.OWNERSHIP.CLOSURE | **Active**: remove dormant consumer editors and qualify sole ownership on reconciled current consumer trees |
+| R5 — LEGACY.OWNERSHIP.CLOSURE | Consumer editor removal and local qualification established; outstanding YVEX publication reconciliation is externally owned |
 
 Both consumers retain exact qualified revision
 `df5538c718b8d068432032e7fb116fb8bfab158e`. Library documentation evolution does
-not justify repinning. R5 closes only after clean builds, artifact/dependency
-inspection, common real-product PTY behavior and each host's semantic control
-agree; deletion or library CI alone is insufficient.
+not justify repinning. The remaining consumer publication reconciliation does not block independent
+library architecture work unless it demonstrates a reproducible generic contract
+defect. This repository does not declare that external publication complete.
 
-Qualification remains Linux-specific and pre-release. There is no stable API,
+**F0 — PUBLIC.ARCHITECTURE is the active library wave.** F1, P0, P3 and all
+later implementation waves remain planned and have not started.
+
+System-terminal runtime qualification remains Linux-specific and pre-release. There is no stable API,
 ABI, SemVer or MSRV promise. The current implementation has one active terminal
 interaction per linked library image, synchronous safe-text output transactions
 and host-owned signal meaning. It does not support independent concurrent
@@ -73,14 +76,14 @@ This is dependency order, not a promise to finish a whole series before learning
 from another. In particular, the first post-R5 design must consider **API tiers,
 performance baselines and event-loop architecture together**. F0 frames that
 joint investigation; F1, P0 and P3 retain distinct deliverables. A convenient API
-cannot be frozen before understanding its blocking behavior and costs. No F0 or
-later implementation is authorized by the roadmap or by R5 completion.
+cannot be frozen before understanding its blocking behavior and costs. F0 has explicit task authorization; no later implementation is authorized
+by the roadmap or by external consumer closure.
 
 ### Foundation — one engine, several embedding levels
 
 | Wave | Property to establish |
 | --- | --- |
-| F0 — PUBLIC.ARCHITECTURE | Re-evaluate ownership as general infrastructure: editor, terminal substrate, interaction, host analysis, render and output boundaries with no donor-specific assumptions |
+| F0 — PUBLIC.ARCHITECTURE | **Active.** Re-evaluate ownership as general infrastructure: editor, terminal substrate, interaction, host analysis, render and output boundaries with no donor-specific assumptions |
 | F1 — API.TIERS | A small blocking/read-line entry, an explicit host-driven interaction surface, and a driven/multiplexable surface over the same engine; simple programs need no elaborate event loop |
 | F2 — TERMINAL.CAPABILITIES | Explicit capabilities and degradation policy, rather than scattered environment checks; request only features needed by the selected line-oriented interaction |
 

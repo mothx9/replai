@@ -55,10 +55,13 @@ unframed multi-command paste is not promised.
 
 ## Terminal and signal ownership
 
+The following resource contract describes the Linux system façade. The
+platform-neutral engine has no resource lease or OS signal policy.
+
 `Interaction::open` validates TTY input and output and requires the same terminal
 before changing state. It duplicates the FDs, captures full termios and window
 dimensions, enters raw mode with ISIG disabled, enables bracketed paste and draws.
-No input queue is flushed. One active interaction per linked library image is admitted;
+No input queue is flushed. One active system terminal per linked library image is admitted;
 other opens fail before mutation. The small atomic lease prevents competing
 editors but does not install a process-wide signal policy.
 
