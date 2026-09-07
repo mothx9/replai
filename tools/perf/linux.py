@@ -133,6 +133,14 @@ class Session:
         # Read remaining pipe output after exit.
         self.receipts.extend(self.control.read())
         code=self.process.wait()
+        # Process exit/receipt EOF does not drain the PTY queue. Count all bytes
+        # before closing the retained slave/master pair (no quiet-time sleep).
+        while True:
+            try:
+                data=os.read(self.master,65536)
+                if not data:break
+                self.output.extend(data)
+            except BlockingIOError:break
         assert code==0,(code,self.receipts[-1000:])
         assert termios.tcgetattr(self.slave)==self.saved, 'terminal state not restored'
         now=resource.getrusage(resource.RUSAGE_CHILDREN)
@@ -273,13 +281,13 @@ def idle_and_output(work, smoke):
             value=next(json.loads(x) for x in session.receipts.splitlines() if x.startswith(b'{'))
             yield dict(schema_version=1,id=f'idle_syscall/{timeout}',component='idle',operation='poll',status='measured',mode='syscall',iterations=1,
                        counters=trace_counts(trace),elapsed_seconds=value['elapsed_seconds'],poll_calls=value['poll_calls'],scope='after READY through cleanup; CPU from untraced run only')
-    for size in ([80] if smoke else [16,80,1024,4096,16384]):
+    for size in ([80,16384] if smoke else [16,80,1024,4096,16384]):
         for rate in ([20] if smoke else [5,20,50,100,200]):
             seconds=0.2 if smoke else 2
             session=Session([HOST,'--mode','output','--initial','retained draft 界','--size',size,'--rate',rate,'--seconds',seconds])
             try:
                 session.ready(gate=True);session.until(lambda:b'"draft_restored"' in session.receipts,timeout=seconds+30)
-                output=len(session.output);cpu=session.finish()
+                cpu=session.finish();output=len(session.output)
             except BaseException:session.abort();raise
             value=next(json.loads(x) for x in session.receipts.splitlines() if x.startswith(b'{'))
             samples_us=value.pop('samples_us')
