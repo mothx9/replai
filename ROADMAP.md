@@ -54,7 +54,10 @@ defect. This repository does not declare that external publication complete.
 drives deterministic tests and the preserved Linux Rust/C interaction path.
 Native macOS/Windows CI executes the engine and virtual transport; their system
 terminal backends remain unimplemented. See [F0 evidence](docs/engineering/f0.md).
-P0 — PERFORMANCE.BASELINE is active: characterization and qualification only.
+**P0 — PERFORMANCE.BASELINE is completed.** Versioned component/allocation,
+real Linux PTY, idle/output, embedding and pinned comparative measurements are
+recorded in [P0 evidence](docs/engineering/p0.md), with explicit environment,
+variance and unsupported-workload limits. No performance optimization was made.
 F1, P1, P2, P3 and all later implementation waves remain unstarted.
 No next implementation wave is authorized.
 
@@ -104,7 +107,7 @@ inventory does not authorize mouse interfaces, alternate screens or a canvas.
 
 | Wave | Property to establish |
 | --- | --- |
-| P0 — PERFORMANCE.BASELINE | Reproducible latency, throughput, allocations, memory, bytes, writes/syscalls, idle wakeups and artifact-size baselines; fair comparisons with linenoise, rustyline and reedline where workloads overlap |
+| P0 — PERFORMANCE.BASELINE | **Completed.** Reproducible component and Linux PTY latency, allocations, memory, bytes, writes/syscalls, idle and embedding baselines; pinned linenoise/rustyline/reedline overlaps and limitations in [P0 evidence](docs/engineering/p0.md) |
 | P1 — EDITOR.KERNEL.PERFORMANCE | Choose buffer/index/cache strategy from observed costs and bounded-memory constraints, including long Unicode and multiline drafts |
 | P2 — INCREMENTAL.RENDER | Measured frame deltas and batched output that reduce cells mutated, terminal bytes and syscalls while preserving cursor/layout correctness |
 | P3 — EVENT.DRIVER | Host event-loop embedding without artificial periodic polling where readiness/resize mechanisms permit it; no prescribed executor |
@@ -112,7 +115,8 @@ inventory does not authorize mouse interfaces, alternate screens or a canvas.
 Today the editor uses String storage and grapheme traversal; the renderer can
 append a suffix but otherwise redraws the frame. Polling checks dimensions and
 caps waits at 100 ms to avoid taking over resize signals. These are valid
-foundation choices, not measured performance conclusions or immutable designs.
+foundation choices; P0 now records their measured costs without making them
+immutable designs or authorizing their replacement.
 
 P0 must characterize beginning/middle/end edits; ASCII, CJK, combining and emoji
 movement; key-to-frame p50/p95/p99; output chunk rates; lifecycle and FD stability;

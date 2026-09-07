@@ -149,6 +149,11 @@ jobs:
           components: rustfmt, clippy
       - name: Compile, execute, validate separate timing and allocation smoke modes
         run: python tools/perf/smoke.py
+      - name: Validate committed characterization evidence
+        run: |
+          python tools/perf/results.py validate docs/engineering/p0/components.json
+          python tools/perf/results.py validate docs/engineering/p0/systems.json
+          python tools/perf/results.py validate docs/engineering/p0/output-comparison.json
       - name: Benchmark fixture lint
         run: cargo clippy --locked --manifest-path tools/perf/Cargo.toml --all-targets --all-features -- -D warnings
       - name: Real Linux PTY harness smoke (no latency threshold)
