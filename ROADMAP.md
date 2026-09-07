@@ -50,8 +50,12 @@ not justify repinning. The remaining consumer publication reconciliation does no
 library architecture work unless it demonstrates a reproducible generic contract
 defect. This repository does not declare that external publication complete.
 
-**F0 — PUBLIC.ARCHITECTURE is the active library wave.** F1, P0, P3 and all
-later implementation waves remain planned and have not started.
+**F0 — PUBLIC.ARCHITECTURE is completed.** One platform-neutral engine now
+drives deterministic tests and the preserved Linux Rust/C interaction path.
+Native macOS/Windows CI executes the engine and virtual transport; their system
+terminal backends remain unimplemented. See [F0 evidence](docs/engineering/f0.md).
+F1, P0, P3 and all later implementation waves remain planned and have not started.
+No next implementation wave is authorized.
 
 System-terminal runtime qualification remains Linux-specific and pre-release. There is no stable API,
 ABI, SemVer or MSRV promise. The current implementation has one active terminal
@@ -83,7 +87,7 @@ by the roadmap or by external consumer closure.
 
 | Wave | Property to establish |
 | --- | --- |
-| F0 — PUBLIC.ARCHITECTURE | **Active.** Re-evaluate ownership as general infrastructure: editor, terminal substrate, interaction, host analysis, render and output boundaries with no donor-specific assumptions |
+| F0 — PUBLIC.ARCHITECTURE | **Completed.** Platform-neutral interaction/actions/layout/render, separate VT protocol and POSIX resources, native macOS/Windows engine execution and preserved Linux Rust/C qualification |
 | F1 — API.TIERS | A small blocking/read-line entry, an explicit host-driven interaction surface, and a driven/multiplexable surface over the same engine; simple programs need no elaborate event loop |
 | F2 — TERMINAL.CAPABILITIES | Explicit capabilities and degradation policy, rather than scattered environment checks; request only features needed by the selected line-oriented interaction |
 
