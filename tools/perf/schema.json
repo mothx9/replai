@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mothx9/replai/tools/perf/schema-v1",
+  "title": "REPLAI performance characterization v1",
+  "type": "object",
+  "required": ["schema_version", "source", "environment", "methodology", "results"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "source": {"type": "object", "required": ["head", "tree", "branch", "dirty", "source_sha256", "file_sha256"]},
+    "environment": {"type": "object", "required": ["os", "kernel", "architecture", "cpu", "rust", "c_compiler", "clock", "build_profile"]},
+    "methodology": {"type": "object", "required": ["outlier_policy", "percentiles"]},
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["schema_version", "id", "component", "status"],
+        "properties": {
+          "schema_version": {"const": 1},
+          "id": {"type": "string", "minLength": 1},
+          "component": {"type": "string", "minLength": 1},
+          "status": {"enum": ["measured", "unsupported", "unavailable", "not_comparable"]},
+          "mode": {"enum": ["latency", "allocation", "syscall", "idle", "size"]},
+          "iterations": {"type": "integer", "minimum": 1},
+          "timing": {
+            "type": "object",
+            "required": ["unit", "median", "p95", "p99", "min", "max", "mad", "samples"],
+            "properties": {"unit": {"const": "us"}, "median": {"type": "number", "minimum": 0}, "p95": {"type": "number", "minimum": 0}, "p99": {"type": "number", "minimum": 0}, "min": {"type": "number", "minimum": 0}, "max": {"type": "number", "minimum": 0}, "mad": {"type": "number", "minimum": 0}, "samples": {"type": "integer", "minimum": 1}}
+          }
+        },
+        "allOf": [
+          {"if": {"properties": {"status": {"const": "measured"}}}, "then": {"required": ["iterations"]}, "else": {"required": ["reason"]}}
+        ]
+      }
+    }
+  }
+}

@@ -58,7 +58,11 @@ impl Renderer {
         prompt: &Prompt,
         size: (usize, usize),
     ) -> Vec<Mutation> {
-        let frame = Frame::new(editor, prompt, size.0, size.1);
+        self.transition(Frame::new(editor, prompt, size.0, size.1))
+    }
+    // Separate already-built geometry from surface mutation for characterization.
+    // No policy or algorithm changes; the production redraw path calls this seam.
+    pub(crate) fn transition(&mut self, frame: Frame) -> Vec<Mutation> {
         if let Some(old) = &self.frame
             && old.cursor == old.end
             && frame.cursor == frame.end

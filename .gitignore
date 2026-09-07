@@ -5,3 +5,7 @@ __pycache__/
 
 # Documentation-only parser dependencies
 /tools/docs/node_modules/
+
+# Isolated performance builds (structured baseline lives in engineering evidence).
+/tools/perf/target/
+/tools/perf/comparisons/target/

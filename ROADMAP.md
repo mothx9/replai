@@ -54,7 +54,8 @@ defect. This repository does not declare that external publication complete.
 drives deterministic tests and the preserved Linux Rust/C interaction path.
 Native macOS/Windows CI executes the engine and virtual transport; their system
 terminal backends remain unimplemented. See [F0 evidence](docs/engineering/f0.md).
-F1, P0, P3 and all later implementation waves remain planned and have not started.
+P0 — PERFORMANCE.BASELINE is active: characterization and qualification only.
+F1, P1, P2, P3 and all later implementation waves remain unstarted.
 No next implementation wave is authorized.
 
 System-terminal runtime qualification remains Linux-specific and pre-release. There is no stable API,
@@ -80,7 +81,7 @@ This is dependency order, not a promise to finish a whole series before learning
 from another. In particular, the first post-R5 design must consider **API tiers,
 performance baselines and event-loop architecture together**. F0 frames that
 joint investigation; F1, P0 and P3 retain distinct deliverables. A convenient API
-cannot be frozen before understanding its blocking behavior and costs. F0 has explicit task authorization; no later implementation is authorized
+cannot be frozen before understanding its blocking behavior and costs. F0 and P0 have explicit task authorization; later implementation is not authorized
 by the roadmap or by external consumer closure.
 
 ### Foundation — one engine, several embedding levels

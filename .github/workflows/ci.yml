@@ -131,3 +131,33 @@ jobs:
         run: |
           cargo clippy --locked -p replai --lib -- -D warnings
           cargo test --locked -p replai --doc
+
+  benchmark-integrity:
+    name: Benchmark integrity (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87
+        with:
+          toolchain: stable
+          components: rustfmt, clippy
+      - name: Compile, execute, validate separate timing and allocation smoke modes
+        run: python tools/perf/smoke.py
+      - name: Benchmark fixture lint
+        run: cargo clippy --locked --manifest-path tools/perf/Cargo.toml --all-targets --all-features -- -D warnings
+      - name: Real Linux PTY harness smoke (no latency threshold)
+        if: runner.os == 'Linux'
+        run: python3 tools/perf/linux.py --smoke --work "$RUNNER_TEMP/replai-performance-pty"
+      - name: Compile pinned comparison fixtures and exercise overlapping PTY cases
+        if: runner.os == 'Linux'
+        run: |
+          python3 tools/perf/run.py --prepare --families comparisons --work "$RUNNER_TEMP/replai-comparison-build"
+          python3 tools/perf/compare.py --smoke --work "$RUNNER_TEMP/replai-comparison-smoke"
+      - name: Check tracked and untracked files stayed unchanged
+        run: python -c "import subprocess; assert not subprocess.check_output(['git','status','--porcelain']).strip()"
