@@ -1,0 +1,341 @@
+{
+  "capability_contracts": [
+    {
+      "description": "Ordered safe styled segments for primary and continuation prompts",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/b9581102220364b94d2bcdef49f602308d24e6c9/docs/presentation.md#theme-and-prompt-composition"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34251543122"
+      ],
+      "guarantees": [
+        "Prompt::composed and with_continuation_text share Text/Span geometry",
+        "The simple Prompt::new and C ABI 1 prompt remain unchanged"
+      ],
+      "id": "presentation.composed_prompt",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "description": "Generic severity notices with explicit non-color markers",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/b9581102220364b94d2bcdef49f602308d24e6c9/docs/presentation.md#structured-documents-and-semantic-ownership"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34251543122"
+      ],
+      "guarantees": [
+        "Info, success, warning and error remain distinct without color",
+        "Host supplies classification; no application status ontology"
+      ],
+      "id": "presentation.status",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "description": "Safe semantic documents, inline spans, headings, facts, lists, literals and separators",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/b9581102220364b94d2bcdef49f602308d24e6c9/docs/presentation.md#structured-documents-and-semantic-ownership"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34251543122"
+      ],
+      "guarantees": [
+        "Document::render/write_to work without an editor; Interaction::output_document coordinates an active POSIX draft",
+        "Bounded input/work; no terminal control injection or silent truncation",
+        "Plain, NO_COLOR and dumb output retain structure; wrapping uses grapheme/cell geometry"
+      ],
+      "id": "presentation.structured_output",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "description": "Responsive line-oriented tables over safe structured text",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/b9581102220364b94d2bcdef49f602308d24e6c9/docs/presentation.md#structured-documents-and-semantic-ownership"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34251543122"
+      ],
+      "guarantees": [
+        "Unicode cell alignment, bounded column shrinking and multiline cells",
+        "Narrow layouts stack records; no horizontal scrolling or hidden content"
+      ],
+      "id": "presentation.table",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "description": "Explicit role-to-foreground/emphasis mapping",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/b9581102220364b94d2bcdef49f602308d24e6c9/docs/presentation.md#theme-and-prompt-composition"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34251543122"
+      ],
+      "guarantees": [
+        "Style and Foreground accept no terminal escapes; default background is retained",
+        "Explicit Default overrides block emphasis; unstyled Text inherits block defaults",
+        "Existing palette and color-disable policies remain compatible"
+      ],
+      "id": "presentation.theme",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "changed_inputs": [
+    "docs/architecture.md",
+    "docs/presentation.md",
+    "src/document.rs",
+    "src/engine.rs",
+    "src/interaction.rs",
+    "src/lib.rs",
+    "src/presentation.rs",
+    "src/protocol.rs",
+    "src/terminal.rs"
+  ],
+  "changes": [
+    {
+      "capability": "presentation.structured_output",
+      "compatibility": "compatible",
+      "description": "Safe semantic documents, inline spans, headings, facts, lists, literals and separators; existing C ABI 1 is unchanged.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34251543122"
+      ],
+      "inputs": [
+        "src/lib.rs",
+        "src/engine.rs",
+        "src/presentation.rs",
+        "src/interaction.rs",
+        "src/protocol.rs",
+        "src/terminal.rs",
+        "docs/presentation.md",
+        "docs/architecture.md",
+        "src/document.rs"
+      ],
+      "kind": "ADDED",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "presentation.table",
+      "compatibility": "compatible",
+      "description": "Responsive line-oriented tables over safe structured text; existing C ABI 1 is unchanged.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34251543122"
+      ],
+      "inputs": [
+        "src/lib.rs",
+        "src/engine.rs",
+        "src/presentation.rs",
+        "src/interaction.rs",
+        "src/protocol.rs",
+        "src/terminal.rs",
+        "docs/presentation.md",
+        "docs/architecture.md",
+        "src/document.rs"
+      ],
+      "kind": "ADDED",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "presentation.status",
+      "compatibility": "compatible",
+      "description": "Generic severity notices with explicit non-color markers; existing C ABI 1 is unchanged.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34251543122"
+      ],
+      "inputs": [
+        "src/lib.rs",
+        "src/engine.rs",
+        "src/presentation.rs",
+        "src/interaction.rs",
+        "src/protocol.rs",
+        "src/terminal.rs",
+        "docs/presentation.md",
+        "docs/architecture.md",
+        "src/document.rs"
+      ],
+      "kind": "ADDED",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "presentation.composed_prompt",
+      "compatibility": "compatible",
+      "description": "Ordered safe styled segments for primary and continuation prompts; existing C ABI 1 is unchanged.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34251543122"
+      ],
+      "inputs": [
+        "src/lib.rs",
+        "src/engine.rs",
+        "src/presentation.rs",
+        "src/interaction.rs",
+        "src/protocol.rs",
+        "src/terminal.rs",
+        "docs/presentation.md",
+        "docs/architecture.md",
+        "src/document.rs"
+      ],
+      "kind": "ADDED",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "presentation.theme",
+      "compatibility": "compatible",
+      "description": "Explicit role-to-foreground/emphasis mapping; existing C ABI 1 is unchanged.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34251543122"
+      ],
+      "inputs": [
+        "src/lib.rs",
+        "src/engine.rs",
+        "src/presentation.rs",
+        "src/interaction.rs",
+        "src/protocol.rs",
+        "src/terminal.rs",
+        "docs/presentation.md",
+        "docs/architecture.md",
+        "src/document.rs"
+      ],
+      "kind": "ADDED",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "current": {
+    "contract_id": "sha256:90bf68e81f46381f54509f808155dca0c1fe7362f33818053c6af813c6316163",
+    "repository": "https://github.com/mothx9/replai",
+    "revision": "b9581102220364b94d2bcdef49f602308d24e6c9",
+    "tree": "f5ec77d774166605a578951e6ca827c29391b500"
+  },
+  "id": "sha256:3198e215b271c6bb2cc6df3b2a63bfb6922b0e2657208431257a45c43499e99c",
+  "kind": "delta",
+  "platforms": [
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34238242934"
+      ],
+      "id": "linux",
+      "status": "runtime-qualified",
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34238242934"
+      ],
+      "id": "macos",
+      "status": "runtime-qualified",
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34238242934"
+      ],
+      "id": "windows",
+      "status": "portable-core-qualified",
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "previous": {
+    "contract_id": "sha256:fe3e1a0bc5b56a3f67a64d79588899d0b6df545cc7e02c87a34067c8c237ef95",
+    "repository": "https://github.com/mothx9/replai",
+    "revision": "6365f84e12865871bf26ecf0d984b48213d81ebc",
+    "tree": "2ff0954473fc642f571bf78424278d9019e29338"
+  },
+  "schema_version": 1,
+  "surfaces": [
+    {
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/interaction.md"
+      ],
+      "id": "rust-native",
+      "kind": "rust-native",
+      "version": "pre-release"
+    },
+    {
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/c-api.md"
+      ],
+      "id": "c-abi-v1",
+      "kind": "c-abi",
+      "version": "1"
+    }
+  ]
+}

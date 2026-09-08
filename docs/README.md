@@ -18,6 +18,7 @@ over prose; summaries link to the owner instead of restating its contract.
 | What proves the F0 ownership refoundation? | [F0 engineering evidence](engineering/f0.md) |
 | How are performance and embedding costs measured? | [P0 characterization](engineering/p0.md) |
 | What proves macOS runtime and common performance convergence? | [macOS/performance evidence](engineering/macos-perf.md) |
+| Where is the repository-owned producer handoff metadata? | [Producer metadata](../.boundary/README.md) |
 | What changed for a consumer? | [Changelog](../CHANGELOG.md) |
 
 Rustdoc owns method-level Rust API documentation (`cargo doc --no-deps`).

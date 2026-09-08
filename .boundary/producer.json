@@ -1,0 +1,929 @@
+{
+  "capabilities": [
+    {
+      "description": "Bounded extended-grapheme editing and atomic replacement",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/interaction.md"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34238242934",
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/engineering/macos-perf.md#final-same-run-comparisons-and-parity"
+      ],
+      "guarantees": [
+        "UTF-8 storage and grapheme cursor boundaries; display cells are distinct from byte offsets",
+        "Atomic capacity/control/range rejection; no host language interpretation"
+      ],
+      "id": "interaction.editing",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "description": "In-memory history mechanics with exact unsent-draft return",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/interaction.md"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34238242934"
+      ],
+      "guarantees": [
+        "Host explicitly admits entries and owns persistence, retention and privacy",
+        "Up/Down preserve the original draft and cursor"
+      ],
+      "id": "interaction.history_navigation",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "description": "Event-driven host completion requests and validated replacement",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/interaction.md"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34238242934"
+      ],
+      "guarantees": [
+        "Host owns candidate discovery and selection; replacement validates grapheme ranges"
+      ],
+      "id": "interaction.completion_request",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos"
+      ],
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "description": "Synchronous safe plain output coordinated with an active draft",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/presentation.md#external-output"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34238242934"
+      ],
+      "guarantees": [
+        "Exact draft/cursor restoration; safe controls and terminal cleanup",
+        "No concurrent independent writers; host owns output meaning"
+      ],
+      "id": "interaction.external_output",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos"
+      ],
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "description": "Simple accented prompt, optional literal state and continuation",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/presentation.md#prompt-cells-and-redraw"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34238242934"
+      ],
+      "guarantees": [
+        "Prompt::new remains simple; safe control-free labels",
+        "Terminal-default background; NO_COLOR and TERM=dumb disable styling"
+      ],
+      "id": "presentation.prompt",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "description": "Exact pre-release C ABI 1 with caller-owned spans/buffers and opaque handles",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/c-api.md"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34238242934"
+      ],
+      "guarantees": [
+        "Numeric ABI identity 1; layout and symbol contract qualified",
+        "Static/shared installation; caller descriptors are duplicated, not transferred",
+        "No long-term stability or Windows resource-binding claim"
+      ],
+      "id": "abi.c.v1",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos"
+      ],
+      "surfaces": [
+        "c-abi-v1"
+      ]
+    },
+    {
+      "description": "Qualified Linux terminal resource binding",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/architecture.md#system-and-protocol-realizations"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34238242934"
+      ],
+      "guarantees": [
+        "Exact termios restoration, paste lifecycle, resource exclusion and descriptor ownership",
+        "Real Rust/C PTYs and Linux Valgrind qualification"
+      ],
+      "id": "platform.posix_linux",
+      "maturity": "experimental",
+      "platforms": [
+        "linux"
+      ],
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "description": "Qualified macOS terminal resource binding through the shared POSIX backend",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/engineering/macos-perf.md"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34238242934"
+      ],
+      "guarantees": [
+        "Real Rust/C PTYs and native leak qualification; captured console modes restored"
+      ],
+      "id": "platform.posix_macos",
+      "maturity": "experimental",
+      "platforms": [
+        "macos"
+      ],
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "description": "Platform-neutral editing, interaction state and logical rendering",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/architecture.md"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34238242934"
+      ],
+      "guarantees": [
+        "Native Linux/macOS/Windows portable tests; Windows has no runtime terminal backend",
+        "No operating-system resources, scheduler or product semantics in the engine"
+      ],
+      "id": "platform.portable_engine",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "description": "Safe semantic documents, inline spans, headings, facts, lists, literals and separators",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/b9581102220364b94d2bcdef49f602308d24e6c9/docs/presentation.md#structured-documents-and-semantic-ownership"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34251543122"
+      ],
+      "guarantees": [
+        "Document::render/write_to work without an editor; Interaction::output_document coordinates an active POSIX draft",
+        "Bounded input/work; no terminal control injection or silent truncation",
+        "Plain, NO_COLOR and dumb output retain structure; wrapping uses grapheme/cell geometry"
+      ],
+      "id": "presentation.structured_output",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "description": "Responsive line-oriented tables over safe structured text",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/b9581102220364b94d2bcdef49f602308d24e6c9/docs/presentation.md#structured-documents-and-semantic-ownership"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34251543122"
+      ],
+      "guarantees": [
+        "Unicode cell alignment, bounded column shrinking and multiline cells",
+        "Narrow layouts stack records; no horizontal scrolling or hidden content"
+      ],
+      "id": "presentation.table",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "description": "Generic severity notices with explicit non-color markers",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/b9581102220364b94d2bcdef49f602308d24e6c9/docs/presentation.md#structured-documents-and-semantic-ownership"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34251543122"
+      ],
+      "guarantees": [
+        "Info, success, warning and error remain distinct without color",
+        "Host supplies classification; no application status ontology"
+      ],
+      "id": "presentation.status",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "description": "Ordered safe styled segments for primary and continuation prompts",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/b9581102220364b94d2bcdef49f602308d24e6c9/docs/presentation.md#theme-and-prompt-composition"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34251543122"
+      ],
+      "guarantees": [
+        "Prompt::composed and with_continuation_text share Text/Span geometry",
+        "The simple Prompt::new and C ABI 1 prompt remain unchanged"
+      ],
+      "id": "presentation.composed_prompt",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "description": "Explicit role-to-foreground/emphasis mapping",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/b9581102220364b94d2bcdef49f602308d24e6c9/docs/presentation.md#theme-and-prompt-composition"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34251543122"
+      ],
+      "guarantees": [
+        "Style and Foreground accept no terminal escapes; default background is retained",
+        "Explicit Default overrides block emphasis; unstyled Text inherits block defaults",
+        "Existing palette and color-disable policies remain compatible"
+      ],
+      "id": "presentation.theme",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "changes": [
+    {
+      "capability": "presentation.structured_output",
+      "compatibility": "compatible",
+      "description": "Safe semantic documents, inline spans, headings, facts, lists, literals and separators; existing C ABI 1 is unchanged.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34251543122"
+      ],
+      "inputs": [
+        "src/lib.rs",
+        "src/engine.rs",
+        "src/presentation.rs",
+        "src/interaction.rs",
+        "src/protocol.rs",
+        "src/terminal.rs",
+        "docs/presentation.md",
+        "docs/architecture.md",
+        "src/document.rs"
+      ],
+      "kind": "ADDED",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "presentation.table",
+      "compatibility": "compatible",
+      "description": "Responsive line-oriented tables over safe structured text; existing C ABI 1 is unchanged.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34251543122"
+      ],
+      "inputs": [
+        "src/lib.rs",
+        "src/engine.rs",
+        "src/presentation.rs",
+        "src/interaction.rs",
+        "src/protocol.rs",
+        "src/terminal.rs",
+        "docs/presentation.md",
+        "docs/architecture.md",
+        "src/document.rs"
+      ],
+      "kind": "ADDED",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "presentation.status",
+      "compatibility": "compatible",
+      "description": "Generic severity notices with explicit non-color markers; existing C ABI 1 is unchanged.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34251543122"
+      ],
+      "inputs": [
+        "src/lib.rs",
+        "src/engine.rs",
+        "src/presentation.rs",
+        "src/interaction.rs",
+        "src/protocol.rs",
+        "src/terminal.rs",
+        "docs/presentation.md",
+        "docs/architecture.md",
+        "src/document.rs"
+      ],
+      "kind": "ADDED",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "presentation.composed_prompt",
+      "compatibility": "compatible",
+      "description": "Ordered safe styled segments for primary and continuation prompts; existing C ABI 1 is unchanged.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34251543122"
+      ],
+      "inputs": [
+        "src/lib.rs",
+        "src/engine.rs",
+        "src/presentation.rs",
+        "src/interaction.rs",
+        "src/protocol.rs",
+        "src/terminal.rs",
+        "docs/presentation.md",
+        "docs/architecture.md",
+        "src/document.rs"
+      ],
+      "kind": "ADDED",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "presentation.theme",
+      "compatibility": "compatible",
+      "description": "Explicit role-to-foreground/emphasis mapping; existing C ABI 1 is unchanged.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34251543122"
+      ],
+      "inputs": [
+        "src/lib.rs",
+        "src/engine.rs",
+        "src/presentation.rs",
+        "src/interaction.rs",
+        "src/protocol.rs",
+        "src/terminal.rs",
+        "docs/presentation.md",
+        "docs/architecture.md",
+        "src/document.rs"
+      ],
+      "kind": "ADDED",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "generation": 2,
+  "id": "sha256:90bf68e81f46381f54509f808155dca0c1fe7362f33818053c6af813c6316163",
+  "inputs": [
+    {
+      "capabilities": [
+        "interaction.editing",
+        "interaction.history_navigation",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
+        "platform.posix_linux",
+        "platform.posix_macos",
+        "platform.portable_engine",
+        "presentation.structured_output",
+        "presentation.table",
+        "presentation.status",
+        "presentation.composed_prompt",
+        "presentation.theme"
+      ],
+      "category": "api",
+      "path": "src/lib.rs",
+      "sha256": "sha256:5250b5e3a38eb56310a67c1945996ce4eb2812a9c9bed7f08316a2cd98d986d7",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "interaction.editing",
+        "interaction.history_navigation",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
+        "platform.posix_linux",
+        "platform.posix_macos",
+        "platform.portable_engine"
+      ],
+      "category": "behavior",
+      "path": "src/core.rs",
+      "sha256": "sha256:7ea45a6693c011a6f8bf5626072b7b18edfb3b7e21300a093b9ae0c0da7b8e37",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "interaction.editing",
+        "interaction.history_navigation",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
+        "platform.posix_linux",
+        "platform.posix_macos",
+        "platform.portable_engine"
+      ],
+      "category": "behavior",
+      "path": "src/actions.rs",
+      "sha256": "sha256:89eb222bfba7ccee2755e4f4ed384a86e1390d2106f281693ffa10158ae38c02",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "interaction.editing",
+        "interaction.history_navigation",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
+        "platform.posix_linux",
+        "platform.posix_macos",
+        "platform.portable_engine"
+      ],
+      "category": "behavior",
+      "path": "src/keymap.rs",
+      "sha256": "sha256:4defb56380d64902b814c917b424b6766f20c3fae05bef145a245ef447c2929b",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "interaction.editing",
+        "interaction.history_navigation",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
+        "platform.posix_linux",
+        "platform.posix_macos",
+        "platform.portable_engine"
+      ],
+      "category": "behavior",
+      "path": "src/input.rs",
+      "sha256": "sha256:63978c621e7056e6ebb43fc7a9636b2791947cc80d86b322bb3eba8bf8123f68",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "interaction.editing",
+        "interaction.history_navigation",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
+        "platform.posix_linux",
+        "platform.posix_macos",
+        "platform.portable_engine",
+        "presentation.structured_output",
+        "presentation.table",
+        "presentation.status",
+        "presentation.composed_prompt",
+        "presentation.theme"
+      ],
+      "category": "behavior",
+      "path": "src/engine.rs",
+      "sha256": "sha256:a86fd86a5d2cf78f8374bd83841fad25e5048d15f2030dea209e4f96a9a0b092",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "interaction.editing",
+        "interaction.history_navigation",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
+        "platform.posix_linux",
+        "platform.posix_macos",
+        "platform.portable_engine"
+      ],
+      "category": "behavior",
+      "path": "src/event.rs",
+      "sha256": "sha256:915d8ce20c1cfb655eeec560b16b3822ac357e2c15d924ac885b3ddecd088601",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "interaction.editing",
+        "interaction.history_navigation",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
+        "platform.posix_linux",
+        "platform.posix_macos",
+        "platform.portable_engine"
+      ],
+      "category": "behavior",
+      "path": "src/render.rs",
+      "sha256": "sha256:9b50bc67bd1b4c0d865c92fb8923b49cfdd1f20cd8be4c17fb8d4f2be2e58788",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "interaction.editing",
+        "interaction.history_navigation",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
+        "platform.posix_linux",
+        "platform.posix_macos",
+        "platform.portable_engine",
+        "presentation.structured_output",
+        "presentation.table",
+        "presentation.status",
+        "presentation.composed_prompt",
+        "presentation.theme"
+      ],
+      "category": "api",
+      "path": "src/presentation.rs",
+      "sha256": "sha256:6ca3b7d4623474293a514bc8a1b6442f2d60ed5535329ed0b17104b7793d4039",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "interaction.editing",
+        "interaction.history_navigation",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
+        "platform.posix_linux",
+        "platform.posix_macos",
+        "platform.portable_engine",
+        "presentation.structured_output",
+        "presentation.table",
+        "presentation.status",
+        "presentation.composed_prompt",
+        "presentation.theme"
+      ],
+      "category": "api",
+      "path": "src/interaction.rs",
+      "sha256": "sha256:2d34c3ea3d715063f868905d02078b7812e4ee3676b03aaa16a8ea01f5253dca",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "interaction.editing",
+        "interaction.history_navigation",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
+        "platform.posix_linux",
+        "platform.posix_macos",
+        "platform.portable_engine",
+        "presentation.structured_output",
+        "presentation.table",
+        "presentation.status",
+        "presentation.composed_prompt",
+        "presentation.theme"
+      ],
+      "category": "behavior",
+      "path": "src/protocol.rs",
+      "sha256": "sha256:1feec7c69562900e04d0e6a14f44cea6c49254c2e332d4b6be40cb8a21758ada",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "interaction.editing",
+        "interaction.history_navigation",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
+        "platform.posix_linux",
+        "platform.posix_macos",
+        "platform.portable_engine",
+        "presentation.structured_output",
+        "presentation.table",
+        "presentation.status",
+        "presentation.composed_prompt",
+        "presentation.theme"
+      ],
+      "category": "behavior",
+      "path": "src/terminal.rs",
+      "sha256": "sha256:0a09b422275c7cdc35d30ea0eff39abe4cbc83f8d75e3ea80b14542aa7abbb02",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "interaction.editing",
+        "interaction.history_navigation",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
+        "platform.posix_linux",
+        "platform.posix_macos",
+        "platform.portable_engine"
+      ],
+      "category": "behavior",
+      "path": "src/system.rs",
+      "sha256": "sha256:02f8617b77e5d917789ff3f8aecd69c1fd5def2c5c158d7e83f1bd782d88da24",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "abi.c.v1"
+      ],
+      "category": "abi",
+      "path": "api/c-abi.json",
+      "sha256": "sha256:946189594ef5a57235c2d70580b1a95c6cb3fadecccf7b95f66b00c3f6cfab6b",
+      "surfaces": [
+        "c-abi-v1"
+      ]
+    },
+    {
+      "capabilities": [
+        "abi.c.v1"
+      ],
+      "category": "abi",
+      "path": "include/replai.h",
+      "sha256": "sha256:c0644f2d541e7537bc5c96f3d70679b2f2f18f7b89af513de96bda2e7cb49bf5",
+      "surfaces": [
+        "c-abi-v1"
+      ]
+    },
+    {
+      "capabilities": [
+        "interaction.editing",
+        "interaction.history_navigation",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
+        "platform.posix_linux",
+        "platform.posix_macos",
+        "platform.portable_engine",
+        "presentation.structured_output",
+        "presentation.table",
+        "presentation.status",
+        "presentation.composed_prompt",
+        "presentation.theme"
+      ],
+      "category": "documentation",
+      "path": "docs/presentation.md",
+      "sha256": "sha256:aab9bd913a90c5d2f78955dfacec6cae5476454855fd1f10f6863be5fcf1db3b",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "interaction.editing",
+        "interaction.history_navigation",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
+        "platform.posix_linux",
+        "platform.posix_macos",
+        "platform.portable_engine",
+        "presentation.structured_output",
+        "presentation.table",
+        "presentation.status",
+        "presentation.composed_prompt",
+        "presentation.theme"
+      ],
+      "category": "documentation",
+      "path": "docs/architecture.md",
+      "sha256": "sha256:180c9eafcb24d3fee8addd5e8c752bbc57e97dc15c10d3486f4e71290e1cad5d",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "interaction.editing",
+        "interaction.history_navigation",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
+        "platform.posix_linux",
+        "platform.posix_macos",
+        "platform.portable_engine"
+      ],
+      "category": "documentation",
+      "path": "docs/interaction.md",
+      "sha256": "sha256:f9db3da01b34448985f9492c3e10ae3c8a94d6bf404ba1fd5826f0ce00e85aa5",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "abi.c.v1"
+      ],
+      "category": "documentation",
+      "path": "docs/c-api.md",
+      "sha256": "sha256:c56610d8f211521dd06d6b80e112a6980ee7ef8d0fcb9ddc9f87ec74d634afbe",
+      "surfaces": [
+        "c-abi-v1"
+      ]
+    },
+    {
+      "capabilities": [
+        "interaction.editing",
+        "platform.posix_macos"
+      ],
+      "category": "qualification",
+      "path": "docs/engineering/macos-perf.md",
+      "sha256": "sha256:e8a051f612ffae0d532cdfdfa8ef7cb87f1c0d0bee27dec9b894c29ab7c0bb2c",
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "capabilities": [
+        "presentation.structured_output",
+        "presentation.table",
+        "presentation.status",
+        "presentation.composed_prompt",
+        "presentation.theme"
+      ],
+      "category": "api",
+      "path": "src/document.rs",
+      "sha256": "sha256:f060f8d894f74ff42414c5e5da94d141f1f345aef31f24f4807ee76838b4a988",
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "kind": "producer",
+  "platforms": [
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34238242934"
+      ],
+      "id": "linux",
+      "status": "runtime-qualified",
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34238242934"
+      ],
+      "id": "macos",
+      "status": "runtime-qualified",
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34238242934"
+      ],
+      "id": "windows",
+      "status": "portable-core-qualified",
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "predecessor": {
+    "contract_id": "sha256:fe3e1a0bc5b56a3f67a64d79588899d0b6df545cc7e02c87a34067c8c237ef95",
+    "repository": "https://github.com/mothx9/replai",
+    "revision": "6365f84e12865871bf26ecf0d984b48213d81ebc",
+    "tree": "2ff0954473fc642f571bf78424278d9019e29338"
+  },
+  "repository": "https://github.com/mothx9/replai",
+  "schema_version": 1,
+  "source": {
+    "dirty": false,
+    "revision": "b9581102220364b94d2bcdef49f602308d24e6c9",
+    "tree": "f5ec77d774166605a578951e6ca827c29391b500"
+  },
+  "surfaces": [
+    {
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/interaction.md"
+      ],
+      "id": "rust-native",
+      "kind": "rust-native",
+      "version": "pre-release"
+    },
+    {
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/c-api.md"
+      ],
+      "id": "c-abi-v1",
+      "kind": "c-abi",
+      "version": "1"
+    }
+  ]
+}
