@@ -14,7 +14,7 @@ const ROWS: usize = 65_536;
 /// A validated UTF-8 span carrying generic emphasis, never terminal commands.
 #[derive(Clone, Debug)]
 pub struct Span {
-    pub(crate) role: Role,
+    pub(crate) role: Option<Role>,
     pub(crate) text: String,
 }
 impl Span {
@@ -27,7 +27,10 @@ impl Span {
         if !crate::core::valid_text(&text) {
             return Err(EditError::InvalidText);
         }
-        Ok(Self { role, text })
+        Ok(Self {
+            role: Some(role),
+            text,
+        })
     }
 }
 /// Inline semantic text. At most 1024 spans and 16 KiB combined UTF-8.
@@ -37,9 +40,12 @@ pub struct Text {
     pub(crate) spans: Vec<Span>,
 }
 impl Text {
-    /// Plain text convenience constructor.
+    /// Text using its block's default emphasis (terminal-default in paragraphs
+    /// and composed prompts). Use `styled` to override, including Role::Default.
     pub fn new(text: &str) -> Result<Self, EditError> {
-        Self::styled(Role::Default, text)
+        let mut span = Span::new(Role::Default, text)?;
+        span.role = None;
+        Self::from_spans(vec![span])
     }
     /// One styled span.
     pub fn styled(role: Role, text: &str) -> Result<Self, EditError> {
@@ -355,13 +361,7 @@ fn wrap(text: &Text, columns: usize, default: Role) -> Result<Vec<Line>, EditErr
             span += 1;
             end += text.spans[span].text.len();
         }
-        let role = text.spans.get(span).map_or(default, |s| {
-            if s.role == Role::Default {
-                default
-            } else {
-                s.role
-            }
-        });
+        let role = text.spans.get(span).and_then(|s| s.role).unwrap_or(default);
         if g == "\n" {
             rows.push(Line::default());
             col = 0;

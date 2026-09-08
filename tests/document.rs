@@ -320,3 +320,29 @@ fn structure_bounds_include_empty_fields_and_split_joined_emoji() {
     );
     assert_eq!(doc(vec![]).render(2, plain()).unwrap(), "");
 }
+
+#[test]
+fn explicit_default_role_overrides_block_emphasis() {
+    let d = doc(vec![Block::Heading {
+        level: 1,
+        text: Text::from_spans(vec![
+            Span::new(Role::Strong, "bold").unwrap(),
+            Span::new(Role::Default, "plain").unwrap(),
+        ])
+        .unwrap(),
+    }]);
+    let mut vt = vt100::Parser::new(4, 40, 0);
+    vt.process(
+        d.render(40, Theme::new(true, false, None))
+            .unwrap()
+            .replace('\n', "\r\n")
+            .as_bytes(),
+    );
+    assert_eq!(vt.screen().contents(), "# boldplain");
+    assert!(vt.screen().cell(0, 2).unwrap().bold());
+    assert!(!vt.screen().cell(0, 6).unwrap().bold());
+    assert_eq!(
+        vt.screen().cell(0, 6).unwrap().fgcolor(),
+        vt100::Color::Default
+    );
+}

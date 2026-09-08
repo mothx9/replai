@@ -346,7 +346,7 @@ impl Layout {
                 span += 1;
                 end += text.spans[span].text.len();
             }
-            let role = text.spans[span].role;
+            let role = text.spans[span].role.unwrap_or(Role::Default);
             if previous != Some(role) {
                 self.style(Role::Default);
                 self.style(role);

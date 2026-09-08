@@ -14,6 +14,9 @@ Hosts classify information; REPLAI lays it out. `Document` contains an ordered,
 nonrecursive sequence of `Block`s. `Text` composes validated `Span`s using the
 same seven `Role`s as prompts. No schema, command vocabulary, JSON dependency or
 terminal escape supplied by the host becomes part of the model.
+`Text::new` takes the block's default emphasis. Explicit `Span::new` or
+`Text::styled` roles override that emphasis, including `Role::Default` to return
+to the terminal foreground and normal intensity within an emphasized block.
 
 | Block | Representation and narrow-width behavior |
 | --- | --- |
