@@ -97,114 +97,198 @@ pub(crate) struct Frame {
     pub cursor: Point,
     pub end: Point,
 }
+// Keep only the potential viewport while locating the cursor. Recycle row
+// storage while scanning its prefix; stop once the visible suffix is complete.
+#[derive(Default)]
+struct Row {
+    line: Line,
+    width: usize,
+    spare: String,
+}
+impl Row {
+    fn reset(&mut self, style: Option<Role>, reuse_limit: usize) {
+        for run in self.line.0.drain(..) {
+            if let Run::Text(text) = run
+                && text.capacity() <= reuse_limit
+                && text.capacity() > self.spare.capacity()
+            {
+                self.spare = text;
+            }
+        }
+        self.spare.clear();
+        self.width = 0;
+        if let Some(role) = style {
+            self.line.0.push(Run::Style(role));
+        }
+    }
+    fn text(&mut self, text: &str) {
+        if let Some(Run::Text(previous)) = self.line.0.last_mut() {
+            previous.push_str(text);
+        } else {
+            let mut buffer = std::mem::take(&mut self.spare);
+            buffer.push_str(text);
+            self.line.0.push(Run::Text(buffer));
+        }
+    }
+}
 struct Layout {
-    lines: Vec<Line>,
-    widths: Vec<usize>,
+    lines: std::collections::VecDeque<Row>,
+    first_row: usize,
+    visible: usize,
+    stop_row: Option<usize>,
+    full: bool,
     point: Point,
     columns: usize,
     style: Option<Role>,
     wrapped: bool,
 }
 impl Layout {
-    fn new(columns: usize) -> Self {
+    fn new(columns: usize, visible: usize) -> Self {
         Self {
-            lines: vec![Line::default()],
-            widths: vec![0],
+            lines: std::collections::VecDeque::from([Row::default()]),
+            first_row: 0,
+            visible,
+            stop_row: None,
+            full: false,
             point: Point::default(),
             columns: columns.max(2),
             style: None,
             wrapped: false,
         }
     }
+    fn found_cursor(&mut self) {
+        let start = self
+            .point
+            .row
+            .saturating_add(1)
+            .saturating_sub(self.visible);
+        self.stop_row = Some(start.saturating_add(self.visible));
+    }
     fn newline(&mut self) {
-        self.lines
-            .push(Line(self.style.map(Run::Style).into_iter().collect()));
-        self.widths.push(0);
         self.point.row += 1;
         self.point.col = 0;
         self.wrapped = false;
+        if self.stop_row.is_some_and(|end| self.point.row >= end) {
+            self.full = true;
+            return;
+        }
+        let mut row = if self.lines.len() == self.visible {
+            self.first_row += 1;
+            self.lines.pop_front().unwrap()
+        } else {
+            Row::default()
+        };
+        // Do not retain an offscreen giant combining grapheme in a tiny row.
+        row.reset(self.style, self.columns.saturating_mul(4).max(4096));
+        self.lines.push_back(row);
+    }
+    fn grapheme(&mut self, grapheme: &str, width: usize) {
+        if self.full {
+            return;
+        }
+        if grapheme == "\t" {
+            let spaces = 4 - self.point.col % 4;
+            for _ in 0..spaces {
+                self.grapheme(" ", 1);
+            }
+            return;
+        }
+        let (text, width) = if width > self.columns {
+            ("�", 1)
+        } else {
+            (grapheme, width)
+        };
+        if self.point.col + width > self.columns {
+            self.newline();
+            if self.full {
+                return;
+            }
+        }
+        let row = self.lines.back_mut().unwrap();
+        row.text(text);
+        self.wrapped = false;
+        self.point.col += width;
+        row.width = self.point.col;
+        // Explicit full-width rows preserve the original autowrap policy.
+        if self.point.col == self.columns {
+            self.newline();
+            self.wrapped = true;
+        }
     }
     fn text(&mut self, text: &str) {
-        for g in text.graphemes(true) {
-            if g == "\t" {
-                let spaces = 4 - self.point.col % 4;
-                for _ in 0..spaces {
-                    self.text(" ");
-                }
-                continue;
+        for grapheme in text.graphemes(true) {
+            if self.full {
+                break;
             }
-            let width = g.width();
-            let (g, width) = if width > self.columns {
-                ("�", 1)
-            } else {
-                (g, width)
-            };
-            if self.point.col + width > self.columns {
-                self.newline();
-            }
-            self.lines.last_mut().unwrap().text(g);
-            self.wrapped = false;
-            self.point.col += width;
-            *self.widths.last_mut().unwrap() = self.point.col;
-            // Materialize a full-width line explicitly, avoiding pending autowrap.
-            if self.point.col == self.columns {
-                self.newline();
-                self.wrapped = true;
-            }
+            self.grapheme(grapheme, grapheme.width());
         }
     }
     fn style(&mut self, role: Role) {
         self.style = Some(role);
-        self.lines.last_mut().unwrap().0.push(Run::Style(role));
+        if !self.full {
+            self.lines.back_mut().unwrap().line.0.push(Run::Style(role));
+        }
     }
 }
 impl Frame {
     pub fn new(editor: &Editor, prompt: &Prompt, columns: usize, rows: usize) -> Self {
-        let mut l = Layout::new(columns);
-        l.style(Role::Accent);
-        l.text(&prompt.label);
-        l.text(&prompt.state);
-        l.text(">");
-        l.style(Role::Default);
-        l.text(" ");
-        let mut cursor = l.point;
-        for (offset, g) in editor.text().grapheme_indices(true) {
-            if g != "\n" && g != "\t" && l.point.col + g.width().min(l.columns) > l.columns {
-                l.newline();
+        let visible = rows.saturating_sub(1).max(1);
+        let mut layout = Layout::new(columns, visible);
+        layout.style(Role::Accent);
+        layout.text(&prompt.label);
+        layout.text(&prompt.state);
+        layout.text(">");
+        layout.style(Role::Default);
+        layout.text(" ");
+        let mut cursor = None;
+        for (offset, grapheme) in editor.text().grapheme_indices(true) {
+            if layout.full {
+                break;
+            }
+            let width = grapheme.width();
+            // Preserve the pre-wrap cursor policy, including oversized glyphs.
+            if grapheme != "\n"
+                && grapheme != "\t"
+                && layout.point.col + width.min(layout.columns) > layout.columns
+            {
+                layout.newline();
+                if layout.full {
+                    break;
+                }
             }
             if offset == editor.cursor() {
-                cursor = l.point;
+                cursor = Some(layout.point);
+                layout.found_cursor();
             }
-            if g == "\n" {
-                if !l.wrapped {
-                    l.newline();
+            if grapheme == "\n" {
+                if !layout.wrapped {
+                    layout.newline();
                 }
-                l.wrapped = false;
-                l.text(&prompt.continuation);
+                layout.wrapped = false;
+                layout.text(&prompt.continuation);
             } else {
-                l.text(g);
+                layout.grapheme(grapheme, width);
             }
         }
         if editor.cursor() == editor.text().len() {
-            cursor = l.point;
+            cursor = Some(layout.point);
         }
-        let visible = rows.saturating_sub(1).max(1);
-        let start = cursor.row.saturating_add(1).saturating_sub(visible);
-        let end = (start + visible).min(l.lines.len());
-        let mut lines: Vec<_> = l.lines.drain(start..end).collect();
+        let cursor = cursor.expect("a valid editor cursor was laid out");
+        let end_col = layout.lines.back().unwrap().width;
+        let mut lines: Vec<_> = layout.lines.into_iter().map(|row| row.line).collect();
         // A viewport may begin inside a wrapped styled prompt.
-        if start > 0 {
+        if layout.first_row > 0 {
             lines[0].0.insert(0, Run::Style(Role::Default));
         }
         let end_row = lines.len() - 1;
         Self {
             cursor: Point {
-                row: cursor.row - start,
+                row: cursor.row - layout.first_row,
                 col: cursor.col,
             },
             end: Point {
                 row: end_row,
-                col: l.widths[end - 1],
+                col: end_col,
             },
             lines,
         }
@@ -220,13 +304,6 @@ pub(crate) enum Run {
 #[derive(Debug, Default, PartialEq)]
 pub(crate) struct Line(pub(crate) Vec<Run>);
 impl Line {
-    fn text(&mut self, text: &str) {
-        if let Some(Run::Text(previous)) = self.0.last_mut() {
-            previous.push_str(text);
-        } else {
-            self.0.push(Run::Text(text.into()));
-        }
-    }
     pub fn suffix(&self, old: &Self) -> Option<&str> {
         if self == old {
             return Some("");
