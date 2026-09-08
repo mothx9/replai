@@ -52,6 +52,8 @@ def environment():
         dependencies=command('cargo','tree','--locked','-p','replai','--edges','normal,build'),
         host_hardware={k:command('sysctl','-n',k) for k in ['hw.model','machdep.cpu.brand_string','hw.memsize','hw.physicalcpu','hw.logicalcpu']} if sys.platform=='darwin' else None,
         macos=command('sw_vers') if sys.platform=='darwin' else None,
+        power_source=command('pmset','-g','batt') if sys.platform=='darwin' else None,
+        power_policy=command('pmset','-g','custom') if sys.platform=='darwin' else None,
         os_packages=command('dpkg-query','-W','libc6','strace','valgrind','gcc','python3','nodejs'))
 
 

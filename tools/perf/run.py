@@ -6,7 +6,7 @@ import os
 from pathlib import Path
 import subprocess
 import sys
-from results import ROOT, identity, environment, envelope
+from results import ROOT, identity, environment, envelope, command
 
 LINENOISE='a473823d74b93eab2ba83480df16ed37617493f2'
 MANIFEST='tools/perf/Cargo.toml'
@@ -60,6 +60,9 @@ def measure(work, families, smoke, qualification):
         path=work/'sizes.jsonl';raw.append(path)
         run([sys.executable,'tools/perf/sizes.py','--qualification',qualification,'--work',work/'stripped'],path)
     assert identity()['source_sha256']==start['source_sha256'],'sources changed during measurement'
+    if sys.platform=='darwin':
+        receipt['environment']['power_source_final']=command('pmset','-g','batt')
+        (work/'environment.json').write_text(json.dumps(receipt,indent=2)+'\n')
     (work/'baseline.json').write_text(json.dumps(envelope(raw,receipt),separators=(',',':'))+'\n')
 
 
