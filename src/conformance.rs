@@ -97,22 +97,43 @@ fn ready_input_is_coalesced_without_collection_wait_or_event_reordering() {
         d.0.borrow_mut().read_limit = limit;
         let (mut e, mut t) = start(&d);
         d.feed("e\u{301}界\x1b[D!\tremaining\r".as_bytes());
-        assert_eq!(
-            t.poll(&mut e, Duration::from_millis(50)).unwrap(),
-            Some(Event::CompletionRequested)
-        );
+        let mut event = t.poll(&mut e, Duration::from_millis(50)).unwrap();
+        for _ in 0..100 {
+            if event.is_some() {
+                break;
+            }
+            event = t.poll(&mut e, Duration::ZERO).unwrap();
+        }
+        assert_eq!(event, Some(Event::CompletionRequested));
         assert_eq!((e.editor.text(), e.editor.cursor()), ("e\u{301}!界", 4));
         assert_eq!(d.screen().screen().contents(), "demo> e\u{301}!界");
-        assert_eq!(d.0.borrow().writes, 2, "initial frame + one ready burst");
+        if limit == 4096 {
+            assert_eq!(d.0.borrow().writes, 2, "initial frame + one ready burst");
+        }
         assert!(d.0.borrow().waits.iter().skip(1).all(Duration::is_zero));
         let fx = e.complete(0..4, "done").unwrap();
         t.apply(&mut e, fx).unwrap();
-        assert_eq!(
-            t.poll(&mut e, Duration::ZERO).unwrap(),
-            Some(Event::Submitted("doneremaining界".into()))
-        );
+        let mut event = None;
+        for _ in 0..100 {
+            event = t.poll(&mut e, Duration::ZERO).unwrap();
+            if event.is_some() {
+                break;
+            }
+        }
+        assert_eq!(event, Some(Event::Submitted("doneremaining界".into())));
         assert!(!t.active);
     }
+}
+
+#[test]
+fn isolated_key_is_visible_without_probing_another_read() {
+    let d = Virtual::new();
+    let (mut e, mut t) = start(&d);
+    d.feed(b"a");
+    assert_eq!(t.poll(&mut e, Duration::from_millis(100)).unwrap(), None);
+    assert_eq!(d.0.borrow().reads, 1);
+    assert_eq!(d.0.borrow().writes, 2);
+    assert_eq!(d.screen().screen().contents(), "demo> a");
 }
 
 #[test]

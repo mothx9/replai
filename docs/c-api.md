@@ -132,8 +132,14 @@ only on OK. On a failed poll/interrupt the caller's event record stays unchanged
 `text_bytes` and `cursor_bytes` describe the current draft at the event. On
 submission `text_bytes` also matches the retained submitted snapshot. A call
 returning OK can still report EDIT_REJECTED; it is not a terminal I/O error.
-Each poll waits at most 100 ms, even with a larger requested timeout, and consumes
-at most one input byte. Host scheduling controls latency and output timing.
+Each poll waits at most 100 ms, even with a larger requested timeout, and
+consumes bounded already-ready input until the first event or a driver yield.
+It never merges independent host events. Read-ahead stays with the opaque handle
+across close/reopen; destroying that handle discards bytes it already consumed.
+The shared [input contract](interaction.md#bounded-input-and-paste) defines the
+budgets and presentation boundaries. Host scheduling controls latency and output
+timing. This internal scheduling change does not alter ABI 1 records, functions,
+status values, validation, output-buffer or descriptor ownership rules.
 
 | Status | Value | Contract |
 | --- | ---: | --- |

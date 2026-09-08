@@ -33,9 +33,11 @@ promise to operate on a terminal that lacks the cursor/erase protocol entirely.
 Physical rows are explicitly laid out with CR/LF; full-width boundaries and
 wide-character gaps are handled without counting scalars as columns. A logical
 newline immediately after a full row does not introduce an extra blank row.
-The previous editing rows are erased before redrawing, then the logical cursor
-is restored. Normal short end insertion appends directly, preserving the compact
-reference rhythm. Ctrl-L explicitly clears the visible screen and redraws.
+Stable geometry permits cursor-only moves and replacement of changed rows or
+ASCII suffixes. Other transitions erase the previous editing rows before
+redrawing; the logical cursor is restored in either case. Normal short end
+insertion appends directly, preserving the compact reference rhythm. Ctrl-L
+explicitly clears the visible screen and redraws.
 For drafts taller than the terminal, a cursor-following viewport retains at most
 height minus one physical rows; hidden text is retained and still submitted.
 Minimum dimensions are two columns and two rows. Resize qualification covers

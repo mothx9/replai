@@ -24,7 +24,12 @@ defines terminal cells, ANSI width, tab expansion and emulator limits.
 
 ## Bounded input and paste
 
-The decoder consumes one byte per poll. UTF-8 staging holds at most four bytes;
+The decoder consumes bytes in order from bounded transport reads (currently
+4 KiB). A poll stops at the first host-visible event, a drained short read, or
+the ready-work budget. Full buffers may continue with zero-wait reads, up to
+32 KiB; a 2 ms active-work budget is checked after semantic actions. Neither
+budget inserts a collection delay or interrupts one atomic editor operation.
+UTF-8 staging holds at most four bytes;
 escape staging at most 64. Supported CSI/SS3 sequences cover arrows, Home/End,
 Delete and bracketed-paste delimiters; listed control keys include Enter,
 Ctrl-A/C/D/E/L, Backspace and Tab. Unknown sequences are rejected. Oversized CSI
@@ -37,6 +42,15 @@ while polling. Each poll waits at most 100 ms. This is an idle bound, not a
 fixed total sequence length/time guess; tests deliver each byte with a delay
 longer than 25 ms. Expired UTF-8/escape input produces `Event::Rejected` and
 keeps the draft. Host starvation can delay observation.
+
+Already-ready semantic edits may share one presentation update. Completion,
+submission, interruption, EOF, rejection and Ctrl-L remain observable boundaries;
+required output completes before the event returns. A drained short read is
+presented before probing for more input, preserving isolated-key responsiveness.
+Read-ahead after an event is retained by the Interaction, bounded to one read,
+including across close/reopen and closed-editor changes. It is not replayed into
+the OS queue. Destroying the Interaction discards its already-consumed read-ahead;
+hosts reusing type-ahead should retain the same Interaction/opaque C handle.
 
 Bracketed paste stages one atomic payload, bounded by the editor byte limit,
 and recognizes fragmented begin/end markers. CRLF becomes one LF; lone CR and

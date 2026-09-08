@@ -114,11 +114,17 @@ width promise. Terminal/font disagreement, particularly joined emoji, remains
 possible; no probing or new width policy is implemented.
 
 The renderer transforms previous/current logical frames into a small private
-mutation vocabulary. It retains the existing append optimization and otherwise
-erases/redraws. Only the VT encoder turns moves, clears, style and protocol modes
+mutation vocabulary. It reuses stable cursor geometry and simple ASCII tail
+edits, updates changed rows, and retains full erase/redraw for changed geometry.
+ASCII row prefixes may be retained; Unicode changes keep the shared width policy
+and use row replacement where needed. Full layout retains only the potential
+viewport and recycles row storage while locating the cursor. It can stop after
+the visible suffix; a distant cursor still requires scanning its prefix.
+Only the VT encoder turns moves, clears, style and protocol modes
 into byte sequences. The default background, continuation rhythm, viewport and
-cursor contracts remain in [presentation](presentation.md). P2 can replace the
-transition algorithm without changing engine actions or resource acquisition.
+cursor contracts remain in [presentation](presentation.md). Engine invalidation
+and ready-input presentation scheduling are common code on every platform;
+neither the renderer nor editor has a Linux/macOS branch.
 
 External output validation and editing-surface coordination are engine work:
 reject controls, suspend the visible surface, emit semantic text/style/newline

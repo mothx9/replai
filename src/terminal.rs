@@ -159,7 +159,11 @@ impl<T: Transport> Terminal<T> {
                 }
                 time_exhausted = started.elapsed() >= READY_TIME;
             }
-            if consumed >= READY_BYTES || time_exhausted {
+            // A short read exhausted the input available to that read. Publish
+            // it now, before another readiness syscall: isolated keys must not
+            // pay for probing the next burst. Full buffers may continue draining.
+            let drained = self.pending.is_empty() && position == length && length < buffer.len();
+            if consumed >= READY_BYTES || time_exhausted || drained {
                 let effects = engine.flush();
                 return self.apply(engine, effects);
             }

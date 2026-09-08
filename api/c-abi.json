@@ -309,7 +309,7 @@
     },
     {
       "name": "replai_poll",
-      "doc": "Poll one byte/tick, at most 100 ms. Return OK with event NONE for no event. Validate event before consuming input.",
+      "doc": "Poll bounded ready input, waiting at most 100 ms. Stop at the first event; read-ahead remains with the handle across reopen. Validate event before consuming input.",
       "params": [
         [
           "handle",

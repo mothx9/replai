@@ -79,7 +79,7 @@ replai_status replai_prompt(replai_handle * handle, const uint8_t * label, size_
 replai_status replai_open(replai_handle * handle, int32_t input_fd, int32_t output_fd);
 /* Restore/release terminal duplicates; retain editor/history. Idempotent, including before open. */
 replai_status replai_close(replai_handle * handle);
-/* Poll one byte/tick, at most 100 ms. Return OK with event NONE for no event. Validate event before consuming input. */
+/* Poll bounded ready input, waiting at most 100 ms. Stop at the first event; read-ahead remains with the handle across reopen. Validate event before consuming input. */
 replai_status replai_poll(replai_handle * handle, uint32_t timeout_ms, replai_event * event);
 /* Deliver a host-observed interrupt and close. Ordinary control flow only; not signal-handler safe. */
 replai_status replai_interrupt(replai_handle * handle, replai_event * event);
