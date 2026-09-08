@@ -1,5 +1,5 @@
 use std::{collections::VecDeque, fmt, ops::Range};
-use unicode_segmentation::UnicodeSegmentation;
+use unicode_segmentation::{GraphemeCursor, UnicodeSegmentation};
 
 /// A rejected edit. Rejection leaves the text and cursor unchanged.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -79,7 +79,12 @@ impl Editor {
         self.limit
     }
     fn boundary(&self, index: usize) -> bool {
-        index == self.text.len() || self.text.grapheme_indices(true).any(|(i, _)| i == index)
+        index == 0
+            || index == self.text.len()
+            || (self.text.is_char_boundary(index)
+                && GraphemeCursor::new(index, self.text.len(), true)
+                    .is_boundary(&self.text, 0)
+                    .expect("complete editor text supplies all grapheme context"))
     }
     /// Replace a grapheme-aligned byte range atomically. Cursor follows replacement.
     pub fn replace(&mut self, range: Range<usize>, text: &str) -> Result<(), EditError> {
@@ -100,12 +105,8 @@ impl Editor {
         let wanted = range.start + text.len();
         self.text.replace_range(range, text);
         // Joining marks/ZWJ may merge both sides of the insertion.
-        self.cursor = self
-            .text
-            .grapheme_indices(true)
-            .map(|(i, _)| i)
-            .find(|&i| i >= wanted)
-            .unwrap_or(self.text.len());
+        self.cursor = wanted;
+        self.snap_cursor();
         Ok(())
     }
     /// Insert text at the cursor without interpreting commands or trimming it.
@@ -156,12 +157,22 @@ impl Editor {
         self.snap_cursor();
     }
     fn snap_cursor(&mut self) {
-        self.cursor = self
-            .text
-            .grapheme_indices(true)
-            .map(|(i, _)| i)
-            .find(|&i| i >= self.cursor)
-            .unwrap_or(self.text.len());
+        if self.cursor == 0 || self.cursor == self.text.len() {
+            return;
+        }
+        // Ask for the context of this boundary instead of traversing the draft
+        // from byte zero. Full text remains available for RI/ZWJ/Indic rules;
+        // long contextual graphemes are deliberately not assumed constant-time.
+        let mut cursor = GraphemeCursor::new(self.cursor, self.text.len(), true);
+        if !cursor
+            .is_boundary(&self.text, 0)
+            .expect("complete editor text supplies all grapheme context")
+        {
+            self.cursor = cursor
+                .next_boundary(&self.text, 0)
+                .expect("complete editor text supplies the following boundary")
+                .unwrap_or(self.text.len());
+        }
     }
     /// Admit one host-selected history entry; evict the oldest at capacity.
     ///
