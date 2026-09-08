@@ -105,6 +105,83 @@ def parse_markdown(text):
     return ids, links, diagrams, headings, errors
 
 
+MATURITY = {"ESTABLISHED": "🟢", "PARTIAL": "🟡", "OPEN": "🔴", "LATER": "⚪"}
+
+
+def check_roadmap(text):
+    """Validate the Markdown control tables, never infer maturity from prose."""
+    errors = []
+
+    def reject(message):
+        errors.append("ROADMAP.md: " + message)
+
+    def section(name):
+        start, end = f"<!-- {name}:start -->", f"<!-- {name}:end -->"
+        if text.count(start) != 1 or text.count(end) != 1 or text.index(start) >= text.index(end):
+            reject(f"expected one ordered {name} section")
+            return ""
+        return text.split(start, 1)[1].split(end, 1)[0]
+
+    def rows(body):
+        return [
+            [cell.strip() for cell in line.strip().strip("|").split("|")]
+            for line in body.splitlines() if line.startswith("|")
+            and not line.startswith(("| ID |", "| Program |", "| ---"))
+        ]
+
+    programs = set()
+    for cells in rows(section("programs")):
+        if len(cells) != 7 or not all(cells):
+            reject("program rows require seven nonempty fields")
+            continue
+        program = cells[0]
+        if not re.fullmatch(r"[FPIOUXQEV]", program) or program in programs:
+            reject(f"invalid or duplicate program: {program}")
+        programs.add(program)
+        if cells[2] not in {f"{icon} {state}" for state, icon in MATURITY.items()}:
+            reject(f"invalid program maturity: {program}")
+    if programs != set("FPIOUXQEV"):
+        reject("missing strategic program")
+
+    counts, ids = dict.fromkeys(MATURITY, 0), set()
+    for cells in rows(section("maturity")):
+        if len(cells) != 7 or not all(cells):
+            reject("maturity rows require seven nonempty fields")
+            continue
+        identity, _, state, _, _, owners, evidence = cells
+        if not re.fullmatch(r"[a-z][a-z0-9_]*(?:\.[a-z][a-z0-9_]*)+", identity) or identity in ids:
+            reject(f"invalid or duplicate maturity ID: {identity}")
+        ids.add(identity)
+        valid = [name for name, icon in MATURITY.items() if state == f"{icon} {name}"]
+        if not valid:
+            reject(f"invalid maturity state: {identity}")
+        else:
+            counts[valid[0]] += 1
+        refs = owners.split(" / ")
+        if len(refs) != len(set(refs)) or not set(refs) <= programs:
+            reject(f"invalid program reference: {identity}")
+        if not re.search(r"\[[^]]+\](?:\[[^]]+\]|\([^)]+\))", evidence):
+            reject(f"missing evidence/owner link: {identity}")
+    if not ids:
+        reject("missing maturity rows")
+    expected = " ".join(f"{state}={count}" for state, count in counts.items()) + f" TOTAL={sum(counts.values())}"
+    if section("maturity-counts").strip() != expected:
+        reject(f"maturity counts differ; expected {expected}")
+
+    selected = re.findall(
+        r"^\| Current selected engineering boundary \| \*\*([A-Z0-9.]+) — SELECTED_NOT_STARTED\*\*",
+        text, re.M,
+    )
+    if len(selected) != 1 or text.count("SELECTED_NOT_STARTED") != 1:
+        reject("expected exactly one selected boundary in the snapshot")
+    elif (
+        "## Current Execution Sequence" not in text
+        or selected[0] not in text.split("## Current Execution Sequence", 1)[1].split("\n## ", 1)[0]
+    ):
+        reject("selected boundary missing from dependency sequence")
+    return errors
+
+
 def check_local(root, paths):
     """Return actionable errors and diagrams; no writes or network calls."""
     root = root.resolve()
@@ -127,6 +204,8 @@ def check_local(root, paths):
             errors.append(f"{path}: project-status owner must be ROADMAP.md")
     if "ROADMAP.md" in parsed and "Project status" not in parsed["ROADMAP.md"][3]:
         errors.append("ROADMAP.md: missing Project status heading")
+    if "ROADMAP.md" in parsed:
+        errors.extend(check_roadmap((root / "ROADMAP.md").read_text()))
     graph = {path: set() for path in parsed}
     for path, (_, links, _, _, _) in parsed.items():
         for link in links:
@@ -196,7 +275,7 @@ def main():
     errors.extend(check_mermaid(diagrams))
     if errors:
         raise SystemExit("\n".join(errors))
-    print(f"PASS documentation links, reachability, owners, ABI tables and {len(diagrams)} Mermaid diagrams")
+    print(f"PASS documentation links, reachability, owners, roadmap control, ABI tables and {len(diagrams)} Mermaid diagrams")
 
 
 if __name__ == "__main__":

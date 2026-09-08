@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Adversarial documentation fixtures; never edit the working documentation."""
 from pathlib import Path
+import re
 import tempfile
 import unittest
 
@@ -93,6 +94,41 @@ class DocumentationGuard(unittest.TestCase):
         self.reject("README.md: line")
         errors, _ = checks.check_local(self.root, self.paths)
         self.assertTrue(any("unclosed code fence" in error for error in errors))
+
+    def test_roadmap_control_rejects_inconsistent_promotions(self):
+        target = self.root / "ROADMAP.md"
+        original = target.read_text()
+        body = original.split("<!-- maturity:start -->")[1].split("<!-- maturity:end -->")[0]
+        rows = [line for line in body.splitlines() if re.match(r"^\| [a-z]+\.", line)]
+        first, second = [cell.strip() for cell in rows[0].strip("|").split("|")], rows[1]
+
+        def changed_cell(index, value):
+            cells = first.copy()
+            cells[index] = value
+            return "| " + " | ".join(cells) + " |"
+
+        selected = re.search(r"\*\*[A-Z0-9.]+ — SELECTED_NOT_STARTED\*\*", original)[0]
+        counts = re.search(r"ESTABLISHED=\d+", original)[0]
+        mutations = [
+            (second, rows[0], "duplicate maturity ID"),
+            (rows[0], changed_cell(2, "🟢 COMPLETE"), "invalid maturity state"),
+            (rows[0], changed_cell(5, "Z"), "invalid program reference"),
+            (counts, "ESTABLISHED=9999", "maturity counts differ"),
+            (selected, "**NONE**", "exactly one selected boundary"),
+            (selected, selected + " SELECTED_NOT_STARTED", "exactly one selected boundary"),
+            ("<!-- maturity:end -->", "<!-- maturity:start -->", "ordered maturity section"),
+            (rows[0], changed_cell(4, ""), "seven nonempty fields"),
+            (rows[0], changed_cell(6, "No evidence"), "missing evidence/owner link"),
+            ("## Current Execution Sequence", "## Unselected work", "selected boundary missing"),
+        ]
+        for before, after, error in mutations:
+            with self.subTest(error=error):
+                target.write_text(original.replace(before, after, 1))
+                self.reject(error)
+        program = original.split("<!-- programs:start -->")[1].split("<!-- programs:end -->")[0]
+        target.write_text(original.replace(program, program.replace("| F |", "| Z |", 1)))
+        self.reject("invalid or duplicate program")
+        target.write_text(original)
 
     def test_actual_mermaid_parser_rejects_invalid_syntax(self):
         errors = checks.check_mermaid([

@@ -1,211 +1,303 @@
 # Project status
 
-This is the sole authority for current project status and future direction.
-Implemented contracts live in [the documentation map](docs/README.md);
-[CHANGELOG](CHANGELOG.md) and Git retain completed changes. Planned series below
-are engineering objectives, not existing features, API declarations, release
-promises or authorization to begin the next wave.
+## At a Glance / Current Snapshot
 
-## Thesis: simple entry, room to grow
-
-REPLAI is becoming an **embeddable interactive command-line substrate**:
-editing, terminal lifecycle, input decoding, history mechanics, host analysis,
-rendering and output coordination beneath an application-owned command loop.
-It should be immediately useful to a small CLI, then support richer application
-shells, database/debugger/compiler frontends and long-lived processes with
-background or streaming output without replacing the interaction engine.
-Streaming model clients and agents are important consumers of these generic
-properties; their commands, execution, state and semantics remain outside the
-library. REPLAI remains narrower than a shell framework or a full-screen TUI.
-
-Small embedding cost and simple mental models matter as much as richer behavior.
-The conceptual reference is modern linenoise, including its multiplexed editing
-and hide/show output lifecycle, not only its original blocking line-read call.
-[Linenoise's current documentation](https://github.com/antirez/linenoise/blob/master/README.markdown)
-also describes multiline editing, hints, bracketed paste, UTF-8 and masking.
-These are comparative design inputs, not borrowed compatibility guarantees.
-
-[Reedline](https://github.com/nushell/reedline) demonstrates separate completion,
-hints, validation, edit modes and menus, with an explicitly experimental
-concurrent external printer. [Rustyline's helper boundary](https://docs.rs/crate/rustyline/18.0.1/source/src/lib.rs)
-combines analysis roles and explicitly raises parsing a draft once for their
-shared use. REPLAI should preserve the simplicity of embedding while making
-that richer analysis and output coordination coherent. It must measure its own
-tradeoffs rather than infer superiority from a feature list.
-
-## Extraction foundation and current status
-
-| Wave | Status and established property |
+| Axis | Current truth |
 | --- | --- |
-| R0 — Repository genesis | Completed: independent repository, safe Rust foundation and application-neutral ownership |
-| R1 — Terminal editor kernel | Completed: Linux grapheme editor, bounded decoder/paste, history, lifecycle and terminal-native presentation |
-| R2 — Interaction API / ABI | Completed: movable native ownership, C ABI 1, installed static/shared consumers, real PTY/layout/resource/memory qualification |
-| R3 — First consumer | Completed: YVEX consumes the qualified C boundary; product execution and cancellation remain host-owned |
-| R4 — Second consumer | Completed: YAI consumes native Rust; transient edits remain distinct from canonical conversation submission |
-| R5 — LEGACY.OWNERSHIP.CLOSURE | Consumer editor removal and local qualification established; outstanding YVEX publication reconciliation is externally owned |
+| Project target | Embeddable command-line interaction infrastructure: a simple entry that can grow into rich, long-lived host-driven interfaces over one engine. |
+| Current selected engineering boundary | **EMBEDDING.CONTRACT.0 — SELECTED_NOT_STARTED**: jointly settle F1 API tiers and P3 host driving, with explicit F2 capability/degradation prerequisites. Selection is direction, not implementation authorization. |
+| Latest major completed boundary | O0/U0 structured presentation and composed prompts, qualified through `b958110…`; producer metadata subsequently published at `9d9375d…`. |
+| Most important structural gap | Public embedding still exposes one POSIX session/poll façade; neither a simple blocking entry nor a public readiness-driven contract is available. |
+| Executable foundation | Platform-neutral engine; bounded Unicode/grapheme editor; history navigation; completion requests; paste, interrupts/EOF, resize, safe output and exact restoration. |
+| Qualified platforms | Linux/macOS: real Rust/C terminal runtime. Windows: portable engine/document tests only, no terminal backend. |
+| Current Rust surface | Editor, Interaction and events; prompt/theme/style and structured documents. No stable API or final integration tiers. |
+| Current C surface | ABI 1: POSIX descriptor binding, static/shared artifacts, caller-owned buffers and plain coordinated output. No structured-document C interface. |
+| Performance posture | P0 baseline and common P1/P2 redesign qualified at recorded workloads; internal batching is not public P3 driving and benchmark integrity is not a universal latency gate. |
+| Presentation posture | Safe spans, headings, facts, lists, responsive tables/status, composed prompts/themes and deterministic plain output. Completion UI and broader visual refinement remain incomplete. |
+| Consumer posture | Native Rust and C consumers are external owners. Exact pins, adoption, application mappings and publication are their decisions; producer metadata assigns no migrations. |
+| Public-release posture | Pre-release; no stable Rust API, ABI longevity, SemVer or MSRV promise and no release date. |
+| Next decision point | Authorize a bounded embedding contract: determine what one engine exposes to blocking/session/driven hosts, how readiness and degradation are represented, and what evidence closes that boundary. |
 
-The extraction-era consumer qualification used exact revision
-`df5538c718b8d068432032e7fb116fb8bfab158e`. Current consumer pins/publication
-are externally owned; library documentation evolution does not justify repinning. The remaining consumer publication reconciliation does not block independent
-library architecture work unless it demonstrates a reproducible generic contract
-defect. This repository does not declare that external publication complete.
+This is the sole authority for **public macro state, maturity, strategic programs,
+dependency ordering and release progression**. [README](README.md) owns first use;
+[architecture][architecture] and contracts own implementation truth; engineering
+dossiers own bounded evidence; Git owns chronology. Planned properties are not
+APIs. No engineering implementation is active or authorized by this document.
 
-**F0 — PUBLIC.ARCHITECTURE is completed.** One platform-neutral engine now
-drives deterministic tests and the preserved Linux Rust/C interaction path.
-At F0, native macOS/Windows CI established engine and virtual-transport execution.
-See [F0 evidence](docs/engineering/f0.md) for that original boundary.
-**P0 — PERFORMANCE.BASELINE is completed.** Versioned component/allocation,
-real Linux PTY, idle/output, embedding and pinned comparative measurements are
-recorded in [P0 evidence](docs/engineering/p0.md), with explicit environment,
-variance and unsupported-workload limits. No performance optimization was made.
-**MACOS.RUNTIME.PERFORMANCE.CLOSURE.0 is completed**, closing X1/P1/P2 together.
-One shared POSIX implementation qualifies real Linux/macOS terminals, including
-ABI 1. Native before/after evidence, retained causal checkpoints and final
-qualification are recorded in the [combined dossier](docs/engineering/macos-perf.md).
-The final primary burst median is 0.194 ms against a same-run parity limit of
-0.575 ms, with preserved isolated-key latency and substantially fewer layout
-allocations. This is a workload-specific result, not a general performance claim.
-Internal input batching does not close public P3 host driving.
-**STRUCTURED.PRESENTATION.0 is completed**, closing O0/U0 together: bounded
-semantic output blocks and composed prompts share safe spans, roles and layout.
-Linux/macOS Rust/C qualification includes structured PTYs, resource cleanup and
-native memory tools; Windows runs portable document/engine tests and benchmark
-integrity. The [presentation contract](docs/presentation.md) defines responsive
-fallbacks, safe bounds and the deliberately unchanged C ABI 1 surface. F1/F2, I series, O1/O2/O3,
-U1/U2/U3, public P3 embedding and Windows runtime remain unstarted. No next wave
-or consumer repin is authorized.
+Navigate: [maturity](#system-maturity) · [programs](#strategic-programs) ·
+[completed boundaries](#completed-boundaries) · [sequence](#current-execution-sequence) ·
+[release](#release-progression) · [promotion](#promotion-and-living-update-discipline).
 
-System-terminal runtime qualification covers Linux and macOS,
-and remains pre-release. There is no stable API,
-ABI, SemVer or MSRV promise. The current implementation has one active terminal
-interaction per linked library image, synchronous safe-text output transactions
-and host-owned signal meaning. It does not support independent concurrent
-writers. See [interaction](docs/interaction.md) and
-[presentation](docs/presentation.md) for the actual conditions.
+## System Maturity
 
-## Ordered development map
+| State | Meaning |
+| --- | --- |
+| 🟢 ESTABLISHED | Generic property implemented and qualified at the exact scope stated in its row. |
+| 🟡 PARTIAL | Real foundation exists; the adopted generic boundary or evidence remains incomplete. |
+| 🔴 OPEN | Adopted capability or architectural property is absent or unqualified. |
+| ⚪ LATER | Deliberately beyond the current dependency horizon; not silently abandoned. |
 
-```mermaid
-flowchart TD
-    R[Extraction closure: R5] --> F[General library architecture: F]
-    F --> PI[Performance and command interaction: P and I]
-    PI --> OU[Streaming output and line-oriented UX: O and U]
-    OU --> XQ[Platforms and robustness: X and Q]
-    XQ --> E[Ecosystem and embedding: E]
-    E --> V[Qualified public release: V]
+Maturity is independent of temporal execution status. An OPEN property need not
+be a currently blocked task; completing a bounded wave does not establish its
+whole program. Counts describe rows, never percentage completion. IDs are stable
+control identifiers, not new public API or producer-capability declarations.
+
+<!-- maturity-counts:start -->
+ESTABLISHED=20 PARTIAL=13 OPEN=9 LATER=4 TOTAL=46
+<!-- maturity-counts:end -->
+
+<!-- maturity:start -->
+### Interaction kernel
+
+| ID | Property | Maturity | Current truth / exact boundary | Promotion condition | Program | Evidence / owner |
+| --- | --- | --- | --- | --- | --- | --- |
+| interaction.editing | Bounded Unicode editing | 🟢 ESTABLISHED | UTF-8 storage and extended-grapheme cursor/atomic replacement; no terminal I/O in the editor. | Preserve rejection atomicity and combining/CJK/ZWJ oracles on supported backends. | F | [Interaction][interaction]; [core tests][core-tests]; [Unicode oracle][unicode-tests] |
+| interaction.history_navigation | History navigation | 🟢 ESTABLISHED | Bounded memory history and exact original draft/cursor return; admission is host-owned. | Preserve draft return independently of future storage/search providers. | I | [Interaction][interaction]; [core tests][core-tests] |
+| interaction.completion_request | Completion mechanics | 🟢 ESTABLISHED | Request event plus host-selected grapheme-aligned replacement; no candidate discovery. | Preserve validated replacement and refusal through Rust/C. | I | [Interaction][interaction]; [PTY][pty] |
+| interaction.outcomes | Submit, interrupt and EOF | 🟢 ESTABLISHED | Distinct outcomes; transport EOF differs from delete-on-nonempty Ctrl-D. Host owns cancellation meaning. | Keep deterministic/backend outcome parity and restoration. | F | [Engine tests][engine-tests]; [PTY][pty] |
+| interaction.paste | Multiline and paste framing | 🟢 ESTABLISHED | Bounded atomic paste normalization, no shortcut execution inside paste; Enter submits complete edited text. | Preserve exact multiline bytes and malformed-sequence progress. | I | [Decoder][decoder]; [PTY][pty] |
+
+### Host integration
+
+| ID | Property | Maturity | Current truth / exact boundary | Promotion condition | Program | Evidence / owner |
+| embedding.session | Explicit interaction ownership | 🟢 ESTABLISHED | Movable state, scoped open/poll/close/reopen and host-owned execution; Linux/macOS acquisition. | Preserve lifecycle/error semantics and public/native C composition. | F | [Interaction][interaction]; [facade][facade]; [C contract][c-api] |
+| embedding.tiers | F1 simple and layered embedding | 🟡 PARTIAL | Session API exists; no one-call blocking convenience or complete three-tier contract. | Demonstrate small blocking, session and driven consumers using one engine without exposing private frames. | F / P | [Facade][facade]; [F0 seams][f0] |
+| embedding.driver | P3 public event driver | 🔴 OPEN | Private driver batches ready bytes; public poll still checks size and caps waits at 100 ms. | Host readiness/resize/expiry delivery without mandatory periodic wakes; preserve pending input and cleanup. | P / F | [Facade][facade]; [driver][driver]; [performance dossier][macos-perf] |
+| analysis.revisions | I0 shared host analysis | 🔴 OPEN | No public revision-aware shared completion/hint/validation snapshot. | Prove one host analysis can serve multiple features and stale results cannot modify a newer draft. | I / F | [Architecture owner][architecture]; [engine][engine-tests] |
+
+### Presentation
+
+| ID | Property | Maturity | Current truth / exact boundary | Promotion condition | Program | Evidence / owner |
+| presentation.prompt | U0 composed prompts | 🟢 ESTABLISHED | Safe primary/continuation spans and semantic roles; simple constructor retained. | Preserve cell geometry, default background and simple embedding across qualified terminals. | U | [Presentation][presentation]; [document tests][documents] |
+| presentation.structured_output | O0 semantic documents | 🟢 ESTABLISHED | Rust paragraphs/headings, key/value, lists, literal blocks and spacing; safe standalone/coordinated output. | Preserve bounds, no terminal injection and meaningful styled/plain forms. | O / U | [Presentation][presentation]; [document tests][documents] |
+| presentation.table | Responsive tables | 🟢 ESTABLISHED | Cell-width layout, wrapped cells and narrow record stacking; no horizontal viewport. | Preserve content and bounded work under narrow/wide Unicode inputs. | U | [Document tests][documents]; [presentation][presentation] |
+| presentation.status | Semantic severity | 🟢 ESTABLISHED | Status has textual cues in plain output; color is not the only distinction. | Keep severity legible under NO_COLOR and captured output. | U | [Presentation][presentation]; [document tests][documents] |
+| presentation.theme | Theme foundation | 🟢 ESTABLISHED | Explicit role styles and emphasis, with terminal-default background and safe spans. | Preserve style inheritance and explicit default emphasis without ANSI injection. | U | [Presentation][presentation]; [document tests][documents] |
+| presentation.completion_ux | U1 completion presentation | 🔴 OPEN | A request/replacement event is not a candidate list, cycling strategy or menu. | Qualify presentation against the rich I1 contract, including narrow/plain behavior. | U / I | [Presentation owner][presentation]; [interaction][interaction] |
+| presentation.multiline_ux | U2 substantial multiline UX | 🟡 PARTIAL | Continuation, wrapping, viewport and resize work; richer diagnostics and large-edit UX remain incomplete. | Qualify substantial multiline editing/diagnostics and width changes without losing cursor/content. | U / I | [PTY][pty]; [layout oracle][layout-tests] |
+| presentation.visual_system | U3 visual refinement | 🟡 PARTIAL | Roles/themes, spacing and plain hierarchy exist; no complete accessibility/UX qualification across future surfaces. | Review coherent prompt, candidate, diagnostic and output hierarchy across capabilities. | U | [Presentation][presentation]; [document tests][documents] |
+
+### Output coordination
+
+| ID | Property | Maturity | Current truth / exact boundary | Promotion condition | Program | Evidence / owner |
+| output.coordinated | Synchronous and exclusive output | 🟢 ESTABLISHED | Safe text/documents preserve active draft/cursor; submit releases editing before host execution and later reopen. | Retain failure cleanup, exact draft return and Rust/C plain compatibility. | O | [Interaction][interaction]; [PTY][pty]; [C PTY][c-pty] |
+| output.streaming | O1 sustained output | 🔴 OPEN | Bounded output measurements exist; no sustained-stream contract or stream-specific optimization qualification. | Measure long-running chunk workloads, bytes/writes/backpressure and restoration with host-owned meaning. | O / P | [P0 output evidence][p0]; [presentation owner][presentation] |
+| output.multiplexed | O2 editing with background output | 🔴 OPEN | Serialized transactions do not establish independent concurrent writers or output arbitration. | Qualify interleaved input/output, bounded scheduling and exact draft/cursor preservation. | O / P | [Interaction owner][interaction]; [F0][f0] |
+| output.transient | O3 transient feedback | 🔴 OPEN | Persistent status blocks are not transient notices, expiry or replacement surfaces. | Define lifetime/removal and redraw evidence without product rendering semantics. | O / U | [Presentation owner][presentation] |
+
+### Command interaction
+
+| ID | Property | Maturity | Current truth / exact boundary | Promotion condition | Program | Evidence / owner |
+| completion.candidates | I1 rich completion contract | 🟡 PARTIAL | Safe replacement mechanics exist; no rich display/description/acceptance candidate protocol. | Qualify host-defined candidates and stale-result handling independently of U1 presentation. | I | [Interaction][interaction]; [architecture owner][architecture] |
+| analysis.hints_highlight | I2 hints and highlighting | 🔴 OPEN | Document spans exist; editor hints, autosuggestions and host syntax spans do not. | Reuse revision-bound analysis with safe range/style validation and plain degradation. | I / U | [Presentation owner][presentation] |
+| analysis.validation | I3 validation and submission policy | 🔴 OPEN | Multiline bytes can be edited; no host complete/incomplete/invalid submission decision. | Prove continued editing, submit and diagnostics with a language-neutral host validator. | I | [Interaction owner][interaction] |
+| history.storage_search | I4 history provider/search | 🟡 PARTIAL | Memory navigation exists; no storage-provider or search boundary. | Separate navigation from storage with bounded search, draft return and host retention/privacy policy. | I | [Core][core]; [interaction][interaction] |
+| editing.keymap | I5 configurable editing | 🟡 PARTIAL | Normalized actions and a fixed compatibility keymap exist; no configurable modes, general undo or search. | Feed common edit operations from different mappings without changing decoder/storage authority. | I | [Keymap][keymap]; [F0][f0] |
+| input.sensitive | I6 sensitive input | ⚪ LATER | No masked/hidden mode or secret-specific history posture. Deferred behind embedding and editing-policy contracts. | Explicit authorization plus display/history/lifecycle leakage tests before admitting secrets. | I | [Interaction owner][interaction] |
+
+### Terminal and platform
+
+| ID | Property | Maturity | Current truth / exact boundary | Promotion condition | Program | Evidence / owner |
+| platform.separation | X0 protocol/resource separation | 🟢 ESTABLISHED | One neutral engine and semantic mutations; VT encoding and POSIX resources are separate. Established by F0/shared POSIX work, not a new X0 wave claim. | Add realizations without OS policy entering the editor or forking the engine. | X / F | [Architecture][architecture]; [conformance][conformance] |
+| platform.posix_linux | Linux terminal runtime | 🟢 ESTABLISHED | Real Rust/C PTYs, static/shared installation, termios/FD cleanup and Valgrind. | Preserve actual terminal and resource evidence on changed boundaries. | X / Q | [PTY][pty]; [C qualification][c-qualification]; [CI][ci] |
+| platform.posix_macos | X1 macOS terminal runtime | 🟢 ESTABLISHED | Shared POSIX runtime with real Rust/C PTYs and native leak qualification. | Preserve native execution and common-engine parity, not compilation alone. | X / Q | [macOS dossier][macos-perf]; [CI][ci] |
+| platform.windows_core | Windows portable engine | 🟢 ESTABLISHED | Native deterministic engine/document tests; no Windows terminal acquisition. | Retain portable execution; do not promote this row into runtime support. | X | [Conformance][conformance]; [CI][ci] |
+| platform.windows_runtime | X2 Windows runtime | 🔴 OPEN | No Console/ConPTY backend or HANDLE-based acquisition contract. | Qualify real Windows input/output, mode restoration and ownership; resolve future C binding separately. | X / F | [Architecture owner][architecture]; [C contract][c-api] |
+| terminal.capabilities | F2 capabilities/degradation | 🟡 PARTIAL | Centralized color/environment policy exists; no general capability discovery/required-feature/degradation contract. | Distinguish terminal facts from policy, including dumb/non-TTY, cursor/paste/width and non-POSIX realization. | F / X | [Current resolver][capabilities]; [presentation][presentation] |
+
+### Performance and robustness
+
+| ID | Property | Maturity | Current truth / exact boundary | Promotion condition | Program | Evidence / owner |
+| performance.baseline | P0 characterization | 🟢 ESTABLISHED | Versioned components, allocations, PTY/idle/output and pinned comparisons at recorded workloads. | Retain workload/toolchain/variance identity; label unsupported workloads and new platforms separately. | P | [P0 dossier][p0]; [performance tools][perf-tools] |
+| performance.editor | P1 editor redesign | 🟢 ESTABLISHED | Measured local grapheme-boundary work retains String storage and Unicode oracle parity. | Preserve semantics and repeat matched scaling measurements for changes. | P | [Combined dossier][macos-perf]; [Unicode oracle][unicode-tests] |
+| performance.render | P2 common layout/render redesign | 🟢 ESTABLISHED | Viewport storage, geometry reuse and changed-row rendering; bounded fallbacks remain. | Recheck exact workloads, allocations, bytes and isolated-key latency; no universal speed-ranking claim. | P | [Combined dossier][macos-perf]; [layout oracle][layout-tests] |
+| performance.regression | Q2 performance regression policy | 🟡 PARTIAL | Benchmark result/driver integrity runs in CI; stable broad latency/resource thresholds are not established. | Admit repeatable metrics with noise budgets and justified failure thresholds. | Q / P | [Performance result tests][perf-tests]; [CI][ci] |
+| robustness.fuzz_property | Q0 general state-machine robustness | 🟡 PARTIAL | Deterministic negative tests and generated Unicode/layout oracles exist; no general fuzz campaign qualification. | Exercise arbitrary edit/decoder sequences with reproducible failures and retained invariants. | Q | [Unicode tests][unicode-tests]; [decoder][decoder]; [conformance][conformance] |
+| robustness.resource_stress | Q1 resource/failure stress | 🟡 PARTIAL | Exact restoration, repeated FD lifecycle and bounded I/O/memory failures qualified; not a general storm/exhaustion campaign. | Stress resize/paste/output and exhaustion with no stuck mode, leaked ownership or unbounded work. | Q | [C contracts][c-tests]; [C qualification][c-qualification]; [PTY][pty] |
+
+### Packaging, ecosystem and release
+
+| ID | Property | Maturity | Current truth / exact boundary | Promotion condition | Program | Evidence / owner |
+| packaging.integration | E0 packaging | 🟡 PARTIAL | Cargo and staged C static/shared/pkg-config work; no standardized CMake/public package release surface. | Qualify clean external installations and supported packaging paths without adjacent checkouts. | E | [C contract][c-api]; [foundation tests][foundation] |
+| ecosystem.consumers | E1 consumer diversity | 🟡 PARTIAL | Two independent Rust/C product integrations and neutral fixtures; no broad shell/DB/debugger/streaming matrix. | Execute genuinely different hosts against exact contracts, with their own semantic controls. | E | [C example][c-example]; [Rust example][rust-example]; [historical extraction][extraction] |
+| ecosystem.cookbook | E2 integration patterns | 🟡 PARTIAL | Executable Rust/C examples and ownership docs exist; full tier/driver recipes await their contracts. | Derive copyable recipes from the qualified E1/F1/P3 consumers. | E / F | [Rust example][rust-example]; [C contract][c-api] |
+| ecosystem.contract_handoff | Producer contract publication | 🟢 ESTABLISHED | Repository-owned snapshots/fingerprints and consumer-neutral delta; no runtime dependency or assigned migrations. | Keep metadata aligned with exact qualified source; consumers author their own profiles/receipts. | E | [Producer metadata][producer]; [exact publication][carrier] |
+| release.api_freeze | E3 API freeze candidate | ⚪ LATER | Pre-release shapes; ABI identity is not a long-term compatibility promise. | Audit all selected public ownership, lifecycle, errors, language and portability contracts after E1 evidence. | E / V | [Architecture owner][architecture]; [C contract][c-api] |
+| release.qualification | V0 release qualification | ⚪ LATER | Boundary-specific evidence exists, not a first-release support envelope. | Close the release progression below with exact platform/API/ABI/package claims and reproducible gates. | V | [Development method][development]; [CI][ci] |
+| release.public | V1 first public commitment | ⚪ LATER | No package publication or stable compatibility promise is authorized. | Explicit release decision after V0; publish only the qualified support/compatibility scope. | V | [Release progression](#release-progression); [development][development] |
+<!-- maturity:end -->
+
+## Strategic Programs
+
+Programs own gaps, not serial time slots. Maturity here describes each program's
+whole adopted target; it is not counted again in the row summary. F/P/I work can
+co-evolve, Q accompanies every affected boundary, and platform/packaging evidence
+can run independently when their prerequisites are explicit.
+
+<!-- programs:start -->
+| Program | Target property | Maturity | Completed foundations | Remaining gaps | Dependencies | Explicit non-goals |
+| --- | --- | --- | --- | --- | --- | --- |
+| F | One engine, simple/session/driven embedding | 🟡 PARTIAL | F0 neutral engine and explicit session ownership | F1 tiers; F2 required capabilities/degradation | Joint P3 design; X resource constraints; P0 evidence | Scheduler, async runtime, cosmetic API churn |
+| P | Measurable, efficient interaction under host driving | 🟡 PARTIAL | P0 baseline; common P1/P2 convergence | P3 public driver; broaden measured workloads without generalizing wins | F1/F2 contracts; Q2 variance policy | Intuitive buffer rewrites; fastest-library claims |
+| I | Rich command interaction from host analysis | 🟡 PARTIAL | Completion requests, history mechanics, fixed normalized actions | I0–I5 analysis/candidates/validation/storage/keymaps; I6 later sensitive input | F1/P3 delivery/revision rules; U presentation; Q bounds | Parser, command language, history database |
+| O | Safe output that scales beyond exclusive phases | 🟡 PARTIAL | O0 documents and synchronous surface coordination | O1 sustained output; O2 arbitration; O3 transient lifecycle | P3/F2 delivery and capabilities; U geometry; Q stress | Product streams, token semantics, uncontrolled writers |
+| U | Coherent line-oriented interaction presentation | 🟡 PARTIAL | U0 prompts; documents, tables, status and theme foundation | U1 candidates; U2 multiline refinement; U3 accessibility/visual system | I1/I3 semantics; F2 degradation; O coordination | Alternate-screen panels, dashboard, product ontology |
+| X | System realizations below one generic engine | 🟡 PARTIAL | X0 separation; Linux and X1 macOS runtime; Windows portable core | X2 runtime and its C acquisition design space; other systems later | F1/F2 resource contract; shared Q conformance | Fake support from compilation; speculative OS stubs |
+| Q | Reproducible correctness/resource/performance promotion | 🟡 PARTIAL | Deterministic/PTY/ABI oracles, failure cleanup, memory tools, benchmark integrity | Q0 fuzz/property breadth; Q1 storms/exhaustion; Q2 stable regression thresholds | Runs alongside each changed boundary; P0 noise evidence | Test-count maturity; unexecuted platform claims |
+| E | Reproducible, understandable independent embedding | 🟡 PARTIAL | Cargo/C installation, examples, two consumers, producer handoff metadata | E0 CMake/package consolidation; E1 diversity; E2 recipes; E3 freeze later | F1/P3 and real platform claims; Q evidence | Consumer migrations by default; mandatory BOUNDARY dependency |
+| V | First defensible public compatibility commitment | ⚪ LATER | Exact pre-release source/ABI qualification and CI | V0 support envelope; V1 publication decision | E3 candidate plus Q/X/package qualification | Date-driven release; incidental SemVer/API promises |
+<!-- programs:end -->
+
+## Completed Boundaries
+
+This compact foundation is not a second changelog. Implementation and later
+qualification/document carriers are distinct; retained measurements apply only
+to their recorded source, workload and environment.
+
+| Boundary | Established foundation and evidence identity |
+| --- | --- |
+| R0–R5 extraction foundation | Independent library, Rust/C boundaries, two consumer substitutions and local legacy-removal qualification. [Retained extraction control][extraction] records the externally owned publication caveat; this roadmap neither reopens extraction implementation nor certifies external publication. Historical qualified consumer contract: `df5538c718b8d068432032e7fb116fb8bfab158e`. |
+| F0 PUBLIC.ARCHITECTURE | Neutral engine/actions/render and system/protocol seams: implementation `a8afb8e…`, closure carrier `4ddd24f…`; [F0 dossier][f0]. |
+| P0 PERFORMANCE.BASELINE | Characterization implementation `d800083…` plus corrections; evidence carrier `8210c93…`; [P0 dossier][p0]. |
+| X1/P1/P2 combined macOS-performance closure | Shared native POSIX runtime and common redesign; measured source/harness `96f794c7b807636b4fabd3939bbeeab150a87dd1`, closure carrier `6365f84e12865871bf26ecf0d984b48213d81ebc`; [combined dossier][macos-perf]. |
+| O0/U0 STRUCTURED.PRESENTATION | Implementation `21e3493…`, correctness closures through `b9581102220364b94d2bcdef49f602308d24e6c9`; [presentation contract][presentation] and [exact qualification][presentation-ci]. Richer U/O work remains separate. |
+| BOUNDARY producer metadata | Metadata/README carrier `9d9375db407246a6f4946e20e38f56fe3155e62a` describes qualified source `b958110…` and the delta from `6365f84…`; [producer metadata][producer]. No runtime/API change or consumer repin. |
+
+## Current Execution Sequence
+
+The selected **EMBEDDING.CONTRACT.0** decision joins F1 and P3 because exposing
+three façades before settling who drives input, resize, expiry and output risks
+freezing the existing poll loop into every tier. [The current façade][facade]
+combines system acquisition and polling; [the internal substrate][substrate] and
+[neutral engine][engine-tests] already separate work from waiting. These are
+real foundations, not an already public driven API.
+
+| Dependency frontier | Decision / evidence required | What remains outside it |
+| --- | --- | --- |
+| F1 ↔ P3, selected joint boundary | Define the smallest common ownership/lifecycle contract; test blocking simplicity, session parity and host readiness using one engine. Measure idle wakes, queued input and cleanup alongside API ergonomics. | No final type names or APIs frozen by this roadmap; no async runtime integration implied. |
+| F2, prerequisite constraints and parallel investigation | Specify required versus optional cursor/paste/color/width facts, resolution owner, dumb/non-TTY policy and failure/degradation outcomes before closing the embedding contract. | This selection does not implement or automatically close the full F2 capability system. |
+| I0, next analysis dependency | Once revision identity and event/result delivery are coherent, specify shared host analysis and stale-result refusal; feed its needs back into F1/P3 before freezing. | No parser, hint/completion implementation or premature public snapshot layout. |
+| I1–I5 with U1–U3; O1–O3 | Advance only the chosen analysis/output/presentation intersections, measured against P baselines and Q stress. | Structured output alone does not close multiplexing; completion requests do not close candidate UX. |
+| X/E/Q, evidence alongside development | Retain Linux/macOS controls; independently scope Windows realization and clean diverse embeddings where prerequisites permit. | Platform compilation, one consumer or a passing benchmark is not release promotion. |
+
+A combined F1/P3 closure is sensible only if one bounded acceptance contract can
+prove all three embeddings without extra engines or hidden scheduling. If F2
+uncovers incompatible resource/degradation assumptions, split or reorder that
+closure rather than hiding an unresolved dependency. Measurement and integration
+evidence may change this sequence. Selection authorizes **no source mutation**;
+future work needs its own explicit engineering scope. F1, P3, F2 and I0 are not
+started by this documentation wave.
+
+## Ownership and Consumer Posture
+
+```text
+HOST: commands, parser, application semantics, execution,
+      candidate discovery, history policy, semantic classification
+                         ↓ public REPLAI contracts
+REPLAI: editing, interaction mechanics, generic presentation,
+        terminal lifecycle, safe output coordination
+                         ↓ platform realization
+Linux / macOS terminal runtime; future Windows runtime
 ```
 
-This is dependency order, not a promise to finish a whole series before learning
-from another. In particular, the first post-R5 design must consider **API tiers,
-performance baselines and event-loop architecture together**. F0 frames that
-joint investigation; F1, P0 and P3 retain distinct deliverables. A convenient API
-cannot be frozen before understanding its blocking behavior and costs. F0 and P0 have explicit task authorization; later implementation is not authorized
-by the roadmap or by external consumer closure. The explicit combined macOS
-and performance closure authorization above supersedes that original ordering.
+YAI and YVEX own their adapters, frontend decisions, application semantics,
+qualification and publication. Consumer repinning requires external authorization
+and does not follow every library commit. The producer manifest exposes generic
+contract deltas; it assigns no consumer migration. Consumer state blocks an
+independent library boundary only when it exposes a **reproducible generic
+REPLAI contract defect**, not because a downstream publication is pending.
 
-### Foundation — one engine, several embedding levels
+BOUNDARY metadata concerns cross-repository contract evolution. It is neither
+an engine component nor a build/runtime dependency. This roadmap changes no
+producer capability meaning, consumer profile, pin or receipt. Control IDs and
+maturity describe project direction; a producer manifest describes an exact
+implemented source contract. Neither substitutes for the other.
 
-| Wave | Property to establish |
+## Release Progression
+
+| Gate | Required promotion evidence |
 | --- | --- |
-| F0 — PUBLIC.ARCHITECTURE | **Completed.** Platform-neutral interaction/actions/layout/render, separate VT protocol and POSIX resources, native macOS/Windows engine execution and preserved Linux Rust/C qualification |
-| F1 — API.TIERS | A small blocking/read-line entry, an explicit host-driven interaction surface, and a driven/multiplexable surface over the same engine; simple programs need no elaborate event loop |
-| F2 — TERMINAL.CAPABILITIES | Explicit capabilities and degradation policy, rather than scattered environment checks; request only features needed by the selected line-oriented interaction |
+| Embedding and capabilities | F1/P3 ownership and F2 degradation are coherent; selected Rust/C exposure is explicit, with unsupported surfaces named. |
+| Robustness and platform envelope | Relevant Q0/Q1 failure/invariant coverage, justified Q2 metrics and real X runtime evidence for every claimed platform. Windows need not block a deliberately narrower release, but must never be implied supported. |
+| Reproducible ecosystem | E0 clean packages/installations, E1 different real hosts and E2 usable recipes; no adjacent source or accidental system library. |
+| E3 freeze candidate | Review public types, errors, lifetimes, resource ownership, API/ABI evolution and compatibility policy against those consumers. |
+| V0 release qualification | Repeat the exact chosen support envelope with pinned artifacts, docs and reproducible CI; record exclusions and residual risks. |
+| V1 public commitment | Separate authorization to publish packages and the first compatibility promise. No date or version number alone establishes readiness. |
 
-These are responsibilities to test, not a prescribed module tree or object
-layout. The lowest integration tier must accept host readiness, resize and
-arriving analysis/output without imposing Tokio, another async runtime or a
-threading model. The higher tiers must not become separate editors.
-Capabilities should distinguish styling, paste, cursor operations and width
-assumptions. TERM=dumb needs a deliberate degradation contract; a capability
-inventory does not authorize mouse interfaces, alternate screens or a canvas.
+The adopted capability map is broader than the eventual first release. A smaller
+release requires an explicit scope decision here; it cannot erase unresolved
+rows or silently treat excluded features as completed.
 
-### Performance — measure before replacing the kernel
+## Explicit Nonclaims
 
-| Wave | Property to establish |
-| --- | --- |
-| P0 — PERFORMANCE.BASELINE | **Completed.** Reproducible component and Linux PTY latency, allocations, memory, bytes, writes/syscalls, idle and embedding baselines; pinned linenoise/rustyline/reedline overlaps and limitations in [P0 evidence](docs/engineering/p0.md) |
-| P1 — EDITOR.KERNEL.PERFORMANCE | **Completed in MACOS/PERF.** Measured local Unicode boundary validation retains String storage; generated Unicode oracles and native scaling evidence qualify the choice |
-| P2 — INCREMENTAL.RENDER | **Completed in MACOS/PERF.** Viewport storage, geometry reuse, changed-row rendering and ready-input presentation scheduling meet same-machine parity with preserved correctness and terminal efficiency |
-| P3 — EVENT.DRIVER | **Unstarted.** Host event-loop embedding without artificial periodic polling where readiness/resize mechanisms permit it; internal bounded reads do not deliver this public driver contract |
+REPLAI is not a shell framework, full-screen TUI, async runtime, application
+command language, parser, agent framework, history database or product rendering
+ontology. Hosts own those meanings and systems.
 
-The editor uses String storage and context-local grapheme boundary work. Layout
-retains the viewport and reuses stable geometry; rendering updates changed rows
-or suffixes where valid. Full prefix scans and redraw fallbacks remain measured
-costs. Polling still checks dimensions and caps waits at 100 ms without owning
-resize signals. P0 remains the immutable characterization baseline; the combined
-dossier records the authorized redesign and its remaining limits.
+There is **no Windows terminal runtime**, stable Rust API/long-term ABI promise,
+universal terminal fallback or support for concurrent independent writers.
+Structured Rust documents are not exposed through C ABI 1. Theme/span support
+is not syntax analysis, and basic multiline editing is not host validation.
+Internal batching is not public event-loop embedding. Existing performance
+comparisons establish exact workload results, not general superiority.
 
-P0 must characterize beginning/middle/end edits; ASCII, CJK, combining and emoji
-movement; key-to-frame p50/p95/p99; output chunk rates; lifecycle and FD stability;
-and substantial pasted SQL, source, JSON or prose. Proposed pressure ranges
-include 1 KB–1 MB paste, 100–100k history entries and 10–100k candidates where the
-respective interface exists. Unsupported ranges must be labelled, never counted
-as current capacity. Compare equivalent behaviors and record platform, terminal,
-versions and bounds. Local opt-in counters for frames, redraws, writes, stale
-analysis and layout work should explain costs with negligible disabled overhead;
-this is development instrumentation, not telemetry. Gap buffers, ropes or piece
-tables are possible outcomes, not predetermined upgrades.
+## Promotion and Living-update Discipline
 
-### Command interaction — host knowledge, library mechanics
+Implementation is not generic maturity; test existence is not qualification;
+one platform is not cross-platform support; consumer success is not generic
+proof; a benchmark win is not general performance superiority; a planned API is
+not an implemented contract.
 
-| Wave | Property to establish |
-| --- | --- |
-| I0 — ANALYSIS.PROTOCOL | Revision-aware shared analysis of draft/cursor/context, so one host parse can drive multiple features and stale results cannot mutate a newer draft |
-| I1 — COMPLETION | Host-defined replacement ranges, display/descriptive metadata and acceptance policy; rich candidates independent of a particular menu |
-| I2 — HINT.HIGHLIGHT | Generic hints/autosuggestions and styled spans derived from host analysis |
-| I3 — VALIDATION.MULTILINE | Host-defined complete/incomplete/invalid outcomes govern submission, continued editing and diagnostics without embedding a language parser |
-| I4 — HISTORY.SEARCH | Navigation separated from storage; bounded memory adapters, custom/persistent providers and incremental/prefix/reverse search with host privacy/retention policy |
-| I5 — KEYMAP.EDITING | Key sequences map to generic edit commands independently of the decoder: word operations, undo/redo, search and eventual Emacs/Vi/custom bindings |
-| I6 — SECRET.INPUT | Explicit masked/hidden behavior with history denied by default and a clear sensitive-input lifecycle |
+For each promotion, update its stable maturity row, exact scope, promotion
+condition, owner/evidence and affected program/dependencies together. Evidence
+must identify source, environment, commands and observed outcomes, including
+rejections and failure cleanup where relevant. Keep historical dossiers bounded;
+do not relabel an old run as qualification of a new source or environment.
 
-Analysis results must identify the revision they describe. Completion, hints,
-highlighting and validation should reuse the same derived snapshot; slow host
-lookups must not overwrite intervening edits. Context fields, candidate tags,
-selection and semantic word-boundary shapes remain design questions. REPLAI
-never acquires the host parser, command registry, filesystem lookup or history
-storage policy merely because it can present their results.
+Change the selected boundary only with a documented dependency rationale. Keep
+one selection, recompute the row counts, and leave chronology to Git. Update
+architecture/contracts when implementation truth changes; keep first-use
+instructions in README. A future narrower release or deferred gap remains
+visible here. New public macro-status pages are not additional authorities.
 
-### Output and presentation — long-running terminal-native interaction
+`python3 tools/check_docs.py` validates maturity IDs/states/counts, program
+references, the unique selection and normal documentation links/anchors. Its
+negative fixtures run through `python3 -B tools/test_check_docs.py`. These checks
+validate control consistency, **not the truth of a maturity promotion**. Follow
+[the development method][development] for qualification and publication.
 
-| Wave | Property to establish |
-| --- | --- |
-| O0 — OUTPUT.MODEL | **Completed in STRUCTURED.PRESENTATION.0.** Bounded semantic documents/spans, responsive blocks and safe standalone/coordinated output; no trusted raw path |
-| O1 — STREAMING.OUTPUT | Characterize and optimize sustained chunks from any host, including build logs, debugger events and model text |
-| O2 — MULTIPLEXED.INTERACTION | Background/streaming output coexists with an editable draft, preserving cursor, draft and terminal ownership under explicit arbitration |
-| O3 — TRANSIENT.FEEDBACK | Generic notices/diagnostics and transient feedback without owning product rendering |
-| U0 — PROMPT.LAYOUT | **Completed in STRUCTURED.PRESENTATION.0.** Composed primary/continuation spans with shared theme and cell geometry; optional right-side information remains deferred |
-| U1 — COMPLETION.UX | Inline, list, cycling and menu strategies over the completion contract |
-| U2 — MULTILINE.UX | Substantial multiline continuation, wrapping, cursor geometry and diagnostic presentation |
-| U3 — VISUAL.SYSTEM | Coherent semantic roles, themes, spacing, accessibility and terminal-native background behavior |
-
-Exclusive execution remains useful: submit, release editing, emit host output,
-then reopen. Concurrent editing is a separate, harder contract. Output arbitration
-must coordinate the editing surface, notices and completion presentation without
-interpreting the stream's product meaning. Long output and a host emitting
-5–200 chunks per second are workloads to characterize, not token semantics or
-performance promises. No full-screen dashboard or hidden theme replacement is
-implied by a richer line surface.
-
-### Platforms, robustness and a qualified ecosystem
-
-| Wave | Property to establish |
-| --- | --- |
-| X0 — BACKEND.SEPARATION | Platform-independent editor/render/interaction logic separated from OS terminal resources and protocols |
-| X1 — MACOS.QUALIFICATION | **Completed in MACOS/PERF.** Shared POSIX Rust/C ABI 1 runtime qualified on physical macOS PTYs and real-terminal CI |
-| X2 — WINDOWS.CONPTY.INVESTIGATION | Independent backend feasibility and qualification, without premature compatibility branches in the Unix implementation |
-| Q0 — FUZZ.PROPERTY | Decoder/state-machine fuzzing and arbitrary edit-sequence invariants |
-| Q1 — RESOURCE.FAILURE.STRESS | Repeated lifecycle, resize/paste/output storms, descriptor exhaustion and controlled I/O/allocation failures where simulatable |
-| Q2 — PERFORMANCE.REGRESSION | Stable, meaningful performance properties become guarded regressions after baseline variance is understood |
-| E0 — PACKAGING | Reproducible Cargo, C ABI installation, pkg-config, CMake and static/shared external builds |
-| E1 — CONSUMER.MATRIX | Small genuinely distinct Rust/C/C++ command, SQL-like, debugger and streaming consumers over the same implementation |
-| E2 — INTEGRATION.COOKBOOK | Copyable patterns derived from those executed consumers, rather than speculative wrappers |
-| E3 — API.FREEZE.CANDIDATE | Audit ownership, ergonomics, failure/lifetime behavior and cross-language compatibility before any promise |
-| V0 — RELEASE.QUALIFICATION | Exact platform, API, ABI, packaging and support claims backed by reproducible evidence |
-| V1 — PUBLIC.0.1 | Consider publication and the first compatibility commitment only after release qualification |
-
-Robustness work should accompany changing boundaries even though its complete
-qualification series follows them. BSD and further language wrappers are future
-investigations, not implied support. The C ABI supplies a language-neutral
-embedding route; it does not require publishing wrappers for every language.
-Release is the conclusion of qualified ownership and real integration, not a
-calendar milestone or a version number already present in Cargo metadata.
+[architecture]: docs/architecture.md
+[interaction]: docs/interaction.md
+[presentation]: docs/presentation.md
+[c-api]: docs/c-api.md
+[development]: docs/development.md
+[f0]: docs/engineering/f0.md
+[p0]: docs/engineering/p0.md
+[macos-perf]: docs/engineering/macos-perf.md
+[producer]: .boundary/README.md
+[carrier]: https://github.com/mothx9/replai/commit/9d9375db407246a6f4946e20e38f56fe3155e62a
+[presentation-ci]: https://github.com/mothx9/replai/actions/runs/34251543122
+[ci]: .github/workflows/ci.yml
+[core]: src/core.rs
+[facade]: src/interaction.rs
+[engine-tests]: src/engine.rs
+[decoder]: src/input.rs
+[keymap]: src/keymap.rs
+[capabilities]: src/capabilities.rs
+[substrate]: src/substrate.rs
+[driver]: src/terminal.rs
+[conformance]: src/conformance.rs
+[core-tests]: tests/core.rs
+[unicode-tests]: tests/unicode_model.rs
+[documents]: tests/document.rs
+[pty]: tests/pty.rs
+[layout-tests]: tests/support/layout_reference.rs
+[c-pty]: tools/c_pty.py
+[c-tests]: tests/c/contracts.c
+[c-qualification]: tools/qualify_c.py
+[foundation]: tests/foundation.rs
+[perf-tools]: tools/perf/run.py
+[perf-tests]: tools/perf/test_results.py
+[rust-example]: examples/demo.rs
+[c-example]: examples/c/demo.c
+[extraction]: https://github.com/mothx9/replai/blob/89d36f8433cd109866ae360d8691dac30b7de026/ROADMAP.md
