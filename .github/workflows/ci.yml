@@ -184,6 +184,7 @@ jobs:
           python tools/perf/results.py validate docs/engineering/p0/components.json
           python tools/perf/results.py validate docs/engineering/p0/systems.json
           python tools/perf/results.py validate docs/engineering/p0/output-comparison.json
+          python tools/perf/results.py validate docs/engineering/macos-perf/before.json
       - name: Benchmark fixture lint
         run: cargo clippy --locked --manifest-path tools/perf/Cargo.toml --all-targets --all-features -- -D warnings
       - name: Real POSIX PTY harness smoke (no latency threshold)

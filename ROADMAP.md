@@ -52,8 +52,8 @@ defect. This repository does not declare that external publication complete.
 
 **F0 — PUBLIC.ARCHITECTURE is completed.** One platform-neutral engine now
 drives deterministic tests and the preserved Linux Rust/C interaction path.
-Native macOS/Windows CI executes the engine and virtual transport; their system
-terminal backends remain unimplemented. See [F0 evidence](docs/engineering/f0.md).
+At F0, native macOS/Windows CI established engine and virtual-transport execution.
+See [F0 evidence](docs/engineering/f0.md) for that original boundary.
 **P0 — PERFORMANCE.BASELINE is completed.** Versioned component/allocation,
 real Linux PTY, idle/output, embedding and pinned comparative measurements are
 recorded in [P0 evidence](docs/engineering/p0.md), with explicit environment,
@@ -62,8 +62,13 @@ MACOS.RUNTIME.PERFORMANCE.CLOSURE.0 is active, absorbing X1/P1/P2: real macOS PO
 native baseline checkpoint, followed by common performance convergence. It
 authorizes the required X1/P1/P2 work and internal driver work only. F1, F2,
 I/O/U series, public P3 host driving and Windows runtime remain unstarted.
+The shared macOS POSIX checkpoint is now qualified on the physical Mac and in
+real-runtime CI, including ABI 1. Native pre-optimization evidence is recorded
+in the [combined dossier](docs/engineering/macos-perf.md). P1/P2 convergence and
+the final combined qualification remain active.
 
-System-terminal runtime qualification remains Linux-specific and pre-release. There is no stable API,
+System-terminal runtime qualification covers Linux and the native macOS checkpoint,
+and remains pre-release. There is no stable API,
 ABI, SemVer or MSRV promise. The current implementation has one active terminal
 interaction per linked library image, synchronous safe-text output transactions
 and host-owned signal meaning. It does not support independent concurrent

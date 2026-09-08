@@ -116,3 +116,67 @@ commit cannot contain its own hash in its tree: exact publication HEAD/TREE
 are reported in the final receipt; recorded benchmark envelopes identify each
 measured checkpoint, and `git log -1 --format='%H %T' -- src tools/perf` recovers
 the last implementation/harness change independently of documentation closure.
+
+## Qualified native checkpoint and baseline
+
+The backend checkpoint is `dbd9562b94fa654b5931c5c06d0cc39287ea9cbf`, tree
+`1b22125ccab89e67a165cca3f7de4b4196457270`. Subsequent fixture preparation and
+test-only oracles produce the measured native checkpoint
+`e058e080c2edbac6360ecc78145476ca7dd23b4c`, tree
+`ce62960bd15bbd4ade53e9c45e9cac4302174676`. Its production editor, decoder,
+layout, renderer and encoding algorithms are still P0's.
+
+`tools/qualify.py` passed on the physical Mac with the clean-worktree gate.
+This includes native debug/release Rust PTYs, failure/unwind restoration,
+static/dylib C01–C15 scenarios, C11/C++17, ownership/layout/export checks,
+staged-loader isolation, and zero leaks in both native C contract runs.
+[Checkpoint CI 34226086836](https://github.com/mothx9/replai/actions/runs/34226086836)
+passed all ten jobs: Linux Rust/PTY/C/Memcheck, macOS real Rust/C terminals,
+Windows portable core, all three benchmark-integrity lanes and documentation.
+An earlier macOS foundation failure was an offline missing Linux dependency;
+fetching the complete locked target graph before that audit fixed preparation.
+
+[The native pre-optimization selection](macos-perf/before.json) contains 3,336
+representative summaries from 5,652 validated full-run records. Full raw timing
+and allocation JSONL stays in the runner's work directory. Selection is
+reproducible with [compact.py](../../tools/perf/compact.py):
+
+```sh
+python3 tools/perf/compact.py /tmp/replai-native-performance/baseline.json \
+  docs/engineering/macos-perf/before.json
+```
+
+The authoritative run used verified AC power, default power mode 0, no local
+compilation during timed families, and clean checkpoint sources. Power was AC
+at both recorded endpoints. Earlier partial battery runs were retained only as
+diagnostics and excluded after the power source changed. Raw Mach-O `size`
+listings include virtual segments; file lengths, not those virtual totals, are
+the binary-size measurements. Compact evidence removes machine installation
+paths, transient battery IDs and verbose archive-member listings.
+
+| Primary 1000-byte ASCII burst + Left + X + exact submission | Median ms | p95 ms | Terminal bytes, median |
+| --- | ---: | ---: | ---: |
+| REPLAI | 18.395 | 20.189 | 17,741 |
+| linenoise blocking | 5.951 | 6.622 | 569,892 |
+| linenoise feed | 6.131 | 6.541 | 569,892 |
+| rustyline | 0.806 | 0.835 | 9,096 |
+| reedline | 0.457 | 0.480 | 1,045 |
+
+All rows have 31 measured invocations after two warmups, exact submission and
+restoration, and complete output draining under the P0 contract. Pins are
+unchanged from P0. The native pre-optimization parity band is
+`1.25 × 456.5 µs = 570.625 µs`; final convergence must use final same-run
+references instead of treating this number as a permanent threshold.
+
+The largest measured editor median is 9.133 ms for a substantial completion
+replacement in a 1 MiB mixed draft. Layout reaches 33.304 ms for a 1 MiB
+multiline draft. The 1 MiB multiline layout at width 20 makes 399,496 allocation
+or reallocation requests, with 12,983,000 peak temporary live bytes, 20,048,300
+requested bytes and 3,264 retained bytes. These quantities are distinct.
+Native 1 MiB ASCII/prose paste medians are respectively 1,246.82/1,248.22 ms.
+
+The frozen full-layout oracle and generated editor model were qualified before
+optimization. They exercise extended-grapheme joins across both replacement
+neighbors, long combining/RI/Prepend context, invalid byte offsets, bounded
+rejection, and more than 65,000 generated edit operations. The old layout
+exists only under the test boundary, not as another production implementation.
