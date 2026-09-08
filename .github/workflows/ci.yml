@@ -128,7 +128,7 @@ jobs:
       - name: Compile platform-neutral public library
         run: cargo check --locked -p replai --lib
       - name: Deterministic engine, protocol, layout and virtual transport conformance
-        run: cargo test --locked -p replai --lib --test core --test architecture
+        run: cargo test --locked -p replai --lib --test core --test architecture --test unicode_model
       - name: Native library lint and documentation
         run: |
           cargo clippy --locked -p replai --lib -- -D warnings

@@ -246,8 +246,60 @@ impl Line {
 }
 
 #[cfg(test)]
+#[path = "../tests/support/layout_reference.rs"]
+mod reference;
+
+#[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn layout_matches_frozen_full_document_oracle() {
+        let units = [
+            "a",
+            "界",
+            "e\u{301}",
+            "👩\u{200d}💻",
+            "🇮🇹",
+            "\t",
+            "\n",
+            "\u{301}",
+            "♥\u{fe0f}",
+        ];
+        let mut random = 19_u64;
+        for case in 0..48 {
+            let mut text = String::new();
+            for _ in 0..case * 3 {
+                random = random.wrapping_mul(6364136223846793005).wrapping_add(1);
+                text.push_str(units[(random >> 32) as usize % units.len()]);
+            }
+            let offsets: Vec<_> = text
+                .grapheme_indices(true)
+                .map(|(i, _)| i)
+                .chain(std::iter::once(text.len()))
+                .collect();
+            let mut editor = Editor::new(4096, 0);
+            editor.insert(&text).unwrap();
+            let prompt = Prompt::new(if case % 2 == 0 { "p" } else { "long界prompt" })
+                .unwrap()
+                .with_state(" ready")
+                .unwrap()
+                .with_continuation("..界 ")
+                .unwrap();
+            for cursor in [offsets[0], offsets[offsets.len() / 2], text.len()] {
+                editor.replace(cursor..cursor, "").unwrap();
+                for columns in [2, 6, 20, 80] {
+                    for rows in [2, 3, 24] {
+                        let frame = Frame::new(&editor, &prompt, columns, rows);
+                        let (lines, cursor, end) =
+                            reference::frame(&editor, &prompt, columns, rows);
+                        assert_eq!(frame.lines, lines, "case {case} at {columns}x{rows}");
+                        assert_eq!(frame.cursor, cursor);
+                        assert_eq!(frame.end, end);
+                    }
+                }
+            }
+        }
+    }
     #[test]
     fn reference_palette_and_disable_rules_are_exact() {
         let roles = [
