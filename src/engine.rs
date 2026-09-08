@@ -2,7 +2,7 @@
 use crate::{
     EditError, Editor, Error, Event, Prompt, Role,
     actions::{EditCommand, Input, Request},
-    render::{Mutation, Renderer},
+    render::{Damage, Mutation, Renderer},
 };
 use std::ops::Range;
 
@@ -16,6 +16,7 @@ struct Surface {
     size: (usize, usize),
     renderer: Renderer,
     dirty: bool,
+    damage: Damage,
 }
 pub(crate) struct Engine {
     pub editor: Editor,
@@ -43,6 +44,7 @@ impl Engine {
             size,
             renderer: Renderer::default(),
             dirty: true,
+            damage: Damage::Rebuild,
         });
         Ok(Effects {
             mutations: self.redraw(),
@@ -54,8 +56,10 @@ impl Engine {
             .surface
             .as_mut()
             .expect("active surface checked by caller");
+        let damage = if s.dirty { s.damage } else { Damage::Rebuild };
         s.dirty = false;
-        s.renderer.redraw(&self.editor, &s.prompt, s.size)
+        s.renderer
+            .redraw_changed(&self.editor, &s.prompt, s.size, damage)
     }
     pub fn apply(&mut self, input: Input) -> Result<Effects, Error> {
         self.apply_inner(input, false)
@@ -85,6 +89,28 @@ impl Engine {
             return Err(Error::State);
         }
         let mut mutations = Vec::new();
+        let previous_len = self.editor.text().len();
+        let at_end = self.editor.cursor() == previous_len;
+        let ascii_tail = self
+            .editor
+            .text()
+            .as_bytes()
+            .last()
+            .is_none_or(|b| *b == b' ' || b.is_ascii_graphic());
+        let mut damage = match &input {
+            Input::Edit(
+                EditCommand::Left | EditCommand::Right | EditCommand::Home | EditCommand::End,
+            ) => Damage::Cursor,
+            Input::Text(text)
+                if at_end
+                    && ascii_tail
+                    && text.bytes().all(|b| b == b' ' || b.is_ascii_graphic()) =>
+            {
+                Damage::AppendAscii
+            }
+            Input::Edit(EditCommand::Backspace) if at_end && ascii_tail => Damage::BackspaceAscii,
+            _ => Damage::Rebuild,
+        };
         let force = matches!(input, Input::Request(Request::Redraw) | Input::Resize(..));
         match input {
             Input::Text(text) => {
@@ -131,7 +157,15 @@ impl Engine {
                 return Ok(self.observable(Event::Rejected(error)));
             }
         }
-        self.surface.as_mut().unwrap().dirty = true;
+        if damage == Damage::BackspaceAscii && previous_len != self.editor.text().len() + 1 {
+            damage = Damage::Rebuild;
+        }
+        let s = self.surface.as_mut().unwrap();
+        if s.dirty && s.damage != damage {
+            damage = Damage::Rebuild;
+        }
+        s.dirty = true;
+        s.damage = damage;
         if !deferred || force {
             mutations.extend(self.redraw());
         }
@@ -164,6 +198,7 @@ impl Engine {
             return Err(Error::State);
         }
         self.editor.replace(range, text)?;
+        self.surface.as_mut().unwrap().damage = Damage::Rebuild;
         Ok(Effects {
             mutations: self.redraw(),
             event: None,
@@ -198,5 +233,141 @@ impl Engine {
             mutations,
             event: None,
         })
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::{Theme, presentation::Frame, protocol::encode};
+
+    #[test]
+    fn deferred_damage_completion_resize_and_output_invalidate_reuse() {
+        for label in ["label", "界\u{301}", "👩\u{200d}💻"] {
+            for width in [6, 20, 80] {
+                let prompt = Prompt::new(label).unwrap();
+                let mut e = Engine::new(Editor::new(4096, 1));
+                e.start(prompt.clone(), (width, 8)).unwrap();
+                for i in 0..60 {
+                    e.apply_deferred(Input::Text("a".into())).unwrap();
+                    e.apply_deferred(Input::Text("b".into())).unwrap();
+                    e.flush();
+                    e.apply_deferred(Input::Edit(EditCommand::Backspace))
+                        .unwrap();
+                    e.apply_deferred(Input::Edit(EditCommand::Backspace))
+                        .unwrap();
+                    e.flush();
+                    e.surface.as_ref().unwrap().renderer.assert_frame(
+                        &e.editor,
+                        &prompt,
+                        (width, 8),
+                    );
+                    e.apply_deferred(Input::Text("x".into())).unwrap();
+                    // Completion must invalidate even a pending homogeneous append.
+                    e.complete(
+                        0..e.editor.text().len(),
+                        if i % 2 == 0 { "界\na\u{301}" } else { "ascii" },
+                    )
+                    .unwrap();
+                    e.surface.as_ref().unwrap().renderer.assert_frame(
+                        &e.editor,
+                        &prompt,
+                        (width, 8),
+                    );
+                    e.external_output(Role::Dim, "notice\nnext").unwrap();
+                    e.surface.as_ref().unwrap().renderer.assert_frame(
+                        &e.editor,
+                        &prompt,
+                        (width, 8),
+                    );
+                    e.apply(Input::Resize(width + 1, 8)).unwrap();
+                    e.surface.as_ref().unwrap().renderer.assert_frame(
+                        &e.editor,
+                        &prompt,
+                        (width + 1, 8),
+                    );
+                    e.apply(Input::Resize(width, 8)).unwrap();
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn cached_geometry_and_incremental_vt_match_fresh_layout_after_adversarial_edits() {
+        let units = [
+            "a",
+            " ",
+            "é",
+            "界",
+            "e\u{301}",
+            "\u{301}",
+            "👩\u{200d}💻",
+            "\u{200d}",
+            "♥\u{fe0f}",
+            "🇮",
+            "🇹",
+            "\u{600}a",
+            "\n",
+            "\t",
+        ];
+        for width in [6, 9, 20, 80] {
+            for ascii_only in [true, false] {
+                let prompt = Prompt::new("p").unwrap();
+                let theme = Theme::new(true, false, None);
+                let mut e = Engine::new(Editor::new(2048, 3));
+                e.editor.admit_history("old\n界 command").unwrap();
+                let mut terminal = vt100::Parser::new(8, width as u16, 0);
+                let initial = e.start(prompt.clone(), (width, 8)).unwrap();
+                terminal.process(encode(&initial.mutations, theme).as_bytes());
+                let mut random = 712_u64;
+                for step in 0..4096 {
+                    random = random.wrapping_mul(6364136223846793005).wrapping_add(1);
+                    let choice = (random >> 32) as usize;
+                    let input = match choice % 18 {
+                        0 => Input::Edit(EditCommand::Home),
+                        1 => Input::Edit(EditCommand::End),
+                        2..=3 => Input::Edit(EditCommand::Left),
+                        4 => Input::Edit(EditCommand::Right),
+                        5..=6 => Input::Edit(EditCommand::Backspace),
+                        7 => Input::Edit(EditCommand::Delete),
+                        8 => Input::Edit(EditCommand::HistoryPrevious),
+                        9 => Input::Edit(EditCommand::HistoryNext),
+                        _ => Input::Text(if ascii_only {
+                            "ab c"[(choice % 4)..][..1].into()
+                        } else {
+                            units[choice % units.len()].into()
+                        }),
+                    };
+                    let effects = e.apply(input).unwrap();
+                    terminal.process(encode(&effects.mutations, theme).as_bytes());
+                    e.surface.as_ref().unwrap().renderer.assert_frame(
+                        &e.editor,
+                        &prompt,
+                        (width, 8),
+                    );
+                    // vt100's joined-emoji width differs from REPLAI's frozen
+                    // policy. The complete Frame equality above covers Unicode;
+                    // this independent screen oracle scores ASCII transitions.
+                    if ascii_only && !e.editor.text().contains('界') {
+                        let mut fresh = vt100::Parser::new(8, width as u16, 0);
+                        fresh.process(
+                            encode(&Frame::new(&e.editor, &prompt, width, 8).draw(), theme)
+                                .as_bytes(),
+                        );
+                        assert_eq!(
+                            terminal.screen().contents(),
+                            fresh.screen().contents(),
+                            "step {step} width {width}"
+                        );
+                        assert_eq!(
+                            terminal.screen().cursor_position(),
+                            fresh.screen().cursor_position(),
+                            "step {step} width {width}"
+                        );
+                        assert_eq!(terminal.screen().fgcolor(), fresh.screen().fgcolor());
+                    }
+                }
+            }
+        }
     }
 }

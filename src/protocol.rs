@@ -37,6 +37,7 @@ pub(crate) fn encode(mutations: &[Mutation], theme: Theme) -> String {
                 let _ = write!(out, "\x1b[{n}D");
             }
             Mutation::ClearLine => out.push_str("\x1b[2K"),
+            Mutation::ClearToEnd => out.push_str("\x1b[K"),
             Mutation::ClearScreen => out.push_str("\x1b[2J\x1b[H"),
             Mutation::Paste(true) => out.push_str("\x1b[?2004h"),
             Mutation::Paste(false) => out.push_str("\x1b[?2004l"),

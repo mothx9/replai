@@ -339,6 +339,7 @@ fn main() {
         },
     );
     render_edges(&h);
+    interaction_scaling(&h, smoke);
     h.measure(
         spec("control", "timer_black_box", 0, "none", 0),
         || 0usize,
@@ -1013,6 +1014,64 @@ fn main() {
                 json!({"vt_bytes":bytes.len(),"logical_mutations":effects.mutations.len()})
             },
         );
+    }
+}
+
+fn interaction_scaling(h: &Harness, smoke: bool) {
+    use actions::EditCommand;
+    for size in if smoke {
+        vec![64, 4096]
+    } else {
+        vec![8, 64, 1024, 4096, 65536, 262144, LIMIT]
+    } {
+        for (class, unit) in [CLASSES[0], CLASSES[3], CLASSES[5], CLASSES[7]] {
+            let text = text_at(size, unit);
+            for op in [
+                "append_end",
+                "backspace_end",
+                "cursor_left",
+                "middle_insert",
+                "completion_range",
+            ] {
+                if size == LIMIT && matches!(op, "append_end" | "middle_insert") {
+                    continue;
+                }
+                let cursor = if matches!(op, "middle_insert" | "completion_range") {
+                    mid(&text)
+                } else {
+                    text.len()
+                };
+                let mut expected = editor(&text, cursor);
+                match op {
+                    "append_end" | "middle_insert" => expected.insert("X").unwrap(),
+                    "backspace_end" => expected.backspace(),
+                    "cursor_left" => expected.left(),
+                    "completion_range" => expected.replace(0..cursor, "selected").unwrap(),
+                    _ => unreachable!(),
+                }
+                h.measure(spec("interaction_edit", op, size, class, 80),
+                    || {
+                        let mut e = Engine::new(editor(&text, cursor));
+                        e.start(prompt(), (80,24)).unwrap();
+                        e
+                    },
+                    |e| {
+                        let effects = match op {
+                            "append_end" | "middle_insert" => e.apply(Input::Text("X".into())).unwrap(),
+                            "backspace_end" => e.apply(Input::Edit(EditCommand::Backspace)).unwrap(),
+                            "cursor_left" => e.apply(Input::Edit(EditCommand::Left)).unwrap(),
+                            "completion_range" => e.complete(0..cursor, "selected").unwrap(),
+                            _ => unreachable!(),
+                        };
+                        let bytes = protocol::encode(&effects.mutations, theme());
+                        (effects, bytes)
+                    },
+                    |e, (effects, bytes)| {
+                        assert_eq!((e.editor.text(), e.editor.cursor()), (expected.text(), expected.cursor()));
+                        json!({"vt_bytes":bytes.len(),"logical_mutations":effects.mutations.len(),"logical_transport_writes":usize::from(!bytes.is_empty()),"coverage":"added during MACOS/PERF; no original P0 timing pair"})
+                    });
+            }
+        }
     }
 }
 

@@ -94,8 +94,13 @@ pub(crate) struct Point {
 #[derive(Debug)]
 pub(crate) struct Frame {
     pub lines: Vec<Line>,
+    pub widths: Vec<usize>,
     pub cursor: Point,
     pub end: Point,
+    pub columns: usize,
+    pub rows: usize,
+    pub source_len: usize,
+    pub source_cursor: usize,
 }
 // Keep only the potential viewport while locating the cursor. Recycle row
 // storage while scanning its prefix; stop once the visible suffix is complete.
@@ -275,6 +280,7 @@ impl Frame {
         }
         let cursor = cursor.expect("a valid editor cursor was laid out");
         let end_col = layout.lines.back().unwrap().width;
+        let widths = layout.lines.iter().map(|row| row.width).collect();
         let mut lines: Vec<_> = layout.lines.into_iter().map(|row| row.line).collect();
         // A viewport may begin inside a wrapped styled prompt.
         if layout.first_row > 0 {
@@ -291,6 +297,11 @@ impl Frame {
                 col: end_col,
             },
             lines,
+            widths,
+            columns: columns.max(2),
+            rows,
+            source_len: editor.text().len(),
+            source_cursor: editor.cursor(),
         }
     }
 }
