@@ -55,6 +55,12 @@ def measure(work, families, smoke, qualification):
     if 'comparisons' in families:
         path=work/'comparisons.jsonl';raw.append(path)
         run([sys.executable,'tools/perf/compare.py','--work',work/'comparison-traces',*(['--smoke'] if smoke else [])],path)
+    if 'driver' in families:
+        path=work/'driver.jsonl';raw.append(path)
+        if sys.platform in ('linux','darwin'):
+            run([sys.executable,'tools/perf/driver.py','--work',work/'driver','--repeats','1' if smoke else '3'],path)
+        else:
+            path.write_text(json.dumps(dict(schema_version=1,id='driver',component='driver',status='unsupported',reason='real production backend requires Linux or macOS'))+'\n')
     if 'sizes' in families:
         assert qualification,'--qualification required for sizes'
         path=work/'sizes.jsonl';raw.append(path)
@@ -67,9 +73,9 @@ def measure(work, families, smoke, qualification):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--work',type=Path,required=True);p.add_argument('--prepare',action='store_true');p.add_argument('--families',default='components,linux,comparisons,sizes');p.add_argument('--smoke',action='store_true');p.add_argument('--qualification',type=Path);a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--work',type=Path,required=True);p.add_argument('--prepare',action='store_true');p.add_argument('--families',default='components,linux,comparisons,driver,sizes');p.add_argument('--smoke',action='store_true');p.add_argument('--qualification',type=Path);a=p.parse_args()
     a.work=a.work.resolve();a.work.mkdir(parents=True,exist_ok=True)
-    families=a.families.split(',');assert set(families)<=set(['components','linux','comparisons','sizes'])
+    families=a.families.split(',');assert set(families)<=set(['components','linux','comparisons','driver','sizes'])
     if a.prepare:
         if 'sizes' in families:assert a.qualification,'--qualification required to prepare release C sizes'
         prepare(a.work,'comparisons' in families,a.qualification if 'sizes' in families else None)

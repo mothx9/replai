@@ -189,7 +189,9 @@ jobs:
         run: cargo clippy --locked --manifest-path tools/perf/Cargo.toml --all-targets --all-features -- -D warnings
       - name: Real POSIX PTY harness smoke (no latency threshold)
         if: runner.os != 'Windows'
-        run: python3 tools/perf/linux.py --smoke --work "$RUNNER_TEMP/replai-performance-pty"
+        run: |
+          python3 tools/perf/linux.py --smoke --work "$RUNNER_TEMP/replai-performance-pty"
+          python3 tools/perf/driver.py --repeats 1 --work "$RUNNER_TEMP/replai-driver-counts"
       - name: Compile pinned comparison fixtures and exercise overlapping PTY cases
         if: runner.os != 'Windows'
         run: |
