@@ -58,16 +58,18 @@ See [F0 evidence](docs/engineering/f0.md) for that original boundary.
 real Linux PTY, idle/output, embedding and pinned comparative measurements are
 recorded in [P0 evidence](docs/engineering/p0.md), with explicit environment,
 variance and unsupported-workload limits. No performance optimization was made.
-MACOS.RUNTIME.PERFORMANCE.CLOSURE.0 is active, absorbing X1/P1/P2: real macOS POSIX runtime and a
-native baseline checkpoint, followed by common performance convergence. It
-authorizes the required X1/P1/P2 work and internal driver work only. F1, F2,
-I/O/U series, public P3 host driving and Windows runtime remain unstarted.
-The shared macOS POSIX checkpoint is now qualified on the physical Mac and in
-real-runtime CI, including ABI 1. Native pre-optimization evidence is recorded
-in the [combined dossier](docs/engineering/macos-perf.md). P1/P2 convergence and
-the final combined qualification remain active.
+**MACOS.RUNTIME.PERFORMANCE.CLOSURE.0 is completed**, closing X1/P1/P2 together.
+One shared POSIX implementation qualifies real Linux/macOS terminals, including
+ABI 1. Native before/after evidence, retained causal checkpoints and final
+qualification are recorded in the [combined dossier](docs/engineering/macos-perf.md).
+The final primary burst median is 0.194 ms against a same-run parity limit of
+0.575 ms, with preserved isolated-key latency and substantially fewer layout
+allocations. This is a workload-specific result, not a general performance claim.
+Internal input batching does not close public P3 host driving. F1, F2, I/O/U
+series, public P3 embedding and Windows runtime remain unstarted. No next wave
+or consumer repin is authorized.
 
-System-terminal runtime qualification covers Linux and the native macOS checkpoint,
+System-terminal runtime qualification covers Linux and macOS,
 and remains pre-release. There is no stable API,
 ABI, SemVer or MSRV promise. The current implementation has one active terminal
 interaction per linked library image, synchronous safe-text output transactions
@@ -116,15 +118,16 @@ inventory does not authorize mouse interfaces, alternate screens or a canvas.
 | Wave | Property to establish |
 | --- | --- |
 | P0 — PERFORMANCE.BASELINE | **Completed.** Reproducible component and Linux PTY latency, allocations, memory, bytes, writes/syscalls, idle and embedding baselines; pinned linenoise/rustyline/reedline overlaps and limitations in [P0 evidence](docs/engineering/p0.md) |
-| P1 — EDITOR.KERNEL.PERFORMANCE | Choose buffer/index/cache strategy from observed costs and bounded-memory constraints, including long Unicode and multiline drafts |
-| P2 — INCREMENTAL.RENDER | Measured frame deltas and batched output that reduce cells mutated, terminal bytes and syscalls while preserving cursor/layout correctness |
-| P3 — EVENT.DRIVER | Host event-loop embedding without artificial periodic polling where readiness/resize mechanisms permit it; no prescribed executor |
+| P1 — EDITOR.KERNEL.PERFORMANCE | **Completed in MACOS/PERF.** Measured local Unicode boundary validation retains String storage; generated Unicode oracles and native scaling evidence qualify the choice |
+| P2 — INCREMENTAL.RENDER | **Completed in MACOS/PERF.** Viewport storage, geometry reuse, changed-row rendering and ready-input presentation scheduling meet same-machine parity with preserved correctness and terminal efficiency |
+| P3 — EVENT.DRIVER | **Unstarted.** Host event-loop embedding without artificial periodic polling where readiness/resize mechanisms permit it; internal bounded reads do not deliver this public driver contract |
 
-Today the editor uses String storage and grapheme traversal; the renderer can
-append a suffix but otherwise redraws the frame. Polling checks dimensions and
-caps waits at 100 ms to avoid taking over resize signals. These are valid
-foundation choices; P0 now records their measured costs without making them
-immutable designs or authorizing their replacement.
+The editor uses String storage and context-local grapheme boundary work. Layout
+retains the viewport and reuses stable geometry; rendering updates changed rows
+or suffixes where valid. Full prefix scans and redraw fallbacks remain measured
+costs. Polling still checks dimensions and caps waits at 100 ms without owning
+resize signals. P0 remains the immutable characterization baseline; the combined
+dossier records the authorized redesign and its remaining limits.
 
 P0 must characterize beginning/middle/end edits; ASCII, CJK, combining and emoji
 movement; key-to-frame p50/p95/p99; output chunk rates; lifecycle and FD stability;
@@ -182,7 +185,7 @@ implied by a richer line surface.
 | Wave | Property to establish |
 | --- | --- |
 | X0 — BACKEND.SEPARATION | Platform-independent editor/render/interaction logic separated from OS terminal resources and protocols |
-| X1 — MACOS.QUALIFICATION | A second operating system qualified by executable lifecycle and PTY evidence |
+| X1 — MACOS.QUALIFICATION | **Completed in MACOS/PERF.** Shared POSIX Rust/C ABI 1 runtime qualified on physical macOS PTYs and real-terminal CI |
 | X2 — WINDOWS.CONPTY.INVESTIGATION | Independent backend feasibility and qualification, without premature compatibility branches in the Unix implementation |
 | Q0 — FUZZ.PROPERTY | Decoder/state-machine fuzzing and arbitrary edit-sequence invariants |
 | Q1 — RESOURCE.FAILURE.STRESS | Repeated lifecycle, resize/paste/output storms, descriptor exhaustion and controlled I/O/allocation failures where simulatable |
