@@ -288,6 +288,7 @@ fn structure_bounds_include_empty_fields_and_split_joined_emoji() {
     for (columns, rows) in [
         (vec![column.clone(); 33], vec![]),
         (vec![column.clone()], vec![vec![t("")]; 4097]),
+        (vec![column.clone()], vec![vec![]; 4097]),
     ] {
         assert!(matches!(
             Document::new(vec![Block::Table { columns, rows }]),

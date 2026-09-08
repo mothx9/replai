@@ -66,10 +66,12 @@ The final primary burst median is 0.194 ms against a same-run parity limit of
 0.575 ms, with preserved isolated-key latency and substantially fewer layout
 allocations. This is a workload-specific result, not a general performance claim.
 Internal input batching does not close public P3 host driving.
-**STRUCTURED.PRESENTATION.0 is active**, implementing O0/U0 together: bounded
+**STRUCTURED.PRESENTATION.0 is completed**, closing O0/U0 together: bounded
 semantic output blocks and composed prompts share safe spans, roles and layout.
-Closure requires the existing Linux/macOS Rust/C qualification plus structured
-PTYs, Windows portable tests and benchmark integrity. F1/F2, I series, O1/O2/O3,
+Linux/macOS Rust/C qualification includes structured PTYs, resource cleanup and
+native memory tools; Windows runs portable document/engine tests and benchmark
+integrity. The [presentation contract](docs/presentation.md) defines responsive
+fallbacks, safe bounds and the deliberately unchanged C ABI 1 surface. F1/F2, I series, O1/O2/O3,
 U1/U2/U3, public P3 embedding and Windows runtime remain unstarted. No next wave
 or consumer repin is authorized.
 
@@ -167,11 +169,11 @@ storage policy merely because it can present their results.
 
 | Wave | Property to establish |
 | --- | --- |
-| O0 — OUTPUT.MODEL | **Active in STRUCTURED.PRESENTATION.0.** Bounded semantic documents/spans, responsive blocks and safe standalone/coordinated output; no trusted raw path |
+| O0 — OUTPUT.MODEL | **Completed in STRUCTURED.PRESENTATION.0.** Bounded semantic documents/spans, responsive blocks and safe standalone/coordinated output; no trusted raw path |
 | O1 — STREAMING.OUTPUT | Characterize and optimize sustained chunks from any host, including build logs, debugger events and model text |
 | O2 — MULTIPLEXED.INTERACTION | Background/streaming output coexists with an editable draft, preserving cursor, draft and terminal ownership under explicit arbitration |
 | O3 — TRANSIENT.FEEDBACK | Generic notices/diagnostics and transient feedback without owning product rendering |
-| U0 — PROMPT.LAYOUT | **Active in STRUCTURED.PRESENTATION.0.** Composed primary/continuation spans with shared theme and cell geometry; optional right-side information remains deferred |
+| U0 — PROMPT.LAYOUT | **Completed in STRUCTURED.PRESENTATION.0.** Composed primary/continuation spans with shared theme and cell geometry; optional right-side information remains deferred |
 | U1 — COMPLETION.UX | Inline, list, cycling and menu strategies over the completion contract |
 | U2 — MULTILINE.UX | Substantial multiline continuation, wrapping, cursor geometry and diagnostic presentation |
 | U3 — VISUAL.SYSTEM | Coherent semantic roles, themes, spacing, accessibility and terminal-native background behavior |

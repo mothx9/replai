@@ -176,11 +176,14 @@ impl Document {
                     items.iter().map(|i| &i.text).collect()
                 }
                 Block::Table { columns, rows } => {
-                    if columns.is_empty() || rows.iter().any(|r| r.len() != columns.len()) {
+                    if columns.is_empty() {
                         return Err(EditError::InvalidRange);
                     }
                     if columns.len() > 32 || rows.len() > 4096 {
                         return Err(EditError::Capacity);
+                    }
+                    if rows.iter().any(|r| r.len() != columns.len()) {
+                        return Err(EditError::InvalidRange);
                     }
                     columns
                         .iter()
