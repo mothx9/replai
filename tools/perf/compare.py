@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Overlapping Linux PTY burst-to-submission workloads, no performance ranking."""
+"""Overlapping POSIX PTY burst-to-submission workloads, no performance ranking."""
 import argparse
 import json
 from pathlib import Path

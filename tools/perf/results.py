@@ -119,7 +119,7 @@ def envelope(raw_files, receipt):
             allocation='separate feature build; System allocation/reallocation requests and logical live bytes; allocator metadata/RSS/internal realloc overlap unobserved',
             micro_timing='setup, validation and returned-value drop excluded; drops inside operation included; control/timer floor recorded',
             pty='includes scheduler/IPC and kernel PTY delivery; does not measure emulator repaint or physical display',
-            authority='recorded development VM; descriptive baseline, not a regression-grade isolated bare-metal lab'),results=rows)
+            authority='recorded host identified by environment; descriptive baseline, not a regression-grade isolated lab'),results=rows)
     validate(data);return data
 
 
