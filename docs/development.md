@@ -35,8 +35,8 @@ installed Rust/C consumers. Mermaid parses actual fenced diagrams using a DOM
 provided by jsdom, without a browser, SVG copies or screenshot comparison.
 
 Complete native qualification additionally requires cc/c++, pkg-config,
-Valgrind and a Linux kernel with Landlock. Missing memory/isolation tools fail
-the gate. Tests use temporary prefixes and never install into system directories.
+Valgrind and Landlock on Linux, or native `leaks` and sandbox isolation on
+macOS. Missing required memory/isolation tools fail the native gate. Tests use temporary prefixes and never install into system directories.
 
 ## Select checks by boundary
 
@@ -101,7 +101,7 @@ Review dependency sources, crate/features, public names, environment reads,
 examples and build scripts. A clean checkout must work without any application
 repository or private configuration. Foundation tests enforce dependency-source
 and package inventory rules. The native qualification denies repository reads
-with Landlock when compiling and running staged consumers. No stale local or
+with Landlock on Linux and a generated sandbox policy on macOS when compiling and running staged consumers. No stale local or
 globally installed library may stand in for the qualified artifact.
 
 For ABI changes edit [api/c-abi.json](../api/c-abi.json), run

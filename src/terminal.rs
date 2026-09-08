@@ -156,7 +156,11 @@ impl<T: Transport> Drop for Terminal<T> {
     }
 }
 
-#[cfg(all(test, target_os = "linux"))]
+#[cfg(all(test, any(target_os = "linux", target_os = "macos")))]
+#[path = "../tests/support/posix_pty.rs"]
+pub(crate) mod pty_support;
+
+#[cfg(all(test, any(target_os = "linux", target_os = "macos")))]
 mod tests {
     use super::*;
     use crate::{Editor, Role, system::Resource};
@@ -165,13 +169,9 @@ mod tests {
     fn write_failure_during_active_output_restores_termios_and_paste_mode() {
         use rustix::{
             fs::{Mode, OFlags, open},
-            pty::{OpenptFlags, ioctl_tiocgptpeer, openpt, unlockpt},
             termios::{Winsize, tcgetattr, tcsetwinsize, ttyname},
         };
-        let flags = OpenptFlags::RDWR | OpenptFlags::NOCTTY | OpenptFlags::CLOEXEC;
-        let master = openpt(flags).unwrap();
-        unlockpt(&master).unwrap();
-        let slave = ioctl_tiocgptpeer(&master, flags).unwrap();
+        let (master, slave) = pty_support::pair();
         tcsetwinsize(
             &slave,
             Winsize {

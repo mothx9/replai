@@ -10,6 +10,7 @@ import shutil
 import subprocess
 import tempfile
 import tomllib
+import sys
 
 from c_pty import run_suite
 
@@ -18,6 +19,22 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def restrict_reads(root, extra=()):
     """Linux Landlock: consumers cannot read the repository or Cargo sources."""
+    if sys.platform == 'darwin':
+        # SBPL is generated at runtime; no machine/SDK paths enter the repository.
+        denied = [str(ROOT), str(Path.home()/'.cargo')]
+        profile = '(version 1)(allow default)(deny file-read* ' + ' '.join('(subpath '+json.dumps(p)+')' for p in denied) + ')'
+        def restrict_darwin():
+            sandbox = ctypes.CDLL('/usr/lib/libsandbox.dylib', use_errno=True)
+            sandbox.sandbox_init.argtypes = [ctypes.c_char_p, ctypes.c_uint64, ctypes.POINTER(ctypes.c_char_p)]
+            sandbox.sandbox_init.restype = ctypes.c_int
+            error = ctypes.c_char_p()
+            if sandbox.sandbox_init(profile.encode(), 0, ctypes.byref(error)):
+                raise RuntimeError('Darwin consumer isolation failed: '+str(error.value))
+            try:
+                with open(ROOT/'Cargo.toml','rb'): pass
+            except PermissionError: return
+            raise AssertionError('consumer unexpectedly has access to repository')
+        return restrict_darwin
     def restrict():
         libc = ctypes.CDLL(None, use_errno=True)
         class Ruleset(ctypes.Structure):
@@ -59,9 +76,9 @@ class Qualification:
         self.consumer = self.root / 'consumer'
         self.env = os.environ.copy()
         for key in list(self.env):
-            if key.startswith('CARGO') or key in ('LD_LIBRARY_PATH', 'LIBRARY_PATH', 'CPATH', 'C_INCLUDE_PATH', 'CPLUS_INCLUDE_PATH'):
+            if key.startswith('CARGO') or key in ('LD_LIBRARY_PATH', 'DYLD_LIBRARY_PATH', 'DYLD_FALLBACK_LIBRARY_PATH', 'LIBRARY_PATH', 'CPATH', 'C_INCLUDE_PATH', 'CPLUS_INCLUDE_PATH', 'SDKROOT'):
                 self.env.pop(key)
-        self.env.update(PATH='/usr/bin:/bin', TMPDIR=str(self.root / 'tmp'), PKG_CONFIG_PATH=str(self.prefix / 'lib/pkgconfig'))
+        self.env.update(PATH='/usr/bin:/bin:/opt/homebrew/bin' if sys.platform=='darwin' else '/usr/bin:/bin', TMPDIR=str(self.root / 'tmp'), PKG_CONFIG_PATH=str(self.prefix / 'lib/pkgconfig'), PKG_CONFIG_LIBDIR=str(self.prefix / 'lib/pkgconfig'))
         self.isolate = restrict_reads(self.root)
 
     def run(self, command, name, *, isolated=True, env=None):
@@ -130,6 +147,12 @@ class Qualification:
         run_suite([str(self.consumer / ('demo-' + mode))], self.consumer / 'rust-terminal-state', self.consumer / 'presentation.tsv', self.root / ('pty-' + mode + '.json'), self.isolate, self.env)
 
     def memory(self):
+        if sys.platform == 'darwin':
+            for mode in ['static', 'shared']:
+                report = self.run(['/usr/bin/leaks', '--atExit', '--', './contracts-'+mode], 'leaks-'+mode)
+                assert '0 leaks for 0 total leaked bytes' in report, report
+                print(report, flush=True)
+            return
         executable = shutil.which(os.environ.get('VALGRIND', 'valgrind'))
         if executable is None:
             raise SystemExit('Valgrind is required; memory qualification cannot be skipped')
@@ -164,13 +187,24 @@ class Qualification:
         assert all(p['source'] is None or p['source'].startswith('registry+') for p in metadata['packages'])
         binding = next(p for p in metadata['packages'] if p['name'] == 'replai-c')
         assert {d['name'] for d in binding['dependencies']} == {'replai', 'libc'}
-        observed = self.run(['nm', '-D', '--defined-only', self.prefix / 'lib/libreplai_c.so'], 'symbols')
         schema = json.loads((ROOT / 'api/c-abi.json').read_text())
         expected = {f['name'] for f in schema['functions']}
-        assert {line.split()[-1] for line in observed.splitlines()} == expected, observed
-        loader = self.run(['ldd', './demo-shared'], 'loader-shared')
-        assert str(self.prefix / 'lib/libreplai_c.so') in loader, loader
-        static = self.run(['ldd', './demo-static'], 'loader-static')
+        if sys.platform == 'darwin':
+            observed = self.run(['nm', '-gU', self.prefix / 'lib/libreplai_c.dylib'], 'symbols')
+            assert {line.split()[-1].removeprefix('_') for line in observed.splitlines() if line.strip()} == expected, observed
+            loader = self.run(['otool', '-L', './demo-shared'], 'loader-shared')
+            assert '@rpath/libreplai_c.dylib' in loader, loader
+            # The actual loaded image must come from this staged prefix.
+            trace_env = {**self.env, 'DYLD_PRINT_LIBRARIES':'1'}
+            loaded = self.run(['./cpp-smoke'], 'loader-resolved', env=trace_env)
+            assert str(self.prefix/'lib/libreplai_c.dylib') in loaded, loaded
+            static = self.run(['otool', '-L', './demo-static'], 'loader-static')
+        else:
+            observed = self.run(['nm', '-D', '--defined-only', self.prefix / 'lib/libreplai_c.so'], 'symbols')
+            assert {line.split()[-1] for line in observed.splitlines()} == expected, observed
+            loader = self.run(['ldd', './demo-shared'], 'loader-shared')
+            assert str(self.prefix / 'lib/libreplai_c.so') in loader, loader
+            static = self.run(['ldd', './demo-static'], 'loader-static')
         assert 'libreplai_c' not in static, static
         pc = (self.prefix / 'lib/pkgconfig/replai.pc').read_text()
         assert '/home/' not in pc and str(ROOT) not in pc and str(self.root) not in pc

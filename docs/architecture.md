@@ -25,7 +25,7 @@ flowchart TB
     mutations --> encoder["VT protocol encoder"]
     driver --> encoder
     driver --> transport["Internal byte-transport contract"]
-    transport --> posix["Linux-qualified POSIX resources"]
+    transport --> posix["Shared Linux/macOS POSIX resources"]
     transport --> virtual["Virtual conformance transport"]
 ```
 
@@ -49,7 +49,7 @@ consume semantic mutations without parsing an escape-coded frame.
 | [capabilities](../src/capabilities.rs) | Existing explicit color/environment policy resolution | Full F2 capability negotiation or Windows discovery |
 | [substrate](../src/substrate.rs) | Internal byte transport, dimensions, readiness wait, write and restoration contract | Interaction meaning or universal public terminal interface |
 | [terminal](../src/terminal.rs) | Generic VT driver over a statically selected transport; timing, decoder expiry, effect execution and cleanup | termios, descriptors or duplicate editing logic |
-| [system](../src/system.rs) | Linux-qualified POSIX acquisition, descriptor duplication, termios, dimensions, poll/read/write, backend lease | Decoder, prompt, events, palette or editor |
+| [system](../src/system.rs) | Shared Linux/macOS POSIX acquisition, descriptor duplication, termios, dimensions, poll/read/write, backend lease | Decoder, prompt, events, palette or editor |
 | [interaction](../src/interaction.rs), [event](../src/event.rs) | Public compatibility façade and portable outcomes/errors | Product loop, language or command authority |
 
 **Generic terminal presentation belongs to the library; semantic rendering
@@ -61,14 +61,14 @@ network dependency inside the engine.
 ## Composition and public boundaries
 
 `Interaction` owns an `Engine`, which owns its `Editor` and optional active
-surface. On Linux the façade separately owns an optional `Terminal<Resource>`.
+surface. On Linux/macOS the façade separately owns an optional `Terminal<Resource>`.
 The driver borrows the engine only for each operation. No stored self-reference,
 forged lifetime, pointer registry or pinned owner is necessary.
 
 `Editor`, `EditError`, `Prompt`, `Theme`, `Role`, `Interaction`, `Event` and `Error`
 are exported on every compilation target. Construction and closed editor access
 are portable. The existing `open`, `poll`, `complete`, `external_output`,
-`interrupt` and `close` system façade remains Linux-gated. No fake acquisition
+`interrupt` and `close` system façade is available on Linux and macOS. No fake acquisition
 method returning Unsupported is supplied on another OS. The deterministic
 engine/action/effect APIs are private until F1/P3 establish a public contract.
 Linux signatures, result variants and host-visible semantics are preserved.
@@ -136,24 +136,24 @@ trait: each backend must validate and capture its actual resources before
 constructing a driver. `restore` must be retryable and restore the captured
 state, while cleanup writes may use a backend-specific alternate route.
 
-The POSIX realization currently compiles only on Linux. `rustix` is a Linux
-**target-specific** dependency. Its single-active-terminal lease, exact termios
-capture/restore, FD duplication and same-TTY checks live in `system`, not in the
-engine. Multiple deterministic engines and virtual terminals work concurrently;
-multiple real Linux terminals remain refused for compatibility. No signal
-handlers or threads are installed. The 100 ms poll cap and repeated dimension
-query belong to the compatibility driver and can be replaced by a later driver.
+The POSIX realization is shared by Linux and macOS. `rustix` supplies safe
+termios capture/restore, FD duplication, same-TTY identity, dimensions and I/O.
+Only readiness differs: Linux uses rustix poll; Darwin uses an owned kqueue via
+nix's safe event wrapper. Darwin's `/dev/tty` alias rejects kqueue and uses safe
+select with an explicit FD_SETSIZE check instead. The kqueue has one read
+registration installed after raw mode, no signal hooks, executor or background
+thread. Lease and lifecycle semantics remain common. The 100 ms compatibility
+wait cap still observes resize; this is not the future public P3 event API.
 
-macOS/BSD can add or qualify a POSIX resource realization without changing the
-engine. Windows Console modes, HANDLE ownership and waits belong to a Windows
-resource realization. ConPTY/VT transports can reuse the byte driver/encoder;
-structured Console input or non-VT output can instead use normalized actions
-and logical mutations. These are extension paths, not existing OS backends.
+Multiple deterministic engines and virtual terminals can run concurrently;
+multiple real POSIX interactions remain refused for compatibility. Windows
+Console modes, HANDLE ownership and ConPTY remain future resource boundaries.
+No Windows runtime is implemented.
 
 ## C compatibility and safety
 
 The separate binding consumes only public Rust API. ABI 1's `replai_open` takes
-integer POSIX-style descriptors: it is the existing Linux-qualified compatibility
+integer POSIX-style descriptors: it is the existing POSIX compatibility
 surface, not a portable Windows acquisition contract. Header records, symbols,
 numeric values, caller serialization, pointer/length text and caller-owned copy
 buffers are unchanged. Future portable C acquisition needs separate design; F0
@@ -170,9 +170,10 @@ Rust API. There is one implementation behind both languages.
 Architecture portability, compilation, deterministic execution and real terminal
 qualification are distinct claims. The CI portable-engine matrix runs library,
 editor, decoder, layout, engine and virtual-driver tests natively on Linux,
-macOS and Windows. Only Linux runs real PTYs and native C/resource/memory gates.
-No macOS, BSD or Windows interactive terminal support is claimed. The C package
-and Linux examples are outside the non-Linux core qualification target.
+macOS and Windows. Linux and macOS additionally run real PTYs and native
+C/resource/memory gates. Windows remains a portable-core target. The combined
+[macOS/performance dossier](engineering/macos-perf.md) records native checkpoint
+and convergence evidence; ROADMAP owns current qualification status.
 
 The [F0 engineering evidence](engineering/f0.md) records identities, comparative
 source archaeology, actual results and limitations. [Architecture guards](../tests/architecture.rs)
@@ -189,11 +190,13 @@ P1/P2 may replace representations without exporting them to consumers.
 ## Dependencies
 
 [Cargo.toml](../Cargo.toml) and [Cargo.lock](../Cargo.lock) own dependency requests
-and exact repository resolution. No dependency was added for this refoundation.
+and exact repository resolution. F0 added no dependency; macOS readiness adds
+only target-specific nix readiness support, reviewed in the closure dossier.
 
 | Dependency | Correctness responsibility | License selection | Scope |
 | --- | --- | --- | --- |
-| `rustix` | Safe termios, FD identity, readiness and transport; PTYs in tests | MIT option | Linux target only |
+| `rustix` | Safe termios, FD identity, readiness and transport; PTYs in tests | MIT option | Linux/macOS targets |
+| `nix` | Safe Darwin kqueue ownership and select fallback | MIT | macOS event/poll features only |
 | `unicode-segmentation` | Extended-grapheme boundaries | MIT option | Editor and layout |
 | `unicode-width` | Current cell-width estimate | MIT option | Logical layout |
 | `vt100` | Independent VT cell/style/cursor oracle | MIT | Tests only |

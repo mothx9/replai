@@ -1,7 +1,7 @@
 //! An embeddable terminal interaction library for line-oriented and REPL-style
 //! command interfaces.
 //!
-//! Platform-neutral editing and interaction engine, with a Linux-qualified system façade.
+//! Platform-neutral editing and interaction engine, with a shared Linux/macOS POSIX system façade.
 //! Hosts retain input meaning, completion discovery and history admission.
 //!
 //! ```
@@ -17,7 +17,7 @@
 //! A host owns the loop, including what to do after submission or interruption:
 //!
 //! ```no_run
-//! # #[cfg(target_os = "linux")]
+//! # #[cfg(any(target_os = "linux", target_os = "macos"))]
 //! # fn example() -> Result<(), Box<dyn std::error::Error>> {
 //! use replai::{Editor, Event, Prompt, Interaction};
 //! use std::time::Duration;
@@ -42,27 +42,27 @@ mod capabilities;
 mod core;
 mod event;
 mod interaction;
-// Non-Linux system façades are intentionally absent. These internal components
+// Other system façades are intentionally absent. These internal components
 // compile everywhere and execute through deterministic tests on every CI OS.
-#[cfg_attr(not(target_os = "linux"), allow(dead_code))]
+#[cfg_attr(not(any(target_os = "linux", target_os = "macos")), allow(dead_code))]
 mod actions;
-#[cfg_attr(not(target_os = "linux"), allow(dead_code))]
+#[cfg_attr(not(any(target_os = "linux", target_os = "macos")), allow(dead_code))]
 mod engine;
-#[cfg_attr(not(target_os = "linux"), allow(dead_code))]
+#[cfg_attr(not(any(target_os = "linux", target_os = "macos")), allow(dead_code))]
 mod input;
-#[cfg_attr(not(target_os = "linux"), allow(dead_code))]
+#[cfg_attr(not(any(target_os = "linux", target_os = "macos")), allow(dead_code))]
 mod keymap;
-#[cfg_attr(not(target_os = "linux"), allow(dead_code))]
+#[cfg_attr(not(any(target_os = "linux", target_os = "macos")), allow(dead_code))]
 mod presentation;
-#[cfg_attr(not(target_os = "linux"), allow(dead_code))]
+#[cfg_attr(not(any(target_os = "linux", target_os = "macos")), allow(dead_code))]
 mod protocol;
-#[cfg_attr(not(target_os = "linux"), allow(dead_code))]
+#[cfg_attr(not(any(target_os = "linux", target_os = "macos")), allow(dead_code))]
 mod render;
-#[cfg_attr(not(target_os = "linux"), allow(dead_code))]
+#[cfg_attr(not(any(target_os = "linux", target_os = "macos")), allow(dead_code))]
 mod substrate;
-#[cfg(target_os = "linux")]
+#[cfg(any(target_os = "linux", target_os = "macos"))]
 mod system;
-#[cfg_attr(not(target_os = "linux"), allow(dead_code))]
+#[cfg_attr(not(any(target_os = "linux", target_os = "macos")), allow(dead_code))]
 mod terminal;
 pub use core::{EditError, Editor};
 pub use event::{Error, Event};

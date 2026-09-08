@@ -1,24 +1,24 @@
 use crate::{Editor, Error, engine::Engine};
-#[cfg(target_os = "linux")]
+#[cfg(any(target_os = "linux", target_os = "macos"))]
 use crate::{
     Event, Prompt, Role, Theme,
     actions::{Input, Request},
     system::Resource,
     terminal::Terminal,
 };
-#[cfg(target_os = "linux")]
+#[cfg(any(target_os = "linux", target_os = "macos"))]
 use std::{ops::Range, os::fd::AsFd, time::Duration};
 
 /// Host-owned interaction state with a scoped system-terminal compatibility façade.
 ///
 /// Editor, events and the internal interaction engine are platform-neutral.
-/// System acquisition/polling is currently Linux-qualified and available on Linux.
+/// System acquisition/polling is available on Linux and macOS.
 /// Moving this value is safe. No signals or background threads are installed.
 /// The current backend admits one active terminal per process; this restriction
 /// belongs to resource acquisition, not to the deterministic engine.
 pub struct Interaction {
     engine: Engine,
-    #[cfg(target_os = "linux")]
+    #[cfg(any(target_os = "linux", target_os = "macos"))]
     terminal: Option<Terminal<Resource>>,
 }
 impl Interaction {
@@ -26,7 +26,7 @@ impl Interaction {
     pub fn new(editor: Editor) -> Self {
         Self {
             engine: Engine::new(editor),
-            #[cfg(target_os = "linux")]
+            #[cfg(any(target_os = "linux", target_os = "macos"))]
             terminal: None,
         }
     }
@@ -44,16 +44,16 @@ impl Interaction {
     }
     /// Whether an interaction is active or a system resource still awaits cleanup.
     pub fn is_open(&self) -> bool {
-        #[cfg(target_os = "linux")]
+        #[cfg(any(target_os = "linux", target_os = "macos"))]
         if self.terminal.is_some() {
             return true;
         }
         self.engine.is_open()
     }
 }
-#[cfg(target_os = "linux")]
+#[cfg(any(target_os = "linux", target_os = "macos"))]
 impl Interaction {
-    /// Acquire a matching Linux TTY pair and draw the retained draft.
+    /// Acquire a matching POSIX TTY pair and draw the retained draft.
     /// Caller descriptors are duplicated and remain owned by the caller.
     /// Failure preserves the editor; closing permits reopening with another prompt.
     pub fn open(

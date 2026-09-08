@@ -1,4 +1,6 @@
 //! Minimal memory history and one fixed completion; no filesystem discovery.
+#[path = "../exit_gate.rs"]
+mod exit_gate;
 use reedline::{
     ColumnarMenu, Completer, CompletionResult, DefaultPrompt, DefaultPromptSegment, Emacs,
     FileBackedHistory, History, HistoryItem, KeyCode, KeyModifiers, MenuBuilder, Reedline,
@@ -15,6 +17,7 @@ impl Completer for Fixed {
     }
 }
 fn main() {
+    let _exit_gate = exit_gate::Gate::new();
     let mut history = FileBackedHistory::new(100).unwrap();
     history
         .save(HistoryItem::from_command_line("history first"))
@@ -49,7 +52,7 @@ fn main() {
         let mut receipt = std::fs::OpenOptions::new()
             .write(true)
             .open(format!(
-                "/proc/self/fd/{}",
+                "/dev/fd/{}",
                 std::env::var("P0_RECEIPT_FD").unwrap()
             ))
             .unwrap();

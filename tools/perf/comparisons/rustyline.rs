@@ -1,4 +1,6 @@
 //! Minimal memory-history consumer; fixed host-selected completion, no discovery.
+#[path = "../exit_gate.rs"]
+mod exit_gate;
 use rustyline::{
     Context, Helper, Result, completion::Completer, highlight::Highlighter, hint::Hinter,
     validate::Validator,
@@ -17,6 +19,7 @@ impl Completer for Fixed {
     }
 }
 fn main() {
+    let _exit_gate = exit_gate::Gate::new();
     let mut editor = rustyline::Editor::<Fixed, rustyline::history::DefaultHistory>::new().unwrap();
     editor.set_helper(Some(Fixed));
     editor.add_history_entry("history first").unwrap();

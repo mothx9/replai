@@ -58,8 +58,10 @@ terminal backends remain unimplemented. See [F0 evidence](docs/engineering/f0.md
 real Linux PTY, idle/output, embedding and pinned comparative measurements are
 recorded in [P0 evidence](docs/engineering/p0.md), with explicit environment,
 variance and unsupported-workload limits. No performance optimization was made.
-F1, P1, P2, P3 and all later implementation waves remain unstarted.
-No next implementation wave is authorized.
+MACOS.RUNTIME.PERFORMANCE.CLOSURE.0 is active, absorbing X1/P1/P2: real macOS POSIX runtime and a
+native baseline checkpoint, followed by common performance convergence. It
+authorizes the required X1/P1/P2 work and internal driver work only. F1, F2,
+I/O/U series, public P3 host driving and Windows runtime remain unstarted.
 
 System-terminal runtime qualification remains Linux-specific and pre-release. There is no stable API,
 ABI, SemVer or MSRV promise. The current implementation has one active terminal
@@ -85,7 +87,8 @@ from another. In particular, the first post-R5 design must consider **API tiers,
 performance baselines and event-loop architecture together**. F0 frames that
 joint investigation; F1, P0 and P3 retain distinct deliverables. A convenient API
 cannot be frozen before understanding its blocking behavior and costs. F0 and P0 have explicit task authorization; later implementation is not authorized
-by the roadmap or by external consumer closure.
+by the roadmap or by external consumer closure. The explicit combined macOS
+and performance closure authorization above supersedes that original ordering.
 
 ### Foundation — one engine, several embedding levels
 

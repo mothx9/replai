@@ -1,8 +1,8 @@
 //! Narrow, pre-release C ABI adapter using only the public safe `replai` API.
 //! All pointer storage remains caller-owned except the opaque handle allocation.
-#![cfg_attr(not(target_os = "linux"), allow(unused))]
-#[cfg(not(target_os = "linux"))]
-compile_error!("the C binding is qualified only on Linux");
+#![cfg_attr(not(any(target_os = "linux", target_os = "macos")), allow(unused))]
+#[cfg(not(any(target_os = "linux", target_os = "macos")))]
+compile_error!("the C binding is available only on Linux and macOS");
 #[cfg(not(panic = "unwind"))]
 compile_error!("the C binding requires panic=unwind for containment");
 

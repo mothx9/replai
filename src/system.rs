@@ -1,19 +1,25 @@
-//! Linux-qualified POSIX resource realization. No editor, prompt or key policy.
+//! Shared Linux/macOS POSIX resource realization. No editor, prompt or key policy.
 use crate::{
     Error,
     substrate::{Read, Transport},
 };
+#[cfg(target_os = "macos")]
+use nix::sys::event::{EvFlags, EventFilter, FilterFlag, KEvent as Readiness, Kqueue};
+#[cfg(target_os = "linux")]
+use rustix::event::{PollFd, PollFlags, Timespec, poll};
 use rustix::{
-    event::{PollFd, PollFlags, Timespec, poll},
     io::{dup, read, write},
     termios::{self, OptionalActions, Termios},
 };
+#[cfg(target_os = "macos")]
+use std::os::fd::AsRawFd;
 use std::{
     io,
     os::fd::{AsFd, OwnedFd},
     sync::atomic::{AtomicBool, Ordering},
     time::Duration,
 };
+
 static ACTIVE: AtomicBool = AtomicBool::new(false);
 struct Lease;
 impl Lease {
@@ -41,6 +47,8 @@ pub(crate) struct Resource {
     saved: Termios,
     active: bool,
     lease: Option<Lease>,
+    #[cfg(target_os = "macos")]
+    readiness: Option<Kqueue>,
 }
 impl Resource {
     pub fn acquire(input: &impl AsFd, output: &impl AsFd) -> Result<(Self, (usize, usize)), Error> {
@@ -70,6 +78,8 @@ impl Resource {
             saved,
             active: true,
             lease: Some(lease),
+            #[cfg(target_os = "macos")]
+            readiness: None,
         };
         let mut raw = resource.saved.clone();
         raw.make_raw();
@@ -84,9 +94,104 @@ impl Resource {
                 .into(),
             });
         }
+        #[cfg(target_os = "macos")]
+        if let Err(error) = resource.prepare_readiness() {
+            return Err(match resource.restore() {
+                Ok(()) => error.into(),
+                Err(cleanup) => io::Error::new(
+                    error.kind(),
+                    format!("{error}; terminal cleanup also failed: {cleanup}"),
+                )
+                .into(),
+            });
+        }
         Ok((resource, size))
     }
 }
+impl Resource {
+    #[cfg(target_os = "macos")]
+    fn prepare_readiness(&mut self) -> io::Result<()> {
+        // Register after raw mode is installed: an existing canonical knote can
+        // otherwise miss bytes already queued when ICANON changes on Darwin.
+        let queue = Kqueue::new()?;
+        rustix::io::fcntl_setfd(&queue, rustix::io::FdFlags::CLOEXEC)?;
+        let event = Readiness::new(
+            self.input.as_raw_fd() as usize,
+            EventFilter::EVFILT_READ,
+            EvFlags::EV_ADD,
+            FilterFlag::empty(),
+            0,
+            0,
+        );
+        self.readiness = match queue.kevent(&[event], &mut [], None) {
+            Ok(_) => Some(queue),
+            // Darwin's /dev/tty alias rejects kqueue, unlike a resolved PTY.
+            Err(nix::errno::Errno::EINVAL | nix::errno::Errno::ENOTSUP) => None,
+            Err(error) => return Err(error.into()),
+        };
+        if self.readiness.is_none() && self.input.as_raw_fd() as usize >= nix::libc::FD_SETSIZE {
+            return Err(io::Error::new(
+                io::ErrorKind::Unsupported,
+                "Darwin /dev/tty readiness requires an owned descriptor below FD_SETSIZE",
+            ));
+        }
+        Ok(())
+    }
+    #[cfg(target_os = "linux")]
+    fn wait_readable(&self, timeout: Duration) -> io::Result<bool> {
+        let ts = Timespec {
+            tv_sec: timeout.as_secs().try_into().unwrap_or(i64::MAX),
+            tv_nsec: timeout.subsec_nanos().into(),
+        };
+        let mut fds = [PollFd::new(&self.input, PollFlags::IN)];
+        match poll(&mut fds, Some(&ts)) {
+            Ok(n) => Ok(n != 0),
+            Err(rustix::io::Errno::INTR) => Ok(false),
+            Err(e) => Err(e.into()),
+        }
+    }
+    #[cfg(target_os = "macos")]
+    fn wait_readable(&self, timeout: Duration) -> io::Result<bool> {
+        let ts = nix::libc::timespec {
+            tv_sec: timeout.as_secs().try_into().unwrap_or(i64::MAX),
+            tv_nsec: timeout.subsec_nanos().into(),
+        };
+        let mut events = [Readiness::new(
+            0,
+            EventFilter::EVFILT_READ,
+            EvFlags::empty(),
+            FilterFlag::empty(),
+            0,
+            0,
+        )];
+        let Some(queue) = &self.readiness else {
+            use nix::sys::{
+                select::{FdSet, select},
+                time::{TimeVal, TimeValLike},
+            };
+            if self.input.as_raw_fd() as usize >= nix::libc::FD_SETSIZE {
+                return Err(io::Error::new(
+                    io::ErrorKind::Unsupported,
+                    "Darwin /dev/tty readiness requires an owned descriptor below FD_SETSIZE",
+                ));
+            }
+            let mut set = FdSet::new();
+            set.insert(self.input.as_fd());
+            let mut tv = TimeVal::microseconds(timeout.as_micros().min(i64::MAX as u128) as i64);
+            return match select(None, Some(&mut set), None, None, Some(&mut tv)) {
+                Ok(n) => Ok(n != 0),
+                Err(nix::errno::Errno::EINTR) => Ok(false),
+                Err(e) => Err(e.into()),
+            };
+        };
+        match queue.kevent(&[], &mut events, Some(ts)) {
+            Ok(n) => Ok(n != 0),
+            Err(nix::errno::Errno::EINTR) => Ok(false),
+            Err(e) => Err(e.into()),
+        }
+    }
+}
+
 impl Transport for Resource {
     fn dimensions(&self) -> io::Result<(usize, usize)> {
         dimensions(&self.output)
@@ -102,15 +207,8 @@ impl Transport for Resource {
         result
     }
     fn read(&self, timeout: Duration) -> io::Result<Read> {
-        let ts = Timespec {
-            tv_sec: timeout.as_secs().try_into().unwrap_or(i64::MAX),
-            tv_nsec: timeout.subsec_nanos().into(),
-        };
-        let mut fds = [PollFd::new(&self.input, PollFlags::IN)];
-        match poll(&mut fds, Some(&ts)) {
-            Ok(0) | Err(rustix::io::Errno::INTR) => return Ok(Read::Idle),
-            Ok(_) => {}
-            Err(e) => return Err(e.into()),
+        if !self.wait_readable(timeout)? {
+            return Ok(Read::Idle);
         }
         let mut byte = [0];
         match read(&self.input, &mut byte) {

@@ -131,6 +131,34 @@ jobs:
         run: |
           cargo clippy --locked -p replai --lib -- -D warnings
           cargo test --locked -p replai --doc
+      - name: Real macOS Rust terminal lifecycle and release PTYs
+        if: runner.os == 'macOS'
+        run: |
+          cargo test --locked --workspace --all-targets
+          cargo test --locked --workspace --release
+
+  native-macos:
+    name: macOS C ABI and real terminal
+    runs-on: macos-latest
+    env:
+      RUSTFLAGS: -D warnings
+      RUSTDOCFLAGS: -D warnings
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87
+        with:
+          toolchain: stable
+      - name: Native C tools
+        run: command -v pkg-config || brew install pkg-config
+      - name: Static/dylib C ABI, C++17, real PTYs, ownership and native leaks
+        run: python3 tools/qualify_c.py --work "$RUNNER_TEMP/replai-native-macos"
+      - name: Check repository stayed unchanged
+        run: |
+          git diff --check
+          test -z "$(git status --porcelain)"
 
   benchmark-integrity:
     name: Benchmark integrity (${{ matrix.os }})
@@ -156,11 +184,11 @@ jobs:
           python tools/perf/results.py validate docs/engineering/p0/output-comparison.json
       - name: Benchmark fixture lint
         run: cargo clippy --locked --manifest-path tools/perf/Cargo.toml --all-targets --all-features -- -D warnings
-      - name: Real Linux PTY harness smoke (no latency threshold)
-        if: runner.os == 'Linux'
+      - name: Real POSIX PTY harness smoke (no latency threshold)
+        if: runner.os != 'Windows'
         run: python3 tools/perf/linux.py --smoke --work "$RUNNER_TEMP/replai-performance-pty"
       - name: Compile pinned comparison fixtures and exercise overlapping PTY cases
-        if: runner.os == 'Linux'
+        if: runner.os != 'Windows'
         run: |
           python3 tools/perf/run.py --prepare --families comparisons --work "$RUNNER_TEMP/replai-comparison-build"
           python3 tools/perf/compare.py --smoke --work "$RUNNER_TEMP/replai-comparison-smoke"

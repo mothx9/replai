@@ -47,7 +47,11 @@ static void drain(int fd) {
     assert(errno == EAGAIN || errno == EWOULDBLOCK);
 }
 static int fd_count(void) {
+#ifdef __APPLE__
+    DIR *dir = opendir("/dev/fd");
+#else
     DIR *dir = opendir("/proc/self/fd");
+#endif
     assert(dir);
     int n = 0;
     struct dirent *e;

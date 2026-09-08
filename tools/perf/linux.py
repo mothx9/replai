@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""Real Linux PTYs; readiness and exact-byte completion, never quiet-time sleeps."""
+"""Real Linux/Darwin PTYs; readiness and exact-byte completion, never quiet-time sleeps."""
 import argparse
+import array
 import errno
 import fcntl
 import json
@@ -15,6 +16,7 @@ import struct
 import subprocess
 import termios
 import time
+import sys
 
 ROOT = Path(__file__).resolve().parents[2]
 HOST = ROOT / 'tools/perf/target/release/pty-host'
@@ -25,11 +27,20 @@ def winsize(fd, columns):
     fcntl.ioctl(fd, termios.TIOCSWINSZ, struct.pack('HHHH', 24, columns, 0, 0))
 
 
+def attributes(fd):
+    if sys.platform == 'darwin':
+        # Darwin PENDIN is deferred line-discipline state, not a configurable
+        # mode. FIONREAD settles it without consuming input. Compare every field
+        # afterward, with the same observation before and after every library.
+        fcntl.ioctl(fd,termios.FIONREAD,array.array('i',[0]),True)
+    return termios.tcgetattr(fd)
+
+
 class Session:
     def __init__(self, command, trace=None, terminal_stderr=False):
         self.master, self.slave = os.openpty()
         winsize(self.slave, 80)
-        self.saved = termios.tcgetattr(self.slave)
+        self.saved = attributes(self.slave)
         os.set_blocking(self.master, False)
         self.output = bytearray()
         self.receipts = bytearray()
@@ -41,10 +52,12 @@ class Session:
             os.setsid()
             fcntl.ioctl(0, termios.TIOCSCTTY, 0)
         control_read, control_write = os.pipe() if terminal_stderr else (None, None)
+        exit_read, self.exit_write = os.pipe()
         self.process = subprocess.Popen(list(map(str, command)), stdin=self.slave,
             stdout=self.slave, stderr=self.slave if terminal_stderr else subprocess.PIPE, preexec_fn=controlling_terminal,
-            pass_fds=(control_write,) if terminal_stderr else (),
-            env={**os.environ, 'TERM': 'xterm-256color', 'NO_COLOR': '1', 'LC_ALL': 'C.UTF-8', **({'P0_RECEIPT_FD':str(control_write)} if terminal_stderr else {})})
+            pass_fds=(exit_read,control_write) if terminal_stderr else (exit_read,),
+            env={**os.environ, 'TERM': 'xterm-256color', 'NO_COLOR': '1', 'LC_ALL': 'C.UTF-8', 'P0_EXIT_FD':str(exit_read), **({'P0_RECEIPT_FD':str(control_write)} if terminal_stderr else {})})
+        os.close(exit_read)
         if terminal_stderr:
             os.close(control_write)
             self.control=os.fdopen(control_read,'rb')
@@ -124,6 +137,9 @@ class Session:
         if gate:self.send(b"!")
 
     def finish(self):
+        self.until(lambda:b'EXIT_READY\n' in self.receipts)
+        assert attributes(self.slave)==self.saved, 'terminal state not restored before session leader exit'
+        os.write(self.exit_write,b'!');os.close(self.exit_write);self.exit_write=None
         deadline=time.monotonic()+30
         while self.process.poll() is None:
             if self.control not in self.selector.get_map():
@@ -142,7 +158,8 @@ class Session:
                 self.output.extend(data)
             except BlockingIOError:break
         assert code==0,(code,self.receipts[-1000:])
-        assert termios.tcgetattr(self.slave)==self.saved, 'terminal state not restored'
+        if sys.platform=='linux':
+            assert attributes(self.slave)==self.saved, 'terminal state not restored'
         now=resource.getrusage(resource.RUSAGE_CHILDREN)
         cpu=(now.ru_utime+now.ru_stime)-(self.rusage_before.ru_utime+self.rusage_before.ru_stime)
         self.selector.close();self.control.close()
@@ -150,6 +167,8 @@ class Session:
         return cpu
 
     def abort(self):
+        if self.exit_write is not None:
+            os.close(self.exit_write);self.exit_write=None
         if self.process.poll() is None:
             os.killpg(self.process.pid,signal.SIGKILL)
             self.process.wait()
@@ -159,6 +178,7 @@ class Session:
 
 def cases(smoke=False):
     result=[
+        dict(name='controlling_tty',initial='native',input='X',expected='nativeX',controlling_tty=True),
         dict(name='ascii_append',initial='x'*64,input='X',expected='x'*64+'X'),
         dict(name='unicode_append',initial='café 界',input='🌍',expected='café 界🌍'),
         dict(name='middle_insert',initial='a'*64,cursor=32,input='X',expected='a'*32+'X'+'a'*32),
@@ -239,7 +259,7 @@ def interactive(work, smoke, samples):
             counters=dict(vt_bytes=bytes_out[0],logical_mutations=prediction['logical_mutations'],terminal_restored=True,submission_exact=True),
             endpoint='master input write start to exact final VT byte read; includes two-process scheduling and PTY delivery')
         # Tracing is a separate invocation. Bound substantial traces to 4 KiB.
-        if shutil.which('strace') and len(case['input'].encode())<=4110:
+        if sys.platform=='linux' and shutil.which('strace') and len(case['input'].encode())<=4110:
             trace=work/(case['name']+'.strace');session=Session([HOST,'--case-file',path],trace)
             try:
                 session.ready(prediction['initial_output'].encode());start=time.time()
@@ -261,7 +281,7 @@ def idle_and_output(work, smoke):
             session=Session([HOST,'--mode','idle','--timeout-ms',timeout,'--seconds',seconds])
             try:
                 session.ready(gate=True);start=time.monotonic()
-                context=Path(f'/proc/{session.process.pid}/status').read_text()
+                context=Path(f'/proc/{session.process.pid}/status').read_text() if sys.platform=='linux' else ''
                 rss=re.search(r'^VmRSS:\s+(\d+) kB',context,re.M)
                 resident_kib=int(rss[1]) if rss else None
                 session.until(lambda:b'"poll_calls"' in session.receipts,timeout=seconds+10)
@@ -274,7 +294,7 @@ def idle_and_output(work, smoke):
             except BaseException:session.abort();raise
         yield dict(schema_version=1,id=f'idle/{timeout}',component='idle',operation='poll',status='measured',mode='idle',iterations=len(observations),observations=observations,
                    scope='production poll calls and lifecycle-inclusive child rusage; zero timeout is deliberate busy polling')
-        if shutil.which('strace') and timeout>=10:
+        if sys.platform=='linux' and shutil.which('strace') and timeout>=10:
             trace=work/f'idle-{timeout}.strace';session=Session([HOST,'--mode','idle','--timeout-ms',timeout,'--seconds',seconds],trace)
             try:session.ready(gate=True);session.until(lambda:b'"poll_calls"' in session.receipts,timeout=seconds+10);session.finish()
             except BaseException:session.abort();raise
@@ -294,7 +314,7 @@ def idle_and_output(work, smoke):
             yield dict(schema_version=1,id=f'output/{size}/{rate}',component='output',operation='synchronous_chunks',status='measured',mode='latency',iterations=len(samples_us),
                 samples_us=samples_us,input_bytes=size,rate=rate,observations=value,counters=dict(observed_terminal_bytes_including_close=output,cpu_seconds_lifecycle=cpu,terminal_restored=True),
                 scope='host-call timer excludes rate scheduling sleeps; serialized single host, no concurrent editing')
-            if shutil.which('strace'):
+            if sys.platform=='linux' and shutil.which('strace'):
                 trace=work/f'output-{size}-{rate}.strace'
                 session=Session([HOST,'--mode','output','--initial','retained draft 界','--size',size,'--rate',rate,'--seconds',seconds],trace)
                 try:session.ready(gate=True);session.until(lambda:b'"draft_restored"' in session.receipts,timeout=seconds+30);session.finish()
@@ -305,16 +325,16 @@ def idle_and_output(work, smoke):
 
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--work',type=Path,required=True);p.add_argument('--smoke',action='store_true');p.add_argument('--samples',type=int,default=31);p.add_argument('--family',choices=['all','pty','idle-output'],default='all');a=p.parse_args()
-    if not sys_platform_linux():
-        print(json.dumps(dict(schema_version=1,id='linux',component='platform',status='unsupported',reason='qualified real backend requires Linux')));return
+    if sys.platform not in ('linux','darwin'):
+        print(json.dumps(dict(schema_version=1,id='linux',component='platform',status='unsupported',reason='qualified real backend requires Linux or macOS')));return
     a.work.mkdir(parents=True,exist_ok=True)
     generators=[]
     if a.family in ('all','pty'):generators.append(interactive(a.work,a.smoke,3 if a.smoke else a.samples))
     if a.family in ('all','idle-output'):generators.append(idle_and_output(a.work,a.smoke))
     for generator in generators:
         for row in generator:print(json.dumps(row),flush=True)
-    if not shutil.which('strace'):
-        print(json.dumps(dict(schema_version=1,id='strace',component='tooling',status='unavailable',reason='optional strace missing; syscalls not inferred from logical writes')))
+    if sys.platform!='linux' or not shutil.which('strace'):
+        print(json.dumps(dict(schema_version=1,id='strace',component='tooling',status='unavailable',reason='optional Linux strace unavailable on this platform; syscalls not inferred from logical writes')))
 
 
 def sys_platform_linux():

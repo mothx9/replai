@@ -48,7 +48,9 @@ fn state_and_geometry_do_not_import_resources_protocol_or_scheduling() {
     );
     let manifest = include_str!("../Cargo.toml");
     assert!(manifest.contains("unsafe_code = \"forbid\""));
-    assert!(manifest.contains("[target.'cfg(target_os = \"linux\")'.dependencies]"));
+    assert!(manifest.contains(
+        "[target.'cfg(any(target_os = \"linux\", target_os = \"macos\"))'.dependencies]"
+    ));
 }
 
 #[test]

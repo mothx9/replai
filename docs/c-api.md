@@ -1,12 +1,12 @@
 # C boundary — pre-release ABI 1
 
-REPLAI exposes one Linux-qualified C ABI through the separate `replai-c`
+REPLAI exposes one POSIX C ABI for Linux and macOS through the separate `replai-c`
 package. ABI 1 identifies an exact header/binary contract; it is not a promise
 of long-term ABI or SemVer stability. No release has been published.
 
 ## Build, install and link
 
-Producer requirements: current stable Rust, Python 3 and Linux. Consumer
+Producer requirements: current stable Rust, Python 3 and Linux or macOS. Consumer
 requirements: C11 compiler and standard headers; pkg-config is convenient.
 The C consumer does not need Cargo, Rust sources or private headers.
 
@@ -20,7 +20,7 @@ The prefix must be absent or empty. Installation writes only that prefix:
 ```text
 include/replai.h
 lib/libreplai_c.a
-lib/libreplai_c.so
+lib/libreplai_c.so       # Linux; libreplai_c.dylib on macOS
 lib/pkgconfig/replai.pc
 share/licenses/replai/LICENSE
 ```
@@ -226,7 +226,7 @@ Only its `src/lib.rs` dereferences C pointers, constructs borrowed FDs or manage
 the opaque allocation. The implementation crate still forbids unsafe code.
 
 Run the complete qualification with current stable Rust, cc/c++, pkg-config,
-Python 3, Valgrind and a Linux kernel with Landlock. Install the documentation
+Python 3, plus Valgrind/Landlock on Linux or native leaks/sandbox isolation on macOS. Install the documentation
 checker prerequisites from [development](development.md#tools) as well:
 
 ```sh
@@ -235,22 +235,24 @@ python3 tools/qualify.py
 
 The command builds/tests Rust, stages release artifacts, compiles the independent
 C consumer and layout/header probes, executes static/shared PTYs and adversarial
-contracts, checks FD ownership and Valgrind, audits symbols/loader/metadata, runs
+contracts, checks FD ownership and the platform memory tool, audits symbols/loader/metadata, runs
 release Rust regressions, then requires a clean repository. `--allow-dirty` is a
 development aid and explicitly does not qualify the clean closure gate.
 `--work /tmp/new-directory` retains commands, layout, misuse, PTY JSON and memory
 reports. The native CI separates prepare/static/shared/memory/audit gates.
-Consumer compilation and execution run with Landlock denying repository reads;
+Consumer compilation and execution deny repository reads with Landlock on Linux
+or a generated sandbox policy on macOS;
 only staged artifacts, copied C files and system toolchain/runtime are available.
 
-The terminal backend is Linux-qualified. C11 and C++17 inclusion are tested;
-that does not establish another OS backend or every compiler/architecture ABI.
+The shared POSIX backend supports Linux and macOS. C11/C++17 headers, static
+and dynamic consumers, real PTYs and native resource gates run on both. This
+does not establish every compiler/architecture ABI or a Windows backend.
 Unicode width, terminal reflow, TERM=dumb, unframed paste and external-output
 limitations remain those in [interaction](interaction.md) and
 [presentation](presentation.md). No consumer integration or release is performed
 by this qualification.
 
-ABI 1 descriptor acquisition remains a POSIX-style, Linux-qualified compatibility
+ABI 1 descriptor acquisition remains a POSIX-style Linux/macOS compatibility
 contract. The underlying Rust interaction engine is platform-neutral; this does
 not make integer file descriptors a Windows terminal endpoint contract. No new
 C acquisition API or ABI identity is introduced by the architecture refoundation.

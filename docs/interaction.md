@@ -55,7 +55,7 @@ unframed multi-command paste is not promised.
 
 ## Terminal and signal ownership
 
-The following resource contract describes the Linux system façade. The
+The following resource contract describes the shared Linux/macOS POSIX system façade. The
 platform-neutral engine has no resource lease or OS signal policy.
 
 `Interaction::open` validates TTY input and output and requires the same terminal

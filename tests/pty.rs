@@ -1,10 +1,9 @@
-//! Real Linux PTYs with an independent VT terminal-state oracle.
-#![cfg(target_os = "linux")]
+//! Real Linux/macOS PTYs with an independent VT terminal-state oracle.
+#![cfg(any(target_os = "linux", target_os = "macos"))]
 use replai::{EditError, Editor, Error, Event, Interaction, Prompt, Role};
 use rustix::{
     fs::{Mode, OFlags, fcntl_getfl, fcntl_setfl, open},
     io::{read, write},
-    pty::{OpenptFlags, ioctl_tiocgptpeer, openpt, unlockpt},
     termios::{
         InputModes, OptionalActions, SpecialCodeIndex, Winsize, tcgetattr, tcsetattr, tcsetwinsize,
         ttyname,
@@ -16,15 +15,15 @@ use std::{
     time::Duration,
 };
 
+#[path = "support/posix_pty.rs"]
+mod pty_support;
+
 static SERIAL: Mutex<()> = Mutex::new(());
 fn serial() -> MutexGuard<'static, ()> {
     SERIAL.lock().unwrap_or_else(|p| p.into_inner())
 }
 fn pty(cols: u16, rows: u16) -> (OwnedFd, OwnedFd) {
-    let flags = OpenptFlags::RDWR | OpenptFlags::NOCTTY | OpenptFlags::CLOEXEC;
-    let master = openpt(flags).unwrap();
-    unlockpt(&master).unwrap();
-    let slave = ioctl_tiocgptpeer(&master, flags).unwrap();
+    let (master, slave) = pty_support::pair();
     resize(&slave, cols, rows);
     fcntl_setfl(&master, fcntl_getfl(&master).unwrap() | OFlags::NONBLOCK).unwrap();
     (master, slave)
@@ -330,6 +329,7 @@ fn pty_unwinding_close_and_exclusivity() {
     let _serial = serial();
     let (master, slave) = pty(80, 24);
     let before = termios(&slave);
+    #[cfg(target_os = "linux")]
     let signals = || {
         std::fs::read_to_string("/proc/self/status")
             .unwrap()
@@ -340,6 +340,7 @@ fn pty_unwinding_close_and_exclusivity() {
             .map(str::to_owned)
             .collect::<Vec<_>>()
     };
+    #[cfg(target_os = "linux")]
     let prior_signals = signals();
     let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let editor = Editor::new(100, 1);
@@ -351,6 +352,7 @@ fn pty_unwinding_close_and_exclusivity() {
     }));
     assert!(result.is_err());
     assert_eq!(termios(&slave), before);
+    #[cfg(target_os = "linux")]
     assert_eq!(signals(), prior_signals);
     let bytes = drain(&master);
     assert!(bytes.windows(8).any(|w| w == b"\x1b[?2004l"));
@@ -608,4 +610,75 @@ fn pty_external_output_rejects_controls_and_keeps_queued_input() {
     assert_eq!(screen.screen().cursor_position(), (1, 8));
     assert_eq!(t.interrupt().unwrap(), Event::Interrupted);
     assert_eq!(termios(&slave), before);
+}
+
+#[cfg(target_os = "macos")]
+#[test]
+fn darwin_restores_all_settled_attributes_without_consuming_queued_input() {
+    let _serial = serial();
+    let (master, slave) = pty(80, 24);
+    // FIONREAD resolves Darwin's transient PENDIN state; no fields are masked.
+    rustix::io::ioctl_fionread(&slave).unwrap();
+    let before = termios(&slave);
+    let mut t = Interaction::new(Editor::new(100, 2));
+    t.open(&slave, &slave, prompt()).unwrap();
+    drain(&master);
+    write(&master, b"next\n").unwrap();
+    let deadline = std::time::Instant::now() + Duration::from_secs(1);
+    while rustix::io::ioctl_fionread(&slave).unwrap() != 5 {
+        assert!(
+            std::time::Instant::now() < deadline,
+            "PTY input did not become ready"
+        );
+        std::thread::yield_now();
+    }
+    t.close().unwrap();
+    rustix::io::ioctl_fionread(&slave).unwrap();
+    assert_eq!(termios(&slave), before);
+    // Bytes queued while raw need not already form a Darwin canonical record.
+    // Reopen and prove exact delivery, rather than assuming canonical readiness.
+    t.open(&slave, &slave, prompt()).unwrap();
+    let mut submitted = None;
+    for _ in 0..10 {
+        if let Some(event) = t.poll(Duration::from_millis(10)).unwrap() {
+            submitted = Some(event);
+            break;
+        }
+    }
+    assert_eq!(
+        submitted,
+        Some(Event::Submitted("next".into())),
+        "draft={:?}, queued={}, before={}",
+        t.editor().text(),
+        rustix::io::ioctl_fionread(&slave).unwrap(),
+        before
+    );
+    rustix::io::ioctl_fionread(&slave).unwrap();
+    assert_eq!(termios(&slave), before);
+}
+
+#[test]
+fn pty_combining_cjk_joined_emoji_variation_and_regional_edits_are_atomic() {
+    let _serial = serial();
+    for grapheme in ["e\u{301}", "界", "👩\u{200d}💻", "🇮🇹", "♥\u{fe0f}"] {
+        let (master, slave) = pty(80, 24);
+        let before = termios(&slave);
+        let mut t = Interaction::new(Editor::new(1024, 2));
+        t.open(&slave, &slave, prompt()).unwrap();
+        let mut screen = vt100::Parser::new(24, 80, 100);
+        screen.process(&drain(&master));
+        feed(
+            &mut t,
+            &master,
+            format!("A{grapheme}B").as_bytes(),
+            &mut screen,
+        );
+        assert_eq!(t.editor().text(), format!("A{grapheme}B"));
+        feed(&mut t, &master, b"\x1b[D\x7f", &mut screen);
+        assert_eq!((t.editor().text(), t.editor().cursor()), ("AB", 1));
+        assert_eq!(screen.screen().contents(), "demo> AB");
+        assert_eq!(screen.screen().cursor_position(), (0, 7));
+        t.close().unwrap();
+        assert_eq!(termios(&slave), before);
+    }
 }

@@ -22,7 +22,7 @@ def command(*args):
 
 
 def identity():
-    paths=sorted([*ROOT.glob('src/*.rs'), ROOT/'Cargo.toml', ROOT/'Cargo.lock',
+    paths=sorted([*ROOT.glob('src/*.rs'), ROOT/'Cargo.toml', ROOT/'Cargo.lock', ROOT/'tests/support/posix_pty.rs',
         *[p for p in (ROOT/'tools/perf').rglob('*') if p.is_file() and 'target' not in p.parts and '__pycache__' not in p.parts]])
     digests={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in paths}
     return dict(head=command('git','rev-parse','HEAD'),tree=command('git','rev-parse','HEAD^{tree}'),
@@ -48,8 +48,10 @@ def environment():
         build_environment={k:os.environ.get(k) for k in ['RUSTFLAGS','CARGO_ENCODED_RUSTFLAGS','CARGO_BUILD_TARGET','CARGO_PROFILE_RELEASE_OPT_LEVEL']},build_profile='release opt-level=3 debug=1 panic=unwind, no LTO or CPU-native override',
         host_description=os.environ.get('P0_MACHINE','unspecified: supply P0_MACHINE for an authoritative run'),
         memory_cgroup_max=read('/sys/fs/cgroup/memory.max'),cpu_cgroup_max=read('/sys/fs/cgroup/cpu.max'),
-        terminal='Linux openpty 80x24, controlling TTY, xterm-256color, NO_COLOR; no terminal emulator',
+        terminal=platform.system()+' openpty 80x24, controlling TTY, xterm-256color, NO_COLOR; no terminal emulator',
         dependencies=command('cargo','tree','--locked','-p','replai','--edges','normal,build'),
+        host_hardware={k:command('sysctl','-n',k) for k in ['hw.model','machdep.cpu.brand_string','hw.memsize','hw.physicalcpu','hw.logicalcpu']} if sys.platform=='darwin' else None,
+        macos=command('sw_vers') if sys.platform=='darwin' else None,
         os_packages=command('dpkg-query','-W','libc6','strace','valgrind','gcc','python3','nodejs'))
 
 

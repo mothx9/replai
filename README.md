@@ -26,7 +26,7 @@ Your application supplies the prompt, decides what the input means, and keeps
 control of execution. An interpreter, database shell, debugger or developer tool
 can use the same interaction machinery with its own language and policies.
 
-**Pre-release · Linux terminal backend qualified.** The Rust API and C ABI 1 are experimental.
+**Pre-release · shared Linux/macOS POSIX terminal backend.** The Rust API and C ABI 1 are experimental.
 Use an exact revision; no stable API/ABI or published crate release is promised.
 See [project status](ROADMAP.md) for demonstrated scope and current limits.
 
@@ -84,7 +84,7 @@ that boundary to REPLAI's safe Rust implementation and separate C binding.
 
 ## Try the interaction
 
-From a checkout, on Linux with stable Rust and an interactive ANSI/VT-compatible
+From a checkout, on Linux or macOS with stable Rust and an interactive ANSI/VT-compatible
 terminal:
 
 ```sh
@@ -118,7 +118,7 @@ the next grapheme. The example owns these loop decisions and history admission.
 ## Embed in Rust
 
 An `Interaction` owns a platform-neutral editing/interaction engine. Its current
-Linux system façade acquires a terminal only while editing. See the
+POSIX system façade acquires a terminal only while editing. See the
 [architecture](docs/architecture.md) for protocol/system separation and the
 distinction between portable core tests and interactive platform qualification.
 The host polls events and decides when to open the next interaction. For example,
@@ -182,7 +182,7 @@ rules. [The C example](examples/c/demo.c) demonstrates the complete host loop.
 Qualification exercises both the safe Rust implementation and independently
 compiled C processes. It observes submitted UTF-8 bytes, terminal cells and
 cursor position, exact termios restoration, descriptor ownership, C/Rust ABI
-layout, staged library resolution and memory-checker results. Real Linux PTYs
+layout, staged library resolution and memory-checker results. Real Linux/macOS PTYs
 are part of both paths. [CI](https://github.com/mothx9/replai/actions/workflows/ci.yml)
 keeps documentation, Rust and native-consumer gates visible separately.
 

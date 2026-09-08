@@ -20,11 +20,16 @@ mod keymap;
 mod presentation;
 #[path = "../../src/protocol.rs"]
 mod protocol;
+#[cfg(all(not(test), any(target_os = "linux", target_os = "macos")))]
+#[path = "../../tests/support/posix_pty.rs"]
+mod pty_support;
+#[cfg(all(test, any(target_os = "linux", target_os = "macos")))]
+use terminal::pty_support;
 #[path = "../../src/render.rs"]
 mod render;
 #[path = "../../src/substrate.rs"]
 mod substrate;
-#[cfg(target_os = "linux")]
+#[cfg(any(target_os = "linux", target_os = "macos"))]
 #[path = "../../src/system.rs"]
 mod system;
 #[path = "../../src/terminal.rs"]
@@ -906,32 +911,47 @@ fn main() {
             },
         );
     }
-    #[cfg(target_os = "linux")]
+    #[cfg(any(target_os = "linux", target_os = "macos"))]
     for size in [1, 80, 1024, 4096] {
-        use rustix::pty::{OpenptFlags, ioctl_tiocgptpeer, openpt, unlockpt};
         use substrate::Transport;
         let bytes = vec![b'x'; size];
+        // This family times enqueue without a concurrent reader. Probe with
+        // nonblocking I/O first: a Darwin PTY can fill below 4 KiB. Waiting for
+        // a reader that only runs in verification would deadlock the harness.
+        let admitted = {
+            let (_master, _slave, resource, _saved) = transport_fixture();
+            let mut resource = resource.into_inner();
+            let flags = rustix::fs::fcntl_getfl(&resource.output).unwrap();
+            rustix::fs::fcntl_setfl(&resource.output, flags | rustix::fs::OFlags::NONBLOCK)
+                .unwrap();
+            let admitted = match resource.write(&bytes) {
+                Ok(()) => true,
+                Err(e) if e.kind() == std::io::ErrorKind::WouldBlock => false,
+                Err(e) => panic!("transport enqueue probe failed: {e}"),
+            };
+            resource.restore().unwrap();
+            admitted
+        };
+        if !admitted {
+            let mut row = spec("transport", "kernel_enqueue", size, "ascii", 80);
+            if row["id"].as_str().unwrap().contains(&h.filter) {
+                row["schema_version"] = json!(1);
+                row["status"] = json!("unsupported");
+                row["mode"] = json!(if cfg!(feature = "allocations") {
+                    "allocation"
+                } else {
+                    "latency"
+                });
+                row["reason"] = json!(
+                    "PTY queue cannot hold this payload without a concurrent reader; the enqueue-only fixture does not measure backpressure"
+                );
+                println!("{row}");
+            }
+            continue;
+        }
         h.measure(
             spec("transport", "kernel_enqueue", size, "ascii", 80),
-            || {
-                let flags = OpenptFlags::RDWR | OpenptFlags::NOCTTY | OpenptFlags::CLOEXEC;
-                let master = openpt(flags).unwrap();
-                unlockpt(&master).unwrap();
-                let slave = ioctl_tiocgptpeer(&master, flags).unwrap();
-                rustix::termios::tcsetwinsize(
-                    &slave,
-                    rustix::termios::Winsize {
-                        ws_row: 24,
-                        ws_col: 80,
-                        ws_xpixel: 0,
-                        ws_ypixel: 0,
-                    },
-                )
-                .unwrap();
-                let saved = format!("{:?}", rustix::termios::tcgetattr(&slave).unwrap());
-                let (resource, _) = system::Resource::acquire(&slave, &slave).unwrap();
-                (master, slave, std::cell::RefCell::new(resource), saved)
-            },
+            transport_fixture,
             |(_, _, resource, _)| resource.get_mut().write(&bytes),
             |(master, slave, resource, saved), result| {
                 assert!(result.is_ok());
@@ -989,4 +1009,27 @@ fn main() {
             },
         );
     }
+}
+
+#[cfg(any(target_os = "linux", target_os = "macos"))]
+fn transport_fixture() -> (
+    std::os::fd::OwnedFd,
+    std::os::fd::OwnedFd,
+    std::cell::RefCell<system::Resource>,
+    String,
+) {
+    let (master, slave) = pty_support::pair();
+    rustix::termios::tcsetwinsize(
+        &slave,
+        rustix::termios::Winsize {
+            ws_row: 24,
+            ws_col: 80,
+            ws_xpixel: 0,
+            ws_ypixel: 0,
+        },
+    )
+    .unwrap();
+    let saved = format!("{:?}", rustix::termios::tcgetattr(&slave).unwrap());
+    let (resource, _) = system::Resource::acquire(&slave, &slave).unwrap();
+    (master, slave, std::cell::RefCell::new(resource), saved)
 }

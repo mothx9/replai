@@ -1,6 +1,10 @@
-//! Linux production-facade host. Control receipts use stderr, never terminal output.
-#[cfg(target_os = "linux")]
+//! POSIX production-facade host. Control receipts use stderr, never terminal output.
+#[cfg(any(target_os = "linux", target_os = "macos"))]
+#[path = "exit_gate.rs"]
+mod exit_gate;
+#[cfg(any(target_os = "linux", target_os = "macos"))]
 fn main() {
+    let _exit_gate = exit_gate::Gate::new();
     use replai::{Editor, Event, Interaction, Prompt, Role};
     use std::{
         io::{self},
@@ -41,8 +45,19 @@ fn main() {
         }
     }
     let mut i = Interaction::new(e);
-    i.open(&io::stdin(), &io::stdout(), Prompt::new("p").unwrap())
-        .unwrap();
+    if case["controlling_tty"].as_bool().unwrap_or(false) {
+        let tty = std::fs::OpenOptions::new()
+            .read(true)
+            .write(true)
+            .open("/dev/tty")
+            .unwrap();
+        i.open(&tty, &tty, Prompt::new("p").unwrap()).unwrap();
+        // The duplicated resource must survive closing the caller's descriptors.
+        drop(tty);
+    } else {
+        i.open(&io::stdin(), &io::stdout(), Prompt::new("p").unwrap())
+            .unwrap();
+    }
     eprintln!("READY");
     if mode == "idle" || mode == "output" {
         use std::io::Read;
@@ -148,7 +163,7 @@ fn main() {
     }
     i.close().unwrap();
 }
-#[cfg(not(target_os = "linux"))]
+#[cfg(not(any(target_os = "linux", target_os = "macos")))]
 fn main() {
-    eprintln!("UNSUPPORTED: the real system backend is Linux-only");
+    eprintln!("UNSUPPORTED: the real system backend requires Linux or macOS");
 }
