@@ -7,7 +7,7 @@ use crate::{
     terminal::Terminal,
 };
 #[cfg(any(target_os = "linux", target_os = "macos"))]
-use std::{ops::Range, os::fd::AsFd, time::Duration};
+use std::{collections::VecDeque, ops::Range, os::fd::AsFd, time::Duration};
 
 /// Host-owned interaction state with a scoped system-terminal compatibility façade.
 ///
@@ -20,6 +20,8 @@ pub struct Interaction {
     engine: Engine,
     #[cfg(any(target_os = "linux", target_os = "macos"))]
     terminal: Option<Terminal<Resource>>,
+    #[cfg(any(target_os = "linux", target_os = "macos"))]
+    pending: VecDeque<u8>,
 }
 impl Interaction {
     /// Own an editor without acquiring a terminal.
@@ -28,6 +30,8 @@ impl Interaction {
             engine: Engine::new(editor),
             #[cfg(any(target_os = "linux", target_os = "macos"))]
             terminal: None,
+            #[cfg(any(target_os = "linux", target_os = "macos"))]
+            pending: VecDeque::new(),
         }
     }
     /// Inspect draft text and byte cursor in any lifecycle state.
@@ -66,17 +70,21 @@ impl Interaction {
             return Err(Error::State);
         }
         let (resource, _) = Resource::acquire(input, output)?;
-        self.terminal = Some(Terminal::start(
+        let mut terminal = Terminal::start(
             resource,
             &mut self.engine,
             prompt,
             Theme::from_environment(true),
-        )?);
+        )?;
+        terminal.pending = std::mem::take(&mut self.pending);
+        self.terminal = Some(terminal);
         Ok(())
     }
     /// Poll at most 100 ms, observing resize without owning signal policy.
     /// Incomplete sequences expire after 250 ms idle. Submit/interrupt/EOF restore
     /// the captured terminal state and release duplicated descriptors.
+    /// Already-ready input is read in bounded chunks. Read-ahead after a returned
+    /// event remains owned by this Interaction, including across close/reopen.
     pub fn poll(&mut self, timeout: Duration) -> Result<Option<Event>, Error> {
         let result = self
             .terminal
@@ -119,13 +127,17 @@ impl Interaction {
     /// Restore and release the terminal, retaining editor/history. Idempotent.
     /// Drop also attempts restoration without panicking; explicit close reports errors.
     pub fn close(&mut self) -> Result<(), Error> {
-        self.terminal
-            .take()
-            .map_or(Ok(()), |mut t| t.close(&mut self.engine))
+        if let Some(mut t) = self.terminal.take() {
+            let result = t.close(&mut self.engine);
+            self.pending = std::mem::take(&mut t.pending);
+            result
+        } else {
+            Ok(())
+        }
     }
     fn reap(&mut self) {
         if self.terminal.as_ref().is_some_and(|t| !t.active) {
-            self.terminal.take();
+            self.pending = std::mem::take(&mut self.terminal.take().unwrap().pending);
         }
     }
 }

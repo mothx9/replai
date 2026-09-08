@@ -20,6 +20,10 @@ struct Device {
     fail_read: bool,
     fail_write: bool,
     fail_restore: usize,
+    read_limit: usize,
+    reads: usize,
+    writes: usize,
+    waits: Vec<Duration>,
 }
 #[derive(Clone)]
 struct Virtual(Rc<RefCell<Device>>);
@@ -27,6 +31,7 @@ impl Virtual {
     fn new() -> Self {
         Self(Rc::new(RefCell::new(Device {
             size: (80, 24),
+            read_limit: 4096,
             ..Device::default()
         })))
     }
@@ -44,17 +49,27 @@ impl Transport for Virtual {
     fn dimensions(&self) -> io::Result<(usize, usize)> {
         Ok(self.0.borrow().size)
     }
-    fn read(&self, _: Duration) -> io::Result<Read> {
+    fn read(&self, buffer: &mut [u8], timeout: Duration) -> io::Result<Read> {
         let mut d = self.0.borrow_mut();
+        d.reads += 1;
+        d.waits.push(timeout);
         if d.fail_read {
             return Err(io::Error::other("read failure"));
         }
-        Ok(d.input
-            .pop_front()
-            .map_or(if d.eof { Read::Eof } else { Read::Idle }, Read::Byte))
+        let n = buffer.len().min(d.input.len()).min(d.read_limit);
+        if n == 0 {
+            return Ok(if d.eof { Read::Eof } else { Read::Idle });
+        }
+        for slot in &mut buffer[..n] {
+            *slot = d.input.pop_front().unwrap();
+        }
+        Ok(Read::Bytes(n))
     }
     fn write(&self, bytes: &[u8]) -> io::Result<()> {
         let mut d = self.0.borrow_mut();
+        if !bytes.is_empty() {
+            d.writes += 1;
+        }
         if d.fail_write && !bytes.is_empty() {
             return Err(io::Error::other("write failure"));
         }
@@ -73,6 +88,90 @@ impl Transport for Virtual {
         d.restored += 1;
         Ok(())
     }
+}
+
+#[test]
+fn ready_input_is_coalesced_without_collection_wait_or_event_reordering() {
+    for limit in [1, 2, 3, 7, 4096] {
+        let d = Virtual::new();
+        d.0.borrow_mut().read_limit = limit;
+        let (mut e, mut t) = start(&d);
+        d.feed("e\u{301}界\x1b[D!\tremaining\r".as_bytes());
+        assert_eq!(
+            t.poll(&mut e, Duration::from_millis(50)).unwrap(),
+            Some(Event::CompletionRequested)
+        );
+        assert_eq!((e.editor.text(), e.editor.cursor()), ("e\u{301}!界", 4));
+        assert_eq!(d.screen().screen().contents(), "demo> e\u{301}!界");
+        assert_eq!(d.0.borrow().writes, 2, "initial frame + one ready burst");
+        assert!(d.0.borrow().waits.iter().skip(1).all(Duration::is_zero));
+        let fx = e.complete(0..4, "done").unwrap();
+        t.apply(&mut e, fx).unwrap();
+        assert_eq!(
+            t.poll(&mut e, Duration::ZERO).unwrap(),
+            Some(Event::Submitted("doneremaining界".into()))
+        );
+        assert!(!t.active);
+    }
+}
+
+#[test]
+fn buffered_partial_sequences_expire_and_paste_remains_atomic() {
+    let d = Virtual::new();
+    let (mut e, mut t) = start(&d);
+    d.feed(b"ab\x1b[");
+    assert_eq!(t.poll(&mut e, Duration::ZERO).unwrap(), None);
+    assert_eq!(e.editor.text(), "ab");
+    d.feed(b"D!");
+    t.poll(&mut e, Duration::ZERO).unwrap();
+    assert_eq!(e.editor.text(), "a!b");
+    d.feed(b"\x1b[200~x\r\ny\t");
+    t.poll(&mut e, Duration::ZERO).unwrap();
+    assert_eq!(e.editor.text(), "a!b");
+    d.feed(b"\x1b[201~");
+    t.poll(&mut e, Duration::ZERO).unwrap();
+    assert_eq!(e.editor.text(), "a!x\ny\tb");
+    d.feed(b"\x1b[");
+    t.poll(&mut e, Duration::ZERO).unwrap();
+    t.expire_for_test();
+    assert_eq!(
+        t.poll(&mut e, Duration::ZERO).unwrap(),
+        Some(Event::Rejected(crate::EditError::InvalidSequence))
+    );
+    assert!(t.active);
+    d.feed(b"\x1b[200~unfinished");
+    t.poll(&mut e, Duration::ZERO).unwrap();
+    t.expire_for_test();
+    assert!(t.poll(&mut e, Duration::ZERO).is_err());
+    assert!(!t.active);
+}
+
+#[test]
+fn every_ready_work_budget_flushes_a_correct_bounded_surface() {
+    let d = Virtual::new();
+    let mut e = Engine::new(Editor::new(100_000, 0));
+    let mut t = Terminal::start(
+        d.clone(),
+        &mut e,
+        Prompt::new("demo").unwrap(),
+        Theme::new(false, false, None),
+    )
+    .unwrap();
+    let body = "a".repeat(70_000);
+    d.feed(format!("\x1b[200~{body}\x1b[201~\r").as_bytes());
+    assert_eq!(t.poll(&mut e, Duration::ZERO).unwrap(), None);
+    assert!(e.editor.text().is_empty());
+    assert!(d.0.borrow().reads <= 8);
+    assert_eq!(d.0.borrow().writes, 1);
+    let mut outcome = None;
+    for _ in 0..10 {
+        outcome = t.poll(&mut e, Duration::ZERO).unwrap();
+        if outcome.is_some() {
+            break;
+        }
+    }
+    assert_eq!(outcome, Some(Event::Submitted(body)));
+    assert!(t.pending.len() <= 4096);
 }
 fn start(device: &Virtual) -> (Engine, Terminal<Virtual>) {
     let mut e = Engine::new(Editor::new(100, 4));
@@ -96,6 +195,10 @@ fn feed(
     for _ in bytes {
         if let Some(value) = t.poll(e, Duration::ZERO).unwrap() {
             event = Some(value);
+            break;
+        }
+        if device.0.borrow().input.is_empty() && t.pending.is_empty() {
+            break;
         }
     }
     event

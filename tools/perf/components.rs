@@ -292,16 +292,21 @@ fn main() {
         let mut d = Decoder::new(LIMIT);
         for b in c["input"].as_str().unwrap_or("").as_bytes() {
             if let Some(k) = d.feed(*b) {
-                let mut fx = e.apply(keymap::binding(k).unwrap()).unwrap();
-                if fx.event == Some(Event::CompletionRequested) {
-                    fx = e
-                        .complete(0..e.editor.text().len(), c["replacement"].as_str().unwrap())
-                        .unwrap();
-                }
+                let fx = e.apply_deferred(keymap::binding(k).unwrap()).unwrap();
                 mutations += fx.mutations.len();
                 out.push_str(&protocol::encode(&fx.mutations, theme()));
+                if fx.event == Some(Event::CompletionRequested) {
+                    let fx = e
+                        .complete(0..e.editor.text().len(), c["replacement"].as_str().unwrap())
+                        .unwrap();
+                    mutations += fx.mutations.len();
+                    out.push_str(&protocol::encode(&fx.mutations, theme()));
+                }
             }
         }
+        let fx = e.flush();
+        mutations += fx.mutations.len();
+        out.push_str(&protocol::encode(&fx.mutations, theme()));
         println!(
             "{}",
             json!({"output":out,"initial_output":initial_bytes,"text":e.editor.text(),"cursor":e.editor.cursor(),"logical_mutations":mutations})

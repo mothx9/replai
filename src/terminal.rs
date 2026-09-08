@@ -10,19 +10,30 @@ use crate::{
     substrate::{Read, Transport, combine},
 };
 use std::{
+    collections::VecDeque,
     io,
     time::{Duration, Instant},
 };
 
 const SEQUENCE_IDLE: Duration = Duration::from_millis(250);
+const READ_BYTES: usize = 4096;
+const READY_BYTES: usize = 32 * 1024;
+const READY_TIME: Duration = Duration::from_millis(2);
 pub(crate) struct Terminal<T: Transport> {
     pub(crate) resource: T,
     pub(crate) active: bool,
     theme: Theme,
     decoder: Decoder,
     last_byte: Instant,
+    // Only the unread tail at a host-visible boundary; ordinary reads use stack
+    // storage. The Interaction retains this bounded tail across close/reopen.
+    pub(crate) pending: VecDeque<u8>,
 }
 impl<T: Transport> Terminal<T> {
+    #[cfg(test)]
+    pub(crate) fn expire_for_test(&mut self) {
+        self.last_byte = Instant::now() - SEQUENCE_IDLE;
+    }
     pub fn start(
         resource: T,
         engine: &mut Engine,
@@ -35,6 +46,7 @@ impl<T: Transport> Terminal<T> {
             theme,
             decoder: Decoder::new(engine.editor.capacity()),
             last_byte: Instant::now(),
+            pending: VecDeque::new(),
         };
         let result = (|| {
             let size = terminal.resource.dimensions()?;
@@ -50,6 +62,9 @@ impl<T: Transport> Terminal<T> {
         Ok(terminal)
     }
     pub fn apply(&mut self, engine: &mut Engine, effects: Effects) -> Result<Option<Event>, Error> {
+        if effects.mutations.is_empty() && engine.is_open() {
+            return Ok(effects.event);
+        }
         let output = self
             .resource
             .write(encode(&effects.mutations, self.theme).as_bytes());
@@ -80,40 +95,80 @@ impl<T: Transport> Terminal<T> {
         let size = self.resource.dimensions()?;
         let effects = engine.apply(Input::Resize(size.0, size.1))?;
         self.apply(engine, effects)?;
-        let key = match self
-            .resource
-            .read(timeout.min(Duration::from_millis(100)))?
-        {
-            Read::Idle => {
-                if self.decoder.pending() && self.last_byte.elapsed() >= SEQUENCE_IDLE {
-                    self.decoder.expire()
-                } else {
-                    None
+        let mut buffer = [0; READ_BYTES];
+        let (mut position, mut length) = (0, 0);
+        let mut consumed = 0;
+        let mut began = None;
+        let mut wait = timeout.min(Duration::from_millis(100));
+        if !self.pending.is_empty() {
+            self.last_byte = Instant::now();
+            wait = Duration::ZERO;
+        }
+        let result = (|| loop {
+            let byte = if let Some(byte) = self.pending.pop_front() {
+                byte
+            } else if position < length {
+                let byte = buffer[position];
+                position += 1;
+                byte
+            } else {
+                match self.resource.read(&mut buffer, wait)? {
+                    Read::Bytes(n) => {
+                        assert!(n > 0 && n <= buffer.len());
+                        self.last_byte = Instant::now();
+                        (position, length) = (1, n);
+                        buffer[0]
+                    }
+                    Read::Idle => {
+                        if self.decoder.pending()
+                            && self.last_byte.elapsed() >= SEQUENCE_IDLE
+                            && let Some(key) = self.decoder.expire()
+                        {
+                            let input = binding(key)
+                                .map_err(|e| io::Error::new(io::ErrorKind::InvalidData, e))?;
+                            let effects = engine.apply(input)?;
+                            return self.apply(engine, effects);
+                        }
+                        let effects = engine.flush();
+                        return self.apply(engine, effects);
+                    }
+                    Read::Eof => {
+                        if self.decoder.pending() {
+                            return Err(io::Error::new(
+                                io::ErrorKind::InvalidData,
+                                "end of input during an incomplete sequence",
+                            )
+                            .into());
+                        }
+                        let effects = engine.apply(Input::TransportEof)?;
+                        return self.apply(engine, effects);
+                    }
                 }
-            }
-            Read::Byte(byte) => {
-                self.last_byte = Instant::now();
-                self.decoder.feed(byte)
-            }
-            Read::Eof => {
-                if self.decoder.pending() {
-                    return Err(io::Error::new(
-                        io::ErrorKind::InvalidData,
-                        "end of input during an incomplete sequence",
-                    )
-                    .into());
+            };
+            // Drain only input which is ready now. No debounce or collection wait.
+            wait = Duration::ZERO;
+            let started = *began.get_or_insert_with(Instant::now);
+            consumed += 1;
+            let mut time_exhausted = false;
+            if let Some(key) = self.decoder.feed(byte) {
+                let input =
+                    binding(key).map_err(|e| io::Error::new(io::ErrorKind::InvalidData, e))?;
+                let effects = engine.apply_deferred(input)?;
+                if let Some(event) = self.apply(engine, effects)? {
+                    return Ok(Some(event));
                 }
-                let effects = engine.apply(Input::TransportEof)?;
+                time_exhausted = started.elapsed() >= READY_TIME;
+            }
+            if consumed >= READY_BYTES || time_exhausted {
+                let effects = engine.flush();
                 return self.apply(engine, effects);
             }
-        };
-        if let Some(key) = key {
-            let input = binding(key).map_err(|e| io::Error::new(io::ErrorKind::InvalidData, e))?;
-            let effects = engine.apply(input)?;
-            self.apply(engine, effects)
-        } else {
-            Ok(None)
-        }
+        })();
+        // Preserve read-ahead even on rejection, submit, interrupt or I/O failure.
+        // New reads occur only after the previous tail is fully consumed.
+        self.pending.extend(&buffer[position..length]);
+        debug_assert!(self.pending.len() <= READ_BYTES);
+        result
     }
     pub fn close(&mut self, engine: &mut Engine) -> Result<(), Error> {
         if !self.active {

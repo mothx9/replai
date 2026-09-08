@@ -95,6 +95,7 @@ static replai_event send_bytes(replai_handle *h, int master, const uint8_t *byte
     for (size_t i = 0; i < n; i++) {
         e = event();
         assert(replai_poll(h, 20, &e) == REPLAI_OK);
+        if (e.kind != REPLAI_EVENT_NONE) break;
     }
     drain(master);
     return e;

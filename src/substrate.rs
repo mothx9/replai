@@ -2,13 +2,13 @@
 use std::{io, time::Duration};
 
 pub(crate) enum Read {
-    Byte(u8),
+    Bytes(usize),
     Eof,
     Idle,
 }
 pub(crate) trait Transport {
     fn dimensions(&self) -> io::Result<(usize, usize)>;
-    fn read(&self, timeout: Duration) -> io::Result<Read>;
+    fn read(&self, buffer: &mut [u8], timeout: Duration) -> io::Result<Read>;
     fn write(&self, bytes: &[u8]) -> io::Result<()>;
     /// Best-effort protocol cleanup, with a backend-specific alternate route if available.
     fn cleanup_write(&self, bytes: &[u8]) -> io::Result<()>;

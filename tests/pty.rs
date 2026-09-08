@@ -75,6 +75,72 @@ fn prompt() -> Prompt {
 }
 
 #[test]
+fn ready_burst_preserves_host_boundaries_and_typeahead_across_reopen() {
+    let _serial = serial();
+    let (master, slave) = pty(80, 24);
+    let before = termios(&slave);
+    let mut t = Interaction::new(Editor::new(4, 2));
+    t.open(&slave, &slave, prompt()).unwrap();
+    drain(&master);
+    let wire = b"ab\tcdef\rnext\r";
+    assert_eq!(write(&master, wire).unwrap(), wire.len());
+    assert_eq!(
+        t.poll(Duration::from_millis(20)).unwrap(),
+        Some(Event::CompletionRequested)
+    );
+    assert_eq!((t.editor().text(), t.editor().cursor()), ("ab", 2));
+    t.complete(0..2, "Z").unwrap();
+    t.external_output(Role::Dim, "notice").unwrap();
+    assert_eq!(
+        t.poll(Duration::ZERO).unwrap(),
+        Some(Event::Rejected(EditError::Capacity))
+    );
+    assert_eq!((t.editor().text(), t.editor().cursor()), ("Zcde", 4));
+    assert_eq!(
+        t.poll(Duration::ZERO).unwrap(),
+        Some(Event::Submitted("Zcde".into()))
+    );
+    assert_eq!(termios(&slave), before);
+    assert!(!t.is_open());
+    t.editor_mut().unwrap().clear();
+    drain(&master);
+    t.open(&slave, &slave, prompt()).unwrap();
+    assert_eq!(
+        t.poll(Duration::ZERO).unwrap(),
+        Some(Event::Submitted("next".into()))
+    );
+    assert_eq!(termios(&slave), before);
+    let output = drain(&master);
+    assert!(output.windows(4).any(|w| w == b"next"));
+}
+
+#[test]
+fn ready_interrupt_eof_and_explicit_close_retain_following_input() {
+    let _serial = serial();
+    let (master, slave) = pty(80, 24);
+    let mut t = Interaction::new(Editor::new(100, 1));
+    t.open(&slave, &slave, prompt()).unwrap();
+    assert_eq!(write(&master, b"first\x03\x04tail\tmore\r").unwrap(), 17);
+    assert_eq!(t.poll(Duration::ZERO).unwrap(), Some(Event::Interrupted));
+    assert_eq!(t.editor().text(), "first");
+    t.editor_mut().unwrap().clear();
+    t.open(&slave, &slave, prompt()).unwrap();
+    assert_eq!(t.poll(Duration::ZERO).unwrap(), Some(Event::EndOfInput));
+    t.open(&slave, &slave, prompt()).unwrap();
+    assert_eq!(
+        t.poll(Duration::ZERO).unwrap(),
+        Some(Event::CompletionRequested)
+    );
+    assert_eq!(t.editor().text(), "tail");
+    t.close().unwrap();
+    t.open(&slave, &slave, prompt()).unwrap();
+    assert_eq!(
+        t.poll(Duration::ZERO).unwrap(),
+        Some(Event::Submitted("tailmore".into()))
+    );
+}
+
+#[test]
 fn pty_editing_submission_and_exact_termios_restore() {
     let _serial = serial();
     let (master, slave) = pty(80, 24);

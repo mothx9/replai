@@ -15,6 +15,7 @@ struct Surface {
     prompt: Prompt,
     size: (usize, usize),
     renderer: Renderer,
+    dirty: bool,
 }
 pub(crate) struct Engine {
     pub editor: Editor,
@@ -41,6 +42,7 @@ impl Engine {
             prompt,
             size,
             renderer: Renderer::default(),
+            dirty: true,
         });
         Ok(Effects {
             mutations: self.redraw(),
@@ -52,20 +54,42 @@ impl Engine {
             .surface
             .as_mut()
             .expect("active surface checked by caller");
+        s.dirty = false;
         s.renderer.redraw(&self.editor, &s.prompt, s.size)
     }
     pub fn apply(&mut self, input: Input) -> Result<Effects, Error> {
+        self.apply_inner(input, false)
+    }
+    /// Apply already-ready input without rebuilding intermediate presentations.
+    /// Host events, explicit redraw and lifecycle transitions always flush first.
+    pub fn apply_deferred(&mut self, input: Input) -> Result<Effects, Error> {
+        self.apply_inner(input, true)
+    }
+    pub fn flush(&mut self) -> Effects {
+        Effects {
+            mutations: if self.surface.as_ref().is_some_and(|s| s.dirty) {
+                self.redraw()
+            } else {
+                Vec::new()
+            },
+            event: None,
+        }
+    }
+    fn observable(&mut self, event: Event) -> Effects {
+        let mut effects = self.flush();
+        effects.event = Some(event);
+        effects
+    }
+    fn apply_inner(&mut self, input: Input, deferred: bool) -> Result<Effects, Error> {
         if !self.is_open() {
             return Err(Error::State);
         }
         let mut mutations = Vec::new();
+        let force = matches!(input, Input::Request(Request::Redraw) | Input::Resize(..));
         match input {
             Input::Text(text) => {
                 if let Err(error) = self.editor.insert(&text) {
-                    return Ok(Effects {
-                        event: Some(Event::Rejected(error)),
-                        ..Effects::default()
-                    });
+                    return Ok(self.observable(Event::Rejected(error)));
                 }
             }
             Input::Edit(command) => match command {
@@ -88,10 +112,7 @@ impl Engine {
             }
             Input::Request(Request::DeleteOrEof) => self.editor.delete(),
             Input::Request(Request::Completion) => {
-                return Ok(Effects {
-                    event: Some(Event::CompletionRequested),
-                    ..Effects::default()
-                });
+                return Ok(self.observable(Event::CompletionRequested));
             }
             Input::Request(Request::Redraw) => {
                 mutations.extend(self.surface.as_mut().unwrap().renderer.clear())
@@ -107,33 +128,33 @@ impl Engine {
                 s.size = (columns, rows);
             }
             Input::Rejected(error) => {
-                return Ok(Effects {
-                    event: Some(Event::Rejected(error)),
-                    ..Effects::default()
-                });
+                return Ok(self.observable(Event::Rejected(error)));
             }
         }
-        mutations.extend(self.redraw());
+        self.surface.as_mut().unwrap().dirty = true;
+        if !deferred || force {
+            mutations.extend(self.redraw());
+        }
         Ok(Effects {
             mutations,
             event: None,
         })
     }
     fn finish(&mut self, event: Event) -> Effects {
+        let mut effects = self.flush();
         let mut surface = self.surface.take().unwrap();
-        Effects {
-            mutations: surface.renderer.leave(event == Event::Interrupted),
-            event: Some(event),
-        }
+        effects
+            .mutations
+            .extend(surface.renderer.leave(event == Event::Interrupted));
+        effects.event = Some(event);
+        effects
     }
     pub fn close(&mut self) -> Effects {
-        Effects {
-            mutations: self
-                .surface
-                .take()
-                .map_or_else(Vec::new, |mut s| s.renderer.leave(false)),
-            event: None,
+        let mut effects = self.flush();
+        if let Some(mut s) = self.surface.take() {
+            effects.mutations.extend(s.renderer.leave(false));
         }
+        effects
     }
     pub fn abandon(&mut self) {
         self.surface = None;

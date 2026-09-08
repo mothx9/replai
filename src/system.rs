@@ -206,14 +206,13 @@ impl Transport for Resource {
         }
         result
     }
-    fn read(&self, timeout: Duration) -> io::Result<Read> {
+    fn read(&self, buffer: &mut [u8], timeout: Duration) -> io::Result<Read> {
         if !self.wait_readable(timeout)? {
             return Ok(Read::Idle);
         }
-        let mut byte = [0];
-        match read(&self.input, &mut byte) {
+        match read(&self.input, buffer) {
             Ok(0) => Ok(Read::Eof),
-            Ok(_) => Ok(Read::Byte(byte[0])),
+            Ok(n) => Ok(Read::Bytes(n)),
             Err(rustix::io::Errno::INTR | rustix::io::Errno::AGAIN) => Ok(Read::Idle),
             Err(e) => Err(e.into()),
         }
