@@ -2,13 +2,21 @@
 """Overlapping POSIX PTY burst-to-submission workloads, no performance ranking."""
 import argparse
 import json
+import hashlib
+import re
+import subprocess
 from pathlib import Path
 import time
 from linux import ROOT, HOST, Session
+from run import LINENOISE
 
 
 def run(work, samples, smoke):
     base=ROOT/'tools/perf/comparisons/target'
+    manifest=(ROOT/'tools/perf/comparisons/Cargo.toml').read_text()
+    revisions={name:re.search(r'^'+name+r' = .*rev = "([0-9a-f]{40})"',manifest,re.M).group(1) for name in ('rustyline','reedline')}
+    revisions.update({'replai':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
+                      'linenoise-blocking':LINENOISE,'linenoise-feed':LINENOISE})
     libraries=[('replai',[HOST,'--mode','comparison']),
                ('linenoise-blocking',[base/'linenoise-host']),
                ('linenoise-feed',[base/'linenoise-host','feed']),
@@ -25,6 +33,7 @@ def run(work, samples, smoke):
     for name,command in libraries:
         if not command[0].exists():
             yield dict(schema_version=1,id=f'comparison/{name}',component='comparison',status='unavailable',reason='fixture executable missing',library=name);continue
+        binary_sha256=hashlib.sha256(command[0].read_bytes()).hexdigest()
         for case,wire,expected in cases:
             timings=[];traffic=[];restored=True;failure=None
             for n in range(samples+2):
@@ -50,9 +59,9 @@ def run(work, samples, smoke):
                 except (TimeoutError,RuntimeError,AssertionError) as exc:
                     failure=f'{type(exc).__name__}: {str(exc)[:240]}';s.abort();break
             if failure:
-                yield dict(schema_version=1,id=f'comparison/{name}/{case}',component='comparison',library=name,operation=case,status='not_comparable',reason=failure)
+                yield dict(schema_version=1,id=f'comparison/{name}/{case}',component='comparison',library=name,library_revision=revisions[name],binary_sha256=binary_sha256,operation=case,status='not_comparable',reason=failure)
             else:
-                yield dict(schema_version=1,id=f'comparison/{name}/{case}',component='comparison',library=name,operation=case,status='measured',mode='latency',
+                yield dict(schema_version=1,id=f'comparison/{name}/{case}',component='comparison',library=name,library_revision=revisions[name],binary_sha256=binary_sha256,operation=case,status='measured',mode='latency',
                     iterations=samples,warmup=2,input_bytes=len(wire.encode()),columns=80,rows=24,samples_us=timings,
                     counters=dict(observed_terminal_bytes=traffic,submission_exact=True,terminal_restored=restored),
                     endpoint='single delivered input burst through submission hex receipt; includes editing, terminal output, submit cleanup and receipt IPC; not key-to-visible')

@@ -32,6 +32,8 @@ def prepare(work, comparisons, qualification=None):
         run(['cc','-O3','-g','-I'+str(upstream),'tools/perf/comparisons/linenoise.c',upstream/'linenoise.c','-o','tools/perf/comparisons/target/linenoise-host'])
     if qualification:run([sys.executable,'tools/perf/embedding.py','--qualification',qualification])
     binaries=[ROOT/'tools/perf/target/release/components',ROOT/'tools/perf/target/release/pty-host',ROOT/'tools/perf/target/allocations/release/components']
+    if comparisons:
+        binaries.extend([ROOT/'tools/perf/comparisons/target/linenoise-host',ROOT/'tools/perf/comparisons/target/release/rustyline-host',ROOT/'tools/perf/comparisons/target/release/reedline-host'])
     import hashlib
     (work/'prepared.json').write_text(json.dumps(dict(source=identity(),binaries={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in binaries}),indent=2)+'\n')
 

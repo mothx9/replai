@@ -34,4 +34,20 @@ class Integrity(unittest.TestCase):
         self.assertNotIn('timing',row)
         self.assertEqual(row['allocations']['retained_delta_bytes']['median'],-8)
 
+    def test_parity_requires_equivalent_measured_correct_results(self):
+        from convergence import primary
+        libraries=('replai','linenoise-blocking','linenoise-feed','rustyline','reedline')
+        data={'results':[dict(component='comparison',operation='long_ascii',library=name,
+            input_bytes=1004,columns=80,rows=24,status='measured',
+            counters=dict(submission_exact=True,terminal_restored=True),timing={'median':100}) for name in libraries]}
+        data['results'][0]['timing']['median']=125
+        self.assertTrue(primary(data)['target_met'])
+        data['results'][0]['timing']['median']=125.1
+        self.assertFalse(primary(data)['target_met'])
+        for key,value in [('input_bytes',999),('columns',40),('status','not_comparable')]:
+            wrong=copy.deepcopy(data);wrong['results'][0][key]=value
+            with self.assertRaises(AssertionError):primary(wrong)
+        wrong=copy.deepcopy(data);wrong['results'][0]['counters']['submission_exact']=False
+        with self.assertRaises(AssertionError):primary(wrong)
+
 if __name__=='__main__':unittest.main()
