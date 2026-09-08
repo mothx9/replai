@@ -14,6 +14,17 @@
 //! # Ok::<(), replai::EditError>(())
 //! ```
 //!
+//! Structured information can also be rendered without an active terminal:
+//!
+//! ```
+//! use replai::{Block, Document, Text, Theme};
+//! let document = Document::new(vec![Block::Heading {
+//!     level: 1, text: Text::new("Connection")?,
+//! }])?;
+//! assert_eq!(document.render(40, Theme::new(false, false, None))?, "# Connection\n");
+//! # Ok::<(), replai::EditError>(())
+//! ```
+//!
 //! A host owns the loop, including what to do after submission or interruption:
 //!
 //! ```no_run
@@ -39,6 +50,8 @@
 //! ```
 
 mod capabilities;
+mod document;
+pub use document::{Alignment, Block, Column, Document, ListItem, Severity, Span, Text};
 mod core;
 mod event;
 mod interaction;
@@ -67,7 +80,7 @@ mod terminal;
 pub use core::{EditError, Editor};
 pub use event::{Error, Event};
 pub use interaction::Interaction;
-pub use presentation::{Prompt, Role, Theme};
+pub use presentation::{Foreground, Prompt, Role, Style, Theme};
 
 #[cfg(test)]
 mod conformance;

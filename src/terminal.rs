@@ -226,55 +226,68 @@ mod tests {
     use rustix::io::read;
     #[test]
     fn write_failure_during_active_output_restores_termios_and_paste_mode() {
-        use rustix::{
-            fs::{Mode, OFlags, open},
-            termios::{Winsize, tcgetattr, tcsetwinsize, ttyname},
-        };
-        let (master, slave) = pty_support::pair();
-        tcsetwinsize(
-            &slave,
-            Winsize {
-                ws_col: 80,
-                ws_row: 24,
-                ws_xpixel: 0,
-                ws_ypixel: 0,
-            },
-        )
-        .unwrap();
-        let before = format!("{:?}", tcgetattr(&slave).unwrap());
-        let mut editor = Editor::new(100, 1);
-        editor.insert("draft").unwrap();
-        editor.left();
-        let (resource, _) = Resource::acquire(&slave, &slave).unwrap();
-        let mut engine = Engine::new(editor);
-        let mut t = Terminal::start(
-            resource,
-            &mut engine,
-            Prompt::new("demo").unwrap(),
-            Theme::new(true, false, None),
-        )
-        .unwrap();
-        let mut bytes = [0; 4096];
-        read(&master, &mut bytes).unwrap();
-        // Replace only the owned output FD with a real read-only handle to the
-        // same PTY, after successful acquisition. No mocked writes or cleanup.
-        t.resource.output = open(
-            ttyname(&slave, Vec::new()).unwrap(),
-            OFlags::RDONLY | OFlags::NOCTTY,
-            Mode::empty(),
-        )
-        .unwrap();
-        assert!(matches!(
-            {
-                let effects = engine.external_output(Role::Dim, "notice").unwrap();
-                t.apply(&mut engine, effects)
-            },
-            Err(Error::Io(_))
-        ));
-        assert_eq!(format!("{:?}", tcgetattr(&slave).unwrap()), before);
-        assert_eq!((engine.editor.text(), engine.editor.cursor()), ("draft", 4));
-        let n = read(&master, &mut bytes).unwrap();
-        assert!(bytes[..n].windows(8).any(|w| w == b"\x1b[?2004l"));
-        assert!(!t.active);
+        for structured in [false, true] {
+            use rustix::{
+                fs::{Mode, OFlags, open},
+                termios::{Winsize, tcgetattr, tcsetwinsize, ttyname},
+            };
+            let (master, slave) = pty_support::pair();
+            tcsetwinsize(
+                &slave,
+                Winsize {
+                    ws_col: 80,
+                    ws_row: 24,
+                    ws_xpixel: 0,
+                    ws_ypixel: 0,
+                },
+            )
+            .unwrap();
+            let before = format!("{:?}", tcgetattr(&slave).unwrap());
+            let mut editor = Editor::new(100, 1);
+            editor.insert("draft").unwrap();
+            editor.left();
+            let (resource, _) = Resource::acquire(&slave, &slave).unwrap();
+            let mut engine = Engine::new(editor);
+            let mut t = Terminal::start(
+                resource,
+                &mut engine,
+                Prompt::new("demo").unwrap(),
+                Theme::new(true, false, None),
+            )
+            .unwrap();
+            let mut bytes = [0; 4096];
+            read(&master, &mut bytes).unwrap();
+            // Replace only the owned output FD with a real read-only handle to the
+            // same PTY, after successful acquisition. No mocked writes or cleanup.
+            t.resource.output = open(
+                ttyname(&slave, Vec::new()).unwrap(),
+                OFlags::RDONLY | OFlags::NOCTTY,
+                Mode::empty(),
+            )
+            .unwrap();
+            assert!(matches!(
+                {
+                    let effects = if structured {
+                        engine
+                            .output_document(
+                                &crate::Document::new(vec![crate::document::Block::Paragraph(
+                                    crate::Text::new("notice").unwrap(),
+                                )])
+                                .unwrap(),
+                            )
+                            .unwrap()
+                    } else {
+                        engine.external_output(Role::Dim, "notice").unwrap()
+                    };
+                    t.apply(&mut engine, effects)
+                },
+                Err(Error::Io(_))
+            ));
+            assert_eq!(format!("{:?}", tcgetattr(&slave).unwrap()), before);
+            assert_eq!((engine.editor.text(), engine.editor.cursor()), ("draft", 4));
+            let n = read(&master, &mut bytes).unwrap();
+            assert!(bytes[..n].windows(8).any(|w| w == b"\x1b[?2004l"));
+            assert!(!t.active);
+        }
     }
 }

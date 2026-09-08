@@ -6,6 +6,11 @@ next work. All entries below are unreleased and carry no compatibility promise.
 
 ## Unreleased
 
+- Added safe structured Rust presentation: headings, facts, lists, responsive
+  tables, literal blocks and severity notices share inline roles, plain rendering
+  and coordinated draft-preserving output. Added composed prompts/continuations
+  and explicit role styles while preserving simple prompts and C ABI 1.
+
 - Made interaction state/events available independently of the Linux backend.
   The platform-neutral engine and semantic render pipeline retain the existing
   Linux Rust/C behavior; system acquisition outside Linux remains unimplemented.

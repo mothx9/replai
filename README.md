@@ -43,7 +43,7 @@ REPLAI brings those mechanisms together behind a host-driven interface.
 | Recalling input | History navigation; return to the original draft and cursor | Admission, retention and persistence |
 | Pasting multiple lines | Bracketed framing; normalized newlines; one draft until Enter | What the submitted text executes |
 | Requesting completion | Typed request; validated replacement and redraw | Candidate discovery and selection |
-| Receiving external output | Write a safe text line; restore the draft and cursor | Content and scheduling |
+| Receiving external output | Lay out safe text or structured blocks; restore draft and cursor | Content and scheduling |
 | Submitting, interrupting or reaching EOF | Distinct outcomes; close and restore captured terminal state | Execute, cancel, retry or exit |
 
 The library supplies a line-oriented editing surface with an accented prompt,
@@ -155,6 +155,25 @@ The [complete Rust example](examples/demo.rs) adds completion, explicit history
 admission and reopen behavior. Generate method documentation with
 `cargo doc --no-deps`. Hosts keep their application loop; no callback framework
 or asynchronous runtime is required.
+
+## Present structured output
+
+Supply information as headings, styled spans, key/value fields, lists, tables or
+notices. REPLAI handles alignment, wrapping and narrow-terminal fallback; your
+application owns what the information means. The same document works in color,
+with `NO_COLOR`, and in captured plain output.
+
+```sh
+cargo run --locked --example structured -- 60
+NO_COLOR=1 cargo run --locked --example structured -- 20
+```
+
+Use `Document::render` or `write_to` for ordinary output, and
+`Interaction::output_document` to preserve an active draft and cursor. Composed
+prompt segments share the same safe text and theme roles; `Prompt::new("demo")`
+remains the simple entry. See the [example](examples/structured.rs) and
+[presentation contract](docs/presentation.md) for bounds and responsive behavior.
+These additions are native Rust APIs; the C interface below keeps ABI 1.
 
 ## Embed in C
 

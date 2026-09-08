@@ -59,7 +59,7 @@ jobs:
       - run: cargo fmt --check
       - run: cargo check --workspace --all-targets
       - name: Rust core and public boundary
-        run: cargo test --workspace --lib --test core --test foundation --test architecture
+        run: cargo test --workspace --lib --test core --test foundation --test architecture --test document
       - name: Rust PTY behavior
         run: cargo test -p replai --test pty
       - name: Rust release regressions
@@ -128,7 +128,7 @@ jobs:
       - name: Compile platform-neutral public library
         run: cargo check --locked -p replai --lib
       - name: Deterministic engine, protocol, layout and virtual transport conformance
-        run: cargo test --locked -p replai --lib --test core --test architecture --test unicode_model
+        run: cargo test --locked -p replai --lib --test core --test architecture --test unicode_model --test document
       - name: Native library lint and documentation
         run: |
           cargo clippy --locked -p replai --lib -- -D warnings

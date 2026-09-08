@@ -8,6 +8,105 @@ The intervening commits changed source/runtime work, with no changes to the
 inspected console editor, palette, stream renderer, completion adapter or PTY
 script. No donor source was modified or linked into REPLAI.
 
+## Structured documents and semantic ownership
+
+Hosts classify information; REPLAI lays it out. `Document` contains an ordered,
+nonrecursive sequence of `Block`s. `Text` composes validated `Span`s using the
+same seven `Role`s as prompts. No schema, command vocabulary, JSON dependency or
+terminal escape supplied by the host becomes part of the model.
+
+| Block | Representation and narrow-width behavior |
+| --- | --- |
+| Paragraph | Preserves LF; wraps at extended-grapheme boundaries |
+| Heading | Levels 1–3 with `#`, `##`, `###` and strong text; hierarchy survives plain output |
+| KeyValue | Aligns labels within the group; stacks label/value when two readable columns do not fit |
+| List | Ordered or unordered markers; explicit depth 0–8, two-cell indentation, hanging continuation |
+| Table | Left/right value alignment, multiline cells, bounded column shrinking; stacks records with column headings when four cells per column plus gaps cannot fit |
+| Literal | Preserves spaces and LF, expands TAB, wraps safely under a `| ` gutter; no syntax interpretation |
+| Status | Info `[i]`, Success `[ok]`, Warning `[!]`, Error `[error]`; color is supplementary |
+| Spacer | One explicit blank line |
+
+Separation is explicit: documents do not insert arbitrary blank lines between
+blocks. When a marker/indent leaves less than two cells, the marker occupies its
+own wrapped rows and the content uses the full width. No horizontal scrolling,
+hidden columns or silent truncation occurs. Paragraph and cell wrapping is
+currently grapheme-based, not language-aware word breaking. A grapheme wider
+than the available row returns `InvalidRange` rather than being split.
+
+`Document::render(columns, theme)` works without terminal acquisition, returning
+LF-terminated text. `write_to` lays out the entire document before touching the
+caller-owned writer, then calls `write_all` once; a short-writing transport may
+need several writes. The caller chooses captured-output width and resolves its
+output capability using `Theme::new` or `Theme::from_environment(is_tty)`.
+The same document, width and plain theme produce identical text under non-TTY,
+NO_COLOR and TERM=dumb. Styling adds only foreground/emphasis, never a background.
+
+For example, a key/value block needs no host padding:
+
+```rust
+use replai::{Block, Document, Text, Theme};
+let document = Document::new(vec![
+    Block::Heading { level: 2, text: Text::new("Connection")? },
+    Block::KeyValue(vec![
+        (Text::new("Endpoint")?, Text::new("http://127.0.0.1:18001")?),
+        (Text::new("Locality")?, Text::new("loopback")?),
+    ]),
+])?;
+let plain = document.render(60, Theme::new(false, false, None))?;
+assert!(plain.contains("Endpoint  http://127.0.0.1:18001"));
+# Ok::<(), replai::EditError>(())
+```
+
+The [structured example](../examples/structured.rs) combines grouped help,
+connection facts, capability notices, a matrix and literal data. Run
+`cargo run --locked --example structured -- 60` or set `NO_COLOR=1`; pass `8`
+to inspect the same document's narrow fallback. This renderer does not reformat
+an application's existing `println!` calls: adopting semantic blocks is a host
+integration decision.
+
+### Bounds and failure atomicity
+
+Text admits valid UTF-8, normalizes CRLF, and permits LF/TAB. Other controls,
+including CSI/OSC/DCS introductions, C1 controls, NUL and lone CR, are rejected.
+TAB expands to four-column stops within its content column. Graphemes crossing
+span boundaries remain indivisible and take the first scalar's role. The width
+policy and terminal/font limitations below apply to documents as well as drafts.
+
+Each span and combined Text is at most 16 KiB, with at most 1024 spans per Text.
+A document admits at most 4096 blocks, 1 MiB aggregate text and 16,384 aggregate
+spans/fields (empty fields still count). Tables admit 1–32 columns and at most
+4096 rows; lists and fact groups admit at most 4096 entries. Lists are flat
+records with depth at most eight; there is no recursive traversal.
+Rendering accepts widths 2–4096 and bounds work to 65,536 physical rows and a
+conservative 8 MiB text/style encoding budget, including plain rendering.
+Excess input/work reports `Capacity`; invalid geometry/structure reports
+`InvalidRange`; forbidden text reports `InvalidText`. Nothing is truncated.
+Construction cannot validate a future width: render-time rejection is possible.
+Rejected output leaves the writer, active surface and editor unchanged. An I/O
+failure may have delivered a prefix; the active interaction attempts its normal
+terminal cleanup. No output API promises rollback of already-written bytes.
+
+### Theme and prompt composition
+
+`Style` maps a role to `Foreground` and bold intensity. The restrained foreground
+choices are terminal-default, neutral, cyan, gray, green, amber and red.
+`Theme::with_style` customizes individual roles without admitting SGR strings;
+Default must remain the reset style. The compatibility palette remains the
+initial theme, so old Rust and C consumers retain their presentation. Strong
+headings/labels, dim literal data, markers and indentation supply hierarchy.
+This is a theme foundation, not the final visual refinement or capability model.
+
+`Prompt::new("demo")` retains exactly `demo> ` and its existing accented style.
+For richer prompts, `Prompt::composed(Text::from_spans(...))` takes ordered
+host-provided segments, including delimiter and spacing. Context and state have
+no library-specific meaning. `with_continuation_text` uses the same span model.
+Composed primary prompts allow 3072 bytes/64 spans; continuations allow 1024
+bytes/64 spans. Prompts reject all controls, including LF/TAB. Existing simple
+label/state/continuation fields retain their 1024-byte limits. `with_state` on a
+composed prompt rejects rather than guessing a suffix insertion slot.
+Use `Interaction::open_with_theme` to select the same resolved theme for prompt
+and coordinated documents. `open` preserves environment-derived default styling.
+
 ## Prompt, cells and redraw
 
 Layout uses `unicode-width`'s normal (ambiguous-narrow) cell policy per grapheme.
@@ -18,7 +117,7 @@ VT oracle covers the subset it can model; a font or emulator may render a joined
 emoji or ambiguous character differently. Full Unicode terminal equivalence,
 bidi layout and all terminal width tables are not claimed.
 
-Prompt fields are plain control-free text, at most 1024 bytes each. The label
+Simple prompt fields are plain control-free text, at most 1024 bytes each. The label
 and optional literal suffix compose as `<Accent>label+suffix><Default> `;
 continuations default to `... `. No raw ANSI prompt injection is accepted.
 Style roles are Default, Strong, Accent, Dim, Success, Warning and Error. All
@@ -54,6 +153,40 @@ ANSI passthrough. Input stays raw and queued bytes are retained. The host contro
 when output is written; independent concurrent writes must be serialized through
 this method. Partial fragments can be sent as separate lines; continuous
 no-newline streaming batches and an unrestricted writer guard are not supported APIs.
+
+`Interaction::output_document(&document)` uses the same synchronous surface
+transaction and current observed terminal width. It lays out and validates all
+blocks before erasing anything. The engine restores the exact draft, cursor,
+prompt and continuation; the POSIX driver handles transport and failure cleanup.
+Call `poll` to observe a resize before emitting output when the host has changed
+terminal dimensions. There is no second editor or independent output writer.
+The old plain method projects unwrapped literal text to the same semantic
+mutation/encoding and coordination path, preserving TAB, trailing LF and ABI 1
+bytes. It intentionally does not acquire document wrapping or size limits.
+Structured documents/composed spans are native Rust APIs only; C ABI 1 is
+unchanged and retains its existing plain prompt/output functions.
+
+## Structured qualification and characterization
+
+[Public document tests](../tests/document.rs) assert exact plain hierarchy,
+responsive rows, style reset, Unicode span boundaries, safe-text rejection,
+bounds and writer atomicity. Deterministic engine tests prove failed layout
+leaves the editing surface and non-end cursor unchanged. The shared
+[POSIX PTY suite](../tests/pty.rs) emits the same document at narrow/wide widths,
+with styled, NO_COLOR and dumb policies, during a composed multiline draft.
+It compares VT cells/cursor to independent rendering, observes resize/reflow,
+default background, balanced paste modes and exact captured termios restoration.
+Terminal tests also inject write failure through both output entrypoints.
+Linux/macOS run those PTYs; Windows runs the portable document/engine tests.
+
+The existing [performance fixture](../tools/perf/documents.rs) characterizes
+paragraphs, 16-field groups, 32-entry lists/tables, status and a 128-paragraph
+document at widths 8, 20, 80 and 160. It measures layout separately from
+layout+plain/styled encoding+writer delivery. Separate allocation instrumentation
+records allocation counts/bytes; output counters record encoded bytes and logical
+writer calls, not OS syscall timing. `python3 tools/perf/smoke.py` checks fixture
+integrity on all three platforms, without hosted latency thresholds. Existing
+editor, render, PTY and comparison measurements remain in that suite.
 
 ## Record derivation
 

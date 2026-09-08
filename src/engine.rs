@@ -1,6 +1,6 @@
 //! Deterministic interaction coordination. No resources, environment or clock.
 use crate::{
-    EditError, Editor, Error, Event, Prompt, Role,
+    Editor, Error, Event, Prompt, Role,
     actions::{EditCommand, Input, Request},
     render::{Damage, Mutation, Renderer},
 };
@@ -204,35 +204,28 @@ impl Engine {
             event: None,
         })
     }
+    pub fn output_document(&mut self, document: &crate::Document) -> Result<Effects, Error> {
+        let size = self.surface.as_ref().ok_or(Error::State)?.size;
+        let mutations = document.mutations(size.0)?;
+        Ok(self.output_mutations(mutations))
+    }
+    fn output_mutations(&mut self, content: Vec<Mutation>) -> Effects {
+        let mut mutations = vec![Mutation::Paste(false)];
+        mutations.extend(self.surface.as_mut().unwrap().renderer.erase());
+        mutations.extend(content);
+        mutations.push(Mutation::Paste(true));
+        mutations.extend(self.redraw());
+        Effects {
+            mutations,
+            event: None,
+        }
+    }
     pub fn external_output(&mut self, role: Role, text: &str) -> Result<Effects, Error> {
         if !self.is_open() {
             return Err(Error::State);
         }
-        let text = text.replace("\r\n", "\n");
-        if !crate::core::valid_text(&text) {
-            return Err(EditError::InvalidText.into());
-        }
-        let mut mutations = vec![Mutation::Paste(false)];
-        mutations.extend(self.surface.as_mut().unwrap().renderer.erase());
-        mutations.push(Mutation::Style(role));
-        for (i, line) in text.split('\n').enumerate() {
-            if i > 0 {
-                mutations.push(Mutation::Newline);
-            }
-            if !line.is_empty() {
-                mutations.push(Mutation::Text(line.into()));
-            }
-        }
-        mutations.push(Mutation::Style(Role::Default));
-        if !text.ends_with('\n') {
-            mutations.push(Mutation::Newline);
-        }
-        mutations.push(Mutation::Paste(true));
-        mutations.extend(self.redraw());
-        Ok(Effects {
-            mutations,
-            event: None,
-        })
+        let mutations = crate::document::plain_mutations(role, text)?;
+        Ok(self.output_mutations(mutations))
     }
 }
 
@@ -240,6 +233,40 @@ impl Engine {
 mod tests {
     use super::*;
     use crate::{Theme, presentation::Frame, protocol::encode};
+
+    #[test]
+    fn structured_output_is_deterministic_and_rejection_does_not_mutate_surface() {
+        use crate::{Document, Text, document::Block};
+        let mut e = Engine::new(Editor::new(1024, 2));
+        let doc = Document::new(vec![Block::Paragraph(Text::new("facts 界").unwrap())]).unwrap();
+        assert!(matches!(e.output_document(&doc), Err(Error::State)));
+        let prompt = Prompt::new("demo").unwrap();
+        e.start(prompt.clone(), (2, 8)).unwrap();
+        e.apply(Input::Text("a界b".into())).unwrap();
+        e.apply(Input::Edit(EditCommand::Left)).unwrap();
+        let huge = Document::new(vec![
+            Block::Paragraph(Text::new(&"x".repeat(16384)).unwrap());
+            64
+        ])
+        .unwrap();
+        assert!(matches!(
+            e.output_document(&huge),
+            Err(Error::Edit(crate::EditError::Capacity))
+        ));
+        assert_eq!((e.editor.text(), e.editor.cursor()), ("a界b", 4));
+        e.surface
+            .as_ref()
+            .unwrap()
+            .renderer
+            .assert_frame(&e.editor, &prompt, (2, 8));
+        e.output_document(&doc).unwrap();
+        assert_eq!((e.editor.text(), e.editor.cursor()), ("a界b", 4));
+        e.surface
+            .as_ref()
+            .unwrap()
+            .renderer
+            .assert_frame(&e.editor, &prompt, (2, 8));
+    }
 
     #[test]
     fn deferred_damage_completion_resize_and_output_invalidate_reuse() {

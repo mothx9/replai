@@ -37,9 +37,13 @@ mod terminal;
 pub use core::{EditError, Editor};
 pub use event::{Error, Event};
 pub use interaction::Interaction;
-pub use presentation::{Prompt, Role, Theme};
+pub use presentation::{Foreground, Prompt, Role, Style, Theme};
 mod allocation;
+#[path = "../../src/document.rs"]
+mod document;
+mod documents;
 use actions::{Input, Request};
+pub use document::{Document, Text};
 use engine::Engine;
 use input::{Decoder, Key};
 use presentation::Frame;
@@ -339,6 +343,7 @@ fn main() {
         },
     );
     render_edges(&h);
+    documents::measure(&h);
     interaction_scaling(&h, smoke);
     h.measure(
         spec("control", "timer_black_box", 0, "none", 0),

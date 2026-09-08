@@ -66,16 +66,22 @@ impl Interaction {
         output: &impl AsFd,
         prompt: Prompt,
     ) -> Result<(), Error> {
+        self.open_with_theme(input, output, prompt, Theme::from_environment(true))
+    }
+    /// Acquire an interaction with an explicitly resolved role theme. Callers
+    /// supplying terminal facts retain responsibility for their color policy.
+    pub fn open_with_theme(
+        &mut self,
+        input: &impl AsFd,
+        output: &impl AsFd,
+        prompt: Prompt,
+        theme: Theme,
+    ) -> Result<(), Error> {
         if self.is_open() {
             return Err(Error::State);
         }
         let (resource, _) = Resource::acquire(input, output)?;
-        let mut terminal = Terminal::start(
-            resource,
-            &mut self.engine,
-            prompt,
-            Theme::from_environment(true),
-        )?;
+        let mut terminal = Terminal::start(resource, &mut self.engine, prompt, theme)?;
         terminal.pending = std::mem::take(&mut self.pending);
         self.terminal = Some(terminal);
         Ok(())
@@ -109,6 +115,15 @@ impl Interaction {
     pub fn external_output(&mut self, role: Role, text: &str) -> Result<(), Error> {
         let terminal = self.terminal.as_mut().ok_or(Error::State)?;
         let effects = self.engine.external_output(role, text)?;
+        let result = terminal.apply(&mut self.engine, effects).map(|_| ());
+        self.reap();
+        result
+    }
+    /// Present a bounded semantic document at the active terminal width, then
+    /// restore the exact draft/cursor. Rejection is atomic; I/O failure cleans up.
+    pub fn output_document(&mut self, document: &crate::Document) -> Result<(), Error> {
+        let terminal = self.terminal.as_mut().ok_or(Error::State)?;
+        let effects = self.engine.output_document(document)?;
         let result = terminal.apply(&mut self.engine, effects).map(|_| ());
         self.reap();
         result

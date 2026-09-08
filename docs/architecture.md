@@ -17,6 +17,8 @@ flowchart TB
     facade["Interaction: compatibility facade"] --> engine
     facade --> driver
     engine["Engine: deterministic interaction transitions"] --> editor["Editor: bounded grapheme draft and history navigation"]
+    facade --> document["Document: semantic blocks and responsive layout"]
+    document --> mutations
     engine --> renderer["Renderer: surface transitions"]
     renderer --> layout["Presentation: prompt and logical cell layout"]
     renderer --> mutations["Semantic terminal mutations"]
@@ -43,6 +45,7 @@ consume semantic mutations without parsing an escape-coded frame.
 | [input](../src/input.rs) | Incremental bounded VT/UTF-8 recognition and atomic paste framing | Editor operations and keymap policy |
 | [keymap](../src/keymap.rs) | Current fixed compatibility mapping from recognized keys to actions | Editor storage; future configurable/Vi/Emacs modes |
 | [engine](../src/engine.rs) | Active surface, editor, submit/interrupt/EOF, completion application, render invalidation and safe output coordination | FDs, HANDLEs, clocks, threads, protocols or environment |
+| [document](../src/document.rs) | Safe spans/blocks, bounded responsive document layout and independent writer output | Host schema, product meaning, editor state or terminal acquisition |
 | [presentation](../src/presentation.rs) | Prompt, semantic roles, logical text/style runs, grapheme/cell layout and viewport | Resource acquisition or escape-coded layout |
 | [render](../src/render.rs) | Private previous frame, append/full-redraw transition and logical mutations | OS APIs or terminal escape serialization |
 | [protocol](../src/protocol.rs) | VT encoding of text, style, moves, clear, newline and paste-mode operations | Geometry, editing policy or resource ownership |
@@ -52,8 +55,8 @@ consume semantic mutations without parsing an escape-coded frame.
 | [system](../src/system.rs) | Shared Linux/macOS POSIX acquisition, descriptor duplication, termios, dimensions, poll/read/write, backend lease | Decoder, prompt, events, palette or editor |
 | [interaction](../src/interaction.rs), [event](../src/event.rs) | Public compatibility façade and portable outcomes/errors | Product loop, language or command authority |
 
-**Generic terminal presentation belongs to the library; semantic rendering
-belongs to the host.** The host still owns completion discovery/selection,
+**Generic terminal presentation belongs to the library; semantic classification
+and content belong to the host.** The host still owns completion discovery/selection,
 history admission/privacy, labels, execution, cancellation meaning and output
 content. There is no application registry, parser, filesystem completion or
 network dependency inside the engine.
@@ -65,10 +68,11 @@ surface. On Linux/macOS the façade separately owns an optional `Terminal<Resour
 The driver borrows the engine only for each operation. No stored self-reference,
 forged lifetime, pointer registry or pinned owner is necessary.
 
-`Editor`, `EditError`, `Prompt`, `Theme`, `Role`, `Interaction`, `Event` and `Error`
+`Document`, `Block`, `Text`, `Span`, table/list/severity metadata, `Style`,
+`Foreground`, `Editor`, `EditError`, `Prompt`, `Theme`, `Role`, `Interaction`, `Event` and `Error`
 are exported on every compilation target. Construction and closed editor access
 are portable. The existing `open`, `poll`, `complete`, `external_output`,
-`interrupt` and `close` system façade is available on Linux and macOS. No fake acquisition
+`output_document`, `open_with_theme`, `interrupt` and `close` system façade is available on Linux and macOS. No fake acquisition
 method returning Unsupported is supplied on another OS. The deterministic
 engine/action/effect APIs are private until F1/P3 establish a public contract.
 Linux signatures, result variants and host-visible semantics are preserved.
@@ -132,6 +136,17 @@ operations, then restore the draft and cursor. The driver serializes those
 operations. LF/CRLF normalization and TAB admission are unchanged. CSI, OSC,
 DCS and clipboard/title operations cannot enter through safe host text. There is
 no trusted raw-output API, asynchronous writer or output scheduler.
+
+Structured documents add bounded output layout alongside editing layout, using
+shared logical text/style runs, Unicode width policy and terminal mutations.
+They do not enter the editor's per-key path. Standalone rendering and active
+output share document layout; active output then uses the existing engine
+surface transaction. Prompt segments reuse the safe inline representation.
+The [presentation contract](presentation.md) owns block geometry, bounds and
+failure atomicity. No JSON framework or new dependency is required. Old plain
+output retains its unwrapped byte semantics through the same coordinator.
+The C binding continues to expose only its qualified plain presentation surface;
+structured C output needs a separate future design, not additions to ABI 1.
 
 ## System and protocol realizations
 

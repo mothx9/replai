@@ -748,3 +748,122 @@ fn pty_combining_cjk_joined_emoji_variation_and_regional_edits_are_atomic() {
         assert_eq!(termios(&slave), before);
     }
 }
+
+#[test]
+fn structured_output_preserves_draft_cursor_and_posix_lifecycle() {
+    use replai::{Alignment, Block, Column, Document, Severity, Span, Text, Theme};
+    let _serial = serial();
+    for columns in [8, 60] {
+        for theme in [
+            Theme::new(true, false, None),
+            Theme::new(true, true, None),
+            Theme::new(true, false, Some("dumb")),
+        ] {
+            let (master, slave) = pty(columns, 30);
+            let before = termios(&slave);
+            let mut editor = Editor::new(1024, 2);
+            editor.insert("a界b\nc").unwrap();
+            editor.left();
+            let prompt = Prompt::composed(
+                Text::from_spans(vec![
+                    Span::new(Role::Strong, "db").unwrap(),
+                    Span::new(Role::Accent, "> ").unwrap(),
+                ])
+                .unwrap(),
+            )
+            .unwrap()
+            .with_continuation_text(Text::styled(Role::Dim, ".. ").unwrap())
+            .unwrap();
+            let mut interaction = Interaction::new(editor);
+            interaction
+                .open_with_theme(&slave, &slave, prompt, theme)
+                .unwrap();
+            let initial = drain(&master);
+            let mut screen = vt100::Parser::new(30, columns, 0);
+            screen.process(&initial);
+            let t = |s: &str| Text::new(s).unwrap();
+            let doc = Document::new(vec![
+                Block::Heading {
+                    level: 2,
+                    text: t("Facts"),
+                },
+                Block::Table {
+                    columns: vec![
+                        Column {
+                            heading: t("Key"),
+                            alignment: Alignment::Left,
+                        },
+                        Column {
+                            heading: t("Value"),
+                            alignment: Alignment::Left,
+                        },
+                    ],
+                    rows: vec![vec![t("Name"), t("café 界")]],
+                },
+                Block::Status {
+                    severity: Severity::Success,
+                    text: t("ready"),
+                },
+            ])
+            .unwrap();
+            interaction.output_document(&doc).unwrap();
+            let bytes = drain(&master);
+            screen.process(&bytes);
+            let mut expected = vt100::Parser::new(30, columns, 0);
+            expected.process(
+                doc.render(columns as usize, theme)
+                    .unwrap()
+                    .replace('\n', "\r\n")
+                    .as_bytes(),
+            );
+            // Independent document screen plus original editing frame is the oracle.
+            expected.process(&initial);
+            assert_eq!(screen.screen().contents(), expected.screen().contents());
+            assert_eq!(
+                screen.screen().cursor_position(),
+                expected.screen().cursor_position()
+            );
+            assert_eq!(
+                (interaction.editor().text(), interaction.editor().cursor()),
+                ("a界b\nc", 6)
+            );
+            for row in 0..30 {
+                for col in 0..columns {
+                    let actual = screen.screen().cell(row, col).unwrap();
+                    let reference = expected.screen().cell(row, col).unwrap();
+                    assert_eq!(actual.fgcolor(), reference.fgcolor());
+                    assert_eq!(actual.bold(), reference.bold());
+                    assert_eq!(
+                        screen.screen().cell(row, col).unwrap().bgcolor(),
+                        vt100::Color::Default
+                    );
+                }
+            }
+            resize(&slave, columns + 3, 30);
+            screen.screen_mut().set_size(30, columns + 3);
+            interaction.poll(Duration::from_millis(20)).unwrap();
+            let resized = drain(&master);
+            screen.process(&resized);
+            interaction.output_document(&doc).unwrap();
+            let more = drain(&master);
+            screen.process(&more);
+            assert!(more.windows(5).any(|w| w == b"ready"));
+            let (row, col) = screen.screen().cursor_position();
+            assert_eq!(col, 3); // continuation, cursor before c
+            assert!(screen.screen().contents().ends_with(".. c"));
+            assert_eq!(screen.screen().cell(row, col).unwrap().contents(), "c");
+            assert_eq!(
+                (interaction.editor().text(), interaction.editor().cursor()),
+                ("a界b\nc", 6)
+            );
+            interaction.close().unwrap();
+            let close = drain(&master);
+            assert_eq!(termios(&slave), before);
+            let all = [initial, bytes, resized, more, close].concat();
+            assert_eq!(
+                all.windows(8).filter(|w| *w == b"\x1b[?2004h").count(),
+                all.windows(8).filter(|w| *w == b"\x1b[?2004l").count()
+            );
+        }
+    }
+}

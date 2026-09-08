@@ -22,10 +22,39 @@ pub enum Role {
     Error,
 }
 
+/// Restrained foreground choices. Background always belongs to the terminal.
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
+pub enum Foreground {
+    /// Terminal foreground.
+    #[default]
+    Default,
+    /// Neutral light foreground (256-color index 250).
+    Neutral,
+    /// Cyan accent (81).
+    Cyan,
+    /// Secondary gray (245).
+    Gray,
+    /// Green (114).
+    Green,
+    /// Amber (179).
+    Amber,
+    /// Red (203).
+    Red,
+}
+/// Terminal appearance independently mapped from semantic roles. No raw escapes.
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
+pub struct Style {
+    /// Foreground from the restrained terminal palette.
+    pub foreground: Foreground,
+    /// Strong intensity. No background or terminal-global mode changes.
+    pub bold: bool,
+}
+
 /// The initial text-only compatibility palette; never sets a background color.
 #[derive(Clone, Copy, Debug)]
 pub struct Theme {
     color: bool,
+    styles: [Style; 7],
 }
 impl Theme {
     /// Resolve styling from explicit terminal facts, without reading the environment.
@@ -33,7 +62,50 @@ impl Theme {
     pub fn new(output_is_tty: bool, no_color_present: bool, term: Option<&str>) -> Self {
         Self {
             color: output_is_tty && !no_color_present && term != Some("dumb"),
+            styles: [
+                Style {
+                    foreground: Foreground::Default,
+                    bold: false,
+                },
+                Style {
+                    foreground: Foreground::Neutral,
+                    bold: true,
+                },
+                Style {
+                    foreground: Foreground::Cyan,
+                    bold: false,
+                },
+                Style {
+                    foreground: Foreground::Gray,
+                    bold: false,
+                },
+                Style {
+                    foreground: Foreground::Green,
+                    bold: false,
+                },
+                Style {
+                    foreground: Foreground::Amber,
+                    bold: false,
+                },
+                Style {
+                    foreground: Foreground::Red,
+                    bold: false,
+                },
+            ],
         }
+    }
+    /// Override one role's appearance. Color-disable policy still takes precedence.
+    /// Default is the reset role and must retain terminal defaults.
+    pub fn with_style(mut self, role: Role, style: Style) -> Result<Self, EditError> {
+        if role == Role::Default && style != Style::default() {
+            return Err(EditError::InvalidRange);
+        }
+        self.styles[role as usize] = style;
+        Ok(self)
+    }
+    /// Inspect the resolved role appearance without terminal serialization.
+    pub fn style(self, role: Role) -> Style {
+        self.styles[role as usize]
     }
     /// Resolve styling from NO_COLOR and TERM for the supplied output capability.
     pub fn from_environment(output_is_tty: bool) -> Self {
@@ -41,7 +113,7 @@ impl Theme {
     }
     /// Return the SGR sequence for a generic role, or empty text when color is disabled.
     pub fn sequence(self, role: Role) -> &'static str {
-        crate::protocol::style(self.color, role)
+        crate::protocol::style(self.color, self.styles[role as usize])
     }
 }
 
@@ -51,6 +123,8 @@ pub struct Prompt {
     label: String,
     state: String,
     continuation: String,
+    composed: Option<crate::Text>,
+    continued: Option<crate::Text>,
 }
 impl Prompt {
     /// Create `<accent>label><reset> ` with `... ` for logical continuations.
@@ -61,10 +135,15 @@ impl Prompt {
             label: label.into(),
             state: String::new(),
             continuation: "... ".into(),
+            composed: None,
+            continued: None,
         })
     }
     /// Set a literal suffix between the label and `>`; spacing is host-provided.
     pub fn with_state(mut self, state: &str) -> Result<Self, EditError> {
+        if self.composed.is_some() {
+            return Err(EditError::InvalidRange);
+        }
         prompt_text(state)?;
         self.state = state.into();
         Ok(self)
@@ -73,8 +152,37 @@ impl Prompt {
     pub fn with_continuation(mut self, marker: &str) -> Result<Self, EditError> {
         prompt_text(marker)?;
         self.continuation = marker.into();
+        self.continued = None;
         Ok(self)
     }
+    /// Compose the complete primary prompt from safe styled segments, including
+    /// host-chosen delimiters and trailing spacing. Maximum 3072 bytes, 64 spans;
+    /// no controls. `with_state` applies only to the simple constructor.
+    pub fn composed(text: crate::Text) -> Result<Self, EditError> {
+        validate_segments(&text, 3072)?;
+        let mut prompt = Self::new("")?;
+        prompt.composed = Some(text);
+        Ok(prompt)
+    }
+    /// Styled logical continuation marker, at most 1024 bytes and 64 spans.
+    pub fn with_continuation_text(mut self, text: crate::Text) -> Result<Self, EditError> {
+        validate_segments(&text, 1024)?;
+        self.continued = Some(text);
+        Ok(self)
+    }
+}
+fn validate_segments(text: &crate::Text, limit: usize) -> Result<(), EditError> {
+    if text.bytes() > limit || text.spans.len() > 64 {
+        return Err(EditError::Capacity);
+    }
+    if text
+        .spans
+        .iter()
+        .any(|s| s.text.chars().any(char::is_control))
+    {
+        return Err(EditError::InvalidText);
+    }
+    Ok(())
 }
 fn prompt_text(text: &str) -> Result<(), EditError> {
     if text.len() > 1024 {
@@ -228,6 +336,26 @@ impl Layout {
             self.grapheme(grapheme, grapheme.width());
         }
     }
+    fn semantic(&mut self, text: &crate::Text) {
+        let flat = text.plain();
+        let mut span = 0;
+        let mut end = text.spans.first().map_or(0, |s| s.text.len());
+        let mut previous = None;
+        for (offset, g) in flat.grapheme_indices(true) {
+            while span + 1 < text.spans.len() && offset >= end {
+                span += 1;
+                end += text.spans[span].text.len();
+            }
+            let role = text.spans[span].role;
+            if previous != Some(role) {
+                self.style(Role::Default);
+                self.style(role);
+                previous = Some(role);
+            }
+            self.grapheme(g, g.width());
+        }
+        self.style(Role::Default);
+    }
     fn style(&mut self, role: Role) {
         self.style = Some(role);
         if !self.full {
@@ -239,12 +367,16 @@ impl Frame {
     pub fn new(editor: &Editor, prompt: &Prompt, columns: usize, rows: usize) -> Self {
         let visible = rows.saturating_sub(1).max(1);
         let mut layout = Layout::new(columns, visible);
-        layout.style(Role::Accent);
-        layout.text(&prompt.label);
-        layout.text(&prompt.state);
-        layout.text(">");
-        layout.style(Role::Default);
-        layout.text(" ");
+        if let Some(text) = &prompt.composed {
+            layout.semantic(text);
+        } else {
+            layout.style(Role::Accent);
+            layout.text(&prompt.label);
+            layout.text(&prompt.state);
+            layout.text(">");
+            layout.style(Role::Default);
+            layout.text(" ");
+        }
         let mut cursor = None;
         for (offset, grapheme) in editor.text().grapheme_indices(true) {
             if layout.full {
@@ -270,7 +402,11 @@ impl Frame {
                     layout.newline();
                 }
                 layout.wrapped = false;
-                layout.text(&prompt.continuation);
+                if let Some(text) = &prompt.continued {
+                    layout.semantic(text);
+                } else {
+                    layout.text(&prompt.continuation);
+                }
             } else {
                 layout.grapheme(grapheme, width);
             }
@@ -306,13 +442,13 @@ impl Frame {
     }
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub(crate) enum Run {
     Text(String),
     Style(Role),
 }
 
-#[derive(Debug, Default, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub(crate) struct Line(pub(crate) Vec<Run>);
 impl Line {
     pub fn suffix(&self, old: &Self) -> Option<&str> {

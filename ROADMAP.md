@@ -44,9 +44,9 @@ tradeoffs rather than infer superiority from a feature list.
 | R4 — Second consumer | Completed: YAI consumes native Rust; transient edits remain distinct from canonical conversation submission |
 | R5 — LEGACY.OWNERSHIP.CLOSURE | Consumer editor removal and local qualification established; outstanding YVEX publication reconciliation is externally owned |
 
-Both consumers retain exact qualified revision
-`df5538c718b8d068432032e7fb116fb8bfab158e`. Library documentation evolution does
-not justify repinning. The remaining consumer publication reconciliation does not block independent
+The extraction-era consumer qualification used exact revision
+`df5538c718b8d068432032e7fb116fb8bfab158e`. Current consumer pins/publication
+are externally owned; library documentation evolution does not justify repinning. The remaining consumer publication reconciliation does not block independent
 library architecture work unless it demonstrates a reproducible generic contract
 defect. This repository does not declare that external publication complete.
 
@@ -65,8 +65,12 @@ qualification are recorded in the [combined dossier](docs/engineering/macos-perf
 The final primary burst median is 0.194 ms against a same-run parity limit of
 0.575 ms, with preserved isolated-key latency and substantially fewer layout
 allocations. This is a workload-specific result, not a general performance claim.
-Internal input batching does not close public P3 host driving. F1, F2, I/O/U
-series, public P3 embedding and Windows runtime remain unstarted. No next wave
+Internal input batching does not close public P3 host driving.
+**STRUCTURED.PRESENTATION.0 is active**, implementing O0/U0 together: bounded
+semantic output blocks and composed prompts share safe spans, roles and layout.
+Closure requires the existing Linux/macOS Rust/C qualification plus structured
+PTYs, Windows portable tests and benchmark integrity. F1/F2, I series, O1/O2/O3,
+U1/U2/U3, public P3 embedding and Windows runtime remain unstarted. No next wave
 or consumer repin is authorized.
 
 System-terminal runtime qualification covers Linux and macOS,
@@ -163,11 +167,11 @@ storage policy merely because it can present their results.
 
 | Wave | Property to establish |
 | --- | --- |
-| O0 — OUTPUT.MODEL | Safe text by default, semantic styled spans, and only a deliberately admitted trusted terminal-output boundary; untrusted OSC/DCS/control data must not acquire terminal authority |
+| O0 — OUTPUT.MODEL | **Active in STRUCTURED.PRESENTATION.0.** Bounded semantic documents/spans, responsive blocks and safe standalone/coordinated output; no trusted raw path |
 | O1 — STREAMING.OUTPUT | Characterize and optimize sustained chunks from any host, including build logs, debugger events and model text |
 | O2 — MULTIPLEXED.INTERACTION | Background/streaming output coexists with an editable draft, preserving cursor, draft and terminal ownership under explicit arbitration |
 | O3 — TRANSIENT.FEEDBACK | Generic notices/diagnostics and transient feedback without owning product rendering |
-| U0 — PROMPT.LAYOUT | Composable primary/context/state/continuation grammar and optional right-side information with correct width accounting |
+| U0 — PROMPT.LAYOUT | **Active in STRUCTURED.PRESENTATION.0.** Composed primary/continuation spans with shared theme and cell geometry; optional right-side information remains deferred |
 | U1 — COMPLETION.UX | Inline, list, cycling and menu strategies over the completion contract |
 | U2 — MULTILINE.UX | Substantial multiline continuation, wrapping, cursor geometry and diagnostic presentation |
 | U3 — VISUAL.SYSTEM | Coherent semantic roles, themes, spacing, accessibility and terminal-native background behavior |
