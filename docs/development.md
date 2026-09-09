@@ -143,3 +143,23 @@ resources. Run `--memory` in a fresh directory for Valgrind on Linux or native
 CI runs both native embedding jobs and preserves their observation artifacts.
 Portable engine tests exercise idle/no-I/O and stale-deadline contracts without
 claiming a Windows terminal backend. Hosted latency is characterization only.
+
+## README terminal preview
+
+The [README image](../assets/terminal-preview.png) is a rasterized screen from
+real `structured` and `demo -- --notice` processes in a Linux PTY, not a mockup.
+The optional [capture script](../tools/docs/capture_terminal.py) uses a 76-column
+terminal, pyte 0.8.2 and Pillow 11.3.0 with DejaVu Sans Mono. Its dark background
+belongs to the capture terminal; it is not emitted by REPLAI. It exercises actual
+host completion and coordinated output. The command vocabulary printed by the
+structured example is illustrative data, not commands implemented by the demo.
+
+To reproduce with the optional tools installed in a disposable Python environment:
+
+```sh
+cargo build --locked --example structured --example demo
+python3 tools/docs/capture_terminal.py
+```
+
+These capture dependencies are not needed for library builds or qualification.
+The preview is documentation, not a substitute for the independent PTY oracle.

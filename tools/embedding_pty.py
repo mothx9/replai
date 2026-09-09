@@ -135,7 +135,9 @@ def driven(work, prefix=()):
             evidence['deadline_expiry'] = s.receipts[mark:].decode()
             s.edit(b'ab', 'ab', 2)
             mark = len(s.receipts); s.send(b'\x1b['); s.until(lambda:b'STATE ' in s.receipts[mark:])
-            time.sleep(0.15)
+            # Send as soon as the child acknowledges pending protocol state.
+            # Sleeping here tests CI scheduling latency, not input-before-expiry;
+            # exact near-deadline/stale-token behavior has a virtual clock oracle.
             s.edit(b'D!', 'a!b', 2)
             time.sleep(0.15); s.event(b'S')
             assert b'DEADLINE\n' not in s.receipts[mark:]

@@ -29,6 +29,14 @@ shell language, command registry, application scheduler or full-screen UI here.
 **Pre-release.** Use an exact revision. The Rust API and C ABI 1 are qualified
 experimental contracts, without a stable API/ABI, SemVer or MSRV promise.
 
+<p align="center">
+  <img src="assets/terminal-preview.png" alt="Real REPLAI terminal session: structured connection facts, capability notices and a table, followed by completion of wor to world and a notice that preserves the editable prompt." width="840">
+</p>
+
+*Captured from the `structured` and `demo -- --notice` examples. The terminal's
+background is its own; REPLAI supplies the text layout and semantic foreground
+styles. [Capture method](docs/development.md#readme-terminal-preview).*
+
 ## Try it
 
 From a checkout, with a Rust toolchain:
@@ -38,19 +46,31 @@ cargo run --locked --example simple
 ```
 
 ```text
-simple> hello
-echo: hello
-simple>
+simple> hello terminal
+echo: hello terminal
+simple> /exit
+echo: /exit
 ```
 
-Submit a line, then use
-Up/Down to recall it and return to an unfinished draft. Bracketed multiline paste
-stays one input until Enter. Ctrl-C interrupts editing; Ctrl-D exits an empty
-prompt or deletes the next grapheme in a nonempty draft.
+This tiny host echoes submitted input and admits it to history. It does not
+execute shell commands. To try the richer session shown above:
 
-The [explicit session example](examples/demo.rs) adds completion (`wor` + Tab).
-`cargo run --locked --example demo -- --notice` emits a notice during editing
-and restores the draft/cursor. No external application or service is required.
+```sh
+cargo run --locked --example demo -- --notice
+```
+
+| Try | Observe |
+| --- | --- |
+| Type `wor`, then Tab | The demo host selects `world`; REPLAI applies the completion |
+| Submit a line, type a new draft, then Up and Down | History recall returns to the original unfinished draft |
+| Move Left, insert text or Backspace | Editing respects grapheme boundaries, including combining characters |
+| Paste several lines | Bracketed paste stays one draft until Enter submits it |
+| Keep typing when the notice arrives after two seconds | Output appears above the prompt; the draft and cursor survive |
+| Ctrl-C, then Ctrl-D on an empty prompt | Interrupt the edit, then leave the example |
+
+No model, external service or application checkout is required. The
+[simple host](examples/simple.rs) needs no polling loop; the
+[session host](examples/demo.rs) owns completion and output scheduling.
 
 ## One engine, explicit ownership
 
