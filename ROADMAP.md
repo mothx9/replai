@@ -5,9 +5,9 @@
 | Axis | Current truth |
 | --- | --- |
 | Project target | Embeddable command-line interaction infrastructure: a simple entry that can grow into rich, long-lived host-driven interfaces over one engine. |
-| Current selected engineering boundary | **TERMINAL.CAPABILITIES.0 — ACTIVE**: complete F2 admission/degradation across the qualified embedding tiers. |
-| Latest major completed boundary | F1/P3 embedding contract: blocking, session and external driving over one engine, with real Linux/macOS PTYs and Windows portable evidence; [embedding dossier][embedding]. |
-| Most important structural gap | Full F2 capability discovery/degradation and I0 revision-aware host analysis remain incomplete; external driving does not supply either contract. |
+| Current selected engineering boundary | **NONE**: F2 is closed; no next engineering boundary is selected or authorized. |
+| Latest major completed boundary | F2 terminal capabilities: unified facts, requirements, degradation and width contract; Linux/macOS real profiles and Windows portable evidence; [F2 dossier][f2]. |
+| Most important structural gap | I0 revision-aware host analysis remains open. Rich completion, validation and asynchronous result ownership need their own semantic contract. |
 | Executable foundation | Platform-neutral engine; bounded Unicode/grapheme editor; history navigation; completion requests; paste, interrupts/EOF, resize, safe output and exact restoration. |
 | Qualified platforms | Linux/macOS: real Rust/C terminal runtime. Windows: portable engine/document tests only, no terminal backend. |
 | Current Rust surface | Editor/Interaction, blocking results, session events, portable wake/deadline/admission types, borrowed POSIX readiness, prompts/themes and structured documents. Pre-release, without API freeze. |
@@ -16,13 +16,13 @@
 | Presentation posture | Safe spans, headings, facts, lists, responsive tables/status, composed prompts/themes and deterministic plain output. Completion UI and broader visual refinement remain incomplete. |
 | Consumer posture | Native Rust and C consumers are external owners. Exact pins, adoption, application mappings and publication are their decisions; producer metadata assigns no migrations. |
 | Public-release posture | Pre-release; no stable Rust API, ABI longevity, SemVer or MSRV promise and no release date. |
-| Next decision point | Separately scope remaining F2 capability/degradation or I0 host analysis dependencies using the qualified embedding boundary; no automatic next selection. |
+| Next decision point | Assess I0 over the qualified F1/P3/F2 foundation: draft revision identity and stale-result refusal. This dependency rationale does not select or start I0. |
 
 This is the sole authority for **public macro state, maturity, strategic programs,
 dependency ordering and release progression**. [README](README.md) owns first use;
 [architecture][architecture] and contracts own implementation truth; engineering
 dossiers own bounded evidence; Git owns chronology. Planned properties are not
-APIs. The embedding scope is complete. F2 is authorized and active; I0 and later implementation remain outside this wave.
+APIs. F1/P3/F2 are complete at their stated scope. I0 and later implementation require a separate selection and authorization.
 
 Navigate: [maturity](#system-maturity) · [programs](#strategic-programs) ·
 [completed boundaries](#completed-boundaries) · [sequence](#current-execution-sequence) ·
@@ -43,7 +43,7 @@ whole program. Counts describe rows, never percentage completion. IDs are stable
 control identifiers, not new public API or producer-capability declarations.
 
 <!-- maturity-counts:start -->
-ESTABLISHED=22 PARTIAL=12 OPEN=8 LATER=4 TOTAL=46
+ESTABLISHED=23 PARTIAL=11 OPEN=8 LATER=4 TOTAL=46
 <!-- maturity-counts:end -->
 
 <!-- maturity:start -->
@@ -108,7 +108,7 @@ ESTABLISHED=22 PARTIAL=12 OPEN=8 LATER=4 TOTAL=46
 | platform.posix_macos | X1 macOS terminal runtime | 🟢 ESTABLISHED | Shared POSIX runtime with real Rust/C PTYs and native leak qualification. | Preserve native execution and common-engine parity, not compilation alone. | X / Q | [macOS dossier][macos-perf]; [CI][ci] |
 | platform.windows_core | Windows portable engine | 🟢 ESTABLISHED | Native deterministic engine/document tests; no Windows terminal acquisition. | Retain portable execution; do not promote this row into runtime support. | X | [Conformance][conformance]; [CI][ci] |
 | platform.windows_runtime | X2 Windows runtime | 🔴 OPEN | No Console/ConPTY backend or HANDLE-based acquisition contract. | Qualify real Windows input/output, mode restoration and ownership; resolve future C binding separately. | X / F | [Architecture owner][architecture]; [C contract][c-api] |
-| terminal.capabilities | F2 capabilities/degradation | 🟡 PARTIAL | Explicit facts versus policy, required cursor/erase and optional styling/paste now support truthful embedding admission. Full discovery, width policy and non-POSIX realization remain incomplete. | Qualify a complete capability/degradation contract across actual realizations without turning assumptions into discovery claims. | F / X | [Current resolver][capabilities]; [interaction][interaction] |
+| terminal.capabilities | F2 capabilities/degradation | 🟢 ESTABLISHED | Shared admission separates observed resources, protocol assumptions, requirements and optional policy; explicit UnicodeNarrow width. Linux/macOS runtime; Windows portable resolver only. | Preserve negative admission, optional degradation, width and lifecycle evidence when adding realizations; no active probing or universal emulator agreement claimed. | F / X | [Capability contract][interaction]; [F2 evidence][f2] |
 
 ### Performance and robustness
 
@@ -144,7 +144,7 @@ can run independently when their prerequisites are explicit.
 <!-- programs:start -->
 | Program | Target property | Maturity | Completed foundations | Remaining gaps | Dependencies | Explicit non-goals |
 | --- | --- | --- | --- | --- | --- | --- |
-| F | One engine, simple/session/driven embedding | 🟡 PARTIAL | F0 engine; F1 blocking/session/driven ownership | Complete F2 capability/degradation contract | Qualified P3 delivery; X resource constraints; P0 evidence | Scheduler, async runtime, cosmetic API churn |
+| F | One engine, simple/session/driven embedding | 🟢 ESTABLISHED | F0 engine; F1 embedding; F2 scoped capability/admission contract | Preserve the same contracts as future platforms and analyses are introduced | Qualified P3 delivery; X resource constraints; P0 evidence | Scheduler, async runtime, cosmetic API churn |
 | P | Measurable, efficient interaction under host driving | 🟡 PARTIAL | P0 baseline; P1/P2 convergence; P3 external driving | Broaden measured envelopes and noise policy without generalizing wins | F1/F2 contracts; Q2 variance policy | Intuitive buffer rewrites; fastest-library claims |
 | I | Rich command interaction from host analysis | 🟡 PARTIAL | Completion requests, history mechanics, fixed normalized actions | I0–I5 analysis/candidates/validation/storage/keymaps; I6 later sensitive input | F1/P3 delivery/revision rules; U presentation; Q bounds | Parser, command language, history database |
 | O | Safe output that scales beyond exclusive phases | 🟡 PARTIAL | O0 documents and synchronous surface coordination | O1 sustained output; O2 arbitration; O3 transient lifecycle | P3/F2 delivery and capabilities; U geometry; Q stress | Product streams, token semantics, uncontrolled writers |
@@ -168,18 +168,20 @@ to their recorded source, workload and environment.
 | P0 PERFORMANCE.BASELINE | Characterization implementation `d800083…` plus corrections; evidence carrier `8210c93…`; [P0 dossier][p0]. |
 | X1/P1/P2 combined macOS-performance closure | Shared native POSIX runtime and common redesign; measured source/harness `96f794c7b807636b4fabd3939bbeeab150a87dd1`, closure carrier `6365f84e12865871bf26ecf0d984b48213d81ebc`; [combined dossier][macos-perf]. |
 | O0/U0 STRUCTURED.PRESENTATION | Implementation `21e3493…`, correctness closures through `b9581102220364b94d2bcdef49f602308d24e6c9`; [presentation contract][presentation] and [exact qualification][presentation-ci]. Richer U/O work remains separate. |
-| F1/P3 EMBEDDING.CONTRACT | Native blocking/session/driven contract and minimal admission; implementation `349d75e…`, native qualification `5c04277…`; [bounded evidence][embedding]. F2 and O2 remain incomplete. |
+| F1/P3 EMBEDDING.CONTRACT | Native blocking/session/driven contract and minimal admission; implementation `349d75e…`, native qualification `5c04277…`; [bounded evidence][embedding]. Its minimal admission is completed by F2 below; O2 remains incomplete. |
+| F2 TERMINAL.CAPABILITIES | Unified acquisition/admission, inspectable snapshot and deterministic width; implementation `12cef7608d8243383b432f303fd3a7218cb9b20c`, qualification observer correction `69205d104a2a2bdd88b9ad03176fc58b5a3e266b`; [native/portable, memory and performance evidence][f2]. No consumer mutation. |
 | BOUNDARY producer metadata | Metadata/README carrier `9d9375db407246a6f4946e20e38f56fe3155e62a` describes qualified source `b958110…` and the delta from `6365f84…`; [producer metadata][producer]. No runtime/API change or consumer repin. |
 
 ## Current Execution Sequence
 
-TERMINAL.CAPABILITIES.0 (F2) is active after the joint F1/P3 closure. The
-[embedding contract][interaction] now separates scheduling from advancement;
-future work can use it without replacing the editor or acquiring the host loop.
+TERMINAL.CAPABILITIES.0 (F2) is complete after joint F1/P3. Current selection is `NONE`. Scheduling and admission are now explicit; I0 is the next dependency
+question because host analysis needs revision identity and stale-result refusal,
+not another terminal loop or capability policy. That rationale is an assessment
+frontier, not permission to implement or automatically select I0.
 
 | Dependency frontier | Next decision / evidence | Explicit limit |
 | --- | --- | --- |
-| F2 capability/degradation | Extend the minimum admission facts with independently qualified discovery, width and platform realization policies. | F1/P3 prerequisite admission is not full F2 closure. |
+| F1/P3/F2 qualified foundation | Reuse one engine, host-owned readiness and explicit admission in later contracts. | Linux/macOS qualification does not establish Windows runtime or active capability discovery. |
 | I0 shared host analysis | Define revision-aware snapshots and stale-result refusal over the external delivery seam. | No parser, completion metadata, hints or validation is implemented by the embedding wave. |
 | I1–I5 with U1–U3; O1–O3 | Select bounded analysis/output/presentation intersections, measured against P baselines and Q stress. | An application reactor is not independent concurrent writers or O2 arbitration. |
 | X/E/Q and release | Retain native runtime/portable limits, strengthen failure and consumer diversity, then evaluate API freeze. | No Windows runtime, release or consumer repin follows automatically. |
@@ -302,3 +304,5 @@ validate control consistency, **not the truth of a maturity promotion**. Follow
 [extraction]: https://github.com/mothx9/replai/blob/89d36f8433cd109866ae360d8691dac30b7de026/ROADMAP.md
 
 [embedding]: docs/engineering/embedding.md
+
+[f2]: docs/engineering/terminal-capabilities.md
