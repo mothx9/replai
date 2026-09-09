@@ -4,17 +4,22 @@ REPLAI owns these producer declarations. They describe generic capabilities,
 surfaces, qualification and changes; they assign no consumer paths, commands or
 migration work. Consumer profiles must be authored by their own repositories.
 
-- [Current producer snapshot](producer.json): qualified runtime/API source
-  `b9581102220364b94d2bcdef49f602308d24e6c9`, tree
-  `f5ec77d774166605a578951e6ca827c29391b500`.
-- [Reconstructed previous checkpoint](checkpoints/6365f84e12865871bf26ecf0d984b48213d81ebc.json):
-  source `6365f84e12865871bf26ecf0d984b48213d81ebc`.
-- [Consumer-neutral delta](deltas/6365f84-b958110.json): structured documents,
-  responsive tables, status, composed prompts and explicit themes added on the
-  native Rust surface. C ABI 1 remains unchanged. This is not an assigned
-  consumer handoff.
+- [Current producer snapshot](producer.json), generation 3: qualified source
+  `3c0b14162cd322017bb718b71cc4b433c6100476`, tree
+  `4b035dbaedf0387961526568a551cf76e0cd617e`. The source includes the embedding implementation and
+  its qualification/documentation carrier; the engine implementation is identified
+  separately in the [embedding dossier](../docs/engineering/embedding.md).
+- [Previous producer snapshot](checkpoints/b9581102220364b94d2bcdef49f602308d24e6c9.json):
+  the immutable generation-2 structured-presentation contract.
+- [Current consumer-neutral delta](deltas/b958110-embedding.json): native blocking,
+  explicit session, driven scheduling, borrowed readiness and terminal admission.
+  Exhaustive native Rust Error matches must account for CapabilityMismatch.
+  C ABI 1 remains unchanged; platform qualification is refreshed. No migration
+  is assigned to any consumer.
+- Historical [6365 checkpoint](checkpoints/6365f84e12865871bf26ecf0d984b48213d81ebc.json)
+  and [6365 → b958 presentation delta](deltas/6365f84-b958110.json) remain unchanged.
 
-The checkpoint manifest was authored retrospectively from that exact Git source
+The 6365 checkpoint manifest was authored retrospectively from that exact Git source
 and its retained qualification; the file did not exist at the checkpoint.
 Snapshot IDs are deterministic SHA-256 identities of the contract record, not
 Git revisions. The commit publishing this metadata is a **carrier**, distinct
@@ -28,7 +33,7 @@ behavior, ABI and documentation inputs. Its external validation command is:
 
 ```sh
 boundary validate .boundary/producer.json --repo . \
-  --previous .boundary/checkpoints/6365f84e12865871bf26ecf0d984b48213d81ebc.json
+  --previous .boundary/checkpoints/b9581102220364b94d2bcdef49f602308d24e6c9.json
 ```
 
 Run from a clean REPLAI checkout with BOUNDARY installed separately. Validation
