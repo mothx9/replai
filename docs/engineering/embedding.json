@@ -1,0 +1,2345 @@
+{
+  "schema_version": 1,
+  "kind": "embedding-characterization",
+  "scope": "bounded source/toolchain observations, not release latency thresholds",
+  "performance": {
+    "before": {
+      "source": {
+        "head": "dfd337e62624e3ea8324ce783c026e2e5737b6ef",
+        "tree": "3b612fa7e7557ccd1b479986ea1507cc2459c33d",
+        "branch": "master",
+        "dirty": false,
+        "source_sha256": "db48e1560bbfa9d48481492175b0537a423a2e714fcee41937f1e29aed8da376",
+        "file_sha256": {
+          "Cargo.lock": "fc5594285c884c8cea2f1d9005adf05aeed62e46568f9cdd3f1e438cde7a09f7",
+          "Cargo.toml": "62dfecfe616546c78e84f409bdbe0b02b98f0eee4ec3c1c0f35276cdf605bbbc",
+          "src/actions.rs": "89eb222bfba7ccee2755e4f4ed384a86e1390d2106f281693ffa10158ae38c02",
+          "src/capabilities.rs": "8c8bda6d85f45bd40ef01f1d3b2e6191f15bf086bb89b24a7669546fe29ae9d6",
+          "src/conformance.rs": "5b94c6b7668ff98978c37482d0a406bfbb93f60892d4d692b422c68be6655141",
+          "src/core.rs": "7ea45a6693c011a6f8bf5626072b7b18edfb3b7e21300a093b9ae0c0da7b8e37",
+          "src/document.rs": "f060f8d894f74ff42414c5e5da94d141f1f345aef31f24f4807ee76838b4a988",
+          "src/engine.rs": "a86fd86a5d2cf78f8374bd83841fad25e5048d15f2030dea209e4f96a9a0b092",
+          "src/event.rs": "915d8ce20c1cfb655eeec560b16b3822ac357e2c15d924ac885b3ddecd088601",
+          "src/input.rs": "63978c621e7056e6ebb43fc7a9636b2791947cc80d86b322bb3eba8bf8123f68",
+          "src/interaction.rs": "2d34c3ea3d715063f868905d02078b7812e4ee3676b03aaa16a8ea01f5253dca",
+          "src/keymap.rs": "4defb56380d64902b814c917b424b6766f20c3fae05bef145a245ef447c2929b",
+          "src/lib.rs": "5250b5e3a38eb56310a67c1945996ce4eb2812a9c9bed7f08316a2cd98d986d7",
+          "src/presentation.rs": "6ca3b7d4623474293a514bc8a1b6442f2d60ed5535329ed0b17104b7793d4039",
+          "src/protocol.rs": "1feec7c69562900e04d0e6a14f44cea6c49254c2e332d4b6be40cb8a21758ada",
+          "src/render.rs": "9b50bc67bd1b4c0d865c92fb8923b49cfdd1f20cd8be4c17fb8d4f2be2e58788",
+          "src/substrate.rs": "0cd2d7c57a62d7074f66a8477339fa4e0a878b2e68c188f28a3c8378f812fd9e",
+          "src/system.rs": "02f8617b77e5d917789ff3f8aecd69c1fd5def2c5c158d7e83f1bd782d88da24",
+          "src/terminal.rs": "0a09b422275c7cdc35d30ea0eff39abe4cbc83f8d75e3ea80b14542aa7abbb02",
+          "tests/support/posix_pty.rs": "7a347c107e90a91a2a312f73601ea68ac17b82616493a142a535cd35b2e184e0",
+          "tools/perf/Cargo.lock": "b7d77ab11b1b86fec2ae8766fd062720982d4c4ddb2c03dd30db8695f6ab851e",
+          "tools/perf/Cargo.toml": "f336fe3c217f02e2d943a189f6b87fb63ec89f28e092ee6a5657f5f8ce34178c",
+          "tools/perf/allocation.rs": "3d4562d11a359b358652c56a2c8be918a9d29361f73b536703e7b12422107a19",
+          "tools/perf/compact.py": "b6bf6683f1a7db0af64b7cda6d8a73f21e06b959d2a00c449acc5dbd24297967",
+          "tools/perf/compare.py": "e3780573cfe52ad5d3cdd47cf93e0103372c9453ee8db16bd9abb31dce99c878",
+          "tools/perf/comparisons/Cargo.lock": "e155f481600f8c8cb629bb512b3eefc9f6ca6261e5768c34748e6ec8cdbbbb64",
+          "tools/perf/comparisons/Cargo.toml": "367b2eec59b6d36d8e157d5e9c0bee788efaa5eaee015f5d59eb1e8563617ea1",
+          "tools/perf/comparisons/linenoise.c": "52b9ec1bd089967b31b88a9a01383c44ced6d1539c84cf54d50fc332c3a8f082",
+          "tools/perf/comparisons/reedline.rs": "a08e8d9a4be27a3eacd77f45be1f410920b26a1eff854b757f4790ef8ae2164b",
+          "tools/perf/comparisons/rustyline.rs": "083a6d20751a1cb3988c76789d283b0d39dc12f0c5aed17e79d6ae18b70a238c",
+          "tools/perf/components.rs": "07068451fa8d0b550466ebb1e936e2618d4b0a63c222625c3c1bae3af7ba4e93",
+          "tools/perf/convergence.py": "037ccc9dc145123fd96701d8bb490b618b07aaa2b9f7910418f9cd62d319c125",
+          "tools/perf/documents.rs": "3b9979bd5fa328cc344299b4c37d84e19de6b2a2bac56da65543246d23a61886",
+          "tools/perf/driver.py": "2a487790b29d3d4553229c3ed6a8963eb1f666b4c5ce40627b74d4a8bdde3ff6",
+          "tools/perf/embedding.py": "bc386aafe2b207013f6738c1cca19412953f7167a9aea56a9704d5abfe3b866e",
+          "tools/perf/exit_gate.rs": "f58287db6c3f1f7d2aa8c6da107ef7afb1d3d082feee941551ada65f06f06685",
+          "tools/perf/linux.py": "9a44e416799b2501f41333f9ced68e08fb0c5f7d4e451db908cb4ee65a1f26fa",
+          "tools/perf/pty_host.rs": "9e40a431136a16af2d52d0857eaa73ac7aea55ca13a6e0d743994abb8f233973",
+          "tools/perf/results.py": "675fb5d1d7ecfa2f4a9c7a23d90daccf8e31d6349f32ad45ac9851ab466d2caa",
+          "tools/perf/run.py": "4d26139cdd364f5da76fa94e7c5f3360236907a9aa464d99b68523fc723cad26",
+          "tools/perf/schema.json": "46409d4fbd7dd636e0df6ce0ea80a9608503eb510daac47906fb295999e063d7",
+          "tools/perf/sizes.py": "3376987e702e6b7e0b35730e4ea879e7fa81a1a660c9b314aee79e451d8ef96f",
+          "tools/perf/smoke.py": "bb9dbb2bc7de61bcb6f4d99fc792fcb45fb4eaeb4ea2175898ecef0452186bc5",
+          "tools/perf/test_results.py": "805600ee5505787cbd5960a318c20e43ce0b2b59f6356183614dffb2709e49df"
+        }
+      },
+      "environment": {
+        "recorded_utc": "2026-09-09T12:10:48Z",
+        "hostname": "spark-7c3d",
+        "os": "Linux-6.17.0-1021-nvidia-aarch64-with-glibc2.39",
+        "architecture": "aarch64",
+        "cpu": [
+          "CPU implementer\t: 0x41",
+          "CPU part\t: 0xd85",
+          "CPU part\t: 0xd87"
+        ],
+        "logical_cores": 20,
+        "rust": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-unknown-linux-gnu\nrelease: 1.98.1\nLLVM version: 22.1.8",
+        "cargo": "cargo 1.98.1 (797e8a9bc 2026-08-05)"
+      },
+      "complete_envelope_sha256": "e1c6a8f0460b8987bce236469edfee0364576bd40c85dc3e724e085bafc8b5db",
+      "observations": [
+        {
+          "id": "render/append/ascii/64/80",
+          "mode": "latency",
+          "counters": {
+            "append_transitions": 1,
+            "clear_lines": 0,
+            "erase_transitions": 0,
+            "logical_mutations": 1,
+            "logical_output_operations": 1,
+            "syscalls": null,
+            "transport_writes": null,
+            "vt_bytes": 1
+          },
+          "input_bytes": 64,
+          "columns": 80,
+          "operation": "append",
+          "median_us": 0.112,
+          "sample_count": 63
+        },
+        {
+          "id": "render/middle_insert/ascii/1024/80",
+          "mode": "latency",
+          "counters": {
+            "append_transitions": 0,
+            "clear_lines": 0,
+            "erase_transitions": 0,
+            "logical_mutations": 29,
+            "logical_output_operations": 1,
+            "syscalls": null,
+            "transport_writes": null,
+            "vt_bytes": 553
+          },
+          "input_bytes": 1024,
+          "columns": 80,
+          "operation": "middle_insert",
+          "median_us": 0.496,
+          "sample_count": 63
+        },
+        {
+          "id": "memory/base_interaction/none/0/0",
+          "mode": "latency",
+          "counters": {
+            "editor_stack_bytes": 128,
+            "interaction_stack_bytes": 584
+          },
+          "input_bytes": 0,
+          "columns": 0,
+          "operation": "base_interaction",
+          "median_us": 0.032,
+          "sample_count": 63
+        },
+        {
+          "id": "render/append/ascii/64/80",
+          "mode": "allocation",
+          "counters": {
+            "append_transitions": 1,
+            "clear_lines": 0,
+            "erase_transitions": 0,
+            "logical_mutations": 1,
+            "logical_output_operations": 1,
+            "syscalls": null,
+            "transport_writes": null,
+            "vt_bytes": 1
+          },
+          "input_bytes": 64,
+          "columns": 80,
+          "operation": "append",
+          "allocation_counts": [
+            3
+          ],
+          "requested_bytes": [
+            121
+          ]
+        },
+        {
+          "id": "render/middle_insert/ascii/1024/80",
+          "mode": "allocation",
+          "counters": {
+            "append_transitions": 0,
+            "clear_lines": 0,
+            "erase_transitions": 0,
+            "logical_mutations": 29,
+            "logical_output_operations": 1,
+            "syscalls": null,
+            "transport_writes": null,
+            "vt_bytes": 553
+          },
+          "input_bytes": 1024,
+          "columns": 80,
+          "operation": "middle_insert",
+          "allocation_counts": [
+            12
+          ],
+          "requested_bytes": [
+            2649
+          ]
+        },
+        {
+          "id": "memory/base_interaction/none/0/0",
+          "mode": "allocation",
+          "counters": {
+            "editor_stack_bytes": 128,
+            "interaction_stack_bytes": 584
+          },
+          "input_bytes": 0,
+          "columns": 0,
+          "operation": "base_interaction",
+          "allocation_counts": [
+            0
+          ],
+          "requested_bytes": [
+            0
+          ]
+        },
+        {
+          "id": "pty/ascii_append",
+          "mode": "latency",
+          "counters": {
+            "vt_bytes": 1,
+            "logical_mutations": 1,
+            "terminal_restored": true,
+            "submission_exact": true
+          },
+          "input_bytes": 1,
+          "initial_bytes": 64,
+          "columns": 80,
+          "operation": "ascii_append",
+          "endpoint": "master input write start to exact final VT byte read; includes two-process scheduling and PTY delivery",
+          "median_us": 33.792,
+          "sample_count": 31
+        },
+        {
+          "id": "syscall/ascii_append",
+          "mode": "syscall",
+          "counters": {
+            "write_syscalls": 1,
+            "terminal_bytes_written": 1,
+            "read_syscalls": 1,
+            "dimension_queries": 1,
+            "poll_syscalls": 1
+          },
+          "input_bytes": 1,
+          "columns": 80,
+          "operation": "ascii_append",
+          "scope": "strace entry timestamps inside delivery interval; already-pending poll may be excluded; no traced latency"
+        },
+        {
+          "id": "pty/completion",
+          "mode": "latency",
+          "counters": {
+            "vt_bytes": 8,
+            "logical_mutations": 1,
+            "terminal_restored": true,
+            "submission_exact": true
+          },
+          "input_bytes": 1,
+          "initial_bytes": 3,
+          "columns": 80,
+          "operation": "completion",
+          "endpoint": "master input write start to exact final VT byte read; includes two-process scheduling and PTY delivery",
+          "median_us": 232.944,
+          "sample_count": 31
+        },
+        {
+          "id": "pty/resize",
+          "mode": "latency",
+          "counters": {
+            "vt_bytes": 158,
+            "logical_mutations": 30,
+            "terminal_restored": true,
+            "submission_exact": true
+          },
+          "input_bytes": 0,
+          "initial_bytes": 120,
+          "columns": 20,
+          "operation": "resize",
+          "endpoint": "master input write start to exact final VT byte read; includes two-process scheduling and PTY delivery",
+          "median_us": 100334.327,
+          "sample_count": 31
+        },
+        {
+          "id": "pty/multiline_paste",
+          "mode": "latency",
+          "counters": {
+            "vt_bytes": 41,
+            "logical_mutations": 13,
+            "terminal_restored": true,
+            "submission_exact": true
+          },
+          "input_bytes": 34,
+          "initial_bytes": 0,
+          "columns": 80,
+          "operation": "multiline_paste",
+          "endpoint": "master input write start to exact final VT byte read; includes two-process scheduling and PTY delivery",
+          "median_us": 221.136,
+          "sample_count": 31
+        },
+        {
+          "id": "idle/100",
+          "mode": "idle",
+          "observations": [
+            {
+              "elapsed_seconds": 3.005017553,
+              "poll_calls": 30,
+              "timeout_ms": 100,
+              "cpu_seconds_lifecycle": 0.0028589999999972804,
+              "window_seconds": 3.0055428970372304,
+              "resident_kib_at_ready": 2012
+            },
+            {
+              "elapsed_seconds": 3.004166371,
+              "poll_calls": 30,
+              "timeout_ms": 100,
+              "cpu_seconds_lifecycle": 0.002455000000004759,
+              "window_seconds": 3.005323696997948,
+              "resident_kib_at_ready": 2016
+            },
+            {
+              "elapsed_seconds": 3.005159874,
+              "poll_calls": 30,
+              "timeout_ms": 100,
+              "cpu_seconds_lifecycle": 0.002967999999995641,
+              "window_seconds": 3.0061380499973893,
+              "resident_kib_at_ready": 2012
+            }
+          ],
+          "operation": "poll",
+          "scope": "production poll calls and lifecycle-inclusive child rusage; zero timeout is deliberate busy polling"
+        },
+        {
+          "id": "idle_syscall/100",
+          "mode": "syscall",
+          "counters": {
+            "write_syscalls": 2,
+            "terminal_bytes_written": 15,
+            "read_syscalls": 1,
+            "dimension_queries": 30,
+            "poll_syscalls": 30
+          },
+          "operation": "poll",
+          "scope": "after READY through cleanup; CPU from untraced run only"
+        },
+        {
+          "id": "output/16384/200",
+          "mode": "latency",
+          "counters": {
+            "observed_terminal_bytes_including_close": 6958816,
+            "cpu_seconds_lifecycle": 0.035558000000001755,
+            "terminal_restored": true
+          },
+          "observations": {
+            "calls": 400,
+            "draft_restored": true,
+            "elapsed_seconds": 1.995564667,
+            "input_bytes": 16384,
+            "missed_deadlines": 0,
+            "rate": 200.0
+          },
+          "input_bytes": 16384,
+          "operation": "synchronous_chunks",
+          "scope": "host-call timer excludes rate scheduling sleeps; serialized single host, no concurrent editing",
+          "median_us": 763.7349999999999,
+          "sample_count": 400
+        },
+        {
+          "id": "driver/short_ascii",
+          "counters": {
+            "poll_calls": [
+              1,
+              1,
+              1
+            ],
+            "observed_terminal_bytes": [
+              23,
+              23,
+              23
+            ],
+            "submission_exact": true,
+            "terminal_restored": true
+          },
+          "input_bytes": 8,
+          "columns": 80,
+          "operation": "short_ascii",
+          "scope": "READY through exact submission and full PTY drain; poll calls include submission, not OS reads or writes"
+        },
+        {
+          "id": "driver/unicode",
+          "counters": {
+            "poll_calls": [
+              1,
+              1,
+              1
+            ],
+            "observed_terminal_bytes": [
+              29,
+              29,
+              29
+            ],
+            "submission_exact": true,
+            "terminal_restored": true
+          },
+          "input_bytes": 14,
+          "columns": 80,
+          "operation": "unicode",
+          "scope": "READY through exact submission and full PTY drain; poll calls include submission, not OS reads or writes"
+        },
+        {
+          "id": "driver/long_ascii",
+          "counters": {
+            "poll_calls": [
+              1,
+              1,
+              1
+            ],
+            "observed_terminal_bytes": [
+              1054,
+              1054,
+              1054
+            ],
+            "submission_exact": true,
+            "terminal_restored": true
+          },
+          "input_bytes": 1005,
+          "columns": 80,
+          "operation": "long_ascii",
+          "scope": "READY through exact submission and full PTY drain; poll calls include submission, not OS reads or writes"
+        },
+        {
+          "id": "driver/paste_multiline_65536",
+          "counters": {
+            "poll_calls": [
+              17,
+              17,
+              17
+            ],
+            "observed_terminal_bytes": [
+              403,
+              403,
+              403
+            ],
+            "submission_exact": true,
+            "terminal_restored": true
+          },
+          "input_bytes": 65549,
+          "columns": 80,
+          "operation": "paste_multiline_65536",
+          "scope": "READY through exact submission and full PTY drain; poll calls include submission, not OS reads or writes"
+        },
+        {
+          "id": "driver/paste_multiline_1048576",
+          "counters": {
+            "poll_calls": [
+              257,
+              258,
+              263
+            ],
+            "observed_terminal_bytes": [
+              403,
+              403,
+              403
+            ],
+            "submission_exact": true,
+            "terminal_restored": true
+          },
+          "input_bytes": 1048589,
+          "columns": 80,
+          "operation": "paste_multiline_1048576",
+          "scope": "READY through exact submission and full PTY drain; poll calls include submission, not OS reads or writes"
+        }
+      ]
+    },
+    "after": {
+      "source": {
+        "head": "349d75ebab5dc9dda0c1875d027f62a95bcdd2d9",
+        "tree": "0bc70ef10e295214c8df43a2fb21f09ad2914e5f",
+        "branch": "master",
+        "dirty": false,
+        "source_sha256": "e4046310486a9fef0eba4d04a6c51b16562ea5a7edcc326492a8486683e5b682",
+        "file_sha256": {
+          "Cargo.lock": "fc5594285c884c8cea2f1d9005adf05aeed62e46568f9cdd3f1e438cde7a09f7",
+          "Cargo.toml": "62dfecfe616546c78e84f409bdbe0b02b98f0eee4ec3c1c0f35276cdf605bbbc",
+          "src/actions.rs": "89eb222bfba7ccee2755e4f4ed384a86e1390d2106f281693ffa10158ae38c02",
+          "src/capabilities.rs": "8b645910c0d647ab4dde8a4629b10887e80917fa4a5702d76f9f1fd5cb9f234c",
+          "src/conformance.rs": "2303b882ed5ce013c41779aef0f6b405f3a720928e8ac60be322efda547e8236",
+          "src/core.rs": "7ea45a6693c011a6f8bf5626072b7b18edfb3b7e21300a093b9ae0c0da7b8e37",
+          "src/document.rs": "f060f8d894f74ff42414c5e5da94d141f1f345aef31f24f4807ee76838b4a988",
+          "src/driving.rs": "613acc98dca71d151f95adb3a245c7004b1dcc143f89f7b44c325da38b00d03c",
+          "src/engine.rs": "a86fd86a5d2cf78f8374bd83841fad25e5048d15f2030dea209e4f96a9a0b092",
+          "src/event.rs": "3b981a3643460622a65b6578dd556cc066763acfb074150228fef7408571f798",
+          "src/input.rs": "63978c621e7056e6ebb43fc7a9636b2791947cc80d86b322bb3eba8bf8123f68",
+          "src/interaction.rs": "09293b434fddf65b349ba3bd03e3b23aab1dccd4650794bc15884036b4cc1831",
+          "src/keymap.rs": "4defb56380d64902b814c917b424b6766f20c3fae05bef145a245ef447c2929b",
+          "src/lib.rs": "c978ac6c6cb7febb8ef424fbbbf86e26d7dc960e6d5942ba3327150e40e28885",
+          "src/presentation.rs": "082689c57a023cd9640de0ec9f99e77fb745e0f3f24515eac32cf48ff30bee85",
+          "src/protocol.rs": "1feec7c69562900e04d0e6a14f44cea6c49254c2e332d4b6be40cb8a21758ada",
+          "src/render.rs": "9b50bc67bd1b4c0d865c92fb8923b49cfdd1f20cd8be4c17fb8d4f2be2e58788",
+          "src/substrate.rs": "0cd2d7c57a62d7074f66a8477339fa4e0a878b2e68c188f28a3c8378f812fd9e",
+          "src/system.rs": "cf4f5e432a612bc251c0500525acaaee9432d7ec2dc470d07158a07635f8a457",
+          "src/terminal.rs": "9449114773982e08611a8c7b342ae7a41f68f0319fa394d53631f3e359713dcd",
+          "tests/support/posix_pty.rs": "7a347c107e90a91a2a312f73601ea68ac17b82616493a142a535cd35b2e184e0",
+          "tools/perf/Cargo.lock": "b7d77ab11b1b86fec2ae8766fd062720982d4c4ddb2c03dd30db8695f6ab851e",
+          "tools/perf/Cargo.toml": "f336fe3c217f02e2d943a189f6b87fb63ec89f28e092ee6a5657f5f8ce34178c",
+          "tools/perf/allocation.rs": "3d4562d11a359b358652c56a2c8be918a9d29361f73b536703e7b12422107a19",
+          "tools/perf/compact.py": "b6bf6683f1a7db0af64b7cda6d8a73f21e06b959d2a00c449acc5dbd24297967",
+          "tools/perf/compare.py": "e3780573cfe52ad5d3cdd47cf93e0103372c9453ee8db16bd9abb31dce99c878",
+          "tools/perf/comparisons/Cargo.lock": "e155f481600f8c8cb629bb512b3eefc9f6ca6261e5768c34748e6ec8cdbbbb64",
+          "tools/perf/comparisons/Cargo.toml": "367b2eec59b6d36d8e157d5e9c0bee788efaa5eaee015f5d59eb1e8563617ea1",
+          "tools/perf/comparisons/linenoise.c": "52b9ec1bd089967b31b88a9a01383c44ced6d1539c84cf54d50fc332c3a8f082",
+          "tools/perf/comparisons/reedline.rs": "a08e8d9a4be27a3eacd77f45be1f410920b26a1eff854b757f4790ef8ae2164b",
+          "tools/perf/comparisons/rustyline.rs": "083a6d20751a1cb3988c76789d283b0d39dc12f0c5aed17e79d6ae18b70a238c",
+          "tools/perf/components.rs": "cfad16e65e563e75653dd465c78e04354407456d1aa815b4a6680a837ac55eeb",
+          "tools/perf/convergence.py": "037ccc9dc145123fd96701d8bb490b618b07aaa2b9f7910418f9cd62d319c125",
+          "tools/perf/documents.rs": "3b9979bd5fa328cc344299b4c37d84e19de6b2a2bac56da65543246d23a61886",
+          "tools/perf/driver.py": "2a487790b29d3d4553229c3ed6a8963eb1f666b4c5ce40627b74d4a8bdde3ff6",
+          "tools/perf/embedding.py": "bc386aafe2b207013f6738c1cca19412953f7167a9aea56a9704d5abfe3b866e",
+          "tools/perf/exit_gate.rs": "f58287db6c3f1f7d2aa8c6da107ef7afb1d3d082feee941551ada65f06f06685",
+          "tools/perf/linux.py": "9a44e416799b2501f41333f9ced68e08fb0c5f7d4e451db908cb4ee65a1f26fa",
+          "tools/perf/pty_host.rs": "9e40a431136a16af2d52d0857eaa73ac7aea55ca13a6e0d743994abb8f233973",
+          "tools/perf/results.py": "675fb5d1d7ecfa2f4a9c7a23d90daccf8e31d6349f32ad45ac9851ab466d2caa",
+          "tools/perf/run.py": "4d26139cdd364f5da76fa94e7c5f3360236907a9aa464d99b68523fc723cad26",
+          "tools/perf/schema.json": "46409d4fbd7dd636e0df6ce0ea80a9608503eb510daac47906fb295999e063d7",
+          "tools/perf/sizes.py": "3376987e702e6b7e0b35730e4ea879e7fa81a1a660c9b314aee79e451d8ef96f",
+          "tools/perf/smoke.py": "bb9dbb2bc7de61bcb6f4d99fc792fcb45fb4eaeb4ea2175898ecef0452186bc5",
+          "tools/perf/test_results.py": "805600ee5505787cbd5960a318c20e43ce0b2b59f6356183614dffb2709e49df"
+        }
+      },
+      "environment": {
+        "recorded_utc": "2026-09-09T12:43:20Z",
+        "hostname": "spark-7c3d",
+        "os": "Linux-6.17.0-1021-nvidia-aarch64-with-glibc2.39",
+        "architecture": "aarch64",
+        "cpu": [
+          "CPU implementer\t: 0x41",
+          "CPU part\t: 0xd85",
+          "CPU part\t: 0xd87"
+        ],
+        "logical_cores": 20,
+        "rust": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-unknown-linux-gnu\nrelease: 1.98.1\nLLVM version: 22.1.8",
+        "cargo": "cargo 1.98.1 (797e8a9bc 2026-08-05)"
+      },
+      "complete_envelope_sha256": "82bc8481564475c365b9c1821fbd2541ae8eadbd9caec224c2165841646d3805",
+      "observations": [
+        {
+          "id": "render/append/ascii/64/80",
+          "mode": "latency",
+          "counters": {
+            "append_transitions": 1,
+            "clear_lines": 0,
+            "erase_transitions": 0,
+            "logical_mutations": 1,
+            "logical_output_operations": 1,
+            "syscalls": null,
+            "transport_writes": null,
+            "vt_bytes": 1
+          },
+          "input_bytes": 64,
+          "columns": 80,
+          "operation": "append",
+          "median_us": 0.112,
+          "sample_count": 63
+        },
+        {
+          "id": "render/middle_insert/ascii/1024/80",
+          "mode": "latency",
+          "counters": {
+            "append_transitions": 0,
+            "clear_lines": 0,
+            "erase_transitions": 0,
+            "logical_mutations": 29,
+            "logical_output_operations": 1,
+            "syscalls": null,
+            "transport_writes": null,
+            "vt_bytes": 553
+          },
+          "input_bytes": 1024,
+          "columns": 80,
+          "operation": "middle_insert",
+          "median_us": 0.512,
+          "sample_count": 63
+        },
+        {
+          "id": "memory/base_interaction/none/0/0",
+          "mode": "latency",
+          "counters": {
+            "deadline_stack_bytes": 32,
+            "editor_stack_bytes": 128,
+            "interaction_stack_bytes": 608,
+            "wait_interest_stack_bytes": 32,
+            "wake_stack_bytes": 32
+          },
+          "input_bytes": 0,
+          "columns": 0,
+          "operation": "base_interaction",
+          "median_us": 0.032,
+          "sample_count": 63
+        },
+        {
+          "id": "driver/idle_interest/none/0/80",
+          "mode": "latency",
+          "counters": {
+            "required_wakes": 0,
+            "transport_reads": 0
+          },
+          "input_bytes": 0,
+          "columns": 80,
+          "operation": "idle_interest",
+          "median_us": 0.032,
+          "sample_count": 63
+        },
+        {
+          "id": "render/append/ascii/64/80",
+          "mode": "allocation",
+          "counters": {
+            "append_transitions": 1,
+            "clear_lines": 0,
+            "erase_transitions": 0,
+            "logical_mutations": 1,
+            "logical_output_operations": 1,
+            "syscalls": null,
+            "transport_writes": null,
+            "vt_bytes": 1
+          },
+          "input_bytes": 64,
+          "columns": 80,
+          "operation": "append",
+          "allocation_counts": [
+            3
+          ],
+          "requested_bytes": [
+            121
+          ]
+        },
+        {
+          "id": "render/middle_insert/ascii/1024/80",
+          "mode": "allocation",
+          "counters": {
+            "append_transitions": 0,
+            "clear_lines": 0,
+            "erase_transitions": 0,
+            "logical_mutations": 29,
+            "logical_output_operations": 1,
+            "syscalls": null,
+            "transport_writes": null,
+            "vt_bytes": 553
+          },
+          "input_bytes": 1024,
+          "columns": 80,
+          "operation": "middle_insert",
+          "allocation_counts": [
+            12
+          ],
+          "requested_bytes": [
+            2649
+          ]
+        },
+        {
+          "id": "memory/base_interaction/none/0/0",
+          "mode": "allocation",
+          "counters": {
+            "deadline_stack_bytes": 32,
+            "editor_stack_bytes": 128,
+            "interaction_stack_bytes": 608,
+            "wait_interest_stack_bytes": 32,
+            "wake_stack_bytes": 32
+          },
+          "input_bytes": 0,
+          "columns": 0,
+          "operation": "base_interaction",
+          "allocation_counts": [
+            0
+          ],
+          "requested_bytes": [
+            0
+          ]
+        },
+        {
+          "id": "driver/idle_interest/none/0/80",
+          "mode": "allocation",
+          "counters": {
+            "required_wakes": 0,
+            "transport_reads": 0
+          },
+          "input_bytes": 0,
+          "columns": 80,
+          "operation": "idle_interest",
+          "allocation_counts": [
+            0
+          ],
+          "requested_bytes": [
+            0
+          ]
+        },
+        {
+          "id": "pty/ascii_append",
+          "mode": "latency",
+          "counters": {
+            "vt_bytes": 1,
+            "logical_mutations": 1,
+            "terminal_restored": true,
+            "submission_exact": true
+          },
+          "input_bytes": 1,
+          "initial_bytes": 64,
+          "columns": 80,
+          "operation": "ascii_append",
+          "endpoint": "master input write start to exact final VT byte read; includes two-process scheduling and PTY delivery",
+          "median_us": 242.88,
+          "sample_count": 31
+        },
+        {
+          "id": "syscall/ascii_append",
+          "mode": "syscall",
+          "counters": {
+            "write_syscalls": 1,
+            "terminal_bytes_written": 1,
+            "read_syscalls": 1,
+            "dimension_queries": 1,
+            "poll_syscalls": 2
+          },
+          "input_bytes": 1,
+          "columns": 80,
+          "operation": "ascii_append",
+          "scope": "strace entry timestamps inside delivery interval; already-pending poll may be excluded; no traced latency"
+        },
+        {
+          "id": "pty/completion",
+          "mode": "latency",
+          "counters": {
+            "vt_bytes": 8,
+            "logical_mutations": 1,
+            "terminal_restored": true,
+            "submission_exact": true
+          },
+          "input_bytes": 1,
+          "initial_bytes": 3,
+          "columns": 80,
+          "operation": "completion",
+          "endpoint": "master input write start to exact final VT byte read; includes two-process scheduling and PTY delivery",
+          "median_us": 140.128,
+          "sample_count": 31
+        },
+        {
+          "id": "pty/resize",
+          "mode": "latency",
+          "counters": {
+            "vt_bytes": 158,
+            "logical_mutations": 30,
+            "terminal_restored": true,
+            "submission_exact": true
+          },
+          "input_bytes": 0,
+          "initial_bytes": 120,
+          "columns": 20,
+          "operation": "resize",
+          "endpoint": "master input write start to exact final VT byte read; includes two-process scheduling and PTY delivery",
+          "median_us": 100732.571,
+          "sample_count": 31
+        },
+        {
+          "id": "pty/multiline_paste",
+          "mode": "latency",
+          "counters": {
+            "vt_bytes": 41,
+            "logical_mutations": 13,
+            "terminal_restored": true,
+            "submission_exact": true
+          },
+          "input_bytes": 34,
+          "initial_bytes": 0,
+          "columns": 80,
+          "operation": "multiline_paste",
+          "endpoint": "master input write start to exact final VT byte read; includes two-process scheduling and PTY delivery",
+          "median_us": 235.36,
+          "sample_count": 31
+        },
+        {
+          "id": "idle/100",
+          "mode": "idle",
+          "observations": [
+            {
+              "elapsed_seconds": 3.0148742,
+              "poll_calls": 30,
+              "timeout_ms": 100,
+              "cpu_seconds_lifecycle": 0.005376999999995746,
+              "window_seconds": 3.0154121359810233,
+              "resident_kib_at_ready": 2016
+            },
+            {
+              "elapsed_seconds": 3.015390326,
+              "poll_calls": 30,
+              "timeout_ms": 100,
+              "cpu_seconds_lifecycle": 0.003543000000000518,
+              "window_seconds": 3.0162225670646876,
+              "resident_kib_at_ready": 2016
+            },
+            {
+              "elapsed_seconds": 3.014453891,
+              "poll_calls": 30,
+              "timeout_ms": 100,
+              "cpu_seconds_lifecycle": 0.004442000000004498,
+              "window_seconds": 3.014907187083736,
+              "resident_kib_at_ready": 2016
+            }
+          ],
+          "operation": "poll",
+          "scope": "production poll calls and lifecycle-inclusive child rusage; zero timeout is deliberate busy polling"
+        },
+        {
+          "id": "idle_syscall/100",
+          "mode": "syscall",
+          "counters": {
+            "write_syscalls": 2,
+            "terminal_bytes_written": 15,
+            "read_syscalls": 1,
+            "dimension_queries": 30,
+            "poll_syscalls": 30
+          },
+          "operation": "poll",
+          "scope": "after READY through cleanup; CPU from untraced run only"
+        },
+        {
+          "id": "output/16384/200",
+          "mode": "latency",
+          "counters": {
+            "observed_terminal_bytes_including_close": 6958816,
+            "cpu_seconds_lifecycle": 0.03728600000000171,
+            "terminal_restored": true
+          },
+          "observations": {
+            "calls": 400,
+            "draft_restored": true,
+            "elapsed_seconds": 1.995577027,
+            "input_bytes": 16384,
+            "missed_deadlines": 0,
+            "rate": 200.0
+          },
+          "input_bytes": 16384,
+          "operation": "synchronous_chunks",
+          "scope": "host-call timer excludes rate scheduling sleeps; serialized single host, no concurrent editing",
+          "median_us": 585.712,
+          "sample_count": 400
+        },
+        {
+          "id": "driver/short_ascii",
+          "counters": {
+            "poll_calls": [
+              1,
+              1,
+              1
+            ],
+            "observed_terminal_bytes": [
+              23,
+              23,
+              23
+            ],
+            "submission_exact": true,
+            "terminal_restored": true
+          },
+          "input_bytes": 8,
+          "columns": 80,
+          "operation": "short_ascii",
+          "scope": "READY through exact submission and full PTY drain; poll calls include submission, not OS reads or writes"
+        },
+        {
+          "id": "driver/unicode",
+          "counters": {
+            "poll_calls": [
+              1,
+              1,
+              1
+            ],
+            "observed_terminal_bytes": [
+              29,
+              29,
+              29
+            ],
+            "submission_exact": true,
+            "terminal_restored": true
+          },
+          "input_bytes": 14,
+          "columns": 80,
+          "operation": "unicode",
+          "scope": "READY through exact submission and full PTY drain; poll calls include submission, not OS reads or writes"
+        },
+        {
+          "id": "driver/long_ascii",
+          "counters": {
+            "poll_calls": [
+              1,
+              1,
+              1
+            ],
+            "observed_terminal_bytes": [
+              1054,
+              1054,
+              1054
+            ],
+            "submission_exact": true,
+            "terminal_restored": true
+          },
+          "input_bytes": 1005,
+          "columns": 80,
+          "operation": "long_ascii",
+          "scope": "READY through exact submission and full PTY drain; poll calls include submission, not OS reads or writes"
+        },
+        {
+          "id": "driver/paste_multiline_65536",
+          "counters": {
+            "poll_calls": [
+              17,
+              17,
+              17
+            ],
+            "observed_terminal_bytes": [
+              403,
+              403,
+              403
+            ],
+            "submission_exact": true,
+            "terminal_restored": true
+          },
+          "input_bytes": 65549,
+          "columns": 80,
+          "operation": "paste_multiline_65536",
+          "scope": "READY through exact submission and full PTY drain; poll calls include submission, not OS reads or writes"
+        },
+        {
+          "id": "driver/paste_multiline_1048576",
+          "counters": {
+            "poll_calls": [
+              259,
+              258,
+              258
+            ],
+            "observed_terminal_bytes": [
+              403,
+              403,
+              403
+            ],
+            "submission_exact": true,
+            "terminal_restored": true
+          },
+          "input_bytes": 1048589,
+          "columns": 80,
+          "operation": "paste_multiline_1048576",
+          "scope": "READY through exact submission and full PTY drain; poll calls include submission, not OS reads or writes"
+        }
+      ]
+    }
+  },
+  "alternating_primary": {
+    "endpoint": "single ready input burst through submission receipt, cleanup and IPC; alternating binaries on same host",
+    "samples": 31,
+    "source_baseline": "dfd337e62624e3ea8324ce783c026e2e5737b6ef",
+    "source_after": "349d75ebab5dc9dda0c1875d027f62a95bcdd2d9",
+    "binary_sha256": {
+      "before": "12b2b9295934a77e94001673bed11cd6a7d1cff5e336f6f67d4399c87a2c68f4",
+      "after": "f81a06d60673b2509f35229040d88c2021bb8174b8b3699e94a4cb5330111eaf"
+    },
+    "results": {
+      "1000_burst_middle_submit": {
+        "before": {
+          "samples_us": [
+            485.888,
+            254.352,
+            355.648,
+            353.264,
+            471.361,
+            479.393,
+            363.36,
+            356.016,
+            355.024,
+            360.032,
+            354.112,
+            241.377,
+            353.024,
+            469.952,
+            353.265,
+            230.24,
+            362.8,
+            137.745,
+            361.92,
+            128.48,
+            363.792,
+            345.904,
+            239.872,
+            348.993,
+            130.608,
+            350.032,
+            241.232,
+            131.488,
+            498.272,
+            138.209,
+            481.376
+          ],
+          "median_us": 353.265
+        },
+        "after": {
+          "samples_us": [
+            251.057,
+            240.0,
+            479.6,
+            277.216,
+            144.368,
+            480.272,
+            476.88,
+            491.024,
+            239.44,
+            351.808,
+            484.048,
+            349.489,
+            243.216,
+            356.416,
+            241.36,
+            361.936,
+            233.264,
+            354.896,
+            134.161,
+            359.361,
+            233.744,
+            130.704,
+            354.192,
+            237.168,
+            352.048,
+            128.576,
+            244.528,
+            363.344,
+            136.128,
+            479.376,
+            222.24
+          ],
+          "median_us": 277.216
+        }
+      },
+      "unicode": {
+        "before": {
+          "samples_us": [
+            132.832,
+            169.648,
+            150.768,
+            152.512,
+            151.2,
+            159.297,
+            148.672,
+            148.4,
+            276.08,
+            157.616,
+            76.768,
+            160.4,
+            165.056,
+            142.8,
+            163.008,
+            274.096,
+            160.464,
+            142.656,
+            289.168,
+            273.712,
+            139.904,
+            247.072,
+            245.632,
+            132.736,
+            31.824,
+            153.329,
+            137.296,
+            135.488,
+            46.752,
+            154.192,
+            279.264
+          ],
+          "median_us": 153.329
+        },
+        "after": {
+          "samples_us": [
+            167.793,
+            156.305,
+            148.528,
+            58.384,
+            153.024,
+            145.296,
+            148.448,
+            144.592,
+            152.544,
+            162.673,
+            142.224,
+            155.648,
+            141.904,
+            162.384,
+            144.208,
+            284.688,
+            276.688,
+            160.64,
+            155.104,
+            240.528,
+            265.424,
+            173.776,
+            132.512,
+            144.4,
+            147.904,
+            140.96,
+            30.208,
+            138.0,
+            136.416,
+            134.112,
+            144.864
+          ],
+          "median_us": 148.448
+        }
+      },
+      "paste": {
+        "before": {
+          "samples_us": [
+            159.168,
+            131.472,
+            161.648,
+            139.936,
+            151.232,
+            274.432,
+            163.072,
+            285.312,
+            165.312,
+            156.48,
+            143.008,
+            286.704,
+            136.496,
+            149.424,
+            45.872,
+            149.328,
+            137.408,
+            160.8,
+            133.408,
+            243.52,
+            26.624,
+            135.232,
+            146.016,
+            158.368,
+            144.416,
+            149.184,
+            148.064,
+            49.808,
+            43.824,
+            77.6,
+            145.056
+          ],
+          "median_us": 148.064
+        },
+        "after": {
+          "samples_us": [
+            33.424,
+            160.688,
+            49.792,
+            65.729,
+            58.688,
+            159.568,
+            272.96,
+            158.96,
+            140.272,
+            144.24,
+            166.88,
+            140.752,
+            289.36,
+            137.984,
+            153.328,
+            281.584,
+            153.312,
+            152.001,
+            273.136,
+            49.841,
+            132.032,
+            147.168,
+            146.528,
+            148.912,
+            50.528,
+            151.36,
+            152.704,
+            51.088,
+            144.832,
+            244.24,
+            155.184
+          ],
+          "median_us": 148.912
+        }
+      },
+      "completion": {
+        "before": {
+          "samples_us": [
+            150.704,
+            150.0,
+            144.944,
+            138.208,
+            52.864,
+            156.656,
+            259.872,
+            158.177,
+            89.744,
+            250.8,
+            260.448,
+            255.984,
+            146.064,
+            157.2,
+            144.56,
+            158.48,
+            33.968,
+            163.504,
+            37.248,
+            139.312,
+            40.48,
+            162.64,
+            162.048,
+            35.632,
+            161.184,
+            247.52,
+            158.608,
+            242.208,
+            259.248,
+            139.872,
+            158.64
+          ],
+          "median_us": 157.2
+        },
+        "after": {
+          "samples_us": [
+            63.904,
+            63.312,
+            152.48,
+            61.073,
+            41.136,
+            147.28,
+            138.736,
+            165.84,
+            163.312,
+            273.712,
+            159.568,
+            135.856,
+            197.536,
+            144.816,
+            156.384,
+            38.032,
+            159.568,
+            38.08,
+            164.832,
+            40.064,
+            157.136,
+            39.104,
+            158.976,
+            151.28,
+            240.16,
+            142.256,
+            137.888,
+            127.52,
+            145.777,
+            288.016,
+            36.928
+          ],
+          "median_us": 145.777
+        }
+      }
+    }
+  },
+  "alternating_isolated": {
+    "endpoint": "master write to exact VT bytes, alternating binaries; same original P0 oracle and cleanup",
+    "results": {
+      "isolated_append": {
+        "before": {
+          "median_us": 137.344,
+          "samples_us": [
+            31.088,
+            39.536,
+            135.712,
+            134.976,
+            334.609,
+            130.992,
+            131.472,
+            264.048,
+            36.96,
+            38.128,
+            32.048,
+            20.48,
+            23.52,
+            258.432,
+            256.16,
+            34.592,
+            253.568,
+            138.912,
+            36.48,
+            137.232,
+            132.416,
+            248.033,
+            262.944,
+            133.008,
+            246.736,
+            21.072,
+            259.808,
+            134.4,
+            246.08,
+            253.168,
+            32.896,
+            135.456,
+            32.512,
+            34.176,
+            250.208,
+            48.512,
+            51.024,
+            382.976,
+            150.688,
+            140.528,
+            60.592,
+            41.296,
+            147.888,
+            52.464,
+            146.576,
+            26.352,
+            140.448,
+            141.952,
+            142.256,
+            138.176,
+            146.144,
+            24.752,
+            59.568,
+            142.272,
+            137.344,
+            148.384,
+            37.136,
+            141.041,
+            372.848,
+            138.48,
+            145.984,
+            139.472,
+            281.12
+          ]
+        },
+        "after": {
+          "median_us": 138.336,
+          "samples_us": [
+            25.024,
+            34.624,
+            137.408,
+            225.824,
+            24.032,
+            262.656,
+            123.264,
+            36.672,
+            29.024,
+            29.472,
+            35.024,
+            139.696,
+            47.088,
+            24.272,
+            26.224,
+            46.352,
+            22.656,
+            258.368,
+            133.28,
+            36.32,
+            138.336,
+            136.864,
+            254.912,
+            365.921,
+            135.344,
+            367.248,
+            129.008,
+            245.184,
+            219.36,
+            41.872,
+            136.464,
+            40.272,
+            134.448,
+            40.272,
+            144.672,
+            45.728,
+            48.72,
+            253.824,
+            141.088,
+            250.272,
+            140.736,
+            143.904,
+            140.608,
+            167.825,
+            47.92,
+            147.425,
+            140.816,
+            141.776,
+            135.472,
+            46.128,
+            141.904,
+            143.041,
+            265.808,
+            135.984,
+            138.688,
+            136.48,
+            143.088,
+            266.592,
+            144.896,
+            258.24,
+            141.152,
+            140.208,
+            143.344
+          ]
+        }
+      },
+      "completion": {
+        "before": {
+          "median_us": 134.512,
+          "samples_us": [
+            148.192,
+            149.04,
+            146.384,
+            151.328,
+            161.824,
+            132.592,
+            273.952,
+            135.072,
+            264.369,
+            236.48,
+            126.56,
+            132.0,
+            261.488,
+            131.008,
+            21.04,
+            266.976,
+            34.752,
+            131.168,
+            40.816,
+            136.384,
+            37.968,
+            53.376,
+            275.12,
+            162.4,
+            49.216,
+            42.688,
+            50.976,
+            51.632,
+            253.456,
+            31.44,
+            291.953,
+            175.536,
+            250.272,
+            245.92,
+            257.744,
+            134.512,
+            259.632,
+            246.448,
+            36.544,
+            32.512,
+            25.264,
+            34.08,
+            21.536,
+            21.072,
+            23.296,
+            21.36,
+            31.008,
+            29.904,
+            19.216,
+            22.4,
+            21.008,
+            30.208,
+            241.936,
+            141.92,
+            253.473,
+            28.672,
+            261.104,
+            241.104,
+            142.048,
+            140.112,
+            137.28,
+            127.792,
+            271.985
+          ]
+        },
+        "after": {
+          "median_us": 133.328,
+          "samples_us": [
+            253.792,
+            277.904,
+            256.656,
+            268.96,
+            139.216,
+            149.825,
+            140.048,
+            142.304,
+            140.688,
+            144.56,
+            147.84,
+            268.624,
+            132.384,
+            265.264,
+            34.144,
+            230.512,
+            136.368,
+            42.496,
+            238.96,
+            134.608,
+            50.672,
+            48.768,
+            37.68,
+            49.984,
+            42.4,
+            42.512,
+            44.736,
+            133.328,
+            38.256,
+            48.624,
+            36.16,
+            253.92,
+            131.52,
+            136.8,
+            251.616,
+            141.28,
+            253.472,
+            258.272,
+            37.232,
+            27.824,
+            36.912,
+            36.336,
+            34.032,
+            23.312,
+            22.833,
+            25.2,
+            23.28,
+            35.168,
+            33.456,
+            21.152,
+            21.504,
+            22.416,
+            236.0,
+            251.04,
+            250.048,
+            247.504,
+            132.976,
+            133.312,
+            135.728,
+            129.36,
+            244.544,
+            237.665,
+            236.784
+          ]
+        }
+      }
+    }
+  },
+  "linux": {
+    "platform": "linux",
+    "memory_command": [],
+    "driven": {
+      "sizes_bytes": {
+        "Interaction": 608,
+        "Deadline": 32,
+        "WaitInterest": 32,
+        "Wake": 32
+      },
+      "idle": {
+        "seconds": 0.4,
+        "replai_advancements": 0,
+        "required_deadline": null,
+        "child_cpu_seconds": 0.0,
+        "scope": "host blocks on terminal/socket; no REPLAI call between observer events"
+      },
+      "unicode": {
+        "open": true,
+        "cursor": 4,
+        "advances": 1,
+        "text": "e\u0301!\u754c",
+        "observed_fds": 8
+      },
+      "unicode_ready_advance_ns": 94352,
+      "output": {
+        "open": true,
+        "cursor": 4,
+        "advances": 1,
+        "text": "e\u0301!\u754c",
+        "observed_fds": 8
+      },
+      "output_screen": {
+        "cursor": "1 10",
+        "text": "application event: draft preserved\ndriven> e\u0301!\u754c",
+        "alternate": "false",
+        "paste": "true",
+        "background_default": "true"
+      },
+      "history_return": {
+        "open": true,
+        "cursor": 4,
+        "advances": 5,
+        "text": "draft",
+        "observed_fds": 8
+      },
+      "completion": {
+        "open": true,
+        "cursor": 5,
+        "advances": 7,
+        "text": "hello",
+        "observed_fds": 8
+      },
+      "paste": {
+        "open": true,
+        "cursor": 22,
+        "advances": 8,
+        "text": "first\n\u754c second\nthird",
+        "observed_fds": 8
+      },
+      "resize": {
+        "open": true,
+        "cursor": 22,
+        "advances": 9,
+        "text": "first\n\u754c second\nthird",
+        "observed_fds": 8
+      },
+      "resize_event_to_receipt_us": 215.696,
+      "resized_screen": {
+        "cursor": "9 9",
+        "text": "application \ndriven> e\u0301!\u754c\necho: e\u0301!\u754c\ndriven> draf\ndriven> hell\ndriven> firs\nt\n... \u754c secon\nd\n... third",
+        "alternate": "false",
+        "paste": "true",
+        "background_default": "true"
+      },
+      "ctrl_l": {
+        "open": true,
+        "cursor": 22,
+        "advances": 9,
+        "text": "first\n\u754c second\nthird",
+        "observed_fds": 8
+      },
+      "deadline_expiry": "READY_ADVANCE_NS 12576\nFDS 8\nSTATE true 0 11 \nDEADLINE\nREJECTED unknown or incomplete terminal sequence\nFDS 8\nSTATE true 0 12 \n",
+      "deadline_superseded": {
+        "open": true,
+        "cursor": 2,
+        "advances": 15,
+        "text": "a!b",
+        "observed_fds": 8
+      },
+      "lifecycle": {
+        "repetitions": 30,
+        "active_fd_counts": [
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7
+        ],
+        "native_observer_active": [
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8
+        ],
+        "native_observer_closed": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "observer_includes_directory_fd": true,
+        "exact_termios": true,
+        "paste_disabled_on_every_close": true
+      },
+      "eof": {
+        "open": false,
+        "cursor": 0,
+        "advances": 16,
+        "text": "",
+        "observed_fds": 6
+      }
+    },
+    "simple": {
+      "submitted": "e\u0301!\u754c",
+      "history_draft": "draft",
+      "interrupt_then_eof": true,
+      "exact_termios": true
+    },
+    "admission": {
+      "environment_refusal": {
+        "'dumb'": "Error: CapabilityMismatch(\"interactive cursor and erase support required\")",
+        "''": "Error: CapabilityMismatch(\"interactive cursor and erase support required\")"
+      },
+      "non_tty": "UnsuitableTerminal",
+      "before_raw": true
+    },
+    "idle_trace": {
+      "status": "measured",
+      "dimension_queries": 0,
+      "terminal_reads": 0,
+      "host_blocking_waits": 1,
+      "replai_periodic_waits": 0,
+      "scope": "between observer notifications; one host reactor ppoll, no terminal/library work"
+    }
+  },
+  "macos": {
+    "platform": "darwin",
+    "memory_command": [],
+    "driven": {
+      "sizes_bytes": {
+        "Interaction": 640,
+        "Deadline": 32,
+        "WaitInterest": 32,
+        "Wake": 32
+      },
+      "idle": {
+        "seconds": 0.4,
+        "replai_advancements": 0,
+        "required_deadline": null,
+        "child_cpu_seconds": null,
+        "scope": "host blocks on terminal/socket; no REPLAI call between observer events"
+      },
+      "unicode": {
+        "open": true,
+        "cursor": 4,
+        "advances": 1,
+        "text": "e\u0301!\u754c",
+        "observed_fds": 9
+      },
+      "unicode_ready_advance_ns": 81125,
+      "output": {
+        "open": true,
+        "cursor": 4,
+        "advances": 1,
+        "text": "e\u0301!\u754c",
+        "observed_fds": 9
+      },
+      "output_screen": {
+        "cursor": "1 10",
+        "text": "application event: draft preserved\ndriven> e\u0301!\u754c",
+        "alternate": "false",
+        "paste": "true",
+        "background_default": "true"
+      },
+      "history_return": {
+        "open": true,
+        "cursor": 4,
+        "advances": 5,
+        "text": "draft",
+        "observed_fds": 9
+      },
+      "completion": {
+        "open": true,
+        "cursor": 5,
+        "advances": 7,
+        "text": "hello",
+        "observed_fds": 9
+      },
+      "paste": {
+        "open": true,
+        "cursor": 22,
+        "advances": 8,
+        "text": "first\n\u754c second\nthird",
+        "observed_fds": 9
+      },
+      "resize": {
+        "open": true,
+        "cursor": 22,
+        "advances": 9,
+        "text": "first\n\u754c second\nthird",
+        "observed_fds": 9
+      },
+      "resize_event_to_receipt_us": 441.333,
+      "resized_screen": {
+        "cursor": "9 9",
+        "text": "application \ndriven> e\u0301!\u754c\necho: e\u0301!\u754c\ndriven> draf\ndriven> hell\ndriven> firs\nt\n... \u754c secon\nd\n... third",
+        "alternate": "false",
+        "paste": "true",
+        "background_default": "true"
+      },
+      "ctrl_l": {
+        "open": true,
+        "cursor": 22,
+        "advances": 10,
+        "text": "first\n\u754c second\nthird",
+        "observed_fds": 9
+      },
+      "deadline_expiry": "READY_ADVANCE_NS 8375\nFDS 9\nSTATE true 0 11 \nDEADLINE\nREJECTED unknown or incomplete terminal sequence\n",
+      "deadline_superseded": {
+        "open": true,
+        "cursor": 2,
+        "advances": 15,
+        "text": "a!b",
+        "observed_fds": 9
+      },
+      "lifecycle": {
+        "repetitions": 30,
+        "active_fd_counts": [],
+        "native_observer_active": [
+          9,
+          9,
+          9,
+          9,
+          9,
+          9,
+          9,
+          9,
+          9,
+          9,
+          9,
+          9,
+          9,
+          9,
+          9,
+          9,
+          9,
+          9,
+          9,
+          9,
+          9,
+          9,
+          9,
+          9,
+          9,
+          9,
+          9,
+          9,
+          9,
+          9
+        ],
+        "native_observer_closed": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "observer_includes_directory_fd": true,
+        "exact_termios": true,
+        "paste_disabled_on_every_close": true
+      },
+      "eof": {
+        "open": false,
+        "cursor": 0,
+        "advances": 16,
+        "text": "",
+        "observed_fds": 6
+      }
+    },
+    "simple": {
+      "submitted": "e\u0301!\u754c",
+      "history_draft": "draft",
+      "interrupt_then_eof": true,
+      "exact_termios": true
+    },
+    "admission": {
+      "environment_refusal": {
+        "'dumb'": "Error: CapabilityMismatch(\"interactive cursor and erase support required\")",
+        "''": "Error: CapabilityMismatch(\"interactive cursor and erase support required\")"
+      },
+      "non_tty": "UnsuitableTerminal",
+      "before_raw": true
+    },
+    "idle_trace": {
+      "status": "unavailable",
+      "reason": "Linux strace unavailable; virtual transport independently asserts zero calls"
+    }
+  },
+  "memory": {
+    "linux": {
+      "platform": "linux",
+      "memory_command": [
+        "/tmp/replia-r2-evidence/valgrind-root/usr/bin/valgrind",
+        "--leak-check=full",
+        "--show-leak-kinds=all",
+        "--errors-for-leak-kinds=definite,indirect",
+        "--error-exitcode=99",
+        "--log-file=/tmp/replai-embedding-closure-memory/valgrind.log"
+      ],
+      "driven": {
+        "sizes_bytes": {
+          "Interaction": 608,
+          "Deadline": 32,
+          "WaitInterest": 32,
+          "Wake": 32
+        },
+        "idle": {
+          "seconds": 0.4,
+          "replai_advancements": 0,
+          "required_deadline": null,
+          "child_cpu_seconds": 0.0,
+          "scope": "host blocks on terminal/socket; no REPLAI call between observer events"
+        },
+        "unicode": {
+          "open": true,
+          "cursor": 4,
+          "advances": 4,
+          "text": "e\u0301!\u754c",
+          "observed_fds": 16
+        },
+        "unicode_ready_advance_ns": 6819682,
+        "output": {
+          "open": true,
+          "cursor": 4,
+          "advances": 4,
+          "text": "e\u0301!\u754c",
+          "observed_fds": 16
+        },
+        "output_screen": {
+          "cursor": "1 10",
+          "text": "application event: draft preserved\ndriven> e\u0301!\u754c",
+          "alternate": "false",
+          "paste": "true",
+          "background_default": "true"
+        },
+        "history_return": {
+          "open": true,
+          "cursor": 4,
+          "advances": 8,
+          "text": "draft",
+          "observed_fds": 16
+        },
+        "completion": {
+          "open": true,
+          "cursor": 5,
+          "advances": 10,
+          "text": "hello",
+          "observed_fds": 16
+        },
+        "paste": {
+          "open": true,
+          "cursor": 22,
+          "advances": 11,
+          "text": "first\n\u754c second\nthird",
+          "observed_fds": 16
+        },
+        "resize": {
+          "open": true,
+          "cursor": 22,
+          "advances": 12,
+          "text": "first\n\u754c second\nthird",
+          "observed_fds": 16
+        },
+        "resize_event_to_receipt_us": 4340.369,
+        "resized_screen": {
+          "cursor": "9 9",
+          "text": "application \ndriven> e\u0301!\u754c\necho: e\u0301!\u754c\ndriven> draf\ndriven> hell\ndriven> firs\nt\n... \u754c secon\nd\n... third",
+          "alternate": "false",
+          "paste": "true",
+          "background_default": "true"
+        },
+        "ctrl_l": {
+          "open": true,
+          "cursor": 22,
+          "advances": 12,
+          "text": "first\n\u754c second\nthird",
+          "observed_fds": 16
+        },
+        "deadline_expiry": "READY_ADVANCE_NS 37648\nFDS 16\nSTATE true 0 14 \nDEADLINE\nREJECTED unknown or incomplete terminal sequence\n",
+        "deadline_superseded": {
+          "open": true,
+          "cursor": 2,
+          "advances": 18,
+          "text": "a!b",
+          "observed_fds": 16
+        },
+        "lifecycle": {
+          "repetitions": 30,
+          "active_fd_counts": [
+            15,
+            15,
+            15,
+            15,
+            15,
+            15,
+            15,
+            15,
+            15,
+            15,
+            15,
+            15,
+            15,
+            15,
+            15,
+            15,
+            15,
+            15,
+            15,
+            15,
+            15,
+            15,
+            15,
+            15,
+            15,
+            15,
+            15,
+            15,
+            15,
+            15
+          ],
+          "native_observer_active": [
+            16,
+            16,
+            16,
+            16,
+            16,
+            16,
+            16,
+            16,
+            16,
+            16,
+            16,
+            16,
+            16,
+            16,
+            16,
+            16,
+            16,
+            16,
+            16,
+            16,
+            16,
+            16,
+            16,
+            16,
+            16,
+            16,
+            16,
+            16,
+            16,
+            16
+          ],
+          "native_observer_closed": [
+            14,
+            14,
+            14,
+            14,
+            14,
+            14,
+            14,
+            14,
+            14,
+            14,
+            14,
+            14,
+            14,
+            14,
+            14,
+            14,
+            14,
+            14,
+            14,
+            14,
+            14,
+            14,
+            14,
+            14,
+            14,
+            14,
+            14,
+            14,
+            14,
+            14
+          ],
+          "observer_includes_directory_fd": true,
+          "exact_termios": true,
+          "paste_disabled_on_every_close": true
+        },
+        "eof": {
+          "open": false,
+          "cursor": 0,
+          "advances": 19,
+          "text": "",
+          "observed_fds": 14
+        }
+      },
+      "simple": {
+        "submitted": "e\u0301!\u754c",
+        "history_draft": "draft",
+        "interrupt_then_eof": true,
+        "exact_termios": true
+      },
+      "admission": {
+        "environment_refusal": {
+          "'dumb'": "Error: CapabilityMismatch(\"interactive cursor and erase support required\")",
+          "''": "Error: CapabilityMismatch(\"interactive cursor and erase support required\")"
+        },
+        "non_tty": "UnsuitableTerminal",
+        "before_raw": true
+      },
+      "idle_trace": {
+        "status": "separate normal run"
+      }
+    },
+    "macos": {
+      "platform": "darwin",
+      "memory_command": [
+        "/usr/bin/leaks",
+        "--atExit",
+        "--"
+      ],
+      "driven": {
+        "sizes_bytes": {
+          "Interaction": 640,
+          "Deadline": 32,
+          "WaitInterest": 32,
+          "Wake": 32
+        },
+        "idle": {
+          "seconds": 0.4,
+          "replai_advancements": 0,
+          "required_deadline": null,
+          "child_cpu_seconds": null,
+          "scope": "host blocks on terminal/socket; no REPLAI call between observer events"
+        },
+        "unicode": {
+          "open": true,
+          "cursor": 4,
+          "advances": 1,
+          "text": "e\u0301!\u754c",
+          "observed_fds": 10
+        },
+        "unicode_ready_advance_ns": 101500,
+        "output": {
+          "open": true,
+          "cursor": 4,
+          "advances": 1,
+          "text": "e\u0301!\u754c",
+          "observed_fds": 10
+        },
+        "output_screen": {
+          "cursor": "1 10",
+          "text": "application event: draft preserved\ndriven> e\u0301!\u754c",
+          "alternate": "false",
+          "paste": "true",
+          "background_default": "true"
+        },
+        "history_return": {
+          "open": true,
+          "cursor": 4,
+          "advances": 5,
+          "text": "draft",
+          "observed_fds": 10
+        },
+        "completion": {
+          "open": true,
+          "cursor": 5,
+          "advances": 7,
+          "text": "hello",
+          "observed_fds": 10
+        },
+        "paste": {
+          "open": true,
+          "cursor": 22,
+          "advances": 8,
+          "text": "first\n\u754c second\nthird",
+          "observed_fds": 10
+        },
+        "resize": {
+          "open": true,
+          "cursor": 22,
+          "advances": 9,
+          "text": "first\n\u754c second\nthird",
+          "observed_fds": 10
+        },
+        "resize_event_to_receipt_us": 331.208,
+        "resized_screen": {
+          "cursor": "9 9",
+          "text": "application \ndriven> e\u0301!\u754c\necho: e\u0301!\u754c\ndriven> draf\ndriven> hell\ndriven> firs\nt\n... \u754c secon\nd\n... third",
+          "alternate": "false",
+          "paste": "true",
+          "background_default": "true"
+        },
+        "ctrl_l": {
+          "open": true,
+          "cursor": 22,
+          "advances": 10,
+          "text": "first\n\u754c second\nthird",
+          "observed_fds": 10
+        },
+        "deadline_expiry": "READY_ADVANCE_NS 9458\nFDS 10\nSTATE true 0 11 \nDEADLINE\nREJECTED unknown or incomplete terminal sequence\n",
+        "deadline_superseded": {
+          "open": true,
+          "cursor": 2,
+          "advances": 15,
+          "text": "a!b",
+          "observed_fds": 10
+        },
+        "lifecycle": {
+          "repetitions": 30,
+          "active_fd_counts": [],
+          "native_observer_active": [
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10,
+            10
+          ],
+          "native_observer_closed": [
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7,
+            7
+          ],
+          "observer_includes_directory_fd": true,
+          "exact_termios": true,
+          "paste_disabled_on_every_close": true
+        },
+        "eof": {
+          "open": false,
+          "cursor": 0,
+          "advances": 16,
+          "text": "",
+          "observed_fds": 7
+        }
+      },
+      "simple": {
+        "submitted": "e\u0301!\u754c",
+        "history_draft": "draft",
+        "interrupt_then_eof": true,
+        "exact_termios": true
+      },
+      "admission": {
+        "environment_refusal": {
+          "'dumb'": "Error: CapabilityMismatch(\"interactive cursor and erase support required\")",
+          "''": "Error: CapabilityMismatch(\"interactive cursor and erase support required\")"
+        },
+        "non_tty": "UnsuitableTerminal",
+        "before_raw": true
+      },
+      "idle_trace": {
+        "status": "separate normal run"
+      }
+    }
+  },
+  "qualification_ci": "https://github.com/mothx9/replai/actions/runs/34353630259"
+}

@@ -73,7 +73,13 @@ class Reactor(Session):
 
     def stop(self):
         self.event(b'Q'); self.restored()
-        self.app.sendall(b'E'); self.until(lambda: self.process.poll() is not None, timeout=60)
+        self.app.sendall(b'E')
+        deadline = time.monotonic()+60
+        while self.process.poll() is None:
+            if time.monotonic() >= deadline: raise TimeoutError('memory/process exit did not complete')
+            # Drain tool output while observing process exit. This is the Python
+            # observer teardown, outside the measured child reactor idle window.
+            self.pump(min(deadline, time.monotonic()+0.05))
         assert self.process.returncode == 0
         self.receipts.extend(self.control.read())
         while True:

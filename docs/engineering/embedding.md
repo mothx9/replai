@@ -8,9 +8,10 @@ are workload/environment observations, not generic latency promises.
 ## Source and ownership
 
 Baseline master HEAD `dfd337e62624e3ea8324ce783c026e2e5737b6ef`, TREE
-`3b612fa7e7557ccd1b479986ea1507cc2459c33d`. Implementation identity is the Git
-commit carrying the source below; subsequent qualification/producer carriers
-will identify it explicitly. No consumer repository or pin is changed.
+`3b612fa7e7557ccd1b479986ea1507cc2459c33d`. Implementation HEAD `349d75ebab5dc9dda0c1875d027f62a95bcdd2d9`, TREE
+`0bc70ef10e295214c8df43a2fb21f09ad2914e5f`. Native fixture qualification at
+`5c042778f453255411943119a35418c230b635e7` preserves those implementation sources;
+later documentation/metadata carriers do not change the runtime. No consumer repository or pin is changed.
 
 Before: the public POSIX façade offered open/poll/complete/output/interrupt/close;
 private terminal polling combined geometry observation, waiting and advancement.
@@ -76,9 +77,8 @@ and visible column 10; history returns `draft` to byte cursor 4; completion turn
 `he` into `hello`; bracketed paste yields `first\n界 second\nthird`, 22 bytes.
 A host resize to 12 columns preserves the same draft. Thirty lifecycle repeats
 restore exact termios/paste and retain 7 active process descriptors. Driven idle
-has zero advancements/deadlines over the observer interval. Native macOS and
-Windows matrix results must be recorded from the published CI run, not inferred
-from this Linux execution.
+has zero advancements/deadlines over the observer interval. Native macOS and Windows results below are executed CI evidence, independently
+of this Linux observation.
 
 ## Qualification commands and measurement scope
 
@@ -130,3 +130,77 @@ sending editing Ctrl-C/EOF. Waiting only for host echo output could inject Ctrl-
 during the intentionally restored interval between reads and signal the host
 session leader. Prompt publication is the raw-editing acquisition barrier; this
 keeps editing interruption distinct from host signal policy.
+
+## Qualified observations
+
+[Native matrix run 34353630259](https://github.com/mothx9/replai/actions/runs/34353630259)
+passed all 12 jobs at `5c042778f453255411943119a35418c230b635e7`: full Linux
+Rust/session/embedding/C static/shared/Valgrind, macOS Rust/embedding/C/native
+leaks, Windows portable engine/rustdoc and all benchmark-integrity jobs.
+The [compact measurement record](embedding.json) retains source hashes,
+environments, observations and the matched comparison samples. Final publication
+CI must also pass; its run remains discoverable from the exact published Git head.
+
+| Property | Linux physical host | Native macOS runner |
+| --- | --- | --- |
+| Unicode, host output | `é!界`, byte cursor 4, visible column 10 before/after document | Same draft/cursor and semantic cells |
+| History / completion | Original `draft`, cursor 4; `he` → `hello` | Same |
+| Multiline / resize | `first\n界 second\nthird`, 22 bytes; 12-column reflow; Ctrl-L preserves it | Same |
+| Deadline | One expiry/rejection; continuation before expiry removes old wake | Same |
+| Idle | No deadline, no advances; 0.00 s process CPU at kernel accounting precision over 0.4 s | No deadline or advances; process CPU not measured |
+| Syscall attribution | Between observer events: one host blocking wait; zero terminal reads, size queries or REPLAI periodic waits | Exact syscalls not measured; same virtual zero-I/O oracle and native reactor execution |
+| Native FD observer | 8 active → 6 closed, stable over 30 repeats | 9 active → 6 closed, stable over 30 repeats |
+| Cleanup | Exact termios before process exit, paste disabled at every close; drop/unwind across pending states | Same; native FD oracle distinguishes Darwin write bookkeeping from caller flags |
+| Memory | Valgrind: 0 errors, 0 definite/indirect/possible lost bytes; 8,736 reachable bytes in two runtime blocks | `leaks --atExit`: 0 leaks / 0 leaked bytes; memory-instrumented FD observer 10 → 7, stable |
+
+FD observer counts include its directory descriptor and fixture handles. The
+parent's independent Linux `/proc` observation records 7 active descriptors.
+These are counts at explicit lifecycle states, not a claim that all belong to
+REPLAI. A second physical repetition exercised 30 simple process lifecycles too.
+
+On Linux, ready notification → advancement return for the Unicode burst was
+94.352 µs; host resize request → completed-write receipt was 215.696 µs.
+The macOS observations were 81.125 µs and 441.333 µs respectively. These are
+single debug-fixture characterizations, not cross-machine comparisons. Existing
+compatibility resize observation remained around 100 ms; the driven entry has
+no such discovery floor and waits for host notification instead.
+
+### Performance preservation
+
+Before/after full runs validate 6,069 / 6,071 result records. The two additions
+are timing/allocation measurements for pure idle interest. Both runs completed
+with their prepared source/binary hashes unchanged. The final measured runtime
+inventory hash is `e4046310486a9fef0eba4d04a6c51b16562ea5a7edcc326492a8486683e5b682`.
+The Linux environment is `spark-7c3d`, aarch64, kernel `6.17.0-1021-nvidia`,
+20 logical CPUs. It is not the historical macOS comparison machine.
+
+| Same-machine observation | Before | After | Endpoint / qualification |
+| --- | ---: | ---: | --- |
+| 1000 ASCII bytes + middle edit + submit | 353.265 µs | 277.216 µs | 31 retained samples each, alternating binaries; includes PTY scheduling, cleanup and submission receipt |
+| Isolated append, matched follow-up | 137.344 µs | 138.336 µs | 63 retained samples each, alternating binaries; exact final VT bytes |
+| Completion replacement, matched follow-up | 134.512 µs | 133.328 µs | Same original P0 case and exact-byte oracle |
+| Multiline paste + submit | 148.064 µs | 148.912 µs | Alternating burst-to-submission fixture |
+| Append frame transition, 64 ASCII bytes | 0.112 µs | 0.112 µs | Separate private component measurement |
+| Middle-insert frame, 1024 ASCII bytes | 0.496 µs | 0.512 µs | Separate private component measurement |
+| Compatibility idle | 30 calls / ~3 s | 30 calls / ~3 s | Periodic observation deliberately retained |
+| Retained Interaction object | 584 bytes | 608 bytes | Linux stack representation; not an ABI layout promise |
+
+The sequential full-run isolated append shifted from 33.792 to 242.880 µs.
+That required investigation, not omission: repeating the exact case with
+alternating old/new binaries gave 137.344 / 138.336 µs. PTY delivery includes
+scheduler/environment variance; the sequential change does not establish a
+library regression. Likewise the faster primary median is not a causal speedup
+or general ranking. Exact output and restoration pass in both comparisons.
+
+The 1000-byte workload remains one compatibility call and 1,054 terminal bytes;
+64 KiB multiline paste remains 17 calls and 403 output bytes. The 1 MiB paste
+retains bounded calls (before 257–263, after 258–259), 403 terminal bytes and exact
+submission. Synchronous output and all existing component/large-paste cases
+remain measured by the complete suite. No editor/render algorithm changed.
+
+The new idle-interest query measured 0.032 µs and **zero allocations**; retained
+Interaction construction also remains allocation-free. Deadline, WaitInterest
+and Wake are each 32 bytes on this Linux target. Native macOS Interaction is
+640 bytes, with its resource realization; its three scheduling values are each
+32 bytes. Pending read-ahead remains bounded to one 4 KiB tail. None of these
+representations is a public binary layout contract.
