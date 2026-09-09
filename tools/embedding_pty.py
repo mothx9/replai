@@ -188,10 +188,11 @@ def simple():
     try:
         s.until(lambda:b'simple> ' in s.output)
         s.send('e\u0301界\x1b[D!\r'.encode())
-        s.until(lambda:'echo: e\u0301!界'.encode() in s.output)
+        s.until(lambda:'echo: e\u0301!界'.encode() in s.output and s.output.count(b'simple> ') >= 2)
         s.send(b'draft\x1b[A\x1b[B\r')
-        s.until(lambda:b'echo: draft' in s.output)
+        s.until(lambda:b'echo: draft' in s.output and s.output.count(b'simple> ') >= 3)
         s.send(b'\x03')
+        s.until(lambda:s.output.count(b'simple> ') >= 4)
         s.send(b'\x04')
         s.finish()
         return dict(submitted='e\u0301!界', history_draft='draft', interrupt_then_eof=True, exact_termios=True)

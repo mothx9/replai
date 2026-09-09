@@ -124,3 +124,9 @@ The native memory runner also waited for process exit before draining its PTY/
 pipe, which can block a verbose exit-time leak report. It now drains while
 waiting and retains the zero-leak assertion. Neither correction changes the
 terminal implementation or relaxes termios restoration.
+
+The blocking-process fixture also waits for the next rendered prompt before
+sending editing Ctrl-C/EOF. Waiting only for host echo output could inject Ctrl-C
+during the intentionally restored interval between reads and signal the host
+session leader. Prompt publication is the raw-editing acquisition barrier; this
+keeps editing interruption distinct from host signal policy.
