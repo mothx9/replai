@@ -161,6 +161,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
         if app.is_some() {
+            // Observer-owned directory FD is included and reported consistently.
+            eprintln!("FDS {}", std::fs::read_dir("/dev/fd")?.count());
             let hex: String = interaction
                 .editor()
                 .text()

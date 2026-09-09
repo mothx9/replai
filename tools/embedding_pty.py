@@ -36,7 +36,7 @@ class Reactor(Session):
         matches = re.findall(rb'STATE (true|false) (\d+) (\d+) ([0-9a-f]*)\n', self.receipts)
         if not matches: return None
         opened, cursor, advances, text = matches[-1]
-        return dict(open=opened == b'true', cursor=int(cursor), advances=int(advances), text=bytes.fromhex(text.decode()).decode())
+        return dict(open=opened == b'true', cursor=int(cursor), advances=int(advances), text=bytes.fromhex(text.decode()).decode(), observed_fds=int(re.findall(rb'FDS (\d+)', self.receipts)[-1]))
 
     def event(self, data):
         mark = len(self.receipts)
@@ -135,12 +135,15 @@ def driven(work, prefix=()):
             assert b'DEADLINE\n' not in s.receipts[mark:]
             evidence['deadline_superseded'] = s.state()
             s.event(b'X'); s.reopen()
-            fd_counts = []
+            fd_counts = []; native_fd_counts = []; closed_fd_counts = []
             for _ in range(30):
                 if sys.platform == 'linux': fd_counts.append(len(list(Path(f'/proc/{s.process.pid}/fd').iterdir())))
-                s.event(b'Q'); s.restored(); s.reopen()
+                native_fd_counts.append(s.state()['observed_fds'])
+                s.event(b'Q'); closed_fd_counts.append(s.state()['observed_fds']); s.restored(); s.reopen()
             assert not fd_counts or len(set(fd_counts)) == 1, fd_counts
-            evidence['lifecycle'] = dict(repetitions=30, active_fd_counts=fd_counts, exact_termios=True, paste_disabled_on_every_close=True)
+            assert len(set(native_fd_counts)) == len(set(closed_fd_counts)) == 1
+            assert native_fd_counts[0] > closed_fd_counts[0]
+            evidence['lifecycle'] = dict(repetitions=30, active_fd_counts=fd_counts, native_observer_active=native_fd_counts, native_observer_closed=closed_fd_counts, observer_includes_directory_fd=True, exact_termios=True, paste_disabled_on_every_close=True)
             s.edit(b'\x04', '', 0); s.until(lambda:not s.state()['open']); s.restored()
             evidence['eof'] = s.state()
             s.stop()
@@ -188,11 +191,11 @@ def simple():
     try:
         s.until(lambda:b'simple> ' in s.output)
         s.send('e\u0301界\x1b[D!\r'.encode())
-        s.until(lambda:'echo: e\u0301!界'.encode() in s.output and s.output.count(b'simple> ') >= 2)
+        s.until(lambda: b'simple> ' in s.output.partition('echo: e\u0301!界'.encode())[2])
         s.send(b'draft\x1b[A\x1b[B\r')
-        s.until(lambda:b'echo: draft' in s.output and s.output.count(b'simple> ') >= 3)
+        s.until(lambda: b'simple> ' in s.output.partition(b'echo: draft')[2])
         s.send(b'\x03')
-        s.until(lambda:s.output.count(b'simple> ') >= 4)
+        s.until(lambda: b'simple> ' in s.output.partition(b'^C\r\n')[2])
         s.send(b'\x04')
         s.finish()
         return dict(submitted='e\u0301!界', history_draft='draft', interrupt_then_eof=True, exact_termios=True)
