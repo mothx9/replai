@@ -211,41 +211,106 @@ lease remains at resource acquisition.
 
 ## Terminal admission and degradation
 
-`TerminalFacts` distinguishes Unknown, Unavailable, Assumed and Supported
-cursor, erase, styling and paste features. `TerminalConfig` separates these facts
-from Disabled/Preferred/Required host policy for optional features and a `Theme`.
-Cursor and erase are required by this editor. `resolve()` is pure admission;
-actual TTY identity/dimensions are still checked separately during acquisition.
-`Interaction::features()` reports the admitted styling and paste mode.
+All tiers share the [capability contract](#terminal-capabilities) below. New
+simple/driven defaults use conservative TERM hints; legacy session/C entries
+retain an explicit VT compatibility assumption. Neither profile bypasses native
+resource verification. See the [simple example](../examples/simple.rs),
+[session example](../examples/demo.rs), [external reactor](../examples/driven.rs)
+and [embedding qualification](engineering/embedding.md).
 
-`read_line` and `open_driven` use conservative environment convenience: a
-nonempty TERM other than `dumb` supplies an explicit VT **assumption**, not
-terminal probing. Missing/empty/dumb TERM does not establish cursor/erase and
-fails before raw mode. An independently informed host can supply facts using
-`open_with_config`; this does not bypass actual TTY validation. NO_COLOR disables
-styling; an explicitly plain theme stays plain. Required styling with a plain
-theme rejects. Optional unavailable paste may be disabled, in which case no
-paste-mode toggles are emitted, including output transactions and cleanup.
-Without framing, multiline paste cannot be distinguished from ordinary Enter.
+## Terminal capabilities
 
-Existing `open`, `open_with_theme` and C ABI 1 retain their qualified explicit VT
-compatibility assumption: TERM=dumb disables styling but does not select a new
-line editor or suppress their existing cursor/erase protocol. This distinction
-preserves existing consumers while making new simple/driven defaults truthful.
+Admission is one contract for every tier, resolved at acquisition rather than per
+key, frame or idle query.
 
-Non-TTY or redirected interactive resources reject as `UnsuitableTerminal`.
-Standalone `Document::render` remains suitable for plain captured/non-TTY/dumb
-output without an interaction. A document renderer does not grant terminal
-editing capabilities. No universal capability discovery, Windows backend,
-terminal probing, fallback cooked editor or complete F2 negotiation is implied.
+| Layer | Public representation | Authority |
+| --- | --- | --- |
+| Protocol evidence | `TerminalFacts`, `FeatureSupport` | Host evidence/assumption, or TERM hint |
+| Resource evidence | `TerminalRealization` | Native acquisition; explicit assertions for virtual resolution |
+| Required mechanics | `InteractionRequirements` | Presentation, Editing or Driven |
+| Optional policy | `TerminalConfig`, `FeaturePolicy` | Disabled / Preferred / Required, independently for styling and paste |
+| Resolved contract | `TerminalCapabilities`, `Degradation` | Original facts plus enabled features and loss reasons |
 
-`Error::CapabilityMismatch(&'static str)` reports admission failure, separately
-from lifecycle, unsuitable resource and I/O errors. Adding this native variant
-requires exhaustive Rust error matches to add an arm; existing operations keep
-their behavior. C ABI 1 declarations, records, symbols and numeric identity are
-unchanged; the binding maps this native category to its existing unsuitable
-terminal status. It exposes neither the new blocking nor driven methods. Their
-future C/HANDLE contract remains an independent cross-language design boundary.
+`Interaction::capabilities()` copies the active snapshot without I/O. It contains
+no handles or ownership. Closing invalidates the accessor (`Error::State`); a
+previous copy remains historical. Dimensions are last observed at acquisition or
+refresh, not continuously discovered.
 
-See the [simple example](../examples/simple.rs), [session example](../examples/demo.rs),
-[external reactor](../examples/driven.rs) and [embedding qualification](engineering/embedding.md).
+### Minimum and precedence
+
+Editing requires matching interactive input/output, restorable input mode, at
+least two columns and two rows, cursor/erase mechanics and backend readiness.
+The cursor profile includes CR/LF, relative/absolute positioning, conventional
+cell advance, autowrap and scrolling. Erase includes line/range clearing and
+clear-to-home for Ctrl-L. These are protocol **assumptions**, not discoveries made
+by `isatty`. Driven additionally requires a host waitable source. Presentation
+requires none of these editing mechanics; the document supplies its layout width.
+
+1. Native acquisition verifies resources and obtains dimensions before raw mode.
+   Configured protocol support cannot override non-TTY/mismatched endpoints or
+   missing dimensions. Refusals emit no prompt/mode bytes.
+2. Explicit `TerminalFacts` replace protocol hints. `Supported` is affirmative
+   evidence supplied by the host, `Assumed` an accepted hypothesis, `Unknown`
+   insufficient evidence and `Unavailable` an explicit negative.
+3. `TerminalConfig::from_environment` reads TERM once as a hint: nonempty/non-dumb
+   produces `Assumed`; absent/empty/dumb produces `Unknown`. NO_COLOR presence,
+   including empty, is `Disabled` styling **policy**, not a negative color fact.
+   Replacing protocol hints later does not remove that captured policy.
+4. Optional policy resolves independently. An explicitly plain theme also vetoes
+   styling. Missing/vetoed `Required` features fail. Unavailable `Preferred`
+   features report `Unavailable` degradation; intentional disablement reports
+   `Disabled`. Facts themselves are not rewritten.
+
+Fully explicit configuration does not reread environment variables. Hosts own
+that choice; starting from `from_environment` retains user policy. `Theme::new`
+and `from_environment` remain compatibility projections through the capability
+module rather than independently discovering terminal truth.
+
+### Resolution and degradation
+
+`TerminalConfig::resolve_for(realization, requirements)` is pure and allocation-free.
+Native opens obtain their own resource observations. Public
+`TerminalRealization::interactive((columns, rows))` instead affirms controlled
+host/virtual facts; it does not probe an OS. Use `Presentation` and
+`TerminalRealization::captured()` to resolve a plain theme without input/cursor
+requirements. The old `resolve()` checks only protocol policy and does not prove
+resource suitability. `open_with_config` admits the Driven requirements; ordinary
+`open` and blocking `read_line` admit Editing. This does not select a scheduler.
+
+Styling loss removes SGR for both prompt and structured output, preserving text
+and hierarchy. The current palette needs intensity and 256-color foregrounds;
+a host with weaker support can conservatively decline styling.
+
+Paste loss suppresses enable/disable sequences, including output and cleanup.
+Ordinary Unicode editing still works. **Unframed multiline paste is not atomic:**
+Enter can submit the first line. Already-read trailing bytes survive close/reopen;
+a host requiring atomic paste must require that feature. Framed input received
+anyway still goes through the bounded, safe paste decoder. Paste policy is
+irrelevant to Presentation requirements, which never enable input modes.
+
+`Readiness` distinguishes absent support, backend-managed waiting and a host
+waitable source; it contains no FD/HANDLE. POSIX borrowed FDs realize the latter.
+Dimensions, `dimension_query` and resize delivery are independent:
+`ResizeDelivery::PollOrHostNotification` means poll queries periodically, while
+driven callers notify with `Wake::Resize`. REPLAI installs no signals or periodic
+driven wake. A controlled fixed surface can resolve to `Fixed` while still being
+waitable. Opaque decoder deadlines remain runtime state, not a capability.
+
+### Compatibility and limits
+
+`open`, `open_with_theme` and C ABI 1 use `TerminalConfig::compatibility` internally.
+This retains their VT assumption under TERM=dumb, with styling suppressed by the
+environment theme. It is not a claim that every dumb terminal supports VT.
+Blocking/driven defaults refuse that hint unless given stronger host evidence.
+
+Missing native dimensions now reports `Error::CapabilityMismatch` rather than
+`UnsuitableTerminal`, naming the required geometry before any raw mode. Non-TTY
+and mismatched endpoints retain `UnsuitableTerminal`; I/O errors retain cleanup
+context. C maps both admission categories to its existing unsuitable status;
+ABI 1 declarations, records, symbols and numeric identity remain unchanged.
+Capability snapshots remain native-only, an explicit E3 cross-language review item.
+
+Linux/macOS share one realization; Windows runs portable model tests without a
+terminal backend. No active probing, alternate editor or emulator database is
+introduced. [Width policy](presentation.md#display-width-contract) ·
+[Profile evidence](engineering/terminal-capabilities.md).

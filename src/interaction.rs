@@ -79,14 +79,13 @@ impl Interaction {
         prompt: Prompt,
         theme: Theme,
     ) -> Result<(), Error> {
-        if self.is_open() {
-            return Err(Error::State);
-        }
-        let (resource, _) = Resource::acquire(input, output)?;
-        let mut terminal = Terminal::start(resource, &mut self.engine, prompt, theme)?;
-        terminal.pending = std::mem::take(&mut self.pending);
-        self.terminal = Some(terminal);
-        Ok(())
+        self.open_admitted(
+            input,
+            output,
+            prompt,
+            crate::TerminalConfig::compatibility(theme),
+            crate::InteractionRequirements::Editing,
+        )
     }
     /// Read one editable line on stdin/stdout without a host polling loop.
     /// Uses conservative environment admission, the same retained editor/history,
@@ -95,7 +94,13 @@ impl Interaction {
     /// On success the terminal is closed. Errors attempt cleanup; explicit close
     /// can retry a retained failed restoration. No application signal policy is installed.
     pub fn read_line(&mut self, prompt: Prompt) -> Result<crate::ReadOutcome, Error> {
-        self.open_driven(&std::io::stdin(), &std::io::stdout(), prompt)?;
+        self.open_admitted(
+            &std::io::stdin(),
+            &std::io::stdout(),
+            prompt,
+            crate::TerminalConfig::from_environment(),
+            crate::InteractionRequirements::Editing,
+        )?;
         loop {
             match self.poll(Duration::from_millis(100))? {
                 Some(Event::Submitted(text)) => return Ok(crate::ReadOutcome::Submitted(text)),
@@ -117,15 +122,16 @@ impl Interaction {
         output: &impl AsFd,
         prompt: Prompt,
     ) -> Result<(), Error> {
-        self.open_with_config(
+        self.open_admitted(
             input,
             output,
             prompt,
             crate::TerminalConfig::from_environment(),
+            crate::InteractionRequirements::Driven,
         )
     }
-    /// Admit required cursor/erase and optional styling/paste before acquiring
-    /// resources. Non-TTY or mismatched resources still fail independently.
+    /// Admit required mechanics and optional styling/paste before raw mode.
+    /// Native resource observations take precedence over configured assumptions.
     /// No signals, threads, reactor, or periodic timer are installed.
     pub fn open_with_config(
         &mut self,
@@ -134,16 +140,43 @@ impl Interaction {
         prompt: Prompt,
         config: crate::TerminalConfig,
     ) -> Result<(), Error> {
+        self.open_admitted(
+            input,
+            output,
+            prompt,
+            config,
+            crate::InteractionRequirements::Driven,
+        )
+    }
+    fn open_admitted(
+        &mut self,
+        input: &impl AsFd,
+        output: &impl AsFd,
+        prompt: Prompt,
+        config: crate::TerminalConfig,
+        requirements: crate::InteractionRequirements,
+    ) -> Result<(), Error> {
         if self.is_open() {
             return Err(Error::State);
         }
-        let (theme, features) = config.resolve()?;
-        let (resource, _) = Resource::acquire(input, output)?;
+        let (resource, theme, capabilities) =
+            Resource::acquire(input, output, config, requirements)?;
         let mut terminal =
-            Terminal::start_config(resource, &mut self.engine, prompt, theme, features)?;
+            Terminal::start_admitted(resource, &mut self.engine, prompt, theme, capabilities)?;
         terminal.pending = std::mem::take(&mut self.pending);
         self.terminal = Some(terminal);
         Ok(())
+    }
+    /// Inspect admitted protocol assumptions, native observations, requirements and
+    /// degradation. No I/O or environment access. Dimensions reflect the last
+    /// successful acquisition/refresh, not an unsolicited size query. Closing
+    /// invalidates this accessor; a copied snapshot carries no terminal ownership.
+    pub fn capabilities(&self) -> Result<crate::TerminalCapabilities, Error> {
+        self.terminal
+            .as_ref()
+            .filter(|t| t.active && self.engine.is_open())
+            .and_then(|t| t.capabilities)
+            .ok_or(Error::State)
     }
     /// Current required wakeup, with no I/O, size query, allocation or wait.
     /// Re-query after every advancement or host mutation. Idle input without a

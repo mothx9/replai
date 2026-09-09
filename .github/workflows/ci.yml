@@ -155,6 +155,8 @@ jobs:
           toolchain: stable
       - name: Blocking and host reactor real PTYs, deadlines, resize and resources
         run: python3 tools/embedding_pty.py --work "$RUNNER_TEMP/replai-embedding"
+      - name: Capability profiles with real native resources
+        run: cargo test --locked --test capabilities_pty -- --nocapture
       - name: Install Linux embedding memory tool
         if: runner.os == 'Linux'
         run: sudo apt-get update && sudo apt-get install -y valgrind

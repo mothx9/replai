@@ -245,7 +245,9 @@ before entering raw mode. `NO_COLOR` disables styling while retaining editing.
 Standalone documents can render plain text to non-TTY output; that does not make
 a redirected stream an interactive terminal. The existing session/C compatibility
 path retains its documented VT assumptions.
-[Terminal admission and degradation](docs/interaction.md).
+`Interaction::capabilities()` exposes protocol assumptions, observed resources,
+admitted features, degradation reasons, resize paths and the Unicode width policy.
+[Terminal admission and degradation](docs/interaction.md#terminal-capabilities).
 
 **Pre-release:** Rust and C ABI 1 are qualified experimental contracts. There is
 no stable Rust API/ABI, SemVer or MSRV promise yet. New commits do not imply that

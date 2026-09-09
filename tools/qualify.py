@@ -20,6 +20,7 @@ commands = [
     ['cargo', 'test', '--workspace', '--all-targets'],
     ['cargo', 'clippy', '--workspace', '--all-targets', '--all-features', '--', '-D', 'warnings'],
     ['cargo', 'test', '--doc'],
+    ['cargo', 'test', '--test', 'capabilities_pty', '--', '--nocapture'],
     ['python3', 'tools/embedding_pty.py', '--work', str(work / 'embedding')],
     ['python3', 'tools/qualify_c.py', '--work', str(work)],
     ['cargo', 'test', '--workspace', '--release'],

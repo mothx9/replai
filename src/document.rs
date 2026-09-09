@@ -1,11 +1,11 @@
 //! Bounded semantic documents; no terminal resources or application schemas.
+use crate::width::cells;
 use crate::{
     EditError, Error, Role, Theme,
     presentation::{Line, Run},
     render::Mutation,
 };
 use unicode_segmentation::UnicodeSegmentation;
-use unicode_width::UnicodeWidthStr;
 
 const FIELD: usize = 16 * 1024;
 const BUDGET: usize = 1024 * 1024;
@@ -345,7 +345,7 @@ fn width(line: &Line) -> usize {
     line.0
         .iter()
         .map(|r| match r {
-            Run::Text(t) => t.width(),
+            Run::Text(t) => cells(t),
             _ => 0,
         })
         .sum()
@@ -371,7 +371,7 @@ fn wrap(text: &Text, columns: usize, default: Role) -> Result<Vec<Line>, EditErr
         let value = if g == "\t" { spaces.as_str() } else { g };
         // Tabs expand as spaces; other extended graphemes stay indivisible.
         for part in value.graphemes(true) {
-            let n = part.width();
+            let n = cells(part);
             if n > columns {
                 return Err(EditError::InvalidRange);
             }
@@ -398,7 +398,7 @@ fn prefixed(
     columns: usize,
     role: Role,
 ) -> Result<(), EditError> {
-    let indent = prefix.width();
+    let indent = cells(prefix);
     if indent + 2 > columns {
         append(
             out,
@@ -422,7 +422,7 @@ fn prefixed(
 fn natural(text: &Text) -> usize {
     text.plain()
         .split('\n')
-        .map(|s| s.replace('\t', "    ").width())
+        .map(|s| cells(&s.replace('\t', "    ")))
         .max()
         .unwrap_or(0)
 }

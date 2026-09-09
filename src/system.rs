@@ -1,6 +1,7 @@
 //! Shared Linux/macOS POSIX resource realization. No editor, prompt or key policy.
 use crate::{
-    Error,
+    Error, InteractionRequirements, TerminalCapabilities, TerminalConfig, TerminalRealization,
+    Theme,
     substrate::{Read, Transport},
 };
 #[cfg(target_os = "macos")]
@@ -55,7 +56,12 @@ impl Resource {
         self.input.as_fd()
     }
 
-    pub fn acquire(input: &impl AsFd, output: &impl AsFd) -> Result<(Self, (usize, usize)), Error> {
+    pub fn acquire(
+        input: &impl AsFd,
+        output: &impl AsFd,
+        config: TerminalConfig,
+        requirements: InteractionRequirements,
+    ) -> Result<(Self, Theme, TerminalCapabilities), Error> {
         if !termios::isatty(input) || !termios::isatty(output) {
             return Err(Error::UnsuitableTerminal);
         }
@@ -70,12 +76,18 @@ impl Resource {
         let saved = termios::tcgetattr(&input).map_err(io::Error::from)?;
         let size = dimensions(&output).map_err(|e| {
             if e.kind() == io::ErrorKind::Unsupported {
-                Error::UnsuitableTerminal
+                Error::CapabilityMismatch(
+                    "terminal dimensions of at least 2 columns and 2 rows required",
+                )
             } else {
                 Error::Io(e)
             }
         })?;
 
+        // Observed resource facts cannot be replaced by host protocol assumptions.
+        // Resolve before any raw-mode mutation; failed admission drops only duplicates.
+        let (theme, capabilities) =
+            config.resolve_for(TerminalRealization::interactive(size), requirements)?;
         let mut resource = Self {
             input,
             output,
@@ -109,7 +121,7 @@ impl Resource {
                 .into(),
             });
         }
-        Ok((resource, size))
+        Ok((resource, theme, capabilities))
     }
 }
 impl Resource {

@@ -4,6 +4,10 @@
 mod actions;
 #[path = "../../src/capabilities.rs"]
 mod capabilities;
+#[path = "../../src/width.rs"]
+mod width;
+pub use capabilities::{InteractionRequirements, TerminalCapabilities, TerminalRealization};
+pub use width::WidthPolicy;
 #[path = "../../src/core.rs"]
 mod core;
 #[path = "../../src/driving.rs"]
@@ -884,6 +888,23 @@ fn main() {
         assert_eq!(e.text(), "keep");
     }
     h.measure(spec("memory","base_interaction",0,"none",0),||(),|_|Interaction::new(Editor::new(LIMIT,100)),|_,i|{assert!(!i.is_open());json!({"editor_stack_bytes":std::mem::size_of::<Editor>(),"interaction_stack_bytes":std::mem::size_of::<Interaction>(),"deadline_stack_bytes":std::mem::size_of::<Deadline>(),"wait_interest_stack_bytes":std::mem::size_of::<WaitInterest>(),"wake_stack_bytes":std::mem::size_of::<Wake>()})});
+    h.measure(
+        spec("capabilities", "resolve_editing", 0, "none", 80),
+        || capabilities::TerminalConfig::compatibility(theme()),
+        |c| {
+            c.resolve_for(
+                TerminalRealization::interactive((80, 24)),
+                InteractionRequirements::Editing,
+            )
+            .unwrap()
+        },
+        |_, (_, snapshot)| {
+            assert!(snapshot.features.bracketed_paste);
+            json!({"snapshot_stack_bytes":std::mem::size_of::<TerminalCapabilities>(),
+                "config_stack_bytes":std::mem::size_of::<capabilities::TerminalConfig>(),
+                "required_wakes":0,"terminal_io":0})
+        },
+    );
     // Pure interest query: virtual acquisition is outside the timed/allocation region.
     struct Quiet;
     impl substrate::Transport for Quiet {
@@ -1132,7 +1153,13 @@ fn transport_fixture() -> (
     )
     .unwrap();
     let saved = format!("{:?}", rustix::termios::tcgetattr(&slave).unwrap());
-    let (resource, _) = system::Resource::acquire(&slave, &slave).unwrap();
+    let (resource, _, _) = system::Resource::acquire(
+        &slave,
+        &slave,
+        TerminalConfig::compatibility(theme()),
+        InteractionRequirements::Editing,
+    )
+    .unwrap();
     (master, slave, std::cell::RefCell::new(resource), saved)
 }
 

@@ -216,6 +216,7 @@ def admission():
     for term in ['dumb', '']:
         master, slave = os.openpty()
         try:
+            winsize(slave, 80)  # Isolate TERM refusal from missing PTY dimensions.
             before = attributes(slave)
             result = subprocess.run([binary], stdin=slave, stdout=slave, stderr=subprocess.PIPE, env={**os.environ, 'TERM':term}, timeout=10)
             assert result.returncode != 0 and b'CapabilityMismatch' in result.stderr, result

@@ -49,7 +49,8 @@ consume semantic mutations without parsing an escape-coded frame.
 | [presentation](../src/presentation.rs) | Prompt, semantic roles, logical text/style runs, grapheme/cell layout and viewport | Resource acquisition or escape-coded layout |
 | [render](../src/render.rs) | Private cached frame, incremental transition and logical mutations | OS APIs or terminal escape serialization |
 | [protocol](../src/protocol.rs) | VT encoding of text, style, moves, clear, newline and paste-mode operations | Geometry, editing policy or resource ownership |
-| [capabilities](../src/capabilities.rs) | Terminal facts, feature admission and environment convenience | Full F2 capability negotiation or Windows discovery |
+| [capabilities](../src/capabilities.rs) | Protocol assumptions, native facts, requirements, degradation and inspectable snapshots | Active probing, OS handles or application policy |
+| [width](../src/width.rs) | Shared deterministic UnicodeNarrow cell policy | Font/emulator discovery or editor storage |
 | [substrate](../src/substrate.rs) | Internal byte transport, dimensions, readiness wait, write and restoration contract | Interaction meaning or universal public terminal interface |
 | [terminal](../src/terminal.rs) | Generic VT driver over a statically selected transport; timing, decoder expiry, effect execution and cleanup | termios, descriptors or duplicate editing logic |
 | [system](../src/system.rs) | Shared Linux/macOS POSIX acquisition, descriptor duplication, termios, dimensions, poll/read/write, backend lease | Decoder, prompt, events, palette or editor |
@@ -116,9 +117,9 @@ the current VT driver supplies the 250 ms idle rule using its clock.
 
 Layout computes logical text/style runs and cell coordinates; its private frame
 contains no ANSI strings. Extended-grapheme editing is separate from cell-width
-estimation. `unicode-width` remains the current internal estimate, not a public
-width promise. Terminal/font disagreement, particularly joined emoji, remains
-possible; no probing or new width policy is implemented.
+policy. Public `WidthPolicy::UnicodeNarrow` names the deterministic non-CJK
+cell estimate shared by document and editing layout. Terminal/font disagreement
+remains possible; this contract does not claim discovery or pixel agreement.
 
 The renderer transforms previous/current logical frames into a small private
 mutation vocabulary. It reuses stable cursor geometry and simple ASCII tail
@@ -249,3 +250,21 @@ ordering, read-ahead, admission and cleanup guarantees. The
 [bounded qualification dossier](engineering/embedding.md) records alternatives,
 measurements and the executed platform scope. Public driven scheduling does not
 expose a raw-byte transport API or introduce concurrent output ownership.
+
+## Capability and acquisition boundary
+
+One [resolver](../src/capabilities.rs) serves blocking, session and driven opens.
+`TerminalFacts` describes protocol evidence/assumptions; `TerminalRealization`
+describes resource observations; `InteractionRequirements` selects required
+mechanics; `FeaturePolicy` governs optional losses. `TerminalCapabilities` records
+all four plus effective features, degradations, width policy and resize paths.
+
+The POSIX owner verifies paired TTYs, captures termios and reads dimensions,
+then resolves admission **before raw mode**. Native resource observations cannot
+be overridden by protocol configuration. The driver stores the admitted snapshot
+and uses its theme/features without per-key/per-frame resolution. Refresh changes
+only last-observed dimensions; protocol deadlines remain separate driver state.
+Legacy session/C opens use an explicit compatibility profile through the same
+resolver. Their VT assumptions remain `Assumed`, even under TERM=dumb.
+[Precedence and admission](interaction.md#terminal-capabilities) ·
+[Qualification](engineering/terminal-capabilities.md).

@@ -97,7 +97,8 @@ choices are terminal-default, neutral, cyan, gray, green, amber and red.
 Default must remain the reset style. The compatibility palette remains the
 initial theme, so old Rust and C consumers retain their presentation. Strong
 headings/labels, dim literal data, markers and indentation supply hierarchy.
-This is a theme foundation, not the final visual refinement or capability model.
+This is a theme foundation, not the final visual refinement. Admission uses the
+shared [capability model](interaction.md#terminal-capabilities).
 
 `Prompt::new("demo")` retains exactly `demo> ` and its existing accented style.
 For richer prompts, `Prompt::composed(Text::from_spans(...))` takes ordered
@@ -312,3 +313,30 @@ the real trailing space on its full-width continuation row; normalization must
 not delete a visible cell. PTY JSON retains input hex, complete output bytes,
 events, text and cursor observations. These are terminal-state/byte contracts,
 not a claim about pixel rendering or arbitrary emulator reflow.
+
+## Display width contract
+
+`WidthPolicy::UnicodeNarrow` is the deterministic policy shared by interactive
+layout and structured documents. `measure` accepts safe single-line text and
+rejects controls, tabs and newlines whose geometry requires context. The locked
+`unicode-width` non-CJK behavior supplies the policy; changing its semantics
+requires a qualified contract delta.
+
+| Text class | Current cell result | Separate concern |
+| --- | --- | --- |
+| ASCII | One per printable character | Rust strings provide UTF-8 validity |
+| Combining | `e` + combining acute: one cell | Extended-grapheme editing is separate |
+| CJK | `界`: two cells | Ambiguous characters follow narrow policy |
+| Emoji / ZWJ | Common joined `👩‍💻`: two cells | Font/emulator presentation can differ |
+| Ambiguous East Asian | `Ω·`: two cells total | Wide-ambiguous emulator settings are not discovered |
+| Tabs / newlines | Layout's tab expansion and line rules | Not single-line width sums |
+
+This is a cell-model guarantee, not pixel, bidi, font or universal emulator
+agreement. No probing or additional configurable width mode is introduced.
+[Executable width/profile oracle](../tests/capabilities.rs).
+
+Themes project explicit inputs through the shared capability policy. Acquisition
+applies resolved styling to prompts and documents alike. NO_COLOR is policy and
+cannot rewrite a supported fact as unavailable. `Presentation` resolution works
+with captured output and no cursor/TTY requirement. An explicit plain Theme and
+`Document::render` remain supported convenience paths.

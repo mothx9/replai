@@ -31,6 +31,7 @@ pub(crate) struct Terminal<T: Transport> {
     session: u64,
     revision: u64,
     pub(crate) features: InteractionFeatures,
+    pub(crate) capabilities: Option<crate::TerminalCapabilities>,
     // Only the unread tail at a host-visible boundary; ordinary reads use stack
     // storage. The Interaction retains this bounded tail across close/reopen.
     pub(crate) pending: VecDeque<u8>,
@@ -40,6 +41,7 @@ impl<T: Transport> Terminal<T> {
     pub(crate) fn expire_for_test(&mut self) {
         self.last_byte = Instant::now() - SEQUENCE_IDLE;
     }
+    #[allow(dead_code)] // Direct virtual-transport fixture entry.
     pub fn start(
         resource: T,
         engine: &mut Engine,
@@ -57,12 +59,39 @@ impl<T: Transport> Terminal<T> {
             },
         )
     }
+    #[allow(dead_code)] // Direct virtual-transport fixture entry.
     pub fn start_config(
         resource: T,
         engine: &mut Engine,
         prompt: Prompt,
         theme: Theme,
         features: InteractionFeatures,
+    ) -> Result<Self, Error> {
+        Self::start_inner(resource, engine, prompt, theme, features, None)
+    }
+    pub fn start_admitted(
+        resource: T,
+        engine: &mut Engine,
+        prompt: Prompt,
+        theme: Theme,
+        capabilities: crate::TerminalCapabilities,
+    ) -> Result<Self, Error> {
+        Self::start_inner(
+            resource,
+            engine,
+            prompt,
+            theme,
+            capabilities.features,
+            Some(capabilities),
+        )
+    }
+    fn start_inner(
+        resource: T,
+        engine: &mut Engine,
+        prompt: Prompt,
+        theme: Theme,
+        features: InteractionFeatures,
+        capabilities: Option<crate::TerminalCapabilities>,
     ) -> Result<Self, Error> {
         let session = NEXT_SESSION
             .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |n| n.checked_add(1))
@@ -76,10 +105,14 @@ impl<T: Transport> Terminal<T> {
             session,
             revision: 0,
             features,
+            capabilities,
             pending: VecDeque::new(),
         };
         let result = (|| {
-            let size = terminal.resource.dimensions()?;
+            let size = match terminal.capabilities.and_then(|c| c.realization.dimensions) {
+                Some(size) => size,
+                None => terminal.resource.dimensions()?,
+            };
             let mut effects = engine.start(prompt, size)?;
             effects.mutations.insert(0, Mutation::Paste(true));
             terminal.apply(engine, effects)?;
@@ -138,6 +171,9 @@ impl<T: Transport> Terminal<T> {
     fn refresh(&mut self, engine: &mut Engine) -> Result<Option<Event>, Error> {
         let size = self.resource.dimensions()?;
         let effects = engine.apply(Input::Resize(size.0, size.1))?;
+        if let Some(capabilities) = &mut self.capabilities {
+            capabilities.realization.dimensions = Some(size);
+        }
         self.apply(engine, effects)
     }
     pub fn advance(&mut self, engine: &mut Engine, wake: Wake) -> Result<Option<Event>, Error> {
@@ -336,7 +372,13 @@ mod tests {
             let mut editor = Editor::new(100, 1);
             editor.insert("draft").unwrap();
             editor.left();
-            let (resource, _) = Resource::acquire(&slave, &slave).unwrap();
+            let (resource, _, _) = Resource::acquire(
+                &slave,
+                &slave,
+                crate::TerminalConfig::compatibility(Theme::new(true, false, None)),
+                crate::InteractionRequirements::Editing,
+            )
+            .unwrap();
             let mut engine = Engine::new(editor);
             let mut t = Terminal::start(
                 resource,

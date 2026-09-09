@@ -55,6 +55,8 @@
 //! ```
 
 mod capabilities;
+mod width;
+pub use width::WidthPolicy;
 mod document;
 mod driving;
 pub use document::{Alignment, Block, Column, Document, ListItem, Severity, Span, Text};
@@ -91,5 +93,8 @@ pub use presentation::{Foreground, Prompt, Role, Style, Theme};
 #[cfg(test)]
 mod conformance;
 
-pub use capabilities::{FeaturePolicy, FeatureSupport, TerminalConfig, TerminalFacts};
+pub use capabilities::{
+    Degradation, FeaturePolicy, FeatureSupport, InteractionRequirements, Readiness, ResizeDelivery,
+    TerminalCapabilities, TerminalConfig, TerminalFacts, TerminalRealization,
+};
 pub use driving::{Deadline, InteractionFeatures, ReadOutcome, WaitInterest, Wake};

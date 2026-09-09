@@ -1,6 +1,6 @@
+use crate::width::cells;
 use crate::{EditError, Editor};
 use unicode_segmentation::UnicodeSegmentation;
-use unicode_width::UnicodeWidthStr;
 
 /// Generic text emphasis. Roles carry no application meaning.
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
@@ -61,7 +61,7 @@ impl Theme {
     /// Presence of NO_COLOR (even empty), non-TTY output, or TERM=dumb disables color.
     pub fn new(output_is_tty: bool, no_color_present: bool, term: Option<&str>) -> Self {
         Self {
-            color: output_is_tty && !no_color_present && term != Some("dumb"),
+            color: crate::capabilities::styling_allowed(output_is_tty, no_color_present, term),
             styles: [
                 Style {
                     foreground: Foreground::Default,
@@ -333,7 +333,7 @@ impl Layout {
             if self.full {
                 break;
             }
-            self.grapheme(grapheme, grapheme.width());
+            self.grapheme(grapheme, cells(grapheme));
         }
     }
     fn semantic(&mut self, text: &crate::Text) {
@@ -352,7 +352,7 @@ impl Layout {
                 self.style(role);
                 previous = Some(role);
             }
-            self.grapheme(g, g.width());
+            self.grapheme(g, cells(g));
         }
         self.style(Role::Default);
     }
@@ -382,7 +382,7 @@ impl Frame {
             if layout.full {
                 break;
             }
-            let width = grapheme.width();
+            let width = cells(grapheme);
             // Preserve the pre-wrap cursor policy, including oversized glyphs.
             if grapheme != "\n"
                 && grapheme != "\t"

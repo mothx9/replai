@@ -5,7 +5,7 @@
 | Axis | Current truth |
 | --- | --- |
 | Project target | Embeddable command-line interaction infrastructure: a simple entry that can grow into rich, long-lived host-driven interfaces over one engine. |
-| Current selected engineering boundary | **NONE**: EMBEDDING.CONTRACT.0 is qualified; no later engineering wave is authorized. |
+| Current selected engineering boundary | **TERMINAL.CAPABILITIES.0 — ACTIVE**: complete F2 admission/degradation across the qualified embedding tiers. |
 | Latest major completed boundary | F1/P3 embedding contract: blocking, session and external driving over one engine, with real Linux/macOS PTYs and Windows portable evidence; [embedding dossier][embedding]. |
 | Most important structural gap | Full F2 capability discovery/degradation and I0 revision-aware host analysis remain incomplete; external driving does not supply either contract. |
 | Executable foundation | Platform-neutral engine; bounded Unicode/grapheme editor; history navigation; completion requests; paste, interrupts/EOF, resize, safe output and exact restoration. |
@@ -22,7 +22,7 @@ This is the sole authority for **public macro state, maturity, strategic program
 dependency ordering and release progression**. [README](README.md) owns first use;
 [architecture][architecture] and contracts own implementation truth; engineering
 dossiers own bounded evidence; Git owns chronology. Planned properties are not
-APIs. The embedding scope is complete; later implementation requires a separate explicit authorization.
+APIs. The embedding scope is complete. F2 is authorized and active; I0 and later implementation remain outside this wave.
 
 Navigate: [maturity](#system-maturity) · [programs](#strategic-programs) ·
 [completed boundaries](#completed-boundaries) · [sequence](#current-execution-sequence) ·
@@ -173,7 +173,7 @@ to their recorded source, workload and environment.
 
 ## Current Execution Sequence
 
-NONE is selected for implementation after the joint F1/P3 closure. The
+TERMINAL.CAPABILITIES.0 (F2) is active after the joint F1/P3 closure. The
 [embedding contract][interaction] now separates scheduling from advancement;
 future work can use it without replacing the editor or acquiring the host loop.
 
