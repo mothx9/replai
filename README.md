@@ -124,7 +124,6 @@ Published macOS checkpoint: **1000-byte ASCII burst → middle insertion → sub
 | REPLAI | 0.194 ms |
 | reedline | 0.460 ms |
 | rustyline | 0.825 ms |
-| linenoise, blocking/feed | 5.869 / 5.899 ms |
 
 **One exact workload, same machine, pinned versions; not a general speed ranking.**
 These are the retained qualified checkpoint measurements, not a claim that every
