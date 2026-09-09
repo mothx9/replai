@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Drive an external C PROCESS through Linux PTYs; use an independent VT oracle."""
+"""Drive an external C PROCESS through native POSIX PTYs; use an independent VT oracle."""
 import fcntl
 import json
 import os
@@ -60,12 +60,16 @@ class Console:
     def wait(self, label, *, after=0, kind=None):
         deadline = time.monotonic() + 20
         while time.monotonic() < deadline:
+            exited = self.p.poll() is not None
+            if exited:
+                # Process exit and pipe readiness are independent observations.
+                # Drain final trace records before deciding an event is absent.
+                self.pump(0)
             for e in self.events[after:]:
                 if e['label'] == label and (kind is None or e['kind'] == kind):
                     self.pump(0)
                     return e
-            if self.p.poll() is not None:
-                self.pump(0)
+            if exited:
                 raise AssertionError((label, self.p.returncode, self.errors.decode(), self.bytes))
             self.pump()
         raise AssertionError(('PTY timeout', label, self.errors.decode(), self.bytes))

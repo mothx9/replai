@@ -15,6 +15,7 @@ work.mkdir(parents=True, exist_ok=True)
 commands = [
     ['python3', 'tools/check_docs.py'],
     ['python3', '-B', 'tools/test_check_docs.py'],
+    ['python3', '-B', 'tools/test_c_pty.py'],
     ['cargo', 'fmt', '--check'],
     ['cargo', 'check', '--workspace', '--all-targets'],
     ['cargo', 'test', '--workspace', '--all-targets'],
