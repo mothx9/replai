@@ -374,8 +374,7 @@
         "https://github.com/mothx9/replai/blob/3c0b14162cd322017bb718b71cc4b433c6100476/docs/interaction.md"
       ],
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34353630259",
-        "https://github.com/mothx9/replai/actions/runs/34355338986"
+        "https://github.com/mothx9/replai/actions/runs/34353630259"
       ],
       "guarantees": [
         "No periodic library wake when idle without a deadline; no blocking input-ready advancement",
@@ -440,16 +439,24 @@
   ],
   "changes": [
     {
-      "capability": "embedding.driven",
+      "capability": "embedding.blocking",
       "compatibility": "compatible",
-      "description": "The real-PTY continuation test sends input immediately after pending-state acknowledgement instead of deliberately sleeping in the observer. Exact near-deadline and stale-token semantics retain the deterministic oracle. Native driver/runtime and public API are unchanged.",
+      "description": "Retained blocking read with typed submission, editing interrupt and EOF",
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34355338986"
+        "https://github.com/mothx9/replai/actions/runs/34353630259"
       ],
       "inputs": [
-        "tools/embedding_pty.py"
+        "src/lib.rs",
+        "src/interaction.rs",
+        "src/terminal.rs",
+        "src/system.rs",
+        "src/presentation.rs",
+        "src/capabilities.rs",
+        "src/driving.rs",
+        "docs/interaction.md",
+        "docs/architecture.md"
       ],
-      "kind": "QUALIFICATION_CHANGED",
+      "kind": "ADDED",
       "platforms": [
         "linux",
         "macos"
@@ -457,10 +464,195 @@
       "surfaces": [
         "rust-native"
       ]
+    },
+    {
+      "capability": "embedding.session",
+      "compatibility": "compatible",
+      "description": "Explicit session compatibility over the common driver",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34353630259"
+      ],
+      "inputs": [
+        "src/lib.rs",
+        "src/interaction.rs",
+        "src/terminal.rs",
+        "src/system.rs",
+        "src/presentation.rs",
+        "src/capabilities.rs",
+        "src/driving.rs",
+        "docs/interaction.md",
+        "docs/architecture.md"
+      ],
+      "kind": "ADDED",
+      "platforms": [
+        "linux",
+        "macos"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "embedding.driven",
+      "compatibility": "compatible",
+      "description": "Externally scheduled input, opaque deadlines and resize over one engine",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34353630259"
+      ],
+      "inputs": [
+        "src/lib.rs",
+        "src/interaction.rs",
+        "src/terminal.rs",
+        "src/system.rs",
+        "src/presentation.rs",
+        "src/capabilities.rs",
+        "src/driving.rs",
+        "docs/interaction.md",
+        "docs/architecture.md"
+      ],
+      "kind": "ADDED",
+      "platforms": [
+        "linux",
+        "macos"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "embedding.readiness",
+      "compatibility": "compatible",
+      "description": "Borrowed native readiness with portable scheduling vocabulary",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34353630259"
+      ],
+      "inputs": [
+        "src/lib.rs",
+        "src/interaction.rs",
+        "src/terminal.rs",
+        "src/system.rs",
+        "src/presentation.rs",
+        "src/capabilities.rs",
+        "src/driving.rs",
+        "docs/interaction.md",
+        "docs/architecture.md"
+      ],
+      "kind": "ADDED",
+      "platforms": [
+        "linux",
+        "macos"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "terminal.admission",
+      "compatibility": "compatible",
+      "description": "Explicit feature facts and admission for new embeddings",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34353630259"
+      ],
+      "inputs": [
+        "src/lib.rs",
+        "src/interaction.rs",
+        "src/terminal.rs",
+        "src/system.rs",
+        "src/presentation.rs",
+        "src/capabilities.rs",
+        "src/driving.rs",
+        "docs/interaction.md",
+        "docs/architecture.md"
+      ],
+      "kind": "ADDED",
+      "platforms": [
+        "linux",
+        "macos"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "interaction.editing",
+      "compatibility": "breaking",
+      "description": "Native Error gains CapabilityMismatch for explicit admission. Exhaustive Rust error matches need an arm; existing editing/session behavior is preserved and C ABI 1 is unchanged.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34353630259"
+      ],
+      "inputs": [
+        "src/event.rs",
+        "src/conformance.rs",
+        "tests/embedding.rs",
+        "tools/embedding_pty.py",
+        "examples/driven.rs",
+        "examples/simple.rs",
+        "examples/support/wait.rs",
+        ".github/workflows/ci.yml"
+      ],
+      "kind": "BREAKING",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "platform.posix_linux",
+      "compatibility": "compatible",
+      "description": "Existing platform scope requalified; Windows remains portable core only, with no terminal backend.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34353630259"
+      ],
+      "inputs": [],
+      "kind": "QUALIFICATION_CHANGED",
+      "platforms": [
+        "linux"
+      ],
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "capability": "platform.posix_macos",
+      "compatibility": "compatible",
+      "description": "Existing platform scope requalified; Windows remains portable core only, with no terminal backend.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34353630259"
+      ],
+      "inputs": [],
+      "kind": "QUALIFICATION_CHANGED",
+      "platforms": [
+        "macos"
+      ],
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "capability": "platform.portable_engine",
+      "compatibility": "compatible",
+      "description": "Existing platform scope requalified; Windows remains portable core only, with no terminal backend.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34353630259"
+      ],
+      "inputs": [],
+      "kind": "QUALIFICATION_CHANGED",
+      "platforms": [
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
     }
   ],
-  "generation": 4,
-  "id": "sha256:eed02d803996d5c6a272c216d15488321dfef9a20e32b2e28f4512b3cd474d96",
+  "generation": 3,
+  "id": "sha256:9ccf788067b71fec8172c72d8a8b53f292d1e08f0a38d063bb1e4433d0851fcf",
   "inputs": [
     {
       "capabilities": [
@@ -961,7 +1153,7 @@
       ],
       "category": "qualification",
       "path": "tools/embedding_pty.py",
-      "sha256": "sha256:002137cb093d94c76faff7d59c6185ed3970aa528151fbcdbab8dae0161630cf",
+      "sha256": "sha256:fe71f2bd373332b1784b70f8da0f6862954083cc616e151f527faec45b1f64ec",
       "surfaces": [
         "rust-native"
       ]
@@ -1067,17 +1259,17 @@
     }
   ],
   "predecessor": {
-    "contract_id": "sha256:9ccf788067b71fec8172c72d8a8b53f292d1e08f0a38d063bb1e4433d0851fcf",
+    "contract_id": "sha256:90bf68e81f46381f54509f808155dca0c1fe7362f33818053c6af813c6316163",
     "repository": "https://github.com/mothx9/replai",
-    "revision": "3c0b14162cd322017bb718b71cc4b433c6100476",
-    "tree": "4b035dbaedf0387961526568a551cf76e0cd617e"
+    "revision": "b9581102220364b94d2bcdef49f602308d24e6c9",
+    "tree": "f5ec77d774166605a578951e6ca827c29391b500"
   },
   "repository": "https://github.com/mothx9/replai",
   "schema_version": 1,
   "source": {
     "dirty": false,
-    "revision": "7f144d9e98a12bc1d3bbfc09bbcda547cecf2bd5",
-    "tree": "8589809ac8898913af193525f884ff7edf07a204"
+    "revision": "3c0b14162cd322017bb718b71cc4b433c6100476",
+    "tree": "4b035dbaedf0387961526568a551cf76e0cd617e"
   },
   "surfaces": [
     {

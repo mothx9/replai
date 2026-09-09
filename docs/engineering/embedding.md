@@ -204,3 +204,22 @@ and Wake are each 32 bytes on this Linux target. Native macOS Interaction is
 640 bytes, with its resource realization; its three scheduling values are each
 32 bytes. Pending read-ahead remains bounded to one 4 KiB tail. None of these
 representations is a public binary layout contract.
+
+### Final observation and documentation carrier
+
+[CI run 34355338986](https://github.com/mothx9/replai/actions/runs/34355338986)
+passed all 12 jobs on `7f144d9e98a12bc1d3bbfc09bbcda547cecf2bd5`, tree
+`8589809ac8898913af193525f884ff7edf07a204`. Full local
+`python3 tools/qualify.py --work /tmp/replai-embedding-final-qualified` passed
+on that clean revision, including C static/shared, Valgrind and release tests.
+The runtime, binding, manifests and lockfile have no diff from the implementation
+revision identified above; the README now includes a real terminal capture.
+
+An intervening macOS run exposed an observer scheduling race: after acknowledging
+an incomplete sequence, the Python host deliberately slept 150 ms inside a
+250 ms protocol window. CI scheduling allowed the legitimate deadline to expire
+before the continuation arrived (`abD!`, rather than `a!b`). The fixture now
+sends the continuation immediately after acknowledgement; real expiry remains a
+separate PTY case, and exact near-deadline/stale-token cases retain the virtual
+clock oracle. This changes qualification timing, not decoder/runtime behavior.
+The producer metadata records this watched-input change as qualification-only.

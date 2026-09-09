@@ -1,0 +1,119 @@
+{
+  "capability_contracts": [
+    {
+      "description": "Externally scheduled input, opaque deadlines and resize over one engine",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/3c0b14162cd322017bb718b71cc4b433c6100476/docs/interaction.md"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34353630259",
+        "https://github.com/mothx9/replai/actions/runs/34355338986"
+      ],
+      "guarantees": [
+        "No periodic library wake when idle without a deadline; no blocking input-ready advancement",
+        "Host owns event waiting and resize notification; output mutations remain serialized",
+        "Deadline tokens reject early, stale and previous-session notifications"
+      ],
+      "id": "embedding.driven",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "changed_inputs": [
+    "tools/embedding_pty.py"
+  ],
+  "changes": [
+    {
+      "capability": "embedding.driven",
+      "compatibility": "compatible",
+      "description": "The real-PTY continuation test sends input immediately after pending-state acknowledgement instead of deliberately sleeping in the observer. Exact near-deadline and stale-token semantics retain the deterministic oracle. Native driver/runtime and public API are unchanged.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34355338986"
+      ],
+      "inputs": [
+        "tools/embedding_pty.py"
+      ],
+      "kind": "QUALIFICATION_CHANGED",
+      "platforms": [
+        "linux",
+        "macos"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "current": {
+    "contract_id": "sha256:eed02d803996d5c6a272c216d15488321dfef9a20e32b2e28f4512b3cd474d96",
+    "repository": "https://github.com/mothx9/replai",
+    "revision": "7f144d9e98a12bc1d3bbfc09bbcda547cecf2bd5",
+    "tree": "8589809ac8898913af193525f884ff7edf07a204"
+  },
+  "id": "sha256:43e4d546acf68f69a194afdde1d54e8caaa77ea195f0bdad6d918e65b43a9a05",
+  "kind": "delta",
+  "platforms": [
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34353630259"
+      ],
+      "id": "linux",
+      "status": "runtime-qualified",
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34353630259"
+      ],
+      "id": "macos",
+      "status": "runtime-qualified",
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34353630259"
+      ],
+      "id": "windows",
+      "status": "portable-core-qualified",
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "previous": {
+    "contract_id": "sha256:9ccf788067b71fec8172c72d8a8b53f292d1e08f0a38d063bb1e4433d0851fcf",
+    "repository": "https://github.com/mothx9/replai",
+    "revision": "3c0b14162cd322017bb718b71cc4b433c6100476",
+    "tree": "4b035dbaedf0387961526568a551cf76e0cd617e"
+  },
+  "schema_version": 1,
+  "surfaces": [
+    {
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/interaction.md"
+      ],
+      "id": "rust-native",
+      "kind": "rust-native",
+      "version": "pre-release"
+    },
+    {
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/c-api.md"
+      ],
+      "id": "c-abi-v1",
+      "kind": "c-abi",
+      "version": "1"
+    }
+  ]
+}
