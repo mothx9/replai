@@ -147,8 +147,7 @@
         "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/architecture.md#system-and-protocol-realizations"
       ],
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34370575960",
-        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
+        "https://github.com/mothx9/replai/actions/runs/34238242934"
       ],
       "guarantees": [
         "Exact termios restoration, paste lifecycle, resource exclusion and descriptor ownership",
@@ -170,8 +169,7 @@
         "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/engineering/macos-perf.md"
       ],
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34370575960",
-        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
+        "https://github.com/mothx9/replai/actions/runs/34238242934"
       ],
       "guarantees": [
         "Real Rust/C PTYs and native leak qualification; captured console modes restored"
@@ -192,8 +190,7 @@
         "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/architecture.md"
       ],
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34370575960",
-        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
+        "https://github.com/mothx9/replai/actions/runs/34238242934"
       ],
       "guarantees": [
         "Native Linux/macOS/Windows portable tests; Windows has no runtime terminal backend",
@@ -418,20 +415,17 @@
       ]
     },
     {
-      "description": "Unified terminal admission across blocking, session and driven embedding",
+      "description": "Explicit feature facts and admission for new embeddings",
       "documentation": [
-        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/interaction.md#terminal-capabilities"
+        "https://github.com/mothx9/replai/blob/3c0b14162cd322017bb718b71cc4b433c6100476/docs/interaction.md"
       ],
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34370575960",
-        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
+        "https://github.com/mothx9/replai/actions/runs/34353630259"
       ],
       "guarantees": [
-        "Native resource observations override protocol configuration; negative admission precedes raw mode and output",
-        "TERM is a protocol hint; NO_COLOR is user policy, captured at configuration boundaries",
-        "Presentation, Editing and Driven requirements share one resolver; optional styling and paste degrade explicitly",
-        "No-paste ordinary editing does not promise atomic multiline input; missing native geometry reports CapabilityMismatch",
-        "Legacy session/C ABI 1 retains explicit VT assumptions and unchanged numeric C admission status"
+        "Required cursor/erase facts separated from optional styling/paste and host policy",
+        "Simple/driven environment defaults refuse unknown or dumb interactive capability before raw mode",
+        "Not full terminal negotiation; plain documents do not imply an interactive editor"
       ],
       "id": "terminal.admission",
       "maturity": "experimental",
@@ -442,247 +436,56 @@
       "surfaces": [
         "rust-native"
       ]
-    },
-    {
-      "description": "Inspectable portable facts, requirements and resolved capability snapshot",
-      "documentation": [
-        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/interaction.md#terminal-capabilities"
-      ],
-      "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34370575960",
-        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
-      ],
-      "guarantees": [
-        "Observed resource facts, protocol assumptions, optional policy and degradation remain distinct",
-        "Dimension query, resize delivery, waitable readiness and protocol deadlines are independent",
-        "Native active snapshot inspection performs no I/O; generic resolution has no allocation or environment reads",
-        "Windows qualifies the portable model only; no terminal runtime is supplied"
-      ],
-      "id": "terminal.capability_snapshot",
-      "maturity": "experimental",
-      "platforms": [
-        "linux",
-        "macos",
-        "windows"
-      ],
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "description": "Public deterministic display-cell policy over the shared presentation implementation",
-      "documentation": [
-        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/presentation.md#display-width-contract"
-      ],
-      "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34370575960",
-        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
-      ],
-      "guarantees": [
-        "UnicodeNarrow preserves the qualified unicode-width non-CJK policy for safe single-line text",
-        "UTF-8 validity, grapheme segmentation and display cells are separate; control text is rejected by the width query",
-        "Actual emulator/font emoji and ambiguous-width behavior is not discovered or universally guaranteed"
-      ],
-      "id": "terminal.width_policy",
-      "maturity": "experimental",
-      "platforms": [
-        "linux",
-        "macos",
-        "windows"
-      ],
-      "surfaces": [
-        "rust-native"
-      ]
     }
   ],
   "changes": [
     {
-      "capability": "terminal.admission",
+      "capability": "embedding.driven",
       "compatibility": "compatible",
-      "description": "Admission now resolves observed resources, explicit protocol evidence, requirements and optional policy once for every native tier. Strong host protocol evidence may replace TERM hints without erasing NO_COLOR policy. Missing native geometry is a typed Rust capability mismatch; C ABI 1 status and legacy session assumptions remain unchanged.",
+      "description": "The real-PTY continuation test sends input immediately after pending-state acknowledgement instead of deliberately sleeping in the observer. Exact near-deadline and stale-token semantics retain the deterministic oracle. Native driver/runtime and public API are unchanged.",
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34370575960",
-        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
+        "https://github.com/mothx9/replai/actions/runs/34355338986"
       ],
       "inputs": [
-        "src/lib.rs",
-        "src/capabilities.rs",
-        "src/interaction.rs",
-        "src/system.rs",
-        "src/terminal.rs",
-        "src/presentation.rs",
-        "docs/architecture.md",
-        "docs/interaction.md",
         "tools/embedding_pty.py"
       ],
-      "kind": "BEHAVIOR_CHANGED",
-      "platforms": [
-        "linux",
-        "macos",
-        "windows"
-      ],
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capability": "terminal.width_policy",
-      "compatibility": "compatible",
-      "description": "Expose the deterministic UnicodeNarrow safe-text cell query; existing layout and document width algorithms delegate to the same implementation without changing geometry.",
-      "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34370575960",
-        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
-      ],
-      "inputs": [
-        "src/width.rs",
-        "src/document.rs",
-        "src/presentation.rs",
-        "src/lib.rs",
-        "docs/presentation.md"
-      ],
-      "kind": "ADDED",
-      "platforms": [
-        "linux",
-        "macos",
-        "windows"
-      ],
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capability": "terminal.capability_snapshot",
-      "compatibility": "compatible",
-      "description": "Expose portable realization/requirements/degradation types and retained native capability inspection. Native observations and virtual resolver evidence are identified separately.",
-      "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34370575960",
-        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
-      ],
-      "inputs": [
-        "src/lib.rs",
-        "src/capabilities.rs",
-        "src/interaction.rs",
-        "tests/capabilities.rs",
-        "tests/capabilities_pty.rs",
-        "docs/engineering/terminal-capabilities.md",
-        "tools/perf/components.rs"
-      ],
-      "kind": "ADDED",
-      "platforms": [
-        "linux",
-        "macos",
-        "windows"
-      ],
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capability": "abi.c.v1",
-      "compatibility": "compatible",
-      "description": "Preserve exact ABI declarations, layouts, symbols and numeric error categories. The PTY observer drains and rechecks final events before judging process exit; negative/missing-event tests retain failure behavior. Isolated C/static/shared/C++ and native memory checks rerun.",
-      "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34370575960",
-        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
-      ],
-      "inputs": [
-        "tools/c_pty.py",
-        "tools/test_c_pty.py",
-        "tools/qualify.py",
-        ".github/workflows/ci.yml"
-      ],
       "kind": "QUALIFICATION_CHANGED",
       "platforms": [
         "linux",
         "macos"
-      ],
-      "surfaces": [
-        "c-abi-v1"
-      ]
-    },
-    {
-      "capability": "platform.posix_linux",
-      "compatibility": "compatible",
-      "description": "Requalify existing platform scope with portable capability matrices and, on native POSIX systems, real degraded/negative PTY profiles and unchanged lifecycle/memory gates.",
-      "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34370575960",
-        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
-      ],
-      "inputs": [],
-      "kind": "QUALIFICATION_CHANGED",
-      "platforms": [
-        "linux"
-      ],
-      "surfaces": [
-        "rust-native",
-        "c-abi-v1"
-      ]
-    },
-    {
-      "capability": "platform.posix_macos",
-      "compatibility": "compatible",
-      "description": "Requalify existing platform scope with portable capability matrices and, on native POSIX systems, real degraded/negative PTY profiles and unchanged lifecycle/memory gates.",
-      "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34370575960",
-        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
-      ],
-      "inputs": [],
-      "kind": "QUALIFICATION_CHANGED",
-      "platforms": [
-        "macos"
-      ],
-      "surfaces": [
-        "rust-native",
-        "c-abi-v1"
-      ]
-    },
-    {
-      "capability": "platform.portable_engine",
-      "compatibility": "compatible",
-      "description": "Requalify existing platform scope with portable capability matrices and, on native POSIX systems, real degraded/negative PTY profiles and unchanged lifecycle/memory gates.",
-      "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34370575960",
-        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
-      ],
-      "inputs": [],
-      "kind": "QUALIFICATION_CHANGED",
-      "platforms": [
-        "windows"
       ],
       "surfaces": [
         "rust-native"
       ]
     }
   ],
-  "generation": 5,
-  "id": "sha256:8f5da6129ab2f27cb86e881608feeb7f3e8dadf57cba1700664f087a29e4fa5d",
+  "generation": 4,
+  "id": "sha256:eed02d803996d5c6a272c216d15488321dfef9a20e32b2e28f4512b3cd474d96",
   "inputs": [
     {
       "capabilities": [
-        "embedding.blocking",
-        "embedding.driven",
-        "embedding.readiness",
-        "embedding.session",
-        "interaction.completion_request",
         "interaction.editing",
-        "interaction.external_output",
         "interaction.history_navigation",
-        "platform.portable_engine",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
         "platform.posix_linux",
         "platform.posix_macos",
-        "presentation.composed_prompt",
-        "presentation.prompt",
-        "presentation.status",
+        "platform.portable_engine",
         "presentation.structured_output",
         "presentation.table",
+        "presentation.status",
+        "presentation.composed_prompt",
         "presentation.theme",
-        "terminal.admission",
-        "terminal.capability_snapshot",
-        "terminal.width_policy"
+        "embedding.blocking",
+        "embedding.session",
+        "embedding.driven",
+        "embedding.readiness",
+        "terminal.admission"
       ],
       "category": "api",
       "path": "src/lib.rs",
-      "sha256": "sha256:58f37d9e51ea801ca457b002dd798838c07a722248620b08ca9bdcb255230a25",
+      "sha256": "sha256:c978ac6c6cb7febb8ef424fbbbf86e26d7dc960e6d5942ba3327150e40e28885",
       "surfaces": [
         "rust-native"
       ]
@@ -820,58 +623,56 @@
     },
     {
       "capabilities": [
-        "embedding.blocking",
-        "embedding.driven",
-        "embedding.readiness",
-        "embedding.session",
-        "interaction.completion_request",
         "interaction.editing",
-        "interaction.external_output",
         "interaction.history_navigation",
-        "platform.portable_engine",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
         "platform.posix_linux",
         "platform.posix_macos",
-        "presentation.composed_prompt",
-        "presentation.prompt",
-        "presentation.status",
+        "platform.portable_engine",
         "presentation.structured_output",
         "presentation.table",
+        "presentation.status",
+        "presentation.composed_prompt",
         "presentation.theme",
-        "terminal.admission",
-        "terminal.width_policy"
+        "embedding.blocking",
+        "embedding.session",
+        "embedding.driven",
+        "embedding.readiness",
+        "terminal.admission"
       ],
       "category": "api",
       "path": "src/presentation.rs",
-      "sha256": "sha256:53eea8e8a3208abe91ab426b235951d5572b7c0f677378c65ac1805d151ea851",
+      "sha256": "sha256:082689c57a023cd9640de0ec9f99e77fb745e0f3f24515eac32cf48ff30bee85",
       "surfaces": [
         "rust-native"
       ]
     },
     {
       "capabilities": [
-        "embedding.blocking",
-        "embedding.driven",
-        "embedding.readiness",
-        "embedding.session",
-        "interaction.completion_request",
         "interaction.editing",
-        "interaction.external_output",
         "interaction.history_navigation",
-        "platform.portable_engine",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
         "platform.posix_linux",
         "platform.posix_macos",
-        "presentation.composed_prompt",
-        "presentation.prompt",
-        "presentation.status",
+        "platform.portable_engine",
         "presentation.structured_output",
         "presentation.table",
+        "presentation.status",
+        "presentation.composed_prompt",
         "presentation.theme",
-        "terminal.admission",
-        "terminal.capability_snapshot"
+        "embedding.blocking",
+        "embedding.session",
+        "embedding.driven",
+        "embedding.readiness",
+        "terminal.admission"
       ],
       "category": "api",
       "path": "src/interaction.rs",
-      "sha256": "sha256:0570e3f6db31f89425e0fb383e1392df85ac25c4f2e55cbbe06796c2ab500521",
+      "sha256": "sha256:09293b434fddf65b349ba3bd03e3b23aab1dccd4650794bc15884036b4cc1831",
       "surfaces": [
         "rust-native"
       ]
@@ -901,51 +702,51 @@
     },
     {
       "capabilities": [
-        "embedding.blocking",
-        "embedding.driven",
-        "embedding.readiness",
-        "embedding.session",
-        "interaction.completion_request",
         "interaction.editing",
-        "interaction.external_output",
         "interaction.history_navigation",
-        "platform.portable_engine",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
         "platform.posix_linux",
         "platform.posix_macos",
-        "presentation.composed_prompt",
-        "presentation.prompt",
-        "presentation.status",
+        "platform.portable_engine",
         "presentation.structured_output",
         "presentation.table",
+        "presentation.status",
+        "presentation.composed_prompt",
         "presentation.theme",
+        "embedding.blocking",
+        "embedding.session",
+        "embedding.driven",
+        "embedding.readiness",
         "terminal.admission"
       ],
       "category": "behavior",
       "path": "src/terminal.rs",
-      "sha256": "sha256:0cea572b85be0a6ba3726b900cb3d0cbee3610a432d623389911fa60a02e30c4",
+      "sha256": "sha256:9449114773982e08611a8c7b342ae7a41f68f0319fa394d53631f3e359713dcd",
       "surfaces": [
         "rust-native"
       ]
     },
     {
       "capabilities": [
-        "embedding.blocking",
-        "embedding.driven",
-        "embedding.readiness",
-        "embedding.session",
-        "interaction.completion_request",
         "interaction.editing",
-        "interaction.external_output",
         "interaction.history_navigation",
-        "platform.portable_engine",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
         "platform.posix_linux",
         "platform.posix_macos",
-        "presentation.prompt",
+        "platform.portable_engine",
+        "embedding.blocking",
+        "embedding.session",
+        "embedding.driven",
+        "embedding.readiness",
         "terminal.admission"
       ],
       "category": "behavior",
       "path": "src/system.rs",
-      "sha256": "sha256:c62f90d1f7f4636b93fe7cee796642b7d7c1d0ba47a4512b0a6f107a7f5c1416",
+      "sha256": "sha256:cf4f5e432a612bc251c0500525acaaee9432d7ec2dc470d07158a07635f8a457",
       "surfaces": [
         "rust-native"
       ]
@@ -974,75 +775,74 @@
     },
     {
       "capabilities": [
-        "interaction.completion_request",
         "interaction.editing",
-        "interaction.external_output",
         "interaction.history_navigation",
-        "platform.portable_engine",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
         "platform.posix_linux",
         "platform.posix_macos",
-        "presentation.composed_prompt",
-        "presentation.prompt",
-        "presentation.status",
+        "platform.portable_engine",
         "presentation.structured_output",
         "presentation.table",
-        "presentation.theme",
-        "terminal.width_policy"
+        "presentation.status",
+        "presentation.composed_prompt",
+        "presentation.theme"
       ],
       "category": "documentation",
       "path": "docs/presentation.md",
-      "sha256": "sha256:0879b33c743096eb10ab28eeaa83cad7302daae0f274fa3e9050ecb29eeecf08",
+      "sha256": "sha256:aab9bd913a90c5d2f78955dfacec6cae5476454855fd1f10f6863be5fcf1db3b",
       "surfaces": [
         "rust-native"
       ]
     },
     {
       "capabilities": [
-        "embedding.blocking",
-        "embedding.driven",
-        "embedding.readiness",
-        "embedding.session",
-        "interaction.completion_request",
         "interaction.editing",
-        "interaction.external_output",
         "interaction.history_navigation",
-        "platform.portable_engine",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
         "platform.posix_linux",
         "platform.posix_macos",
-        "presentation.composed_prompt",
-        "presentation.prompt",
-        "presentation.status",
+        "platform.portable_engine",
         "presentation.structured_output",
         "presentation.table",
+        "presentation.status",
+        "presentation.composed_prompt",
         "presentation.theme",
+        "embedding.blocking",
+        "embedding.session",
+        "embedding.driven",
+        "embedding.readiness",
         "terminal.admission"
       ],
       "category": "documentation",
       "path": "docs/architecture.md",
-      "sha256": "sha256:001546c21f58739a01ca65252148f9971bd3fdd74ed86279f686b8ea44512930",
+      "sha256": "sha256:a67d3157e61bc483ee291ee8b1d72c996abe28cea6c9695ac6f400d98196217c",
       "surfaces": [
         "rust-native"
       ]
     },
     {
       "capabilities": [
-        "embedding.blocking",
-        "embedding.driven",
-        "embedding.readiness",
-        "embedding.session",
-        "interaction.completion_request",
         "interaction.editing",
-        "interaction.external_output",
         "interaction.history_navigation",
-        "platform.portable_engine",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
         "platform.posix_linux",
         "platform.posix_macos",
-        "presentation.prompt",
+        "platform.portable_engine",
+        "embedding.blocking",
+        "embedding.session",
+        "embedding.driven",
+        "embedding.readiness",
         "terminal.admission"
       ],
       "category": "documentation",
       "path": "docs/interaction.md",
-      "sha256": "sha256:218d1013820ca450b33c0a8bbe521f953d52dda1d6f52caff32a943576c3c7a1",
+      "sha256": "sha256:6a19a9c4dfa66eca568b09e189cd6cf8b7cc766e2666ad7c3290dee2516d036d",
       "surfaces": [
         "rust-native"
       ]
@@ -1073,33 +873,31 @@
     },
     {
       "capabilities": [
-        "presentation.composed_prompt",
-        "presentation.status",
         "presentation.structured_output",
         "presentation.table",
-        "presentation.theme",
-        "terminal.width_policy"
+        "presentation.status",
+        "presentation.composed_prompt",
+        "presentation.theme"
       ],
       "category": "api",
       "path": "src/document.rs",
-      "sha256": "sha256:1245196c1c94872cdf1d416065689abef129dc2335854005994e879bc960251f",
+      "sha256": "sha256:f060f8d894f74ff42414c5e5da94d141f1f345aef31f24f4807ee76838b4a988",
       "surfaces": [
         "rust-native"
       ]
     },
     {
       "capabilities": [
+        "interaction.editing",
         "embedding.blocking",
+        "embedding.session",
         "embedding.driven",
         "embedding.readiness",
-        "embedding.session",
-        "interaction.editing",
-        "terminal.admission",
-        "terminal.capability_snapshot"
+        "terminal.admission"
       ],
       "category": "api",
       "path": "src/capabilities.rs",
-      "sha256": "sha256:2699d395437ed4b3989722a777e0ed55aeba57d20c6503eb930a12128ea8eeba",
+      "sha256": "sha256:8b645910c0d647ab4dde8a4629b10887e80917fa4a5702d76f9f1fd5cb9f234c",
       "surfaces": [
         "rust-native"
       ]
@@ -1154,16 +952,16 @@
     },
     {
       "capabilities": [
+        "interaction.editing",
         "embedding.blocking",
+        "embedding.session",
         "embedding.driven",
         "embedding.readiness",
-        "embedding.session",
-        "interaction.editing",
         "terminal.admission"
       ],
       "category": "qualification",
       "path": "tools/embedding_pty.py",
-      "sha256": "sha256:2c296e37a055af80a30eb9c002a1f4501e91cf8ff8145670408a79eaa380b22a",
+      "sha256": "sha256:002137cb093d94c76faff7d59c6185ed3970aa528151fbcdbab8dae0161630cf",
       "surfaces": [
         "rust-native"
       ]
@@ -1218,111 +1016,18 @@
     },
     {
       "capabilities": [
-        "abi.c.v1",
+        "interaction.editing",
         "embedding.blocking",
+        "embedding.session",
         "embedding.driven",
         "embedding.readiness",
-        "embedding.session",
-        "interaction.editing",
         "terminal.admission"
       ],
       "category": "qualification",
       "path": ".github/workflows/ci.yml",
-      "sha256": "sha256:4a0912b59c02b940ea83b9a27ccb860e9dd70df2bbca2422237650342cea303b",
-      "surfaces": [
-        "c-abi-v1",
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "terminal.width_policy"
-      ],
-      "category": "api",
-      "path": "src/width.rs",
-      "sha256": "sha256:ea8859ec7bbfeacf641b798f70ae8723154ec0b31f3247b92046d3fa3e2c47d3",
+      "sha256": "sha256:29f1d7183e2abc751c01e45eff5bcbbc64a9df7bcb94aab6907d7c0438e4b5b4",
       "surfaces": [
         "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "terminal.capability_snapshot"
-      ],
-      "category": "qualification",
-      "path": "tests/capabilities.rs",
-      "sha256": "sha256:191660c55d0f964ef60f14b3ae55f1f88de0409b135d07635531f92a0d7c0a31",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "terminal.capability_snapshot"
-      ],
-      "category": "qualification",
-      "path": "tests/capabilities_pty.rs",
-      "sha256": "sha256:54f2e60f462f399f1115ca9510a60f9940c4df368c886fe7c7c48bf4d53e64dd",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "terminal.capability_snapshot"
-      ],
-      "category": "qualification",
-      "path": "docs/engineering/terminal-capabilities.md",
-      "sha256": "sha256:ff2663ee21b09f492ba1483b1fdfaa8035d6d98567ccbe86e82cf53997ff2c8e",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "terminal.capability_snapshot"
-      ],
-      "category": "qualification",
-      "path": "tools/perf/components.rs",
-      "sha256": "sha256:c8fd033b16d7babe1a8e881de9551c2f9dd801bc62023f4540f67cc5d27fd468",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "abi.c.v1"
-      ],
-      "category": "qualification",
-      "path": "tools/c_pty.py",
-      "sha256": "sha256:39c169e2a4f024d88ed55adbcab596220fd984f8d0800d9e9af09e706282c8a9",
-      "surfaces": [
-        "rust-native",
-        "c-abi-v1"
-      ]
-    },
-    {
-      "capabilities": [
-        "abi.c.v1"
-      ],
-      "category": "qualification",
-      "path": "tools/test_c_pty.py",
-      "sha256": "sha256:ad54fb8d69f482d52402e817f493aa3e114cf7150656ddf7588a9d9f98b460c6",
-      "surfaces": [
-        "rust-native",
-        "c-abi-v1"
-      ]
-    },
-    {
-      "capabilities": [
-        "abi.c.v1"
-      ],
-      "category": "qualification",
-      "path": "tools/qualify.py",
-      "sha256": "sha256:9d6d266f8aa8aea9456ea5929d45375c21ea2f2f377f8a4274afca5608d2bcef",
-      "surfaces": [
-        "rust-native",
-        "c-abi-v1"
       ]
     }
   ],
@@ -1330,7 +1035,7 @@
   "platforms": [
     {
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34370575960"
+        "https://github.com/mothx9/replai/actions/runs/34353630259"
       ],
       "id": "linux",
       "status": "runtime-qualified",
@@ -1341,7 +1046,7 @@
     },
     {
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34370575960"
+        "https://github.com/mothx9/replai/actions/runs/34353630259"
       ],
       "id": "macos",
       "status": "runtime-qualified",
@@ -1352,7 +1057,7 @@
     },
     {
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34370575960"
+        "https://github.com/mothx9/replai/actions/runs/34353630259"
       ],
       "id": "windows",
       "status": "portable-core-qualified",
@@ -1362,23 +1067,22 @@
     }
   ],
   "predecessor": {
-    "contract_id": "sha256:eed02d803996d5c6a272c216d15488321dfef9a20e32b2e28f4512b3cd474d96",
+    "contract_id": "sha256:9ccf788067b71fec8172c72d8a8b53f292d1e08f0a38d063bb1e4433d0851fcf",
     "repository": "https://github.com/mothx9/replai",
-    "revision": "7f144d9e98a12bc1d3bbfc09bbcda547cecf2bd5",
-    "tree": "8589809ac8898913af193525f884ff7edf07a204"
+    "revision": "3c0b14162cd322017bb718b71cc4b433c6100476",
+    "tree": "4b035dbaedf0387961526568a551cf76e0cd617e"
   },
   "repository": "https://github.com/mothx9/replai",
   "schema_version": 1,
   "source": {
     "dirty": false,
-    "revision": "36fefcaebba8489d672eb1c5c2b4f5cb1d939d86",
-    "tree": "6ed9bbde9e820cfdff7a160870377d3aa9da0723"
+    "revision": "7f144d9e98a12bc1d3bbfc09bbcda547cecf2bd5",
+    "tree": "8589809ac8898913af193525f884ff7edf07a204"
   },
   "surfaces": [
     {
       "documentation": [
-        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/interaction.md",
-        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/presentation.md"
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/interaction.md"
       ],
       "id": "rust-native",
       "kind": "rust-native",

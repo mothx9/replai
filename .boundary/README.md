@@ -4,11 +4,16 @@ REPLAI owns these producer declarations. They describe generic capabilities,
 surfaces, qualification and changes; they assign no consumer paths, commands or
 migration work. Consumer profiles must be authored by their own repositories.
 
-- [Current producer snapshot](producer.json), generation 4: qualified source
-  `7f144d9e98a12bc1d3bbfc09bbcda547cecf2bd5`, tree
-  `8589809ac8898913af193525f884ff7edf07a204`. The source includes the embedding implementation and
-  its qualification/documentation carrier; the engine implementation is identified
-  separately in the [embedding dossier](../docs/engineering/embedding.md).
+- [Current producer snapshot](producer.json), generation 5: qualified source/document
+  `36fefcaebba8489d672eb1c5c2b4f5cb1d939d86`, tree
+  `6ed9bbde9e820cfdff7a160870377d3aa9da0723`. The [F2 dossier](../docs/engineering/terminal-capabilities.md)
+  separately identifies the implementation, measured source and native CI revision.
+- [Terminal capability delta](deltas/embedding-terminal-capabilities.json): unified
+  admission, portable capability snapshot and deterministic width query. C ABI 1
+  remains exact; its qualification is refreshed, including final-event observation.
+  These native additions assign no consumer migration.
+- [Previous embedding producer snapshot](checkpoints/7f144d9e98a12bc1d3bbfc09bbcda547cecf2bd5.json)
+  preserves generation 4 and its exact source/fingerprints.
 - [Structured-presentation producer snapshot](checkpoints/b9581102220364b94d2bcdef49f602308d24e6c9.json):
   the immutable generation-2 structured-presentation contract.
 - [Embedding consumer-neutral delta](deltas/b958110-embedding.json): native blocking,
@@ -17,7 +22,7 @@ migration work. Consumer profiles must be authored by their own repositories.
   C ABI 1 remains unchanged; platform qualification is refreshed. No migration
   is assigned to any consumer.
 - [Previous embedding snapshot](checkpoints/3c0b14162cd322017bb718b71cc4b433c6100476.json)
-  and [current qualification-only delta](deltas/embedding-observation.json) retain
+  and [historical qualification-only delta](deltas/embedding-observation.json) retain
   the real-PTY observation correction. No runtime, Rust API or C ABI changed
   between these two snapshots.
 - Historical [6365 checkpoint](checkpoints/6365f84e12865871bf26ecf0d984b48213d81ebc.json)
@@ -37,7 +42,7 @@ behavior, ABI and documentation inputs. Its external validation command is:
 
 ```sh
 boundary validate .boundary/producer.json --repo . \
-  --previous .boundary/checkpoints/3c0b14162cd322017bb718b71cc4b433c6100476.json
+  --previous .boundary/checkpoints/7f144d9e98a12bc1d3bbfc09bbcda547cecf2bd5.json
 ```
 
 Run from a clean REPLAI checkout with BOUNDARY installed separately. Validation

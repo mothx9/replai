@@ -1,0 +1,422 @@
+{
+  "capability_contracts": [
+    {
+      "description": "Exact pre-release C ABI 1 with caller-owned spans/buffers and opaque handles",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/c-api.md"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34238242934"
+      ],
+      "guarantees": [
+        "Numeric ABI identity 1; layout and symbol contract qualified",
+        "Static/shared installation; caller descriptors are duplicated, not transferred",
+        "No long-term stability or Windows resource-binding claim"
+      ],
+      "id": "abi.c.v1",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos"
+      ],
+      "surfaces": [
+        "c-abi-v1"
+      ]
+    },
+    {
+      "description": "Platform-neutral editing, interaction state and logical rendering",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/architecture.md"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34370575960",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
+      ],
+      "guarantees": [
+        "Native Linux/macOS/Windows portable tests; Windows has no runtime terminal backend",
+        "No operating-system resources, scheduler or product semantics in the engine"
+      ],
+      "id": "platform.portable_engine",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "description": "Qualified Linux terminal resource binding",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/architecture.md#system-and-protocol-realizations"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34370575960",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
+      ],
+      "guarantees": [
+        "Exact termios restoration, paste lifecycle, resource exclusion and descriptor ownership",
+        "Real Rust/C PTYs and Linux Valgrind qualification"
+      ],
+      "id": "platform.posix_linux",
+      "maturity": "experimental",
+      "platforms": [
+        "linux"
+      ],
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "description": "Qualified macOS terminal resource binding through the shared POSIX backend",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/engineering/macos-perf.md"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34370575960",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
+      ],
+      "guarantees": [
+        "Real Rust/C PTYs and native leak qualification; captured console modes restored"
+      ],
+      "id": "platform.posix_macos",
+      "maturity": "experimental",
+      "platforms": [
+        "macos"
+      ],
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "description": "Unified terminal admission across blocking, session and driven embedding",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/interaction.md#terminal-capabilities"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34370575960",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
+      ],
+      "guarantees": [
+        "Native resource observations override protocol configuration; negative admission precedes raw mode and output",
+        "TERM is a protocol hint; NO_COLOR is user policy, captured at configuration boundaries",
+        "Presentation, Editing and Driven requirements share one resolver; optional styling and paste degrade explicitly",
+        "No-paste ordinary editing does not promise atomic multiline input; missing native geometry reports CapabilityMismatch",
+        "Legacy session/C ABI 1 retains explicit VT assumptions and unchanged numeric C admission status"
+      ],
+      "id": "terminal.admission",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "description": "Inspectable portable facts, requirements and resolved capability snapshot",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/interaction.md#terminal-capabilities"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34370575960",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
+      ],
+      "guarantees": [
+        "Observed resource facts, protocol assumptions, optional policy and degradation remain distinct",
+        "Dimension query, resize delivery, waitable readiness and protocol deadlines are independent",
+        "Native active snapshot inspection performs no I/O; generic resolution has no allocation or environment reads",
+        "Windows qualifies the portable model only; no terminal runtime is supplied"
+      ],
+      "id": "terminal.capability_snapshot",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "description": "Public deterministic display-cell policy over the shared presentation implementation",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/presentation.md#display-width-contract"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34370575960",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
+      ],
+      "guarantees": [
+        "UnicodeNarrow preserves the qualified unicode-width non-CJK policy for safe single-line text",
+        "UTF-8 validity, grapheme segmentation and display cells are separate; control text is rejected by the width query",
+        "Actual emulator/font emoji and ambiguous-width behavior is not discovered or universally guaranteed"
+      ],
+      "id": "terminal.width_policy",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "changed_inputs": [
+    ".github/workflows/ci.yml",
+    "docs/architecture.md",
+    "docs/engineering/terminal-capabilities.md",
+    "docs/interaction.md",
+    "docs/presentation.md",
+    "src/capabilities.rs",
+    "src/document.rs",
+    "src/interaction.rs",
+    "src/lib.rs",
+    "src/presentation.rs",
+    "src/system.rs",
+    "src/terminal.rs",
+    "src/width.rs",
+    "tests/capabilities.rs",
+    "tests/capabilities_pty.rs",
+    "tools/c_pty.py",
+    "tools/embedding_pty.py",
+    "tools/perf/components.rs",
+    "tools/qualify.py",
+    "tools/test_c_pty.py"
+  ],
+  "changes": [
+    {
+      "capability": "terminal.admission",
+      "compatibility": "compatible",
+      "description": "Admission now resolves observed resources, explicit protocol evidence, requirements and optional policy once for every native tier. Strong host protocol evidence may replace TERM hints without erasing NO_COLOR policy. Missing native geometry is a typed Rust capability mismatch; C ABI 1 status and legacy session assumptions remain unchanged.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34370575960",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
+      ],
+      "inputs": [
+        "src/lib.rs",
+        "src/capabilities.rs",
+        "src/interaction.rs",
+        "src/system.rs",
+        "src/terminal.rs",
+        "src/presentation.rs",
+        "docs/architecture.md",
+        "docs/interaction.md",
+        "tools/embedding_pty.py"
+      ],
+      "kind": "BEHAVIOR_CHANGED",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "terminal.width_policy",
+      "compatibility": "compatible",
+      "description": "Expose the deterministic UnicodeNarrow safe-text cell query; existing layout and document width algorithms delegate to the same implementation without changing geometry.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34370575960",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
+      ],
+      "inputs": [
+        "src/width.rs",
+        "src/document.rs",
+        "src/presentation.rs",
+        "src/lib.rs",
+        "docs/presentation.md"
+      ],
+      "kind": "ADDED",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "terminal.capability_snapshot",
+      "compatibility": "compatible",
+      "description": "Expose portable realization/requirements/degradation types and retained native capability inspection. Native observations and virtual resolver evidence are identified separately.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34370575960",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
+      ],
+      "inputs": [
+        "src/lib.rs",
+        "src/capabilities.rs",
+        "src/interaction.rs",
+        "tests/capabilities.rs",
+        "tests/capabilities_pty.rs",
+        "docs/engineering/terminal-capabilities.md",
+        "tools/perf/components.rs"
+      ],
+      "kind": "ADDED",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "abi.c.v1",
+      "compatibility": "compatible",
+      "description": "Preserve exact ABI declarations, layouts, symbols and numeric error categories. The PTY observer drains and rechecks final events before judging process exit; negative/missing-event tests retain failure behavior. Isolated C/static/shared/C++ and native memory checks rerun.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34370575960",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
+      ],
+      "inputs": [
+        "tools/c_pty.py",
+        "tools/test_c_pty.py",
+        "tools/qualify.py",
+        ".github/workflows/ci.yml"
+      ],
+      "kind": "QUALIFICATION_CHANGED",
+      "platforms": [
+        "linux",
+        "macos"
+      ],
+      "surfaces": [
+        "c-abi-v1"
+      ]
+    },
+    {
+      "capability": "platform.posix_linux",
+      "compatibility": "compatible",
+      "description": "Requalify existing platform scope with portable capability matrices and, on native POSIX systems, real degraded/negative PTY profiles and unchanged lifecycle/memory gates.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34370575960",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
+      ],
+      "inputs": [],
+      "kind": "QUALIFICATION_CHANGED",
+      "platforms": [
+        "linux"
+      ],
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "capability": "platform.posix_macos",
+      "compatibility": "compatible",
+      "description": "Requalify existing platform scope with portable capability matrices and, on native POSIX systems, real degraded/negative PTY profiles and unchanged lifecycle/memory gates.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34370575960",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
+      ],
+      "inputs": [],
+      "kind": "QUALIFICATION_CHANGED",
+      "platforms": [
+        "macos"
+      ],
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "capability": "platform.portable_engine",
+      "compatibility": "compatible",
+      "description": "Requalify existing platform scope with portable capability matrices and, on native POSIX systems, real degraded/negative PTY profiles and unchanged lifecycle/memory gates.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34370575960",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
+      ],
+      "inputs": [],
+      "kind": "QUALIFICATION_CHANGED",
+      "platforms": [
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "current": {
+    "contract_id": "sha256:8f5da6129ab2f27cb86e881608feeb7f3e8dadf57cba1700664f087a29e4fa5d",
+    "repository": "https://github.com/mothx9/replai",
+    "revision": "36fefcaebba8489d672eb1c5c2b4f5cb1d939d86",
+    "tree": "6ed9bbde9e820cfdff7a160870377d3aa9da0723"
+  },
+  "id": "sha256:6dbe0cead8bb3b6f49c34bb58aeb1bc490902aee0e31fe7eb38d0005460265ef",
+  "kind": "delta",
+  "platforms": [
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34370575960"
+      ],
+      "id": "linux",
+      "status": "runtime-qualified",
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34370575960"
+      ],
+      "id": "macos",
+      "status": "runtime-qualified",
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34370575960"
+      ],
+      "id": "windows",
+      "status": "portable-core-qualified",
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "previous": {
+    "contract_id": "sha256:eed02d803996d5c6a272c216d15488321dfef9a20e32b2e28f4512b3cd474d96",
+    "repository": "https://github.com/mothx9/replai",
+    "revision": "7f144d9e98a12bc1d3bbfc09bbcda547cecf2bd5",
+    "tree": "8589809ac8898913af193525f884ff7edf07a204"
+  },
+  "schema_version": 1,
+  "surfaces": [
+    {
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/interaction.md",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/presentation.md"
+      ],
+      "id": "rust-native",
+      "kind": "rust-native",
+      "version": "pre-release"
+    },
+    {
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/c-api.md"
+      ],
+      "id": "c-abi-v1",
+      "kind": "c-abi",
+      "version": "1"
+    }
+  ]
+}
