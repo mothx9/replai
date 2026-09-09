@@ -6,6 +6,8 @@ mod actions;
 mod capabilities;
 #[path = "../../src/core.rs"]
 mod core;
+#[path = "../../src/driving.rs"]
+mod driving;
 #[path = "../../src/engine.rs"]
 mod engine;
 #[path = "../../src/event.rs"]
@@ -881,7 +883,38 @@ fn main() {
         }
         assert_eq!(e.text(), "keep");
     }
-    h.measure(spec("memory","base_interaction",0,"none",0),||(),|_|Interaction::new(Editor::new(LIMIT,100)),|_,i|{assert!(!i.is_open());json!({"editor_stack_bytes":std::mem::size_of::<Editor>(),"interaction_stack_bytes":std::mem::size_of::<Interaction>()})});
+    h.measure(spec("memory","base_interaction",0,"none",0),||(),|_|Interaction::new(Editor::new(LIMIT,100)),|_,i|{assert!(!i.is_open());json!({"editor_stack_bytes":std::mem::size_of::<Editor>(),"interaction_stack_bytes":std::mem::size_of::<Interaction>(),"deadline_stack_bytes":std::mem::size_of::<Deadline>(),"wait_interest_stack_bytes":std::mem::size_of::<WaitInterest>(),"wake_stack_bytes":std::mem::size_of::<Wake>()})});
+    // Pure interest query: virtual acquisition is outside the timed/allocation region.
+    struct Quiet;
+    impl substrate::Transport for Quiet {
+        fn dimensions(&self) -> std::io::Result<(usize, usize)> {
+            Ok((80, 24))
+        }
+        fn read(&self, _: &mut [u8], _: std::time::Duration) -> std::io::Result<substrate::Read> {
+            panic!("interest must not read")
+        }
+        fn write(&self, _: &[u8]) -> std::io::Result<()> {
+            Ok(())
+        }
+        fn cleanup_write(&self, _: &[u8]) -> std::io::Result<()> {
+            Ok(())
+        }
+        fn restore(&mut self) -> std::io::Result<()> {
+            Ok(())
+        }
+    }
+    h.measure(
+        spec("driver", "idle_interest", 0, "none", 80),
+        || {
+            let mut engine = Engine::new(Editor::new(1024, 1));
+            terminal::Terminal::start(Quiet, &mut engine, prompt(), theme()).unwrap()
+        },
+        |t| t.interest(),
+        |_, interest| {
+            assert_eq!(interest, &WaitInterest::Input { deadline: None });
+            json!({"required_wakes":0,"transport_reads":0})
+        },
+    );
     for &size in sizes {
         let t = text_at(size, "abcd ");
         h.measure(
@@ -1102,3 +1135,6 @@ fn transport_fixture() -> (
     let (resource, _) = system::Resource::acquire(&slave, &slave).unwrap();
     (master, slave, std::cell::RefCell::new(resource), saved)
 }
+
+pub use capabilities::{FeaturePolicy, FeatureSupport, TerminalConfig, TerminalFacts};
+pub use driving::{Deadline, InteractionFeatures, ReadOutcome, WaitInterest, Wake};

@@ -114,7 +114,7 @@ fn error(e: Error) -> i32 {
         Error::Io(_) => REPLAI_IO,
         Error::State => REPLAI_INVALID_STATE,
         Error::Busy => REPLAI_BUSY,
-        Error::UnsuitableTerminal => REPLAI_UNSUITABLE_TERMINAL,
+        Error::UnsuitableTerminal | Error::CapabilityMismatch(_) => REPLAI_UNSUITABLE_TERMINAL,
     }
 }
 fn result(r: Result<(), Error>) -> i32 {

@@ -53,7 +53,7 @@ pub struct Style {
 /// The initial text-only compatibility palette; never sets a background color.
 #[derive(Clone, Copy, Debug)]
 pub struct Theme {
-    color: bool,
+    pub(crate) color: bool,
     styles: [Style; 7],
 }
 impl Theme {

@@ -1,6 +1,6 @@
 //! Compatibility VT driver over a byte transport; timing belongs here, not in Engine.
 use crate::{
-    Error, Event, Prompt, Theme,
+    Deadline, Error, Event, InteractionFeatures, Prompt, Theme, WaitInterest, Wake,
     actions::Input,
     engine::{Effects, Engine},
     input::Decoder,
@@ -12,8 +12,11 @@ use crate::{
 use std::{
     collections::VecDeque,
     io,
+    sync::atomic::{AtomicU64, Ordering},
     time::{Duration, Instant},
 };
+
+static NEXT_SESSION: AtomicU64 = AtomicU64::new(1);
 
 const SEQUENCE_IDLE: Duration = Duration::from_millis(250);
 const READ_BYTES: usize = 4096;
@@ -25,6 +28,9 @@ pub(crate) struct Terminal<T: Transport> {
     theme: Theme,
     decoder: Decoder,
     last_byte: Instant,
+    session: u64,
+    revision: u64,
+    pub(crate) features: InteractionFeatures,
     // Only the unread tail at a host-visible boundary; ordinary reads use stack
     // storage. The Interaction retains this bounded tail across close/reopen.
     pub(crate) pending: VecDeque<u8>,
@@ -40,12 +46,36 @@ impl<T: Transport> Terminal<T> {
         prompt: Prompt,
         theme: Theme,
     ) -> Result<Self, Error> {
+        Self::start_config(
+            resource,
+            engine,
+            prompt,
+            theme,
+            InteractionFeatures {
+                styling: theme.color,
+                bracketed_paste: true,
+            },
+        )
+    }
+    pub fn start_config(
+        resource: T,
+        engine: &mut Engine,
+        prompt: Prompt,
+        theme: Theme,
+        features: InteractionFeatures,
+    ) -> Result<Self, Error> {
+        let session = NEXT_SESSION
+            .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |n| n.checked_add(1))
+            .map_err(|_| io::Error::other("terminal session identity exhausted"))?;
         let mut terminal = Self {
             resource,
             active: true,
             theme,
             decoder: Decoder::new(engine.editor.capacity()),
             last_byte: Instant::now(),
+            session,
+            revision: 0,
+            features,
             pending: VecDeque::new(),
         };
         let result = (|| {
@@ -61,7 +91,16 @@ impl<T: Transport> Terminal<T> {
         }
         Ok(terminal)
     }
-    pub fn apply(&mut self, engine: &mut Engine, effects: Effects) -> Result<Option<Event>, Error> {
+    pub fn apply(
+        &mut self,
+        engine: &mut Engine,
+        mut effects: Effects,
+    ) -> Result<Option<Event>, Error> {
+        if !self.features.bracketed_paste {
+            effects
+                .mutations
+                .retain(|m| !matches!(m, Mutation::Paste(_)));
+        }
         if effects.mutations.is_empty() && engine.is_open() {
             return Ok(effects.event);
         }
@@ -80,28 +119,70 @@ impl<T: Transport> Terminal<T> {
         }
         Ok(effects.event)
     }
+    pub fn interest(&self) -> WaitInterest {
+        if !self.pending.is_empty() {
+            WaitInterest::Ready
+        } else {
+            WaitInterest::Input {
+                deadline: self.deadline(),
+            }
+        }
+    }
+    fn deadline(&self) -> Option<Deadline> {
+        self.decoder.pending().then_some(Deadline {
+            at: self.last_byte + SEQUENCE_IDLE,
+            session: self.session,
+            revision: self.revision,
+        })
+    }
+    fn refresh(&mut self, engine: &mut Engine) -> Result<Option<Event>, Error> {
+        let size = self.resource.dimensions()?;
+        let effects = engine.apply(Input::Resize(size.0, size.1))?;
+        self.apply(engine, effects)
+    }
+    pub fn advance(&mut self, engine: &mut Engine, wake: Wake) -> Result<Option<Event>, Error> {
+        let result = match wake {
+            Wake::Resize => self.refresh(engine),
+            Wake::InputReady => self.input(engine, Duration::ZERO),
+            Wake::Deadline(token) => {
+                if self.deadline() == Some(token) && Instant::now() >= token.at() {
+                    // Reconcile input already queued before expiry, without blocking.
+                    self.input(engine, Duration::ZERO)
+                } else {
+                    Ok(None)
+                }
+            }
+        };
+        self.finish(engine, result)
+    }
     pub fn poll(&mut self, engine: &mut Engine, timeout: Duration) -> Result<Option<Event>, Error> {
-        let result = self.poll_inner(engine, timeout);
+        let result = (|| {
+            self.refresh(engine)?;
+            let mut wait = timeout.min(Duration::from_millis(100));
+            if let Some(deadline) = self.deadline() {
+                wait = wait.min(deadline.at().saturating_duration_since(Instant::now()));
+            }
+            self.input(engine, wait)
+        })();
+        self.finish(engine, result)
+    }
+    fn finish(
+        &mut self,
+        engine: &mut Engine,
+        result: Result<Option<Event>, Error>,
+    ) -> Result<Option<Event>, Error> {
         if result.is_err() {
             engine.abandon();
         }
         result.map_err(|error| self.failure(error))
     }
-    fn poll_inner(
-        &mut self,
-        engine: &mut Engine,
-        timeout: Duration,
-    ) -> Result<Option<Event>, Error> {
-        let size = self.resource.dimensions()?;
-        let effects = engine.apply(Input::Resize(size.0, size.1))?;
-        self.apply(engine, effects)?;
+    fn input(&mut self, engine: &mut Engine, mut wait: Duration) -> Result<Option<Event>, Error> {
         let mut buffer = [0; READ_BYTES];
         let (mut position, mut length) = (0, 0);
         let mut consumed = 0;
         let mut began = None;
-        let mut wait = timeout.min(Duration::from_millis(100));
         if !self.pending.is_empty() {
-            self.last_byte = Instant::now();
+            self.received()?;
             wait = Duration::ZERO;
         }
         let result = (|| loop {
@@ -115,7 +196,7 @@ impl<T: Transport> Terminal<T> {
                 match self.resource.read(&mut buffer, wait)? {
                     Read::Bytes(n) => {
                         assert!(n > 0 && n <= buffer.len());
-                        self.last_byte = Instant::now();
+                        self.received()?;
                         (position, length) = (1, n);
                         buffer[0]
                     }
@@ -174,6 +255,14 @@ impl<T: Transport> Terminal<T> {
         debug_assert!(self.pending.len() <= READ_BYTES);
         result
     }
+    fn received(&mut self) -> Result<(), Error> {
+        self.last_byte = Instant::now();
+        self.revision = self
+            .revision
+            .checked_add(1)
+            .ok_or_else(|| io::Error::other("terminal input identity exhausted"))?;
+        Ok(())
+    }
     pub fn close(&mut self, engine: &mut Engine) -> Result<(), Error> {
         if !self.active {
             engine.abandon();
@@ -186,11 +275,12 @@ impl<T: Transport> Terminal<T> {
         if !self.active {
             return Ok(());
         }
+        let mutations = [
+            Mutation::Paste(false),
+            Mutation::Style(crate::Role::Default),
+        ];
         let bytes = encode(
-            &[
-                Mutation::Paste(false),
-                Mutation::Style(crate::Role::Default),
-            ],
+            &mutations[usize::from(!self.features.bracketed_paste)..],
             self.theme,
         );
         let output = self.resource.cleanup_write(bytes.as_bytes());

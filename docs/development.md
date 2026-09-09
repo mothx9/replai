@@ -84,7 +84,7 @@ python3 tools/qualify.py --work /tmp/replai-qualification
 ```
 
 Choose a fresh work directory. It records each command and gate log, executes
-documentation/Rust checks and [native C qualification](c-api.md#executable-authority-and-current-limits),
+documentation/Rust checks, [real embedding qualification](engineering/embedding.md) and [native C qualification](c-api.md#executable-authority-and-current-limits),
 then requires a clean repository. `--allow-dirty` supports development only;
 it does not qualify clean closure. CI separates documentation, Rust core/PTY,
 release, and C prepare/static/shared/memory/audit gates.
@@ -131,3 +131,15 @@ Before delivery inspect the actual final diff, rerun affected checks, commit
 only the intended paths and use an ordinary push. Verify the remote revision
 and actual CI outcomes. Report any remaining failures with causal scope rather
 than either hiding them or promoting unrelated failures into library defects.
+
+## Embedding qualification
+
+`python3 tools/embedding_pty.py --work /tmp/replai-embedding` builds the real
+simple/driven examples and runs an external POSIX reactor over a PTY and an
+independent application socket. It records exact drafts/cursors, VT cells,
+resize/deadline observations, termios before process exit and repeated lifecycle
+resources. Run `--memory` in a fresh directory for Valgrind on Linux or native
+`leaks --atExit` on macOS. These complement the full existing session/C gates.
+CI runs both native embedding jobs and preserves their observation artifacts.
+Portable engine tests exercise idle/no-I/O and stale-deadline contracts without
+claiming a Windows terminal backend. Hosted latency is characterization only.

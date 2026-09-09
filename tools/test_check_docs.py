@@ -107,15 +107,15 @@ class DocumentationGuard(unittest.TestCase):
             cells[index] = value
             return "| " + " | ".join(cells) + " |"
 
-        selected = re.search(r"\*\*[A-Z0-9.]+ — SELECTED_NOT_STARTED\*\*", original)[0]
+        selected = re.search(r"\*\*(?:[A-Z0-9.]+ — (?:SELECTED_NOT_STARTED|ACTIVE)|NONE)\*\*", original)[0]
         counts = re.search(r"ESTABLISHED=\d+", original)[0]
         mutations = [
             (second, rows[0], "duplicate maturity ID"),
             (rows[0], changed_cell(2, "🟢 COMPLETE"), "invalid maturity state"),
             (rows[0], changed_cell(5, "Z"), "invalid program reference"),
             (counts, "ESTABLISHED=9999", "maturity counts differ"),
-            (selected, "**NONE**", "exactly one selected boundary"),
-            (selected, selected + " SELECTED_NOT_STARTED", "exactly one selected boundary"),
+            (selected, "**UNDECLARED**", "exactly one selected boundary"),
+            (selected, selected + " **EXTRA — SELECTED_NOT_STARTED**", "exactly one selected boundary"),
             ("<!-- maturity:end -->", "<!-- maturity:start -->", "ordered maturity section"),
             (rows[0], changed_cell(4, ""), "seven nonempty fields"),
             (rows[0], changed_cell(6, "No evidence"), "missing evidence/owner link"),

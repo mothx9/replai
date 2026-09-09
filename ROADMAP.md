@@ -5,9 +5,9 @@
 | Axis | Current truth |
 | --- | --- |
 | Project target | Embeddable command-line interaction infrastructure: a simple entry that can grow into rich, long-lived host-driven interfaces over one engine. |
-| Current selected engineering boundary | **EMBEDDING.CONTRACT.0 — SELECTED_NOT_STARTED**: jointly settle F1 API tiers and P3 host driving, with explicit F2 capability/degradation prerequisites. Selection is direction, not implementation authorization. |
+| Current selected engineering boundary | **EMBEDDING.CONTRACT.0 — ACTIVE**: qualify F1 blocking/session/driven tiers and P3 external readiness/deadline driving; F2 admission prerequisites remain narrower than full capability negotiation. |
 | Latest major completed boundary | O0/U0 structured presentation and composed prompts, qualified through `b958110…`; producer metadata subsequently published at `9d9375d…`. |
-| Most important structural gap | Public embedding still exposes one POSIX session/poll façade; neither a simple blocking entry nor a public readiness-driven contract is available. |
+| Most important structural gap | New blocking and external driver APIs are implemented; cross-platform qualification and performance preservation must close before maturity promotion. |
 | Executable foundation | Platform-neutral engine; bounded Unicode/grapheme editor; history navigation; completion requests; paste, interrupts/EOF, resize, safe output and exact restoration. |
 | Qualified platforms | Linux/macOS: real Rust/C terminal runtime. Windows: portable engine/document tests only, no terminal backend. |
 | Current Rust surface | Editor, Interaction and events; prompt/theme/style and structured documents. No stable API or final integration tiers. |
@@ -16,13 +16,13 @@
 | Presentation posture | Safe spans, headings, facts, lists, responsive tables/status, composed prompts/themes and deterministic plain output. Completion UI and broader visual refinement remain incomplete. |
 | Consumer posture | Native Rust and C consumers are external owners. Exact pins, adoption, application mappings and publication are their decisions; producer metadata assigns no migrations. |
 | Public-release posture | Pre-release; no stable Rust API, ABI longevity, SemVer or MSRV promise and no release date. |
-| Next decision point | Authorize a bounded embedding contract: determine what one engine exposes to blocking/session/driven hosts, how readiness and degradation are represented, and what evidence closes that boundary. |
+| Next decision point | Complete native Linux/macOS driver, deadline, idle, restoration and performance evidence; preserve C ABI 1 and Windows portable tests. |
 
 This is the sole authority for **public macro state, maturity, strategic programs,
 dependency ordering and release progression**. [README](README.md) owns first use;
 [architecture][architecture] and contracts own implementation truth; engineering
 dossiers own bounded evidence; Git owns chronology. Planned properties are not
-APIs. No engineering implementation is active or authorized by this document.
+APIs. The current embedding implementation is explicitly authorized separately; this document records its qualification scope.
 
 Navigate: [maturity](#system-maturity) · [programs](#strategic-programs) ·
 [completed boundaries](#completed-boundaries) · [sequence](#current-execution-sequence) ·
@@ -62,8 +62,8 @@ ESTABLISHED=20 PARTIAL=13 OPEN=9 LATER=4 TOTAL=46
 | ID | Property | Maturity | Current truth / exact boundary | Promotion condition | Program | Evidence / owner |
 | --- | --- | --- | --- | --- | --- | --- |
 | embedding.session | Explicit interaction ownership | 🟢 ESTABLISHED | Movable state, scoped open/poll/close/reopen and host-owned execution; Linux/macOS acquisition. | Preserve lifecycle/error semantics and public/native C composition. | F | [Interaction][interaction]; [facade][facade]; [C contract][c-api] |
-| embedding.tiers | F1 simple and layered embedding | 🟡 PARTIAL | Session API exists; no one-call blocking convenience or complete three-tier contract. | Demonstrate small blocking, session and driven consumers using one engine without exposing private frames. | F / P | [Facade][facade]; [F0 seams][f0] |
-| embedding.driver | P3 public event driver | 🔴 OPEN | Private driver batches ready bytes; public poll still checks size and caps waits at 100 ms. | Host readiness/resize/expiry delivery without mandatory periodic wakes; preserve pending input and cleanup. | P / F | [Facade][facade]; [driver][driver]; [performance dossier][macos-perf] |
+| embedding.tiers | F1 simple and layered embedding | 🟡 PARTIAL | One retained Interaction now implements blocking, compatibility and driven facades; full native qualification remains pending. | Demonstrate small blocking, session and driven consumers using one engine without exposing private frames. | F / P | [Facade][facade]; [F0 seams][f0] |
+| embedding.driver | P3 public event driver | 🔴 OPEN | Public readiness, opaque deadline and resize advancement implemented; promotion awaits the complete acceptance evidence. | Host readiness/resize/expiry delivery without mandatory periodic wakes; preserve pending input and cleanup. | P / F | [Facade][facade]; [driver][driver]; [performance dossier][macos-perf] |
 | analysis.revisions | I0 shared host analysis | 🔴 OPEN | No public revision-aware shared completion/hint/validation snapshot. | Prove one host analysis can serve multiple features and stale results cannot modify a newer draft. | I / F | [Architecture owner][architecture]; [engine][engine-tests] |
 
 ### Presentation
@@ -192,8 +192,8 @@ prove all three embeddings without extra engines or hidden scheduling. If F2
 uncovers incompatible resource/degradation assumptions, split or reorder that
 closure rather than hiding an unresolved dependency. Measurement and integration
 evidence may change this sequence. Selection authorizes **no source mutation**;
-future work needs its own explicit engineering scope. F1, P3, F2 and I0 are not
-started by this documentation wave.
+future work needs its own explicit engineering scope. F1/P3 are active under the explicit EMBEDDING.CONTRACT.0 scope. Full F2 and I0
+remain unstarted; adjacent prerequisites do not close them.
 
 ## Ownership and Consumer Posture
 
@@ -308,3 +308,5 @@ validate control consistency, **not the truth of a maturity promotion**. Follow
 [rust-example]: examples/demo.rs
 [c-example]: examples/c/demo.c
 [extraction]: https://github.com/mothx9/replai/blob/89d36f8433cd109866ae360d8691dac30b7de026/ROADMAP.md
+
+[embedding]: docs/engineering/embedding.md

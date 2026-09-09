@@ -6,6 +6,12 @@ next work. All entries below are unreleased and carry no compatibility promise.
 
 ## Unreleased
 
+- Added native blocking reads and external readiness/deadline/resize driving over
+  the retained Interaction engine. Existing session polling and C ABI 1 remain
+  available. New terminal fact/policy admission separates optional styling/paste
+  from required editing features. Added `Error::CapabilityMismatch`; exhaustive
+  native Rust error matches need an additional arm. No driven C entry is added.
+
 - Added safe structured Rust presentation: headings, facts, lists, responsive
   tables, literal blocks and severity notices share inline roles, plain rendering
   and coordinated draft-preserving output. Added composed prompts/continuations

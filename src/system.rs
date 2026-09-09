@@ -51,6 +51,10 @@ pub(crate) struct Resource {
     readiness: Option<Kqueue>,
 }
 impl Resource {
+    pub(crate) fn input_source(&self) -> std::os::fd::BorrowedFd<'_> {
+        self.input.as_fd()
+    }
+
     pub fn acquire(input: &impl AsFd, output: &impl AsFd) -> Result<(Self, (usize, usize)), Error> {
         if !termios::isatty(input) || !termios::isatty(output) {
             return Err(Error::UnsuitableTerminal);

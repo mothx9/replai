@@ -60,6 +60,8 @@ impl Interaction {
     /// Acquire a matching POSIX TTY pair and draw the retained draft.
     /// Caller descriptors are duplicated and remain owned by the caller.
     /// Failure preserves the editor; closing permits reopening with another prompt.
+    /// This compatibility entry assumes VT cursor/erase/paste even for TERM=dumb
+    /// (which disables styling). New hosts can use explicit admission instead.
     pub fn open(
         &mut self,
         input: &impl AsFd,
@@ -85,6 +87,124 @@ impl Interaction {
         terminal.pending = std::mem::take(&mut self.pending);
         self.terminal = Some(terminal);
         Ok(())
+    }
+    /// Read one editable line on stdin/stdout without a host polling loop.
+    /// Uses conservative environment admission, the same retained editor/history,
+    /// and the compatibility waiter. No history is admitted automatically. Tab
+    /// is declined; recoverable input rejection is reported as safe feedback.
+    /// On success the terminal is closed. Errors attempt cleanup; explicit close
+    /// can retry a retained failed restoration. No application signal policy is installed.
+    pub fn read_line(&mut self, prompt: Prompt) -> Result<crate::ReadOutcome, Error> {
+        self.open_driven(&std::io::stdin(), &std::io::stdout(), prompt)?;
+        loop {
+            match self.poll(Duration::from_millis(100))? {
+                Some(Event::Submitted(text)) => return Ok(crate::ReadOutcome::Submitted(text)),
+                Some(Event::Interrupted) => return Ok(crate::ReadOutcome::Interrupted),
+                Some(Event::EndOfInput) => return Ok(crate::ReadOutcome::EndOfInput),
+                Some(Event::Rejected(error)) => {
+                    self.external_output(Role::Warning, &error.to_string())?
+                }
+                Some(Event::CompletionRequested) | None => {}
+            }
+        }
+    }
+    /// Open using conservative terminal facts from the environment. This does
+    /// not wait or select a scheduler. Missing/dumb TERM refuses before raw mode;
+    /// hosts with independent capability evidence can use [`Self::open_with_config`].
+    pub fn open_driven(
+        &mut self,
+        input: &impl AsFd,
+        output: &impl AsFd,
+        prompt: Prompt,
+    ) -> Result<(), Error> {
+        self.open_with_config(
+            input,
+            output,
+            prompt,
+            crate::TerminalConfig::from_environment(),
+        )
+    }
+    /// Admit required cursor/erase and optional styling/paste before acquiring
+    /// resources. Non-TTY or mismatched resources still fail independently.
+    /// No signals, threads, reactor, or periodic timer are installed.
+    pub fn open_with_config(
+        &mut self,
+        input: &impl AsFd,
+        output: &impl AsFd,
+        prompt: Prompt,
+        config: crate::TerminalConfig,
+    ) -> Result<(), Error> {
+        if self.is_open() {
+            return Err(Error::State);
+        }
+        let (theme, features) = config.resolve()?;
+        let (resource, _) = Resource::acquire(input, output)?;
+        let mut terminal =
+            Terminal::start_config(resource, &mut self.engine, prompt, theme, features)?;
+        terminal.pending = std::mem::take(&mut self.pending);
+        self.terminal = Some(terminal);
+        Ok(())
+    }
+    /// Current required wakeup, with no I/O, size query, allocation or wait.
+    /// Re-query after every advancement or host mutation. Idle input without a
+    /// deadline has no periodic REPLAI wake; resize must be notified by the host.
+    pub fn wait_interest(&self) -> Result<crate::WaitInterest, Error> {
+        let terminal = self
+            .terminal
+            .as_ref()
+            .filter(|t| t.active && self.engine.is_open())
+            .ok_or(Error::State)?;
+        Ok(terminal.interest())
+    }
+    /// Advance one host notification. Input advancement only checks immediately
+    /// ready input; it never blocks waiting for another key. Already-read bytes
+    /// stop at semantic events and remain retained, including across reopen.
+    /// A stale/early deadline is a no-op; resize queries this resource's geometry.
+    /// Hosts serialize this with completion/output/interrupt; this is not an
+    /// async-signal-safe handler or a concurrent-writer interface.
+    pub fn advance(&mut self, wake: crate::Wake) -> Result<Option<Event>, Error> {
+        if !self.engine.is_open() {
+            return Err(Error::State);
+        }
+        let result = self
+            .terminal
+            .as_mut()
+            .ok_or(Error::State)?
+            .advance(&mut self.engine, wake);
+        self.reap();
+        result
+    }
+    /// Borrow the active REPLAI-owned POSIX readiness source for a host reactor.
+    /// The borrow cannot outlive close or transfer restoration ownership. REPLAI
+    /// remains the sole reader: do not read from this source or change its flags.
+    /// Register for readability, release the borrow, then call [`Self::advance`].
+    ///
+    /// ```compile_fail
+    /// # use replai::Interaction;
+    /// # fn wrong(interaction: &mut Interaction) {
+    /// let source = interaction.input_source().unwrap();
+    /// interaction.close().unwrap(); // cannot close while the borrow is still used
+    /// drop(source);
+    /// # }
+    /// ```
+    /// Unregister any raw reactor registration before closing/reopening; a raw
+    /// descriptor copied into a reactor does not extend this borrow's lifetime.
+    pub fn input_source(&self) -> Result<std::os::fd::BorrowedFd<'_>, Error> {
+        let terminal = self
+            .terminal
+            .as_ref()
+            .filter(|t| t.active && self.engine.is_open())
+            .ok_or(Error::State)?;
+        Ok(terminal.resource.input_source())
+    }
+    /// Features admitted at acquisition; optional losses are visible here.
+    pub fn features(&self) -> Result<crate::InteractionFeatures, Error> {
+        let terminal = self
+            .terminal
+            .as_ref()
+            .filter(|t| t.active && self.engine.is_open())
+            .ok_or(Error::State)?;
+        Ok(terminal.features)
     }
     /// Poll at most 100 ms, observing resize without owning signal policy.
     /// Incomplete sequences expire after 250 ms idle. Submit/interrupt/EOF restore

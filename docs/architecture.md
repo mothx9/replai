@@ -14,7 +14,7 @@ flowchart TB
     host["Host semantics and application loop"] --> facade
     c["C host"] --> abi["replai-c: ABI 1 adapter"]
     abi -->|Public Rust API| facade
-    facade["Interaction: compatibility facade"] --> engine
+    facade["Interaction: blocking, session, driven facades"] --> engine
     facade --> driver
     engine["Engine: deterministic interaction transitions"] --> editor["Editor: bounded grapheme draft and history navigation"]
     facade --> document["Document: semantic blocks and responsive layout"]
@@ -22,7 +22,7 @@ flowchart TB
     engine --> renderer["Renderer: surface transitions"]
     renderer --> layout["Presentation: prompt and logical cell layout"]
     renderer --> mutations["Semantic terminal mutations"]
-    driver["VT driver: compatibility polling and effects"] -->|Normalized input| engine
+    driver["VT driver: advancement plus compatibility waiter"] -->|Normalized input| engine
     driver --> decoder["VT decoder then compatibility keymap"]
     mutations --> encoder["VT protocol encoder"]
     driver --> encoder
@@ -47,13 +47,13 @@ consume semantic mutations without parsing an escape-coded frame.
 | [engine](../src/engine.rs) | Active surface, editor, submit/interrupt/EOF, completion application, render invalidation and safe output coordination | FDs, HANDLEs, clocks, threads, protocols or environment |
 | [document](../src/document.rs) | Safe spans/blocks, bounded responsive document layout and independent writer output | Host schema, product meaning, editor state or terminal acquisition |
 | [presentation](../src/presentation.rs) | Prompt, semantic roles, logical text/style runs, grapheme/cell layout and viewport | Resource acquisition or escape-coded layout |
-| [render](../src/render.rs) | Private previous frame, append/full-redraw transition and logical mutations | OS APIs or terminal escape serialization |
+| [render](../src/render.rs) | Private cached frame, incremental transition and logical mutations | OS APIs or terminal escape serialization |
 | [protocol](../src/protocol.rs) | VT encoding of text, style, moves, clear, newline and paste-mode operations | Geometry, editing policy or resource ownership |
-| [capabilities](../src/capabilities.rs) | Existing explicit color/environment policy resolution | Full F2 capability negotiation or Windows discovery |
+| [capabilities](../src/capabilities.rs) | Terminal facts, feature admission and environment convenience | Full F2 capability negotiation or Windows discovery |
 | [substrate](../src/substrate.rs) | Internal byte transport, dimensions, readiness wait, write and restoration contract | Interaction meaning or universal public terminal interface |
 | [terminal](../src/terminal.rs) | Generic VT driver over a statically selected transport; timing, decoder expiry, effect execution and cleanup | termios, descriptors or duplicate editing logic |
 | [system](../src/system.rs) | Shared Linux/macOS POSIX acquisition, descriptor duplication, termios, dimensions, poll/read/write, backend lease | Decoder, prompt, events, palette or editor |
-| [interaction](../src/interaction.rs), [event](../src/event.rs) | Public compatibility façade and portable outcomes/errors | Product loop, language or command authority |
+| [interaction](../src/interaction.rs), [event](../src/event.rs) | Three native facades and portable outcomes/errors | Product loop, language or command authority |
 
 **Generic terminal presentation belongs to the library; semantic classification
 and content belong to the host.** The host still owns completion discovery/selection,
@@ -74,8 +74,11 @@ are exported on every compilation target. Construction and closed editor access
 are portable. The existing `open`, `poll`, `complete`, `external_output`,
 `output_document`, `open_with_theme`, `interrupt` and `close` system façade is available on Linux and macOS. No fake acquisition
 method returning Unsupported is supplied on another OS. The deterministic
-engine/action/effect APIs are private until F1/P3 establish a public contract.
-Linux signatures, result variants and host-visible semantics are preserved.
+engine/action/effect APIs remain private. Portable `WaitInterest`, `Wake`,
+`Deadline`, `ReadOutcome` and terminal fact/policy types expose scheduling and
+admission without exposing frames or decoder state. `Error::CapabilityMismatch`
+is the additional native variant; exhaustive Rust matches must accommodate it.
+Existing session behavior and C ABI 1 remain preserved.
 
 The old terminal object owned editor transitions and rendering alongside OS
 resources. The façade now delegates policy to the same engine exercised without
@@ -225,3 +228,24 @@ only target-specific nix readiness support, reviewed in the closure dossier.
 
 No sibling checkout, async runtime, system framework or new package is required.
 The separate Mermaid/DOM tooling remains documentation-only.
+
+## Scheduling convergence
+
+`Interaction::read_line` composes the compatibility waiter over the same bounded
+input advancement used by `advance`. `poll` refreshes geometry and selects a
+bounded wait; `advance(InputReady)` selects zero wait, `advance(Resize)` refreshes
+geometry, and `advance(Deadline)` validates the opaque session/input token before
+reconciling queued input and expiry. None implements editing or rendering again.
+
+The private terminal driver owns monotonic deadline identity. The deterministic
+engine still owns only semantic transitions. A borrowed POSIX input source lets
+the host register its own reactor; no FD appears in portable wake types. A future
+Windows resource facade can expose its own borrowed native wait source without
+forking the engine. The transport waiter remains replaceable beneath this
+contract; Linux/macOS share advancement and differ only in native waiting.
+
+The [embedding contract](interaction.md#embedding-tiers-and-wait-ownership) owns
+ordering, read-ahead, admission and cleanup guarantees. The
+[bounded qualification dossier](engineering/embedding.md) records alternatives,
+measurements and the executed platform scope. Public driven scheduling does not
+expose a raw-byte transport API or introduce concurrent output ownership.

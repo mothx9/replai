@@ -10,6 +10,8 @@ pub enum Error {
     Busy,
     /// Input/output are not a matching, suitably sized terminal pair.
     UnsuitableTerminal,
+    /// Required terminal semantics could not be admitted before acquisition.
+    CapabilityMismatch(&'static str),
     /// An invalid edit; the terminal remains active and the draft is unchanged.
     Edit(EditError),
     /// Terminal failure. Cleanup has been attempted; a cleanup failure is included in the message.
@@ -23,6 +25,7 @@ impl fmt::Display for Error {
             Self::UnsuitableTerminal => {
                 f.write_str("unsuitable terminal descriptors or dimensions")
             }
+            Self::CapabilityMismatch(reason) => f.write_str(reason),
             Self::Edit(e) => e.fmt(f),
             Self::Io(e) => e.fmt(f),
         }

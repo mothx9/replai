@@ -34,21 +34,21 @@ experimental contracts, without a stable API/ABI, SemVer or MSRV promise.
 From a checkout, with a Rust toolchain:
 
 ```sh
-cargo run --locked --example demo
+cargo run --locked --example simple
 ```
 
 ```text
-demo> hello
+simple> hello
 echo: hello
-
-demo>
+simple>
 ```
 
-Type `wor` and press Tab for host-selected completion. Submit a line, then use
+Submit a line, then use
 Up/Down to recall it and return to an unfinished draft. Bracketed multiline paste
 stays one input until Enter. Ctrl-C interrupts editing; Ctrl-D exits an empty
 prompt or deletes the next grapheme in a nonempty draft.
 
+The [explicit session example](examples/demo.rs) adds completion (`wor` + Tab).
 `cargo run --locked --example demo -- --notice` emits a notice during editing
 and restores the draft/cursor. No external application or service is required.
 
@@ -75,6 +75,7 @@ own background and scrollback. [Architecture and boundaries](docs/architecture.m
 | Capability | Implemented contract |
 | --- | --- |
 | Editing | Bounded UTF-8; extended-grapheme cursor/edit operations; atomic replacement and rejection |
+| Embedding | Blocking read, explicit session and external readiness/deadline driving over one engine |
 | Interaction | Distinct submit, interrupt, EOF and completion events; explicit close/reopen |
 | History and completion | Original-draft restoration; host-owned admission, persistence and candidate selection |
 | Input and display | Bounded decoder, atomic bracketed paste, multiline viewport, resize and incremental redraw |
@@ -115,31 +116,31 @@ editing, layout, encoding, allocations, transport and embedding costs.
 
 ## Embed in Rust
 
-The current API is host-driven. A future one-call blocking façade is not yet
-implemented. This complete loop reads one input and declines completion:
+Start with a retained interaction and a typed blocking result:
 
 ```rust
-use replai::{Editor, Event, Interaction, Prompt, Role};
-use std::time::Duration;
+use replai::{Editor, Interaction, Prompt, ReadOutcome};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut input = Interaction::new(Editor::new(65_536, 100));
-    input.open(&std::io::stdin(), &std::io::stdout(), Prompt::new("demo")?)?;
-    loop {
-        match input.poll(Duration::from_millis(100))? {
-            Some(Event::Submitted(text)) => { println!("received: {text}"); break; }
-            Some(Event::Interrupted | Event::EndOfInput) => break,
-            Some(Event::Rejected(e)) => input.external_output(Role::Warning, &e.to_string())?,
-            Some(Event::CompletionRequested) | None => {}
-        }
+    match input.read_line(Prompt::new("demo")?)? {
+        ReadOutcome::Submitted(text) => println!("received: {text}"),
+        ReadOutcome::Interrupted | ReadOutcome::EndOfInput => {}
     }
     Ok(())
 }
 ```
 
-Submission restores the terminal before the host processes the text. The
-[complete example](examples/demo.rs) adds history admission, completion and
-reopen. Build method documentation with `cargo doc --no-deps`.
+The terminal is restored before the result returns. The [retained-reader example](examples/simple.rs)
+adds host history admission and repeated reads. This simple entry requires a
+supported interactive terminal; unknown/dumb TERM refuses before raw mode.
+
+For completion and explicit scheduling, retain the [session API](examples/demo.rs).
+For an existing reactor, use [the driven API](examples/driven.rs): borrow the
+readiness source, wait for terminal/application events or an opaque deadline,
+then advance. Driven idle has no required periodic REPLAI wake; resize is
+host-notified. All tiers share one engine and synchronous output coordination.
+[Full ownership and degradation contract](docs/interaction.md#embedding-tiers-and-wait-ownership).
 
 ## Present structure, not padded strings
 

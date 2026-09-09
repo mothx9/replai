@@ -25,7 +25,7 @@ defines terminal cells, ANSI width, tab expansion and emulator limits.
 ## Bounded input and paste
 
 The decoder consumes bytes in order from bounded transport reads (currently
-4 KiB). A poll stops at the first host-visible event, a drained short read, or
+4 KiB). An advancement stops at the first host-visible event, a drained short read, or
 the ready-work budget. Full buffers may continue with zero-wait reads, up to
 32 KiB; a 2 ms active-work budget is checked after semantic actions. Neither
 budget inserts a collection delay or interrupts one atomic editor operation.
@@ -38,7 +38,8 @@ UTF-8 byte and the incomplete scalar containing it are rejected together; the
 offending byte is not replayed as a shortcut.
 
 The adapter expires pending sequences after a 250 ms idle interval, observed
-while polling. Each poll waits at most 100 ms. This is an idle bound, not a
+by the selected scheduler: compatibility polling or an explicit host deadline.
+Each compatibility poll waits at most 100 ms. This is an idle bound, not a
 fixed total sequence length/time guess; tests deliver each byte with a delay
 longer than 25 ms. Expired UTF-8/escape input produces `Event::Rejected` and
 keeps the draft. Host starvation can delay observation.
@@ -144,3 +145,106 @@ The [presentation contract](presentation.md#external-output) owns visible
 output transactions and their limits. Host execution may instead write after
 submission closes the terminal, then reopen for the next draft. Neither path
 installs an application scheduler.
+
+## Embedding tiers and wait ownership
+
+All three native tiers retain one `Interaction`, editor, decoder, renderer and
+resource lifecycle. System methods exist on Linux/macOS; the scheduling values
+and capability facts compile on every portable core target.
+
+| Tier | Entry | Host responsibility | Deliberate scope |
+| --- | --- | --- | --- |
+| Simple blocking | `read_line(Prompt)` | Match `ReadOutcome`, execute application code, admit history, clear/retain editor, repeat if wanted | stdin/stdout, no completion discovery; Tab declined; recoverable rejection produces safe warning feedback and editing continues |
+| Explicit session | Existing `open` / `poll` / output / completion / close | Dispatch events and decide when to poll | Compatibility scheduler observes dimensions each call, waits at most 100 ms and shortens its wait for a pending internal deadline |
+| Driven | `open_driven` or `open_with_config`, `wait_interest`, `advance` | Wait on terminal/application sources and deadlines; deliver resize; serialize mutations | No internal blocking wait, periodic timer, signal handler, thread or executor |
+
+`ReadOutcome::{Submitted, Interrupted, EndOfInput}` returns after restoration;
+it never means evaluate, cancel application work or exit the process. The
+retained reader preserves history and read-ahead. `editor_mut()` is available
+between reads. Fatal errors attempt restoration using the same driver as the
+session tier. Drop remains best effort; explicit close reports/retries cleanup.
+
+`WaitInterest::Ready` means the interaction already holds unread input: advance
+without waiting for another OS readiness edge. `WaitInterest::Input { deadline }`
+means wait for readability and, if present, the monotonic due time. With `None`
+there is **no required periodic REPLAI wake**. Interest inspection performs no
+I/O, allocation or geometry query. Host application and resize events remain
+independent wake sources. Obtain a fresh interest after each operation.
+
+`Wake::InputReady` drains a bounded ready burst with zero-duration readiness
+checks and the same observable event ordering described above. Spurious
+readiness is normal no-progress. REPLAI is the sole reader of the terminal;
+a competing reader invalidates the readiness/read assumption. Caller file
+status flags are not changed and O_NONBLOCK is not required.
+
+`Deadline` is an opaque token with `at() -> Instant`. It identifies one active
+resource session and input epoch. Early, superseded and previous-session tokens
+are no-ops. A due notification first reconciles input already queued, then
+expires pending protocol state if still due. Successful expiry removes that
+deadline, so replay does not repeat its outcome. Time is monotonic, never UTC.
+The engine itself still has no clock or protocol timeout policy.
+
+`Wake::Resize` asks the owned resource for its dimensions and applies the same
+layout/render transition immediately. The library does not install SIGWINCH;
+the host converts its own notification into this ordinary serialized call.
+Input readiness does not probe dimensions. The compatibility scheduler retains
+periodic observation; its idle wakeup behavior is **not** the driven contract.
+
+### POSIX borrowing and serialization
+
+`input_source()` returns `BorrowedFd<'_>` tied to the active interaction. It does
+not transfer ownership, keep a closed resource alive or assign restoration to
+the host. A live Rust borrow prevents closing/mutating the interaction. Hosts
+which copy the descriptor into an OS registration must unregister before close
+or reopen: an integer in a reactor is not a Rust lifetime. Never read this
+source directly, change its modes or hand it to another terminal owner.
+
+The public values and `Interaction` satisfy Send/Sync auto traits; that does not
+permit concurrent mutations. Methods require exclusive mutable access and the
+host serializes advancement, completion, interruption and synchronous output.
+The examples use one thread. External socket/timer readiness can trigger
+`output_document` while a draft exists, preserving exact bytes/cursor. This is
+composable event waiting, **not concurrent independent writers**, background
+queues or an O2 output service. The current backend's single active terminal
+lease remains at resource acquisition.
+
+## Terminal admission and degradation
+
+`TerminalFacts` distinguishes Unknown, Unavailable, Assumed and Supported
+cursor, erase, styling and paste features. `TerminalConfig` separates these facts
+from Disabled/Preferred/Required host policy for optional features and a `Theme`.
+Cursor and erase are required by this editor. `resolve()` is pure admission;
+actual TTY identity/dimensions are still checked separately during acquisition.
+`Interaction::features()` reports the admitted styling and paste mode.
+
+`read_line` and `open_driven` use conservative environment convenience: a
+nonempty TERM other than `dumb` supplies an explicit VT **assumption**, not
+terminal probing. Missing/empty/dumb TERM does not establish cursor/erase and
+fails before raw mode. An independently informed host can supply facts using
+`open_with_config`; this does not bypass actual TTY validation. NO_COLOR disables
+styling; an explicitly plain theme stays plain. Required styling with a plain
+theme rejects. Optional unavailable paste may be disabled, in which case no
+paste-mode toggles are emitted, including output transactions and cleanup.
+Without framing, multiline paste cannot be distinguished from ordinary Enter.
+
+Existing `open`, `open_with_theme` and C ABI 1 retain their qualified explicit VT
+compatibility assumption: TERM=dumb disables styling but does not select a new
+line editor or suppress their existing cursor/erase protocol. This distinction
+preserves existing consumers while making new simple/driven defaults truthful.
+
+Non-TTY or redirected interactive resources reject as `UnsuitableTerminal`.
+Standalone `Document::render` remains suitable for plain captured/non-TTY/dumb
+output without an interaction. A document renderer does not grant terminal
+editing capabilities. No universal capability discovery, Windows backend,
+terminal probing, fallback cooked editor or complete F2 negotiation is implied.
+
+`Error::CapabilityMismatch(&'static str)` reports admission failure, separately
+from lifecycle, unsuitable resource and I/O errors. Adding this native variant
+requires exhaustive Rust error matches to add an arm; existing operations keep
+their behavior. C ABI 1 declarations, records, symbols and numeric identity are
+unchanged; the binding maps this native category to its existing unsuitable
+terminal status. It exposes neither the new blocking nor driven methods. Their
+future C/HANDLE contract remains an independent cross-language design boundary.
+
+See the [simple example](../examples/simple.rs), [session example](../examples/demo.rs),
+[external reactor](../examples/driven.rs) and [embedding qualification](engineering/embedding.md).

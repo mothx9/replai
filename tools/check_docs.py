@@ -180,14 +180,19 @@ def check_roadmap(text):
         reject(f"maturity counts differ; expected {expected}")
 
     selected = re.findall(
-        r"^\| Current selected engineering boundary \| \*\*([A-Z0-9.]+) — SELECTED_NOT_STARTED\*\*",
+        r"^\| Current selected engineering boundary \| \*\*([A-Z0-9.]+)(?: — (SELECTED_NOT_STARTED|ACTIVE))?\*\*",
         text, re.M,
     )
-    if len(selected) != 1 or text.count("SELECTED_NOT_STARTED") != 1:
-        reject("expected exactly one selected boundary in the snapshot")
+    markers = re.findall(r"\*\*(?:[A-Z0-9.]+ — (?:SELECTED_NOT_STARTED|ACTIVE)|NONE)\*\*", text)
+    valid = len(selected) == 1 and len(markers) == 1
+    if valid:
+        identity, state = selected[0]
+        valid = (identity == "NONE" and not state) or (identity != "NONE" and bool(state))
+    if not valid:
+        reject("expected exactly one selected boundary or explicit NONE in the snapshot")
     elif (
         "## Current Execution Sequence" not in text
-        or selected[0] not in text.split("## Current Execution Sequence", 1)[1].split("\n## ", 1)[0]
+        or selected[0][0] not in text.split("## Current Execution Sequence", 1)[1].split("\n## ", 1)[0]
     ):
         reject("selected boundary missing from dependency sequence")
     return errors

@@ -22,6 +22,7 @@ struct Device {
     fail_restore: usize,
     read_limit: usize,
     reads: usize,
+    dimension_queries: usize,
     writes: usize,
     waits: Vec<Duration>,
 }
@@ -47,7 +48,9 @@ impl Virtual {
 }
 impl Transport for Virtual {
     fn dimensions(&self) -> io::Result<(usize, usize)> {
-        Ok(self.0.borrow().size)
+        let mut d = self.0.borrow_mut();
+        d.dimension_queries += 1;
+        Ok(d.size)
     }
     fn read(&self, buffer: &mut [u8], timeout: Duration) -> io::Result<Read> {
         let mut d = self.0.borrow_mut();
@@ -458,4 +461,149 @@ fn transport_faults_cleanup_drop_and_reopen_share_one_driver() {
     assert!(t.active);
     drop(t);
     assert_eq!(d.0.borrow().restored, 1);
+}
+
+#[test]
+fn driven_idle_resize_and_output_have_explicit_work_ownership() {
+    use crate::{WaitInterest, Wake};
+    let d = Virtual::new();
+    let (mut e, mut t) = start(&d);
+    for _ in 0..10_000 {
+        assert_eq!(t.interest(), WaitInterest::Input { deadline: None });
+    }
+    assert_eq!(
+        (
+            d.0.borrow().reads,
+            d.0.borrow().writes,
+            d.0.borrow().dimension_queries
+        ),
+        (0, 1, 1)
+    );
+    d.feed("e\u{301}界\x1b[D!".as_bytes());
+    t.advance(&mut e, Wake::InputReady).unwrap();
+    assert_eq!((e.editor.text(), e.editor.cursor()), ("e\u{301}!界", 4));
+    let fx = e.external_output(Role::Dim, "application event").unwrap();
+    t.apply(&mut e, fx).unwrap();
+    assert_eq!(d.0.borrow().dimension_queries, 1);
+    d.0.borrow_mut().size = (12, 24);
+    t.advance(&mut e, Wake::Resize).unwrap();
+    assert_eq!(d.0.borrow().dimension_queries, 2);
+    assert_eq!((e.editor.text(), e.editor.cursor()), ("e\u{301}!界", 4));
+    assert!(d.0.borrow().waits.iter().all(Duration::is_zero));
+    assert_eq!(t.interest(), WaitInterest::Input { deadline: None });
+    t.close(&mut e).unwrap();
+    assert_eq!(d.0.borrow().restored, 1);
+}
+
+#[test]
+fn driven_deadlines_are_early_stale_and_session_safe() {
+    use crate::{WaitInterest, Wake};
+    fn deadline(t: &Terminal<Virtual>) -> crate::Deadline {
+        let WaitInterest::Input {
+            deadline: Some(token),
+        } = t.interest()
+        else {
+            panic!("no deadline")
+        };
+        token
+    }
+    let d = Virtual::new();
+    let (mut e, mut t) = start(&d);
+    d.feed(b"ab\x1b[");
+    t.advance(&mut e, Wake::InputReady).unwrap();
+    let early = deadline(&t);
+    let reads = d.0.borrow().reads;
+    assert_eq!(t.advance(&mut e, Wake::Deadline(early)).unwrap(), None);
+    assert_eq!(d.0.borrow().reads, reads);
+    d.feed(b"D!");
+    t.advance(&mut e, Wake::InputReady).unwrap();
+    assert_eq!(e.editor.text(), "a!b");
+    assert_eq!(t.advance(&mut e, Wake::Deadline(early)).unwrap(), None);
+    d.feed(b"\x1b[");
+    t.advance(&mut e, Wake::InputReady).unwrap();
+    t.expire_for_test();
+    let due = deadline(&t);
+    assert_eq!(
+        t.advance(&mut e, Wake::Deadline(due)).unwrap(),
+        Some(Event::Rejected(crate::EditError::InvalidSequence))
+    );
+    assert_eq!(t.advance(&mut e, Wake::Deadline(due)).unwrap(), None);
+    t.close(&mut e).unwrap();
+    let (mut e, mut t) = start(&d);
+    d.feed(b"\x1b[");
+    t.advance(&mut e, Wake::InputReady).unwrap();
+    assert_eq!(t.advance(&mut e, Wake::Deadline(due)).unwrap(), None);
+    assert!(matches!(
+        t.interest(),
+        WaitInterest::Input { deadline: Some(_) }
+    ));
+    // Even a due notification reconciles ready continuation before expiry.
+    t.expire_for_test();
+    let due = deadline(&t);
+    d.feed(b"D");
+    assert_eq!(t.advance(&mut e, Wake::Deadline(due)).unwrap(), None);
+    assert_eq!(t.interest(), WaitInterest::Input { deadline: None });
+}
+
+#[test]
+fn driven_semantic_boundary_retains_read_ahead_and_cleans_failures() {
+    use crate::{WaitInterest, Wake};
+    let d = Virtual::new();
+    let (mut e, mut t) = start(&d);
+    d.feed(b"he\tllo\rnext");
+    assert_eq!(
+        t.advance(&mut e, Wake::InputReady).unwrap(),
+        Some(Event::CompletionRequested)
+    );
+    assert_eq!(t.interest(), WaitInterest::Ready);
+    assert_eq!(e.editor.text(), "he");
+    assert_eq!(
+        t.advance(&mut e, Wake::InputReady).unwrap(),
+        Some(Event::Submitted("hello".into()))
+    );
+    assert_eq!(t.pending.iter().copied().collect::<Vec<_>>(), b"next");
+    assert_eq!(d.0.borrow().restored, 1);
+    for fail_read in [true, false] {
+        let d = Virtual::new();
+        let (mut e, mut t) = start(&d);
+        d.0.borrow_mut().fail_read = fail_read;
+        d.0.borrow_mut().fail_write = !fail_read;
+        d.feed(b"x");
+        assert!(t.advance(&mut e, Wake::InputReady).is_err());
+        assert!(!t.active);
+        assert!(!e.is_open());
+        assert_eq!(d.0.borrow().restored, 1);
+    }
+}
+
+#[test]
+fn optional_paste_admission_controls_every_transaction_and_restoration() {
+    let d = Virtual::new();
+    let mut e = Engine::new(Editor::new(100, 1));
+    let mut t = Terminal::start_config(
+        d.clone(),
+        &mut e,
+        Prompt::new("demo").unwrap(),
+        Theme::new(true, true, None),
+        crate::InteractionFeatures {
+            styling: false,
+            bracketed_paste: false,
+        },
+    )
+    .unwrap();
+    let fx = e.external_output(Role::Dim, "notice").unwrap();
+    t.apply(&mut e, fx).unwrap();
+    t.close(&mut e).unwrap();
+    assert!(!d.0.borrow().output.windows(6).any(|s| s == b"[?2004"));
+    assert_eq!(d.0.borrow().restored, 1);
+}
+
+#[test]
+fn public_scheduling_values_are_portable_and_single_owner_mutation_is_sufficient() {
+    fn send_sync<T: Send + Sync>() {}
+    send_sync::<crate::Interaction>();
+    send_sync::<crate::Deadline>();
+    send_sync::<crate::WaitInterest>();
+    send_sync::<crate::Wake>();
+    send_sync::<crate::TerminalConfig>();
 }

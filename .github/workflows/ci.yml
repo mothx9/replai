@@ -139,6 +139,36 @@ jobs:
           cargo test --locked --workspace --all-targets
           cargo test --locked --workspace --release
 
+  embedding:
+    name: External embedding (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87
+        with:
+          toolchain: stable
+      - name: Blocking and host reactor real PTYs, deadlines, resize and resources
+        run: python3 tools/embedding_pty.py --work "$RUNNER_TEMP/replai-embedding"
+      - name: Install Linux embedding memory tool
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y valgrind
+      - name: Real reactor lifecycle under native memory tooling
+        run: python3 tools/embedding_pty.py --memory --work "$RUNNER_TEMP/replai-embedding-memory"
+      - name: Retain exact embedding observations
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: embedding-${{ matrix.os }}
+          path: |
+            ${{ runner.temp }}/replai-embedding
+            ${{ runner.temp }}/replai-embedding-memory
+
   native-macos:
     name: macOS C ABI and real terminal
     runs-on: macos-latest

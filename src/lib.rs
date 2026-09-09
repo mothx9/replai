@@ -3,6 +3,11 @@
 //!
 //! Platform-neutral editing and interaction engine, with a shared Linux/macOS POSIX system façade.
 //! Hosts retain input meaning, completion discovery and history admission.
+//! One [`Interaction`] offers `Interaction::read_line` on Linux/macOS for tiny
+//! blocking hosts, compatibility polling, and host-owned readiness/deadline
+//! driving. [`WaitInterest`], [`Wake`] and [`Deadline`] are portable scheduling
+//! values; resource methods exist only for qualified system backends.
+//! No threads, signal handlers or async runtime are installed.
 //!
 //! ```
 //! use replai::Editor;
@@ -51,6 +56,7 @@
 
 mod capabilities;
 mod document;
+mod driving;
 pub use document::{Alignment, Block, Column, Document, ListItem, Severity, Span, Text};
 mod core;
 mod event;
@@ -84,3 +90,6 @@ pub use presentation::{Foreground, Prompt, Role, Style, Theme};
 
 #[cfg(test)]
 mod conformance;
+
+pub use capabilities::{FeaturePolicy, FeatureSupport, TerminalConfig, TerminalFacts};
+pub use driving::{Deadline, InteractionFeatures, ReadOutcome, WaitInterest, Wake};
