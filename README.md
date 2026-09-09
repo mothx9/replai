@@ -30,7 +30,7 @@ shell language, command registry, application scheduler or full-screen UI here.
 experimental contracts, without a stable API/ABI, SemVer or MSRV promise.
 
 <p align="center">
-  <img src="assets/terminal-preview.png" alt="Real REPLAI terminal session: structured connection facts, capability notices and a table, followed by completion of wor to world and a notice that preserves the editable prompt." width="840">
+  <a href="assets/terminal-preview.png"><img src="assets/terminal-preview.png" alt="Real REPLAI terminal session: structured connection facts, capability notices and a table, followed by completion of wor to world and a notice that preserves the editable prompt." width="960"></a>
 </p>
 
 *Captured from the `structured` and `demo -- --notice` examples. The terminal's

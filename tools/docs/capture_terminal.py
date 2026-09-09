@@ -60,15 +60,25 @@ last = max(i for i, r in enumerate(rows) if r.strip())
 rows = rows[: last + 1]
 fontpath = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
 boldpath = fontpath.replace(".ttf", "-Bold.ttf")
-font = ImageFont.truetype(fontpath, 19)
-bold = ImageFont.truetype(boldpath, 19)
-cw = 12
-ch = 27
-pad = 30
-top = 60
+# Render glyphs directly at 2x density; never enlarge an existing bitmap.
+scale = 2
+font = ImageFont.truetype(fontpath, 20 * scale)
+bold = ImageFont.truetype(boldpath, 20 * scale)
+caption = ImageFont.truetype(fontpath, 14 * scale)
+cw = 12 * scale
+ch = 28 * scale
+pad = 24 * scale
+top = 72 * scale
 im = Image.new("RGB", (76 * cw + 2 * pad, top + len(rows) * ch + pad), (24, 27, 33))
 d = ImageDraw.Draw(im)
-d.text((pad, 18), "REPLAI  /  real terminal session", font=font, fill="#a5aebc")
+d.text((pad, 17 * scale), "REPLAI", font=bold, fill="#dce2eb")
+d.text(
+    (pad + 100 * scale, 22 * scale),
+    "structured output + live editing",
+    font=caption,
+    fill="#a5aebc",
+)
+d.line((pad, 53 * scale, im.width - pad, 53 * scale), fill="#363d49", width=scale)
 colors = {
     "default": "#dce2eb",
     "black": "#17191e",
@@ -99,14 +109,14 @@ if y < len(rows):
     d.rectangle(
         (
             pad + x * cw,
-            top + y * ch + 3,
-            pad + (x + 1) * cw - 2,
-            top + (y + 1) * ch - 2,
+            top + y * ch + 3 * scale,
+            pad + (x + 1) * cw - 2 * scale,
+            top + (y + 1) * ch - 2 * scale,
         ),
         outline="#dce2eb",
-        width=2,
+        width=scale,
     )
-im.save(root / "assets/terminal-preview.png")
+im.save(root / "assets/terminal-preview.png", optimize=True)
 print("\n".join(rows))
 print(im.size)
 send(b"\x03", 0.1)

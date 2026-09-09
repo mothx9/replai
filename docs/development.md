@@ -149,7 +149,9 @@ claiming a Windows terminal backend. Hosted latency is characterization only.
 The [README image](../assets/terminal-preview.png) is a rasterized screen from
 real `structured` and `demo -- --notice` processes in a Linux PTY, not a mockup.
 The optional [capture script](../tools/docs/capture_terminal.py) uses a 76-column
-terminal, pyte 0.8.2 and Pillow 11.3.0 with DejaVu Sans Mono. Its dark background
+terminal, pyte 0.8.2 and Pillow 11.3.0 with DejaVu Sans Mono. Glyphs are
+rasterized directly at 2× density into a 1920-pixel-wide PNG; the README links
+to the full-resolution image. No existing bitmap is enlarged. Its dark background
 belongs to the capture terminal; it is not emitted by REPLAI. It exercises actual
 host completion and coordinated output. The command vocabulary printed by the
 structured example is illustrative data, not commands implemented by the demo.
