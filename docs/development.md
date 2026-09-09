@@ -146,22 +146,27 @@ claiming a Windows terminal backend. Hosted latency is characterization only.
 
 ## README terminal preview
 
-The [README image](../assets/terminal-preview.png) is a rasterized screen from
-real `structured` and `demo -- --notice` processes in a Linux PTY, not a mockup.
-The optional [capture script](../tools/docs/capture_terminal.py) uses a 76-column
-terminal, pyte 0.8.2 and Pillow 11.3.0 with DejaVu Sans Mono. Glyphs are
-rasterized directly at 2× density into a 1920-pixel-wide PNG; the README links
-to the full-resolution image. No existing bitmap is enlarged. Its dark background
-belongs to the capture terminal; it is not emitted by REPLAI. It exercises actual
-host completion and coordinated output. The command vocabulary printed by the
-structured example is illustrative data, not commands implemented by the demo.
+The README uses two real [query-host](../examples/query.rs) screens:
+[structured results](../assets/terminal-results.png) and
+[multiline editing with host output](../assets/terminal-editing.png).
+The example has a fixed query and an in-memory fixture; it connects to no database.
+All terminal contents come from the executable, not authored image text.
 
-To reproduce with the optional tools installed in a disposable Python environment:
+The optional [capture script](../tools/docs/capture_terminal.py) drives a 72-column
+Linux PTY with pyte 0.8.2 and Pillow 11.3.0. It exercises completion, submission,
+history return, multiline paste, cursor movement, Ctrl-L and a host notice. It
+checks clean exit, exact termios restoration and paste-mode cleanup. The images
+are rasterized directly at 2× density with DejaVu Sans Mono into 1824-pixel-wide
+PNGs. The dark background and title strip belong to the capture, not REPLAI output.
+No existing bitmap is enlarged or altered.
+
+To reproduce with optional capture dependencies in a disposable environment:
 
 ```sh
-cargo build --locked --example structured --example demo
+cargo build --locked --example query
 python3 tools/docs/capture_terminal.py
 ```
 
-These capture dependencies are not needed for library builds or qualification.
-The preview is documentation, not a substitute for the independent PTY oracle.
+These dependencies are not required for library builds or qualification.
+Screenshots illustrate behavior; the independent native PTY oracles remain the
+qualification authority.
