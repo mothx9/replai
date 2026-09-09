@@ -60,6 +60,7 @@ ESTABLISHED=20 PARTIAL=13 OPEN=9 LATER=4 TOTAL=46
 ### Host integration
 
 | ID | Property | Maturity | Current truth / exact boundary | Promotion condition | Program | Evidence / owner |
+| --- | --- | --- | --- | --- | --- | --- |
 | embedding.session | Explicit interaction ownership | 🟢 ESTABLISHED | Movable state, scoped open/poll/close/reopen and host-owned execution; Linux/macOS acquisition. | Preserve lifecycle/error semantics and public/native C composition. | F | [Interaction][interaction]; [facade][facade]; [C contract][c-api] |
 | embedding.tiers | F1 simple and layered embedding | 🟡 PARTIAL | Session API exists; no one-call blocking convenience or complete three-tier contract. | Demonstrate small blocking, session and driven consumers using one engine without exposing private frames. | F / P | [Facade][facade]; [F0 seams][f0] |
 | embedding.driver | P3 public event driver | 🔴 OPEN | Private driver batches ready bytes; public poll still checks size and caps waits at 100 ms. | Host readiness/resize/expiry delivery without mandatory periodic wakes; preserve pending input and cleanup. | P / F | [Facade][facade]; [driver][driver]; [performance dossier][macos-perf] |
@@ -68,6 +69,7 @@ ESTABLISHED=20 PARTIAL=13 OPEN=9 LATER=4 TOTAL=46
 ### Presentation
 
 | ID | Property | Maturity | Current truth / exact boundary | Promotion condition | Program | Evidence / owner |
+| --- | --- | --- | --- | --- | --- | --- |
 | presentation.prompt | U0 composed prompts | 🟢 ESTABLISHED | Safe primary/continuation spans and semantic roles; simple constructor retained. | Preserve cell geometry, default background and simple embedding across qualified terminals. | U | [Presentation][presentation]; [document tests][documents] |
 | presentation.structured_output | O0 semantic documents | 🟢 ESTABLISHED | Rust paragraphs/headings, key/value, lists, literal blocks and spacing; safe standalone/coordinated output. | Preserve bounds, no terminal injection and meaningful styled/plain forms. | O / U | [Presentation][presentation]; [document tests][documents] |
 | presentation.table | Responsive tables | 🟢 ESTABLISHED | Cell-width layout, wrapped cells and narrow record stacking; no horizontal viewport. | Preserve content and bounded work under narrow/wide Unicode inputs. | U | [Document tests][documents]; [presentation][presentation] |
@@ -80,6 +82,7 @@ ESTABLISHED=20 PARTIAL=13 OPEN=9 LATER=4 TOTAL=46
 ### Output coordination
 
 | ID | Property | Maturity | Current truth / exact boundary | Promotion condition | Program | Evidence / owner |
+| --- | --- | --- | --- | --- | --- | --- |
 | output.coordinated | Synchronous and exclusive output | 🟢 ESTABLISHED | Safe text/documents preserve active draft/cursor; submit releases editing before host execution and later reopen. | Retain failure cleanup, exact draft return and Rust/C plain compatibility. | O | [Interaction][interaction]; [PTY][pty]; [C PTY][c-pty] |
 | output.streaming | O1 sustained output | 🔴 OPEN | Bounded output measurements exist; no sustained-stream contract or stream-specific optimization qualification. | Measure long-running chunk workloads, bytes/writes/backpressure and restoration with host-owned meaning. | O / P | [P0 output evidence][p0]; [presentation owner][presentation] |
 | output.multiplexed | O2 editing with background output | 🔴 OPEN | Serialized transactions do not establish independent concurrent writers or output arbitration. | Qualify interleaved input/output, bounded scheduling and exact draft/cursor preservation. | O / P | [Interaction owner][interaction]; [F0][f0] |
@@ -88,6 +91,7 @@ ESTABLISHED=20 PARTIAL=13 OPEN=9 LATER=4 TOTAL=46
 ### Command interaction
 
 | ID | Property | Maturity | Current truth / exact boundary | Promotion condition | Program | Evidence / owner |
+| --- | --- | --- | --- | --- | --- | --- |
 | completion.candidates | I1 rich completion contract | 🟡 PARTIAL | Safe replacement mechanics exist; no rich display/description/acceptance candidate protocol. | Qualify host-defined candidates and stale-result handling independently of U1 presentation. | I | [Interaction][interaction]; [architecture owner][architecture] |
 | analysis.hints_highlight | I2 hints and highlighting | 🔴 OPEN | Document spans exist; editor hints, autosuggestions and host syntax spans do not. | Reuse revision-bound analysis with safe range/style validation and plain degradation. | I / U | [Presentation owner][presentation] |
 | analysis.validation | I3 validation and submission policy | 🔴 OPEN | Multiline bytes can be edited; no host complete/incomplete/invalid submission decision. | Prove continued editing, submit and diagnostics with a language-neutral host validator. | I | [Interaction owner][interaction] |
@@ -98,6 +102,7 @@ ESTABLISHED=20 PARTIAL=13 OPEN=9 LATER=4 TOTAL=46
 ### Terminal and platform
 
 | ID | Property | Maturity | Current truth / exact boundary | Promotion condition | Program | Evidence / owner |
+| --- | --- | --- | --- | --- | --- | --- |
 | platform.separation | X0 protocol/resource separation | 🟢 ESTABLISHED | One neutral engine and semantic mutations; VT encoding and POSIX resources are separate. Established by F0/shared POSIX work, not a new X0 wave claim. | Add realizations without OS policy entering the editor or forking the engine. | X / F | [Architecture][architecture]; [conformance][conformance] |
 | platform.posix_linux | Linux terminal runtime | 🟢 ESTABLISHED | Real Rust/C PTYs, static/shared installation, termios/FD cleanup and Valgrind. | Preserve actual terminal and resource evidence on changed boundaries. | X / Q | [PTY][pty]; [C qualification][c-qualification]; [CI][ci] |
 | platform.posix_macos | X1 macOS terminal runtime | 🟢 ESTABLISHED | Shared POSIX runtime with real Rust/C PTYs and native leak qualification. | Preserve native execution and common-engine parity, not compilation alone. | X / Q | [macOS dossier][macos-perf]; [CI][ci] |
@@ -108,6 +113,7 @@ ESTABLISHED=20 PARTIAL=13 OPEN=9 LATER=4 TOTAL=46
 ### Performance and robustness
 
 | ID | Property | Maturity | Current truth / exact boundary | Promotion condition | Program | Evidence / owner |
+| --- | --- | --- | --- | --- | --- | --- |
 | performance.baseline | P0 characterization | 🟢 ESTABLISHED | Versioned components, allocations, PTY/idle/output and pinned comparisons at recorded workloads. | Retain workload/toolchain/variance identity; label unsupported workloads and new platforms separately. | P | [P0 dossier][p0]; [performance tools][perf-tools] |
 | performance.editor | P1 editor redesign | 🟢 ESTABLISHED | Measured local grapheme-boundary work retains String storage and Unicode oracle parity. | Preserve semantics and repeat matched scaling measurements for changes. | P | [Combined dossier][macos-perf]; [Unicode oracle][unicode-tests] |
 | performance.render | P2 common layout/render redesign | 🟢 ESTABLISHED | Viewport storage, geometry reuse and changed-row rendering; bounded fallbacks remain. | Recheck exact workloads, allocations, bytes and isolated-key latency; no universal speed-ranking claim. | P | [Combined dossier][macos-perf]; [layout oracle][layout-tests] |
@@ -118,6 +124,7 @@ ESTABLISHED=20 PARTIAL=13 OPEN=9 LATER=4 TOTAL=46
 ### Packaging, ecosystem and release
 
 | ID | Property | Maturity | Current truth / exact boundary | Promotion condition | Program | Evidence / owner |
+| --- | --- | --- | --- | --- | --- | --- |
 | packaging.integration | E0 packaging | 🟡 PARTIAL | Cargo and staged C static/shared/pkg-config work; no standardized CMake/public package release surface. | Qualify clean external installations and supported packaging paths without adjacent checkouts. | E | [C contract][c-api]; [foundation tests][foundation] |
 | ecosystem.consumers | E1 consumer diversity | 🟡 PARTIAL | Two independent Rust/C product integrations and neutral fixtures; no broad shell/DB/debugger/streaming matrix. | Execute genuinely different hosts against exact contracts, with their own semantic controls. | E | [C example][c-example]; [Rust example][rust-example]; [historical extraction][extraction] |
 | ecosystem.cookbook | E2 integration patterns | 🟡 PARTIAL | Executable Rust/C examples and ownership docs exist; full tier/driver recipes await their contracts. | Derive copyable recipes from the qualified E1/F1/P3 consumers. | E / F | [Rust example][rust-example]; [C contract][c-api] |

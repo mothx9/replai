@@ -130,6 +130,19 @@ class DocumentationGuard(unittest.TestCase):
         self.reject("invalid or duplicate program")
         target.write_text(original)
 
+    def test_table_delimiters_are_required_even_when_control_rows_are_valid(self):
+        target = self.root / "ROADMAP.md"
+        original = target.read_text()
+        delimiter = "| --- | --- | --- | --- | --- | --- | --- |\n"
+        for replacement in ("", "| --- | --- |\n"):
+            with self.subTest(replacement=replacement):
+                target.write_text(original.replace(delimiter, replacement, 1))
+                self.reject("table header requires a matching Markdown delimiter row")
+        target.write_text(original)
+        self.append("README.md", "```text\n| example | only |\n```")
+        errors, _ = checks.check_local(self.root, self.paths)
+        self.assertEqual(errors, [])
+
     def test_actual_mermaid_parser_rejects_invalid_syntax(self):
         errors = checks.check_mermaid([
             {"file": "docs/bad.md", "line": 12, "code": "flowchart LR\n A --> ["},

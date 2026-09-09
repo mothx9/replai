@@ -62,7 +62,7 @@ git diff --check
 The checker validates local links/anchors, document and asset reachability,
 retired-surface absence, the designated project-status owner, roadmap maturity
 IDs/states/counts, program references and unique engineering selection, ABI identity/tag
-tables against the schema, and Mermaid syntax. Its negative fixtures must prove
+tables against the schema, Markdown table delimiters, and Mermaid syntax. Its negative fixtures must prove
 that rejected documents produce a file-specific error. It does not infer prose
 accuracy, verify live external URLs or prove capability by counting tests.
 

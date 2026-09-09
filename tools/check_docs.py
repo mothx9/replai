@@ -69,6 +69,17 @@ def parse_markdown(text):
             visible.append(line)
     if fence:
         errors.append(f"line {start}: unclosed code fence")
+    # A pipe header without its delimiter renders as prose, even when control
+    # rows are otherwise valid. Check visible tables, excluding fenced examples.
+    for i, line in enumerate(visible):
+        if not line.startswith("|") or (i and visible[i - 1].startswith("|")):
+            continue
+        header = re.split(r"(?<!\\)\|", line.strip().strip("|"))
+        following = visible[i + 1] if i + 1 < len(visible) else ""
+        delimiter = following.strip().strip("|").split("|")
+        if (not following.startswith("|") or len(delimiter) != len(header)
+                or not all(re.fullmatch(r":?-{3,}:?", cell.strip()) for cell in delimiter)):
+            errors.append(f"line {i + 1}: table header requires a matching Markdown delimiter row")
     prose = "\n".join(visible)
     html = HtmlLinks()
     html.feed(prose)
