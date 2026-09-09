@@ -73,7 +73,7 @@ class Reactor(Session):
 
     def stop(self):
         self.event(b'Q'); self.restored()
-        self.app.sendall(b'E'); self.process.wait(timeout=20)
+        self.app.sendall(b'E'); self.until(lambda: self.process.poll() is not None, timeout=60)
         assert self.process.returncode == 0
         self.receipts.extend(self.control.read())
         while True:
@@ -99,6 +99,7 @@ def driven(work, prefix=()):
                 scope='host blocks on terminal/socket; no REPLAI call between observer events')
             text = 'e\u0301!界'
             evidence['unicode'] = s.edit('e\u0301界\x1b[D!'.encode(), text, 4)
+            evidence['unicode_ready_advance_ns'] = int(re.findall(rb'READY_ADVANCE_NS (\d+)', s.receipts)[-1])
             before = s.screen(); assert before['cursor'] == '0 10', before
             evidence['output'] = s.event(b'O'); after = s.screen()
             assert s.state()['text'] == text and s.state()['cursor'] == 4

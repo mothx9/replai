@@ -111,3 +111,16 @@ remain deliberate backend constraints. Driven resize requires a host notificatio
 reactor registrations must not outlive borrowed descriptor ownership. O2 concurrent
 writers, I0 revision-aware analysis, full F2 discovery, Windows runtime and a
 portable driven C contract are not implemented by this work. No new wave begins.
+
+## Native fixture corrections
+
+The first native run exposed two observation defects, with existing macOS C
+and portable library tests green. The new flag oracle initially compared
+Darwin's kernel `FWASWRITTEN` marker as though it were a caller-selected mode.
+[XNU fcntl definitions](https://github.com/apple-oss-distributions/xnu/blob/main/bsd/sys/fcntl.h)
+identify `0x00010000` as write bookkeeping; the corrected oracle excludes only
+that bit on macOS and still compares every other bit, including O_NONBLOCK.
+The native memory runner also waited for process exit before draining its PTY/
+pipe, which can block a verbose exit-time leak report. It now drains while
+waiting and retains the zero-leak assertion. Neither correction changes the
+terminal implementation or relaxes termios restoration.

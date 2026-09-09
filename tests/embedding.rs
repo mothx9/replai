@@ -27,7 +27,7 @@ fn admission_borrowing_and_unwinding_preserve_real_caller_resources() {
     .unwrap();
     fcntl_setfl(&master, fcntl_getfl(&master).unwrap() | OFlags::NONBLOCK).unwrap();
     let before = format!("{:?}", tcgetattr(&slave).unwrap());
-    let flags = fcntl_getfl(&slave).unwrap();
+    let flags = caller_flags(&slave);
     let config = TerminalConfig {
         facts: TerminalFacts::assumed_vt(),
         styling: FeaturePolicy::Disabled,
@@ -54,12 +54,8 @@ fn admission_borrowing_and_unwinding_preserve_real_caller_resources() {
             t.open_with_config(&slave, &slave, Prompt::new("test").unwrap(), config)
                 .unwrap();
             let source = t.input_source().unwrap();
-            assert_eq!(fcntl_getfl(source).unwrap(), flags);
-            assert_eq!(
-                fcntl_getfl(&slave).unwrap(),
-                flags,
-                "no caller O_NONBLOCK mutation"
-            );
+            assert_eq!(caller_flags(&source), flags);
+            assert_eq!(caller_flags(&slave), flags, "no caller O_NONBLOCK mutation");
             if !wire.is_empty() {
                 write(&master, wire).unwrap();
                 t.advance(Wake::InputReady).unwrap();
@@ -85,7 +81,7 @@ fn admission_borrowing_and_unwinding_preserve_real_caller_resources() {
                 drop(t);
             }
             assert_eq!(format!("{:?}", tcgetattr(&slave).unwrap()), before);
-            assert_eq!(fcntl_getfl(&slave).unwrap(), flags);
+            assert_eq!(caller_flags(&slave), flags);
             let mut bytes = Vec::new();
             let mut buffer = [0; 4096];
             while let Ok(n) = read(&master, &mut buffer) {
@@ -108,4 +104,14 @@ fn admission_borrowing_and_unwinding_preserve_real_caller_resources() {
     assert!(!interaction.features().unwrap().bracketed_paste);
     interaction.close().unwrap();
     assert_eq!(format!("{:?}", tcgetattr(&slave).unwrap()), before);
+}
+
+fn caller_flags(fd: &impl std::os::fd::AsFd) -> u32 {
+    let flags = fcntl_getfl(fd).unwrap().bits();
+    // Darwin exposes FWASWRITTEN, kernel bookkeeping set by ordinary writes.
+    // Compare every other bit, including O_NONBLOCK, rather than treating that
+    // unavoidable write marker as a caller-mode mutation. XNU bsd/sys/fcntl.h.
+    #[cfg(target_os = "macos")]
+    let flags = flags & !0x0001_0000;
+    flags
 }

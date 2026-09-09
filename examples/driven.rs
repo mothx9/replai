@@ -67,7 +67,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         };
         let mut outcome = None;
         if input_ready || interest == Some(WaitInterest::Ready) {
+            let started = Instant::now();
             outcome = interaction.advance(Wake::InputReady)?;
+            let elapsed = started.elapsed();
+            if app.is_some() {
+                eprintln!("READY_ADVANCE_NS {}", elapsed.as_nanos());
+            }
             advances += 1;
         } else if let Some(token) = deadline.filter(|d| Instant::now() >= d.at()) {
             outcome = interaction.advance(Wake::Deadline(token))?;

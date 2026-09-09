@@ -174,8 +174,9 @@ independent wake sources. Obtain a fresh interest after each operation.
 `Wake::InputReady` drains a bounded ready burst with zero-duration readiness
 checks and the same observable event ordering described above. Spurious
 readiness is normal no-progress. REPLAI is the sole reader of the terminal;
-a competing reader invalidates the readiness/read assumption. Caller file
-status flags are not changed and O_NONBLOCK is not required.
+a competing reader invalidates the readiness/read assumption. REPLAI never sets caller file
+status flags and O_NONBLOCK is not required. OS bookkeeping on ordinary writes
+is separate from host-selected file modes.
 
 `Deadline` is an opaque token with `at() -> Instant`. It identifies one active
 resource session and input epoch. Early, superseded and previous-session tokens
