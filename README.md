@@ -143,11 +143,12 @@ installs no signal handlers and owns no background writer or application schedul
 
 Integrate the native API through Cargo using an exact Git revision. This qualified
 checkpoint includes the three embedding tiers, structured presentation, rich
-completion, validated multiline input and explicit terminal capabilities:
+completion, validated multiline input, editor analysis presentation and explicit
+terminal capabilities:
 
 ```toml
 [dependencies]
-replai = { git = "https://github.com/mothx9/replai", rev = "1da4dbf9162a2fea4d267e1aa473859ee64ae290" }
+replai = { git = "https://github.com/mothx9/replai", rev = "27981f0dbb22305f96a07bb7e4c7fafbbf81e90b" }
 ```
 
 A retained interaction provides a complete blocking input loop:

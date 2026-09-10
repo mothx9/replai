@@ -1,0 +1,2404 @@
+{
+  "linux": {
+    "runtime": {
+      "platform": "linux",
+      "memory_command": [],
+      "styled": {
+        "plain": false,
+        "damage": [
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 1856.273
+          },
+          {
+            "operation": "replace",
+            "bytes": 0,
+            "observer_us": 1702.507
+          },
+          {
+            "operation": "resize_20",
+            "bytes": 78,
+            "observer_us": 1453.594
+          },
+          {
+            "operation": "resize_40",
+            "bytes": 100,
+            "observer_us": 1612.44
+          },
+          {
+            "operation": "resize_80",
+            "bytes": 99,
+            "observer_us": 1835.063
+          },
+          {
+            "operation": "resize_132",
+            "bytes": 99,
+            "observer_us": 2208.588
+          },
+          {
+            "operation": "output",
+            "bytes": 168,
+            "observer_us": 2385.057
+          },
+          {
+            "operation": "completion",
+            "bytes": 278,
+            "observer_us": 2569.821
+          },
+          {
+            "operation": "dismiss",
+            "bytes": 139,
+            "observer_us": 2398.582
+          },
+          {
+            "operation": "install",
+            "bytes": 106,
+            "observer_us": 2437.384
+          },
+          {
+            "operation": "install",
+            "bytes": 106,
+            "observer_us": 2581.072
+          },
+          {
+            "operation": "clear",
+            "bytes": 32,
+            "observer_us": 2432.906
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 2641.755
+          },
+          {
+            "operation": "install",
+            "bytes": 104,
+            "observer_us": 2690.104
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 2717.396
+          },
+          {
+            "operation": "install",
+            "bytes": 109,
+            "observer_us": 3100.545
+          },
+          {
+            "operation": "install",
+            "bytes": 2135,
+            "observer_us": 5320.417
+          },
+          {
+            "operation": "large_10_resize_20",
+            "bytes": 1747,
+            "observer_us": 4210.092
+          },
+          {
+            "operation": "large_10_resize_40",
+            "bytes": 2378,
+            "observer_us": 5022.332
+          },
+          {
+            "operation": "large_10_resize_80",
+            "bytes": 2240,
+            "observer_us": 6044.184
+          },
+          {
+            "operation": "large_10_resize_132",
+            "bytes": 2150,
+            "observer_us": 6784.251
+          },
+          {
+            "operation": "large_10_output",
+            "bytes": 2219,
+            "observer_us": 7319.026
+          },
+          {
+            "operation": "install",
+            "bytes": 2084,
+            "observer_us": 7921.066
+          },
+          {
+            "operation": "install",
+            "bytes": 4583,
+            "observer_us": 15178.075
+          },
+          {
+            "operation": "large_100_resize_20",
+            "bytes": 1855,
+            "observer_us": 11834.026
+          },
+          {
+            "operation": "large_100_resize_40",
+            "bytes": 2586,
+            "observer_us": 12568.081
+          },
+          {
+            "operation": "large_100_resize_80",
+            "bytes": 4610,
+            "observer_us": 15162.797
+          },
+          {
+            "operation": "large_100_resize_132",
+            "bytes": 4610,
+            "observer_us": 16531.313
+          },
+          {
+            "operation": "large_100_output",
+            "bytes": 4679,
+            "observer_us": 18245.783
+          },
+          {
+            "operation": "install",
+            "bytes": 4702,
+            "observer_us": 18354.735
+          },
+          {
+            "operation": "install",
+            "bytes": 2163,
+            "observer_us": 65585.768
+          },
+          {
+            "operation": "large_1000_resize_20",
+            "bytes": 987,
+            "observer_us": 51898.015
+          },
+          {
+            "operation": "large_1000_resize_40",
+            "bytes": 1310,
+            "observer_us": 52641.841
+          },
+          {
+            "operation": "large_1000_resize_80",
+            "bytes": 2190,
+            "observer_us": 54677.816
+          },
+          {
+            "operation": "large_1000_resize_132",
+            "bytes": 2190,
+            "observer_us": 55771.801
+          },
+          {
+            "operation": "large_1000_output",
+            "bytes": 2259,
+            "observer_us": 56580.636
+          },
+          {
+            "operation": "install",
+            "bytes": 4702,
+            "observer_us": 44954.986
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 24538.409
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 24735.656
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 24816.917
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 24835.601
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 24900.301
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 24419.076
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 25151.72
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 25111.505
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 24867.761
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 24360.768
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 25001.931
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 24576.489
+          }
+        ],
+        "large": [
+          {
+            "lines": 10,
+            "bytes": 650,
+            "screen": {
+              "cursor": "5 4",
+              "text": "xx\nxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxx\napplication event: draft preserved\nvalidate> \n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... ",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          },
+          {
+            "lines": 100,
+            "bytes": 6500,
+            "screen": {
+              "cursor": "2 4",
+              "text": "application event: draft preserved\nvalidate> \n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          },
+          {
+            "lines": 1000,
+            "bytes": 65000,
+            "screen": {
+              "cursor": "2 4",
+              "text": "application event: draft preserved\nvalidate> \n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          }
+        ],
+        "styled_cell_verified": true,
+        "delayed_stale_zero_bytes": true,
+        "canonical_submission": "bu",
+        "lifecycle_restoration": 12,
+        "shared_snapshot_products": true
+      },
+      "plain": {
+        "plain": true,
+        "damage": [
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 1687.92
+          },
+          {
+            "operation": "replace",
+            "bytes": 0,
+            "observer_us": 1627.398
+          },
+          {
+            "operation": "resize_20",
+            "bytes": 31,
+            "observer_us": 1346.445
+          },
+          {
+            "operation": "resize_40",
+            "bytes": 53,
+            "observer_us": 1502.395
+          },
+          {
+            "operation": "resize_80",
+            "bytes": 52,
+            "observer_us": 1770.754
+          },
+          {
+            "operation": "resize_132",
+            "bytes": 52,
+            "observer_us": 2159.998
+          },
+          {
+            "operation": "output",
+            "bytes": 109,
+            "observer_us": 2410.014
+          },
+          {
+            "operation": "completion",
+            "bytes": 168,
+            "observer_us": 2463.844
+          },
+          {
+            "operation": "dismiss",
+            "bytes": 92,
+            "observer_us": 2395.096
+          },
+          {
+            "operation": "install",
+            "bytes": 59,
+            "observer_us": 2450.569
+          },
+          {
+            "operation": "install",
+            "bytes": 59,
+            "observer_us": 2400.946
+          },
+          {
+            "operation": "clear",
+            "bytes": 18,
+            "observer_us": 2325.215
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 2438.416
+          },
+          {
+            "operation": "install",
+            "bytes": 57,
+            "observer_us": 2516.091
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 2603.904
+          },
+          {
+            "operation": "install",
+            "bytes": 62,
+            "observer_us": 2823.222
+          },
+          {
+            "operation": "install",
+            "bytes": 842,
+            "observer_us": 4889.687
+          },
+          {
+            "operation": "large_10_resize_20",
+            "bytes": 668,
+            "observer_us": 3674.085
+          },
+          {
+            "operation": "large_10_resize_40",
+            "bytes": 985,
+            "observer_us": 4204.652
+          },
+          {
+            "operation": "large_10_resize_80",
+            "bytes": 947,
+            "observer_us": 4996.304
+          },
+          {
+            "operation": "large_10_resize_132",
+            "bytes": 857,
+            "observer_us": 5540.307
+          },
+          {
+            "operation": "large_10_output",
+            "bytes": 914,
+            "observer_us": 5914.282
+          },
+          {
+            "operation": "install",
+            "bytes": 806,
+            "observer_us": 6374.919
+          },
+          {
+            "operation": "install",
+            "bytes": 1772,
+            "observer_us": 13686.781
+          },
+          {
+            "operation": "large_100_resize_20",
+            "bytes": 776,
+            "observer_us": 10460.71
+          },
+          {
+            "operation": "large_100_resize_40",
+            "bytes": 1051,
+            "observer_us": 10802.864
+          },
+          {
+            "operation": "large_100_resize_80",
+            "bytes": 1799,
+            "observer_us": 13024.79
+          },
+          {
+            "operation": "large_100_resize_132",
+            "bytes": 1799,
+            "observer_us": 13508.059
+          },
+          {
+            "operation": "large_100_output",
+            "bytes": 1856,
+            "observer_us": 14144.302
+          },
+          {
+            "operation": "install",
+            "bytes": 1806,
+            "observer_us": 14463.215
+          },
+          {
+            "operation": "install",
+            "bytes": 1772,
+            "observer_us": 61577.05
+          },
+          {
+            "operation": "large_1000_resize_20",
+            "bytes": 776,
+            "observer_us": 47880.952
+          },
+          {
+            "operation": "large_1000_resize_40",
+            "bytes": 1051,
+            "observer_us": 48988.312
+          },
+          {
+            "operation": "large_1000_resize_80",
+            "bytes": 1799,
+            "observer_us": 51315.441
+          },
+          {
+            "operation": "large_1000_resize_132",
+            "bytes": 1799,
+            "observer_us": 51912.674
+          },
+          {
+            "operation": "large_1000_output",
+            "bytes": 1856,
+            "observer_us": 52806.324
+          },
+          {
+            "operation": "install",
+            "bytes": 1806,
+            "observer_us": 40284.42
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 27044.35
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 22731.658
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 22558.365
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 22646.285
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 21077.107
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 23929.43
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 20954.216
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 20309.82
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 19944.884
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 19766.667
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 20296.364
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 20580.324
+          }
+        ],
+        "large": [
+          {
+            "lines": 10,
+            "bytes": 650,
+            "screen": {
+              "cursor": "5 4",
+              "text": "xx\nxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxx\napplication event: draft preserved\nvalidate> \n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... ",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          },
+          {
+            "lines": 100,
+            "bytes": 6500,
+            "screen": {
+              "cursor": "2 4",
+              "text": "application event: draft preserved\nvalidate> \n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          },
+          {
+            "lines": 1000,
+            "bytes": 65000,
+            "screen": {
+              "cursor": "2 4",
+              "text": "application event: draft preserved\nvalidate> \n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          }
+        ],
+        "styled_cell_verified": false,
+        "delayed_stale_zero_bytes": true,
+        "canonical_submission": "bu",
+        "lifecycle_restoration": 12,
+        "shared_snapshot_products": true
+      },
+      "session": {
+        "synchronous": true,
+        "delayed_stale": false,
+        "canonical_submission": "bu",
+        "exact_restoration": true
+      },
+      "delayed_session": {
+        "synchronous": true,
+        "delayed_stale": true,
+        "canonical_submission": "bu!",
+        "exact_restoration": true
+      }
+    },
+    "memory": {
+      "platform": "linux",
+      "memory_command": [
+        "/usr/bin/valgrind",
+        "--leak-check=full",
+        "--show-leak-kinds=all",
+        "--errors-for-leak-kinds=definite,indirect",
+        "--error-exitcode=99",
+        "--log-file=/home/runner/work/_temp/replai-analysis-presentation-memory/valgrind-%p.log"
+      ],
+      "styled": {
+        "plain": false,
+        "damage": [
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 46455.163
+          },
+          {
+            "operation": "replace",
+            "bytes": 0,
+            "observer_us": 7327.556
+          },
+          {
+            "operation": "resize_20",
+            "bytes": 78,
+            "observer_us": 10822.639
+          },
+          {
+            "operation": "resize_40",
+            "bytes": 100,
+            "observer_us": 7501.09
+          },
+          {
+            "operation": "resize_80",
+            "bytes": 99,
+            "observer_us": 2792.983
+          },
+          {
+            "operation": "resize_132",
+            "bytes": 99,
+            "observer_us": 4616.336
+          },
+          {
+            "operation": "output",
+            "bytes": 168,
+            "observer_us": 44164.318
+          },
+          {
+            "operation": "completion",
+            "bytes": 278,
+            "observer_us": 50983.415
+          },
+          {
+            "operation": "dismiss",
+            "bytes": 139,
+            "observer_us": 13784.978
+          },
+          {
+            "operation": "install",
+            "bytes": 106,
+            "observer_us": 3657.297
+          },
+          {
+            "operation": "install",
+            "bytes": 106,
+            "observer_us": 3654.701
+          },
+          {
+            "operation": "clear",
+            "bytes": 32,
+            "observer_us": 4669.916
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 3662.566
+          },
+          {
+            "operation": "install",
+            "bytes": 104,
+            "observer_us": 3702.991
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 3832.292
+          },
+          {
+            "operation": "install",
+            "bytes": 109,
+            "observer_us": 4074.515
+          },
+          {
+            "operation": "install",
+            "bytes": 2135,
+            "observer_us": 30061.877
+          },
+          {
+            "operation": "large_10_resize_20",
+            "bytes": 1747,
+            "observer_us": 25831.642
+          },
+          {
+            "operation": "large_10_resize_40",
+            "bytes": 2378,
+            "observer_us": 23044.761
+          },
+          {
+            "operation": "large_10_resize_80",
+            "bytes": 2240,
+            "observer_us": 23843.862
+          },
+          {
+            "operation": "large_10_resize_132",
+            "bytes": 2150,
+            "observer_us": 24754.852
+          },
+          {
+            "operation": "large_10_output",
+            "bytes": 2219,
+            "observer_us": 26056.281
+          },
+          {
+            "operation": "install",
+            "bytes": 2084,
+            "observer_us": 32662.032
+          },
+          {
+            "operation": "install",
+            "bytes": 4583,
+            "observer_us": 225481.717
+          },
+          {
+            "operation": "large_100_resize_20",
+            "bytes": 1855,
+            "observer_us": 168071.205
+          },
+          {
+            "operation": "large_100_resize_40",
+            "bytes": 2586,
+            "observer_us": 167156.909
+          },
+          {
+            "operation": "large_100_resize_80",
+            "bytes": 4610,
+            "observer_us": 171138.894
+          },
+          {
+            "operation": "large_100_resize_132",
+            "bytes": 4610,
+            "observer_us": 172125.512
+          },
+          {
+            "operation": "large_100_output",
+            "bytes": 4679,
+            "observer_us": 173131.909
+          },
+          {
+            "operation": "install",
+            "bytes": 4702,
+            "observer_us": 138827.004
+          },
+          {
+            "operation": "install",
+            "bytes": 2163,
+            "observer_us": 1967584.384
+          },
+          {
+            "operation": "large_1000_resize_20",
+            "bytes": 987,
+            "observer_us": 1556955.155
+          },
+          {
+            "operation": "large_1000_resize_40",
+            "bytes": 1310,
+            "observer_us": 1541842.926
+          },
+          {
+            "operation": "large_1000_resize_80",
+            "bytes": 2190,
+            "observer_us": 1533574.939
+          },
+          {
+            "operation": "large_1000_resize_132",
+            "bytes": 2190,
+            "observer_us": 1526184.112
+          },
+          {
+            "operation": "large_1000_output",
+            "bytes": 2259,
+            "observer_us": 1531679.87
+          },
+          {
+            "operation": "install",
+            "bytes": 4702,
+            "observer_us": 866403.969
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 26058.666
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 26158.342
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 26255.012
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 26097.318
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 26027.106
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 25920.077
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 25777.771
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 26240.135
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 25763.304
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 25731.294
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 25571.687
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 25866.897
+          }
+        ],
+        "large": [
+          {
+            "lines": 10,
+            "bytes": 650,
+            "screen": {
+              "cursor": "5 4",
+              "text": "xx\nxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxx\napplication event: draft preserved\nvalidate> \n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... ",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          },
+          {
+            "lines": 100,
+            "bytes": 6500,
+            "screen": {
+              "cursor": "2 4",
+              "text": "application event: draft preserved\nvalidate> \n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          },
+          {
+            "lines": 1000,
+            "bytes": 65000,
+            "screen": {
+              "cursor": "2 4",
+              "text": "application event: draft preserved\nvalidate> \n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          }
+        ],
+        "styled_cell_verified": true,
+        "delayed_stale_zero_bytes": true,
+        "canonical_submission": "bu",
+        "lifecycle_restoration": 12,
+        "shared_snapshot_products": true
+      },
+      "plain": {
+        "plain": true,
+        "damage": [
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 46150.995
+          },
+          {
+            "operation": "replace",
+            "bytes": 0,
+            "observer_us": 7000.145
+          },
+          {
+            "operation": "resize_20",
+            "bytes": 31,
+            "observer_us": 10380.984
+          },
+          {
+            "operation": "resize_40",
+            "bytes": 53,
+            "observer_us": 7447.74
+          },
+          {
+            "operation": "resize_80",
+            "bytes": 52,
+            "observer_us": 2842.675
+          },
+          {
+            "operation": "resize_132",
+            "bytes": 52,
+            "observer_us": 4668.142
+          },
+          {
+            "operation": "output",
+            "bytes": 109,
+            "observer_us": 44855.557
+          },
+          {
+            "operation": "completion",
+            "bytes": 168,
+            "observer_us": 51510.578
+          },
+          {
+            "operation": "dismiss",
+            "bytes": 92,
+            "observer_us": 13967.81
+          },
+          {
+            "operation": "install",
+            "bytes": 59,
+            "observer_us": 3715.134
+          },
+          {
+            "operation": "install",
+            "bytes": 59,
+            "observer_us": 3657.496
+          },
+          {
+            "operation": "clear",
+            "bytes": 18,
+            "observer_us": 4564.109
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 3614.336
+          },
+          {
+            "operation": "install",
+            "bytes": 57,
+            "observer_us": 3590.702
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 3701.408
+          },
+          {
+            "operation": "install",
+            "bytes": 62,
+            "observer_us": 3971.292
+          },
+          {
+            "operation": "install",
+            "bytes": 842,
+            "observer_us": 28765.437
+          },
+          {
+            "operation": "large_10_resize_20",
+            "bytes": 668,
+            "observer_us": 25130.883
+          },
+          {
+            "operation": "large_10_resize_40",
+            "bytes": 985,
+            "observer_us": 21952.643
+          },
+          {
+            "operation": "large_10_resize_80",
+            "bytes": 947,
+            "observer_us": 28597.064
+          },
+          {
+            "operation": "large_10_resize_132",
+            "bytes": 857,
+            "observer_us": 22723.431
+          },
+          {
+            "operation": "large_10_output",
+            "bytes": 914,
+            "observer_us": 24544.379
+          },
+          {
+            "operation": "install",
+            "bytes": 806,
+            "observer_us": 29933.357
+          },
+          {
+            "operation": "install",
+            "bytes": 1772,
+            "observer_us": 217953.784
+          },
+          {
+            "operation": "large_100_resize_20",
+            "bytes": 776,
+            "observer_us": 164827.309
+          },
+          {
+            "operation": "large_100_resize_40",
+            "bytes": 1051,
+            "observer_us": 163502.776
+          },
+          {
+            "operation": "large_100_resize_80",
+            "bytes": 1799,
+            "observer_us": 166454.307
+          },
+          {
+            "operation": "large_100_resize_132",
+            "bytes": 1799,
+            "observer_us": 169332.261
+          },
+          {
+            "operation": "large_100_output",
+            "bytes": 1856,
+            "observer_us": 167594.054
+          },
+          {
+            "operation": "install",
+            "bytes": 1806,
+            "observer_us": 133830.97
+          },
+          {
+            "operation": "install",
+            "bytes": 1772,
+            "observer_us": 1941447.848
+          },
+          {
+            "operation": "large_1000_resize_20",
+            "bytes": 776,
+            "observer_us": 1546542.346
+          },
+          {
+            "operation": "large_1000_resize_40",
+            "bytes": 1051,
+            "observer_us": 1527202.694
+          },
+          {
+            "operation": "large_1000_resize_80",
+            "bytes": 1799,
+            "observer_us": 1513677.944
+          },
+          {
+            "operation": "large_1000_resize_132",
+            "bytes": 1799,
+            "observer_us": 1508672.226
+          },
+          {
+            "operation": "large_1000_output",
+            "bytes": 1856,
+            "observer_us": 1511382.903
+          },
+          {
+            "operation": "install",
+            "bytes": 1806,
+            "observer_us": 855407.518
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 21312.923
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 21159.641
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 21379.377
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 21250.887
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 21166.741
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 21337.459
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 20813.321
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 21180.967
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 21178.953
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 21281.754
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 21185.034
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 21248.493
+          }
+        ],
+        "large": [
+          {
+            "lines": 10,
+            "bytes": 650,
+            "screen": {
+              "cursor": "5 4",
+              "text": "xx\nxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxx\napplication event: draft preserved\nvalidate> \n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... ",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          },
+          {
+            "lines": 100,
+            "bytes": 6500,
+            "screen": {
+              "cursor": "2 4",
+              "text": "application event: draft preserved\nvalidate> \n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          },
+          {
+            "lines": 1000,
+            "bytes": 65000,
+            "screen": {
+              "cursor": "2 4",
+              "text": "application event: draft preserved\nvalidate> \n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          }
+        ],
+        "styled_cell_verified": false,
+        "delayed_stale_zero_bytes": true,
+        "canonical_submission": "bu",
+        "lifecycle_restoration": 12,
+        "shared_snapshot_products": true
+      },
+      "session": {
+        "synchronous": true,
+        "delayed_stale": false,
+        "canonical_submission": "bu",
+        "exact_restoration": true
+      },
+      "delayed_session": {
+        "synchronous": true,
+        "delayed_stale": true,
+        "canonical_submission": "bu!",
+        "exact_restoration": true
+      }
+    }
+  },
+  "macos": {
+    "runtime": {
+      "platform": "darwin",
+      "memory_command": [],
+      "styled": {
+        "plain": false,
+        "damage": [
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 6954.417
+          },
+          {
+            "operation": "replace",
+            "bytes": 0,
+            "observer_us": 7754.375
+          },
+          {
+            "operation": "resize_20",
+            "bytes": 78,
+            "observer_us": 6447.375
+          },
+          {
+            "operation": "resize_40",
+            "bytes": 100,
+            "observer_us": 5856.0
+          },
+          {
+            "operation": "resize_80",
+            "bytes": 99,
+            "observer_us": 5859.167
+          },
+          {
+            "operation": "resize_132",
+            "bytes": 99,
+            "observer_us": 5809.584
+          },
+          {
+            "operation": "output",
+            "bytes": 168,
+            "observer_us": 5633.834
+          },
+          {
+            "operation": "completion",
+            "bytes": 278,
+            "observer_us": 4745.959
+          },
+          {
+            "operation": "dismiss",
+            "bytes": 139,
+            "observer_us": 5864.25
+          },
+          {
+            "operation": "install",
+            "bytes": 106,
+            "observer_us": 4908.042
+          },
+          {
+            "operation": "install",
+            "bytes": 106,
+            "observer_us": 5418.25
+          },
+          {
+            "operation": "clear",
+            "bytes": 32,
+            "observer_us": 5260.667
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 4678.541
+          },
+          {
+            "operation": "install",
+            "bytes": 104,
+            "observer_us": 5003.125
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 5288.167
+          },
+          {
+            "operation": "install",
+            "bytes": 109,
+            "observer_us": 5794.541
+          },
+          {
+            "operation": "install",
+            "bytes": 2135,
+            "observer_us": 7412.125
+          },
+          {
+            "operation": "large_10_resize_20",
+            "bytes": 1747,
+            "observer_us": 6520.416
+          },
+          {
+            "operation": "large_10_resize_40",
+            "bytes": 2378,
+            "observer_us": 7044.542
+          },
+          {
+            "operation": "large_10_resize_80",
+            "bytes": 2240,
+            "observer_us": 8899.667
+          },
+          {
+            "operation": "large_10_resize_132",
+            "bytes": 2150,
+            "observer_us": 7728.0
+          },
+          {
+            "operation": "large_10_output",
+            "bytes": 2219,
+            "observer_us": 9448.833
+          },
+          {
+            "operation": "install",
+            "bytes": 2084,
+            "observer_us": 12614.666
+          },
+          {
+            "operation": "install",
+            "bytes": 4583,
+            "observer_us": 16771.667
+          },
+          {
+            "operation": "large_100_resize_20",
+            "bytes": 1855,
+            "observer_us": 14404.5
+          },
+          {
+            "operation": "large_100_resize_40",
+            "bytes": 2586,
+            "observer_us": 14803.292
+          },
+          {
+            "operation": "large_100_resize_80",
+            "bytes": 4610,
+            "observer_us": 17247.25
+          },
+          {
+            "operation": "large_100_resize_132",
+            "bytes": 4610,
+            "observer_us": 23816.167
+          },
+          {
+            "operation": "large_100_output",
+            "bytes": 4679,
+            "observer_us": 24720.5
+          },
+          {
+            "operation": "install",
+            "bytes": 4702,
+            "observer_us": 17804.5
+          },
+          {
+            "operation": "install",
+            "bytes": 2163,
+            "observer_us": 61147.958
+          },
+          {
+            "operation": "large_1000_resize_20",
+            "bytes": 987,
+            "observer_us": 64645.333
+          },
+          {
+            "operation": "large_1000_resize_40",
+            "bytes": 1310,
+            "observer_us": 71685.0
+          },
+          {
+            "operation": "large_1000_resize_80",
+            "bytes": 2190,
+            "observer_us": 79389.542
+          },
+          {
+            "operation": "large_1000_resize_132",
+            "bytes": 2190,
+            "observer_us": 89741.5
+          },
+          {
+            "operation": "large_1000_output",
+            "bytes": 2259,
+            "observer_us": 63989.917
+          },
+          {
+            "operation": "install",
+            "bytes": 4702,
+            "observer_us": 61508.541
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 35781.708
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 31414.0
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 25528.291
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 36536.875
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 41502.5
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 33687.25
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 48370.083
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 41344.5
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 38442.417
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 50966.458
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 41554.584
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 44403.208
+          }
+        ],
+        "large": [
+          {
+            "lines": 10,
+            "bytes": 650,
+            "screen": {
+              "cursor": "5 4",
+              "text": "xx\nxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxx\napplication event: draft preserved\nvalidate> \n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... ",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          },
+          {
+            "lines": 100,
+            "bytes": 6500,
+            "screen": {
+              "cursor": "2 4",
+              "text": "application event: draft preserved\nvalidate> \n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          },
+          {
+            "lines": 1000,
+            "bytes": 65000,
+            "screen": {
+              "cursor": "2 4",
+              "text": "application event: draft preserved\nvalidate> \n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          }
+        ],
+        "styled_cell_verified": true,
+        "delayed_stale_zero_bytes": true,
+        "canonical_submission": "bu",
+        "lifecycle_restoration": 12,
+        "shared_snapshot_products": true
+      },
+      "plain": {
+        "plain": true,
+        "damage": [
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 6807.458
+          },
+          {
+            "operation": "replace",
+            "bytes": 0,
+            "observer_us": 6416.625
+          },
+          {
+            "operation": "resize_20",
+            "bytes": 31,
+            "observer_us": 8458.292
+          },
+          {
+            "operation": "resize_40",
+            "bytes": 53,
+            "observer_us": 5556.417
+          },
+          {
+            "operation": "resize_80",
+            "bytes": 52,
+            "observer_us": 7744.792
+          },
+          {
+            "operation": "resize_132",
+            "bytes": 52,
+            "observer_us": 5985.25
+          },
+          {
+            "operation": "output",
+            "bytes": 109,
+            "observer_us": 5459.542
+          },
+          {
+            "operation": "completion",
+            "bytes": 168,
+            "observer_us": 9063.709
+          },
+          {
+            "operation": "dismiss",
+            "bytes": 92,
+            "observer_us": 7433.416
+          },
+          {
+            "operation": "install",
+            "bytes": 59,
+            "observer_us": 7943.542
+          },
+          {
+            "operation": "install",
+            "bytes": 59,
+            "observer_us": 8171.709
+          },
+          {
+            "operation": "clear",
+            "bytes": 18,
+            "observer_us": 9550.416
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 6147.209
+          },
+          {
+            "operation": "install",
+            "bytes": 57,
+            "observer_us": 8415.625
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 9270.25
+          },
+          {
+            "operation": "install",
+            "bytes": 62,
+            "observer_us": 7824.042
+          },
+          {
+            "operation": "install",
+            "bytes": 842,
+            "observer_us": 11100.334
+          },
+          {
+            "operation": "large_10_resize_20",
+            "bytes": 668,
+            "observer_us": 15157.042
+          },
+          {
+            "operation": "large_10_resize_40",
+            "bytes": 985,
+            "observer_us": 12707.334
+          },
+          {
+            "operation": "large_10_resize_80",
+            "bytes": 947,
+            "observer_us": 15162.833
+          },
+          {
+            "operation": "large_10_resize_132",
+            "bytes": 857,
+            "observer_us": 8558.959
+          },
+          {
+            "operation": "large_10_output",
+            "bytes": 914,
+            "observer_us": 8038.0
+          },
+          {
+            "operation": "install",
+            "bytes": 806,
+            "observer_us": 9921.375
+          },
+          {
+            "operation": "install",
+            "bytes": 1772,
+            "observer_us": 16315.792
+          },
+          {
+            "operation": "large_100_resize_20",
+            "bytes": 776,
+            "observer_us": 15120.416
+          },
+          {
+            "operation": "large_100_resize_40",
+            "bytes": 1051,
+            "observer_us": 13531.625
+          },
+          {
+            "operation": "large_100_resize_80",
+            "bytes": 1799,
+            "observer_us": 17847.209
+          },
+          {
+            "operation": "large_100_resize_132",
+            "bytes": 1799,
+            "observer_us": 17193.75
+          },
+          {
+            "operation": "large_100_output",
+            "bytes": 1856,
+            "observer_us": 16169.25
+          },
+          {
+            "operation": "install",
+            "bytes": 1806,
+            "observer_us": 21373.292
+          },
+          {
+            "operation": "install",
+            "bytes": 1772,
+            "observer_us": 83622.167
+          },
+          {
+            "operation": "large_1000_resize_20",
+            "bytes": 776,
+            "observer_us": 56138.917
+          },
+          {
+            "operation": "large_1000_resize_40",
+            "bytes": 1051,
+            "observer_us": 47746.333
+          },
+          {
+            "operation": "large_1000_resize_80",
+            "bytes": 1799,
+            "observer_us": 90784.0
+          },
+          {
+            "operation": "large_1000_resize_132",
+            "bytes": 1799,
+            "observer_us": 73276.125
+          },
+          {
+            "operation": "large_1000_output",
+            "bytes": 1856,
+            "observer_us": 135975.084
+          },
+          {
+            "operation": "install",
+            "bytes": 1806,
+            "observer_us": 75499.125
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 86589.708
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 38983.917
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 39138.417
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 38533.292
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 31649.416
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 44586.583
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 48049.917
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 41461.625
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 31342.875
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 31612.25
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 43937.958
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 59316.084
+          }
+        ],
+        "large": [
+          {
+            "lines": 10,
+            "bytes": 650,
+            "screen": {
+              "cursor": "5 4",
+              "text": "xx\nxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxx\napplication event: draft preserved\nvalidate> \n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... ",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          },
+          {
+            "lines": 100,
+            "bytes": 6500,
+            "screen": {
+              "cursor": "2 4",
+              "text": "application event: draft preserved\nvalidate> \n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          },
+          {
+            "lines": 1000,
+            "bytes": 65000,
+            "screen": {
+              "cursor": "2 4",
+              "text": "application event: draft preserved\nvalidate> \n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          }
+        ],
+        "styled_cell_verified": false,
+        "delayed_stale_zero_bytes": true,
+        "canonical_submission": "bu",
+        "lifecycle_restoration": 12,
+        "shared_snapshot_products": true
+      },
+      "session": {
+        "synchronous": true,
+        "delayed_stale": false,
+        "canonical_submission": "bu",
+        "exact_restoration": true
+      },
+      "delayed_session": {
+        "synchronous": true,
+        "delayed_stale": true,
+        "canonical_submission": "bu!",
+        "exact_restoration": true
+      }
+    },
+    "memory": {
+      "platform": "darwin",
+      "memory_command": [
+        "/usr/bin/leaks",
+        "--atExit",
+        "--"
+      ],
+      "styled": {
+        "plain": false,
+        "damage": [
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 14180.958
+          },
+          {
+            "operation": "replace",
+            "bytes": 0,
+            "observer_us": 9189.0
+          },
+          {
+            "operation": "resize_20",
+            "bytes": 78,
+            "observer_us": 10787.833
+          },
+          {
+            "operation": "resize_40",
+            "bytes": 100,
+            "observer_us": 6600.542
+          },
+          {
+            "operation": "resize_80",
+            "bytes": 99,
+            "observer_us": 7083.583
+          },
+          {
+            "operation": "resize_132",
+            "bytes": 99,
+            "observer_us": 7391.833
+          },
+          {
+            "operation": "output",
+            "bytes": 168,
+            "observer_us": 7943.333
+          },
+          {
+            "operation": "completion",
+            "bytes": 278,
+            "observer_us": 12670.208
+          },
+          {
+            "operation": "dismiss",
+            "bytes": 139,
+            "observer_us": 8284.834
+          },
+          {
+            "operation": "install",
+            "bytes": 106,
+            "observer_us": 10125.625
+          },
+          {
+            "operation": "install",
+            "bytes": 106,
+            "observer_us": 7872.208
+          },
+          {
+            "operation": "clear",
+            "bytes": 32,
+            "observer_us": 8664.416
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 12091.541
+          },
+          {
+            "operation": "install",
+            "bytes": 104,
+            "observer_us": 11715.5
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 9437.791
+          },
+          {
+            "operation": "install",
+            "bytes": 109,
+            "observer_us": 17040.25
+          },
+          {
+            "operation": "install",
+            "bytes": 2135,
+            "observer_us": 18877.208
+          },
+          {
+            "operation": "large_10_resize_20",
+            "bytes": 1747,
+            "observer_us": 17437.125
+          },
+          {
+            "operation": "large_10_resize_40",
+            "bytes": 2378,
+            "observer_us": 19128.5
+          },
+          {
+            "operation": "large_10_resize_80",
+            "bytes": 2240,
+            "observer_us": 10814.375
+          },
+          {
+            "operation": "large_10_resize_132",
+            "bytes": 2150,
+            "observer_us": 18703.375
+          },
+          {
+            "operation": "large_10_output",
+            "bytes": 2219,
+            "observer_us": 16825.291
+          },
+          {
+            "operation": "install",
+            "bytes": 2084,
+            "observer_us": 27831.917
+          },
+          {
+            "operation": "install",
+            "bytes": 4583,
+            "observer_us": 31894.709
+          },
+          {
+            "operation": "large_100_resize_20",
+            "bytes": 1855,
+            "observer_us": 28189.167
+          },
+          {
+            "operation": "large_100_resize_40",
+            "bytes": 2586,
+            "observer_us": 26680.875
+          },
+          {
+            "operation": "large_100_resize_80",
+            "bytes": 4610,
+            "observer_us": 31943.125
+          },
+          {
+            "operation": "large_100_resize_132",
+            "bytes": 4610,
+            "observer_us": 31069.667
+          },
+          {
+            "operation": "large_100_output",
+            "bytes": 4679,
+            "observer_us": 30073.75
+          },
+          {
+            "operation": "install",
+            "bytes": 4702,
+            "observer_us": 28783.417
+          },
+          {
+            "operation": "install",
+            "bytes": 2163,
+            "observer_us": 146178.25
+          },
+          {
+            "operation": "large_1000_resize_20",
+            "bytes": 987,
+            "observer_us": 138729.792
+          },
+          {
+            "operation": "large_1000_resize_40",
+            "bytes": 1310,
+            "observer_us": 99892.667
+          },
+          {
+            "operation": "large_1000_resize_80",
+            "bytes": 2190,
+            "observer_us": 110518.417
+          },
+          {
+            "operation": "large_1000_resize_132",
+            "bytes": 2190,
+            "observer_us": 107527.833
+          },
+          {
+            "operation": "large_1000_output",
+            "bytes": 2259,
+            "observer_us": 127830.208
+          },
+          {
+            "operation": "install",
+            "bytes": 4702,
+            "observer_us": 108762.708
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 45388.584
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 44342.666
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 30824.5
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 43013.583
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 37711.167
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 39916.25
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 51178.917
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 54552.334
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 32462.917
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 45229.417
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 46306.458
+          },
+          {
+            "operation": "install",
+            "bytes": 98,
+            "observer_us": 45509.0
+          }
+        ],
+        "large": [
+          {
+            "lines": 10,
+            "bytes": 650,
+            "screen": {
+              "cursor": "5 4",
+              "text": "xx\nxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxx\napplication event: draft preserved\nvalidate> \n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... ",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          },
+          {
+            "lines": 100,
+            "bytes": 6500,
+            "screen": {
+              "cursor": "2 4",
+              "text": "application event: draft preserved\nvalidate> \n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          },
+          {
+            "lines": 1000,
+            "bytes": 65000,
+            "screen": {
+              "cursor": "2 4",
+              "text": "application event: draft preserved\nvalidate> \n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          }
+        ],
+        "styled_cell_verified": true,
+        "delayed_stale_zero_bytes": true,
+        "canonical_submission": "bu",
+        "lifecycle_restoration": 12,
+        "shared_snapshot_products": true
+      },
+      "plain": {
+        "plain": true,
+        "damage": [
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 5215.083
+          },
+          {
+            "operation": "replace",
+            "bytes": 0,
+            "observer_us": 7896.5
+          },
+          {
+            "operation": "resize_20",
+            "bytes": 31,
+            "observer_us": 4811.292
+          },
+          {
+            "operation": "resize_40",
+            "bytes": 53,
+            "observer_us": 7290.917
+          },
+          {
+            "operation": "resize_80",
+            "bytes": 52,
+            "observer_us": 9049.291
+          },
+          {
+            "operation": "resize_132",
+            "bytes": 52,
+            "observer_us": 13984.833
+          },
+          {
+            "operation": "output",
+            "bytes": 109,
+            "observer_us": 8960.917
+          },
+          {
+            "operation": "completion",
+            "bytes": 168,
+            "observer_us": 10266.458
+          },
+          {
+            "operation": "dismiss",
+            "bytes": 92,
+            "observer_us": 8573.875
+          },
+          {
+            "operation": "install",
+            "bytes": 59,
+            "observer_us": 16151.125
+          },
+          {
+            "operation": "install",
+            "bytes": 59,
+            "observer_us": 9647.541
+          },
+          {
+            "operation": "clear",
+            "bytes": 18,
+            "observer_us": 8141.791
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 12875.125
+          },
+          {
+            "operation": "install",
+            "bytes": 57,
+            "observer_us": 13015.125
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 12040.584
+          },
+          {
+            "operation": "install",
+            "bytes": 62,
+            "observer_us": 9973.625
+          },
+          {
+            "operation": "install",
+            "bytes": 842,
+            "observer_us": 14419.959
+          },
+          {
+            "operation": "large_10_resize_20",
+            "bytes": 668,
+            "observer_us": 18871.0
+          },
+          {
+            "operation": "large_10_resize_40",
+            "bytes": 985,
+            "observer_us": 17608.0
+          },
+          {
+            "operation": "large_10_resize_80",
+            "bytes": 947,
+            "observer_us": 19977.75
+          },
+          {
+            "operation": "large_10_resize_132",
+            "bytes": 857,
+            "observer_us": 15841.875
+          },
+          {
+            "operation": "large_10_output",
+            "bytes": 914,
+            "observer_us": 20622.875
+          },
+          {
+            "operation": "install",
+            "bytes": 806,
+            "observer_us": 12166.875
+          },
+          {
+            "operation": "install",
+            "bytes": 1772,
+            "observer_us": 29200.167
+          },
+          {
+            "operation": "large_100_resize_20",
+            "bytes": 776,
+            "observer_us": 19612.75
+          },
+          {
+            "operation": "large_100_resize_40",
+            "bytes": 1051,
+            "observer_us": 28398.208
+          },
+          {
+            "operation": "large_100_resize_80",
+            "bytes": 1799,
+            "observer_us": 32100.75
+          },
+          {
+            "operation": "large_100_resize_132",
+            "bytes": 1799,
+            "observer_us": 23999.75
+          },
+          {
+            "operation": "large_100_output",
+            "bytes": 1856,
+            "observer_us": 32777.959
+          },
+          {
+            "operation": "install",
+            "bytes": 1806,
+            "observer_us": 28720.75
+          },
+          {
+            "operation": "install",
+            "bytes": 1772,
+            "observer_us": 154652.0
+          },
+          {
+            "operation": "large_1000_resize_20",
+            "bytes": 776,
+            "observer_us": 140116.083
+          },
+          {
+            "operation": "large_1000_resize_40",
+            "bytes": 1051,
+            "observer_us": 126846.375
+          },
+          {
+            "operation": "large_1000_resize_80",
+            "bytes": 1799,
+            "observer_us": 130165.75
+          },
+          {
+            "operation": "large_1000_resize_132",
+            "bytes": 1799,
+            "observer_us": 147410.625
+          },
+          {
+            "operation": "large_1000_output",
+            "bytes": 1856,
+            "observer_us": 125029.208
+          },
+          {
+            "operation": "install",
+            "bytes": 1806,
+            "observer_us": 124244.167
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 43163.0
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 38215.667
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 36365.458
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 37847.833
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 45529.291
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 26092.542
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 40267.791
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 40317.416
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 45678.75
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 27003.875
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 35990.583
+          },
+          {
+            "operation": "install",
+            "bytes": 51,
+            "observer_us": 26852.625
+          }
+        ],
+        "large": [
+          {
+            "lines": 10,
+            "bytes": 650,
+            "screen": {
+              "cursor": "5 4",
+              "text": "xx\nxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxx\napplication event: draft preserved\nvalidate> \n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... ",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          },
+          {
+            "lines": 100,
+            "bytes": 6500,
+            "screen": {
+              "cursor": "2 4",
+              "text": "application event: draft preserved\nvalidate> \n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          },
+          {
+            "lines": 1000,
+            "bytes": 65000,
+            "screen": {
+              "cursor": "2 4",
+              "text": "application event: draft preserved\nvalidate> \n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row \u754c e\u0301 \ud83d\udc69\u200d\ud83d\udcbb xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          }
+        ],
+        "styled_cell_verified": false,
+        "delayed_stale_zero_bytes": true,
+        "canonical_submission": "bu",
+        "lifecycle_restoration": 12,
+        "shared_snapshot_products": true
+      },
+      "session": {
+        "synchronous": true,
+        "delayed_stale": false,
+        "canonical_submission": "bu",
+        "exact_restoration": true
+      },
+      "delayed_session": {
+        "synchronous": true,
+        "delayed_stale": true,
+        "canonical_submission": "bu!",
+        "exact_restoration": true
+      }
+    }
+  },
+  "qualification_commit": "27981f0dbb22305f96a07bb7e4c7fafbbf81e90b",
+  "ci": "https://github.com/mothx9/replai/actions/runs/34502378013",
+  "windows": "portable tests and benchmark integrity passed; no terminal backend"
+}

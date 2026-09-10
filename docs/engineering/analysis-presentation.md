@@ -101,8 +101,8 @@ The readiness observer recognizes the prompt before an intervening SGR reset.
 
 ## Measurements and remaining limits
 
-Final measurement/CI identities are recorded after execution, separately from
-this source contract. A native test does not establish emulator-independent
+The qualified results below separate source identity, runtime execution and
+characterization from this contract. A native test does not establish emulator-independent
 Unicode appearance. WidthPolicy remains the existing deterministic cell policy.
 
 U2's known prefix geometry scan remains: a bounded visible frame does not imply
@@ -113,3 +113,100 @@ cursor movement still invalidates spans and may require host reuse/reanalysis.
 No I4/I5/U3/output-concurrency or API-freeze claim follows from I2. C ABI 1 keeps
 its existing synchronous replacement/direct submission surface; native I0–I3
 visibility requires separate E3 cross-language design.
+
+## Qualified results
+
+Implementation: `e0ab06bc2e9111b41968842b459c51a68855aa13`, tree
+`3c0479400d02f73fcc3237a026c47deb51a8200e`.
+Fixture carrier: `27981f0dbb22305f96a07bb7e4c7fafbbf81e90b`, with unchanged library
+source and added delayed-session/active edit-invalidation checks.
+[Implementation CI](https://github.com/mothx9/replai/actions/runs/34501515879) and
+[fixture CI](https://github.com/mothx9/replai/actions/runs/34502378013) each passed
+**12/12 jobs**. The local complete qualifier passed **22 content gates**, including
+I2 native/memory, all existing boundaries and C prepare/static/shared/memory/audit;
+clean publication is checked separately at closure.
+
+[Native observations](analysis-presentation/platforms.json) retain real Linux and
+macOS session/driven results, styled/plain editor cell checks, stale zero-byte
+refusal, active completion/history/paste invalidation, output/resize and 12
+restoration cycles per profile. Linux Valgrind reports zero errors; macOS
+`leaks --atExit` reports zero leaks. The 10/100/1000-line semantic screens match
+across Linux and macOS. Windows portable engine/model, docs and benchmark
+integrity jobs pass; this remains **no Windows terminal-runtime claim**.
+
+### Performance and memory
+
+[Before](analysis-presentation/before.json) and
+[after](analysis-presentation/after.json) are schema-v1 selections from 7,000 and
+7,410 full measured/integrity records. Raw timing and allocation streams were
+separate. All **3,494 common measured allocation profiles are identical**.
+Environment, compiler, sample distributions and source hashes are embedded.
+
+The baseline binaries were prepared from clean `e372f4e…`. Development edits
+started while those immutable binaries ran, so run.py's live-source end guard
+correctly refused to call that a source-stable run. The baseline envelope was
+assembled only after verifying **every executing binary hash** against its clean
+pre-mutation preparation receipt; that explicit qualification is recorded in the
+artifact. There was no rebuild of those binaries during timing. The after run
+passes the source-hash stability guard; its development source fingerprints were
+independently matched against every published implementation blob at `e0ab06b…`.
+Its recorded dirty preparation identity is retained, not rewritten as clean.
+
+Same Linux aarch64 machine, 1 KiB ASCII editor, median microseconds:
+
+| Operation | Before | After |
+| --- | ---: | ---: |
+| Append | 0.064 | 0.064 |
+| Left | 0.032 | 0.032 |
+| Right | 0.064 | 0.064 |
+| Direct completion replacement | 0.048 | 0.048 |
+| History previous | 0.048 | 0.048 |
+| 10-line beginning edit, validation enabled | 16.352 | 16.464 |
+| 1000-line beginning edit, validation enabled | 37.728 | 38.256 |
+
+The timer quantizes very small operations at roughly 0.016 µs. The
+[alternating primary PTY run](analysis-presentation/paired.json) uses the exact
+1000-byte ASCII + Left + X + Enter workload: **248.433 → 165.232 µs median**,
+p95 **362.352 → 275.344 µs**, MAD **26.959 / 34.768 µs**. Both emit **1054 bytes**;
+all 63 samples per source submit exact bytes and restore terminal state. This
+run establishes no observed regression at that workload; it is not a causal
+speedup attribution or a general library ranking.
+
+I2 installation includes snapshot-range validation, current-state replacement,
+layout and render transition, with the payload already constructed by the host.
+Short hint, cursor at end, 80 columns, median milliseconds:
+
+| Spans | 1 KiB | 64 KiB | 1 MiB |
+| --- | ---: | ---: | ---: |
+| 10 | 0.037552 | 2.169203 | 34.633633 |
+| 100 | 0.046960 | 2.268051 | 35.991139 |
+| 1000 | 0.039744 | 2.359603 | 36.237203 |
+
+Adjacent equal-role spans need fewer emitted style runs than sparse alternating
+ranges, so span count alone is not a latency ranking. The 100-span multiline
+fixtures install in **0.033632 / 0.267440 / 2.614420 ms** at 10/100/1000 lines
+(690/6900/69000 bytes). No constant-time deep-cursor layout claim is made.
+Long 4096-byte and combining/CJK/ZWJ hints are recorded separately in the artifacts.
+
+At 1 KiB/100 spans, forced render (Ctrl-L) is **34.480 µs**, resize 80→40 columns
+**35.600 µs**, and explicit display clear **24.240 µs**. Component VT-byte counters
+use the harness's plain encoder and are not OS syscall counts. The real native
+`bu` fixture records styled/plain bytes: initial install **106/59**, identical
+replacement **0/0**, output coordination **168/109**, completion show **278/168**,
+menu dismissal **139/92**, display clear **32/18**. These are line-surface damage
+transactions, not an alternate-screen or full-terminal menu redraw.
+
+On this 64-bit target, Editor remains **144 bytes**; Interaction changes
+**688→704 bytes**. AnalysisSpan is **24 bytes**, Hint **24**, and
+AnalysisPresentation **64**. One retained maximum I2 payload is bounded to
+4096×24 + 4096 + 64 = **102,464 bytes**, excluding allocator bookkeeping and
+existing renderer buffers. The result owns no draft copy. Ordinary editing
+without a result allocates no candidate/span/hint state.
+
+Allocation records measure installation/renderer work, excluding the host's
+already-built payload: 1 KiB short-hint installs with 10/100/1000 spans make
+**170/599/118 allocations**, with **7,581/41,365/5,701 bytes** net retained by the
+measured frame/effects transaction. These numbers include temporary render
+mutations and are not the size of the semantic payload. Sparse styles and
+cross-line layout still create recycled row/run work; optimization beyond this
+bounded first contract requires its own measurements.

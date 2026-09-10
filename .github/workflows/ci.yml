@@ -238,6 +238,8 @@ jobs:
         run: python tools/perf/smoke.py
       - name: Validate committed characterization evidence
         run: |
+          python tools/perf/results.py validate docs/engineering/analysis-presentation/before.json
+          python tools/perf/results.py validate docs/engineering/analysis-presentation/after.json
           python tools/perf/results.py validate docs/engineering/validation-multiline/before.json
           python tools/perf/results.py validate docs/engineering/validation-multiline/after.json
           python tools/perf/results.py validate docs/engineering/analysis-protocol/before.json
