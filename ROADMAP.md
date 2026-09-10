@@ -5,24 +5,24 @@
 | Axis | Current truth |
 | --- | --- |
 | Project target | Embeddable command-line interaction infrastructure: a simple entry that can grow into rich, long-lived host-driven interfaces over one engine. |
-| Current selected engineering boundary | **ANALYSIS.PROTOCOL.0 — ACTIVE**: I0 revision provenance and stale-result refusal; later interaction work remains unauthorized. |
-| Latest major completed boundary | F2 terminal capabilities: unified facts, requirements, degradation and width contract; Linux/macOS real profiles and Windows portable evidence; [F2 dossier][f2]. |
-| Most important structural gap | I0 revision-aware host analysis remains open. Rich completion, validation and asynchronous result ownership need their own semantic contract. |
+| Current selected engineering boundary | **NONE**: I0 is closed; no later interaction boundary is selected or authorized. |
+| Latest major completed boundary | I0 analysis protocol: shared immutable snapshots, draft revision identity and stale-safe replacement; [native/portable and performance qualification][analysis-protocol]. |
+| Most important structural gap | Rich completion, hints/highlighting and validation remain open above the qualified shared draft-provenance boundary. |
 | Executable foundation | Platform-neutral engine; bounded Unicode/grapheme editor; history navigation; completion requests; paste, interrupts/EOF, resize, safe output and exact restoration. |
 | Qualified platforms | Linux/macOS: real Rust/C terminal runtime. Windows: portable engine/document tests only, no terminal backend. |
-| Current Rust surface | Editor/Interaction, blocking results, session events, portable wake/deadline/admission types, borrowed POSIX readiness, prompts/themes and structured documents. Pre-release, without API freeze. |
-| Current C surface | ABI 1: POSIX descriptor binding, static/shared artifacts, caller-owned buffers and plain coordinated output. No structured-document C interface. |
+| Current Rust surface | Editor/Interaction, blocking results, session events, portable wake/deadline/admission types, borrowed POSIX readiness, revision/snapshot/stale outcomes, prompts/themes and structured documents. Pre-release, without API freeze. |
+| Current C surface | ABI 1: POSIX descriptor binding, static/shared artifacts, caller-owned buffers and plain coordinated output. No structured-document or revision-aware analysis C interface. |
 | Performance posture | P0/P1/P2 preserved at matched workloads; driven idle requires no periodic library wake, while compatibility polling retains its 100 ms resize observation. No universal latency gate. |
 | Presentation posture | Safe spans, headings, facts, lists, responsive tables/status, composed prompts/themes and deterministic plain output. Completion UI and broader visual refinement remain incomplete. |
 | Consumer posture | Native Rust and C consumers are external owners. Exact pins, adoption, application mappings and publication are their decisions; producer metadata assigns no migrations. |
 | Public-release posture | Pre-release; no stable Rust API, ABI longevity, SemVer or MSRV promise and no release date. |
-| Next decision point | Qualify I0 over F1/P3/F2: exact revision transitions, delayed stale refusal, native PTYs and hot-path preservation. |
+| Next decision point | Assess I1/U1 versus I3/U2 and I2 using concrete host needs; I0 supplies provenance, not feature semantics. No next implementation is selected. |
 
 This is the sole authority for **public macro state, maturity, strategic programs,
 dependency ordering and release progression**. [README](README.md) owns first use;
 [architecture][architecture] and contracts own implementation truth; engineering
 dossiers own bounded evidence; Git owns chronology. Planned properties are not
-APIs. F1/P3/F2 are complete at their stated scope. I0 is explicitly authorized and active; later boundaries require separate authorization.
+APIs. F1/P3/F2 are complete at their stated scope. I0 is complete at its stated scope; later boundaries require separate authorization.
 
 Navigate: [maturity](#system-maturity) · [programs](#strategic-programs) ·
 [completed boundaries](#completed-boundaries) · [sequence](#current-execution-sequence) ·
@@ -43,7 +43,7 @@ whole program. Counts describe rows, never percentage completion. IDs are stable
 control identifiers, not new public API or producer-capability declarations.
 
 <!-- maturity-counts:start -->
-ESTABLISHED=23 PARTIAL=11 OPEN=8 LATER=4 TOTAL=46
+ESTABLISHED=24 PARTIAL=11 OPEN=7 LATER=4 TOTAL=46
 <!-- maturity-counts:end -->
 
 <!-- maturity:start -->
@@ -64,7 +64,7 @@ ESTABLISHED=23 PARTIAL=11 OPEN=8 LATER=4 TOTAL=46
 | embedding.session | Explicit interaction ownership | 🟢 ESTABLISHED | Movable state, scoped open/poll/close/reopen and host-owned execution; Linux/macOS acquisition. | Preserve lifecycle/error semantics and public/native C composition. | F | [Interaction][interaction]; [facade][facade]; [C contract][c-api] |
 | embedding.tiers | F1 simple and layered embedding | 🟢 ESTABLISHED | One retained Interaction supplies typed blocking reads, explicit sessions and host driving on Linux/macOS; C ABI 1 retains session compatibility. | Preserve all three native facades over one engine, with real acquisition/restoration and explicit cross-language limits. | F / P | [Embedding qualification][embedding]; [interaction][interaction] |
 | embedding.driver | P3 public event driver | 🟢 ESTABLISHED | Host-owned readiness wait, opaque monotonic deadlines and explicit resize; no required periodic driven idle wake. Pending input and observable ordering retained. | Preserve real native reactor, deadline, resize, output and resource oracles without acquiring host scheduling. | P / F | [Embedding qualification][embedding]; [driver][driver] |
-| analysis.revisions | I0 shared host analysis | 🔴 OPEN | Revision/snapshot and stale-safe replacement are implemented; joint portable/native/performance qualification is in progress. | Prove one host analysis can serve multiple features and stale results cannot modify a newer draft. | I / F | [Architecture owner][architecture]; [engine][engine-tests] |
+| analysis.revisions | I0 shared host analysis | 🟢 ESTABLISHED | Editor-owned identity, shared immutable snapshots and atomic stale-safe replacement; native Linux/macOS delayed analysis qualified, portable model on Windows. | Preserve exact text/cursor/lifecycle provenance, stale refusal and allocation-free revision bookkeeping; future feature protocols reuse this identity. | I / F | [I0 qualification][analysis-protocol]; [analysis contract](docs/interaction.md#revision-aware-host-analysis) |
 
 ### Presentation
 
@@ -146,7 +146,7 @@ can run independently when their prerequisites are explicit.
 | --- | --- | --- | --- | --- | --- | --- |
 | F | One engine, simple/session/driven embedding | 🟢 ESTABLISHED | F0 engine; F1 embedding; F2 scoped capability/admission contract | Preserve the same contracts as future platforms and analyses are introduced | Qualified P3 delivery; X resource constraints; P0 evidence | Scheduler, async runtime, cosmetic API churn |
 | P | Measurable, efficient interaction under host driving | 🟡 PARTIAL | P0 baseline; P1/P2 convergence; P3 external driving | Broaden measured envelopes and noise policy without generalizing wins | F1/F2 contracts; Q2 variance policy | Intuitive buffer rewrites; fastest-library claims |
-| I | Rich command interaction from host analysis | 🟡 PARTIAL | Completion requests, history mechanics, fixed normalized actions | I0–I5 analysis/candidates/validation/storage/keymaps; I6 later sensitive input | F1/P3 delivery/revision rules; U presentation; Q bounds | Parser, command language, history database |
+| I | Rich command interaction from host analysis | 🟡 PARTIAL | Revision-aware shared snapshots, completion requests, history mechanics, fixed normalized actions | I1–I5 candidates/validation/storage/keymaps; I6 later sensitive input | F1/P3 delivery/revision rules; U presentation; Q bounds | Parser, command language, history database |
 | O | Safe output that scales beyond exclusive phases | 🟡 PARTIAL | O0 documents and synchronous surface coordination | O1 sustained output; O2 arbitration; O3 transient lifecycle | P3/F2 delivery and capabilities; U geometry; Q stress | Product streams, token semantics, uncontrolled writers |
 | U | Coherent line-oriented interaction presentation | 🟡 PARTIAL | U0 prompts; documents, tables, status and theme foundation | U1 candidates; U2 multiline refinement; U3 accessibility/visual system | I1/I3 semantics; F2 degradation; O coordination | Alternate-screen panels, dashboard, product ontology |
 | X | System realizations below one generic engine | 🟡 PARTIAL | X0 separation; Linux and X1 macOS runtime; Windows portable core | X2 runtime and its C acquisition design space; other systems later | F1/F2 resource contract; shared Q conformance | Fake support from compilation; speculative OS stubs |
@@ -171,17 +171,20 @@ to their recorded source, workload and environment.
 | F1/P3 EMBEDDING.CONTRACT | Native blocking/session/driven contract and minimal admission; implementation `349d75e…`, native qualification `5c04277…`; [bounded evidence][embedding]. Its minimal admission is completed by F2 below; O2 remains incomplete. |
 | F2 TERMINAL.CAPABILITIES | Unified acquisition/admission, inspectable snapshot and deterministic width; implementation `12cef7608d8243383b432f303fd3a7218cb9b20c`, qualification observer correction `69205d104a2a2bdd88b9ad03176fc58b5a3e266b`; [native/portable, memory and performance evidence][f2]. No consumer mutation. |
 | BOUNDARY producer metadata | Metadata/README carrier `9d9375db407246a6f4946e20e38f56fe3155e62a` describes qualified source `b958110…` and the delta from `6365f84…`; [producer metadata][producer]. No runtime/API change or consumer repin. |
+| I0 ANALYSIS.PROTOCOL | Implementation `81d102e74e0aa0b42aa3ad569315c00c3d34b675`, qualified observer carrier `39d41fef51012a8b4e509928846489026d908654`; [I0 dossier][analysis-protocol]. C ABI 1 remains synchronous. |
 
 ## Current Execution Sequence
 
-ANALYSIS.PROTOCOL.0 is active over the qualified F1/P3/F2 foundation. It establishes
-shared draft provenance and stale-result refusal without acquiring host analysis.
+ANALYSIS.PROTOCOL.0 is complete over the qualified F1/P3/F2 foundation. Current
+selection is `NONE`. Shared draft provenance and stale refusal permit separate
+I1/U1, I2 and I3/U2 decisions; their ordering requires concrete host use cases,
+not another provenance or terminal ownership rewrite.
 No later completion, hint, validation or UX boundary is selected or authorized.
 
 | Dependency frontier | Next decision / evidence | Explicit limit |
 | --- | --- | --- |
 | F1/P3/F2 qualified foundation | Reuse one engine, host-owned readiness and explicit admission in later contracts. | Linux/macOS qualification does not establish Windows runtime or active capability discovery. |
-| I0 shared host analysis | Define revision-aware snapshots and stale-result refusal over the external delivery seam. | No parser, completion metadata, hints or validation is implemented by the embedding wave. |
+| I0 qualified provenance | Reuse snapshots and stale-safe application for future host analysis contracts. | No parser, rich completion, hint/highlight or validation semantics follow from revision identity. |
 | I1–I5 with U1–U3; O1–O3 | Select bounded analysis/output/presentation intersections, measured against P baselines and Q stress. | An application reactor is not independent concurrent writers or O2 arbitration. |
 | X/E/Q and release | Retain native runtime/portable limits, strengthen failure and consumer diversity, then evaluate API freeze. | No Windows runtime, release or consumer repin follows automatically. |
 
@@ -305,3 +308,5 @@ validate control consistency, **not the truth of a maturity promotion**. Follow
 [embedding]: docs/engineering/embedding.md
 
 [f2]: docs/engineering/terminal-capabilities.md
+
+[analysis-protocol]: docs/engineering/analysis-protocol.md
