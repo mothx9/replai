@@ -1,0 +1,354 @@
+{
+  "capability_contracts": [
+    {
+      "description": "Optional host-owned revision-bound submission validation",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/interaction.md#validated-submission-and-multiline-navigation",
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/use-cases.md"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34494834221",
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
+      ],
+      "guarantees": [
+        "Host grammar and scheduling remain external; Enter emits an immutable snapshot when validation is enabled",
+        "Complete atomically submits exactly the requested current draft; Incomplete inserts LF; Invalid preserves text and shows bounded safe diagnostics",
+        "Stale results cannot submit, edit or emit terminal bytes; successful decisions consume pending Enter authority",
+        "32 diagnostics, 4096 bytes per message and 65536 aggregate bytes; grapheme-safe optional snapshot ranges",
+        "Direct submission remains default; C ABI 1 cannot enable validation"
+      ],
+      "id": "analysis.validation",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "description": "Externally scheduled input, opaque deadlines and resize over one engine",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/3c0b14162cd322017bb718b71cc4b433c6100476/docs/interaction.md"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34494834221",
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
+      ],
+      "guarantees": [
+        "No periodic library wake when idle without a deadline; no blocking input-ready advancement",
+        "Host owns event waiting and resize notification; output mutations remain serialized",
+        "Deadline tokens reject early, stale and previous-session notifications",
+        "Native Event adds opt-in SubmissionRequested; exhaustive Rust matches need an additional arm. Default runtime submission is unchanged."
+      ],
+      "id": "embedding.driven",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "description": "Explicit session compatibility over the common driver",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/3c0b14162cd322017bb718b71cc4b433c6100476/docs/interaction.md"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34494834221",
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
+      ],
+      "guarantees": [
+        "Existing open/poll/completion/output/close behavior and bounded read-ahead remain available",
+        "Compatibility polling retains bounded periodic resize observation; C ABI 1 unchanged",
+        "Native Event adds opt-in SubmissionRequested; exhaustive Rust matches need an additional arm. Default runtime submission is unchanged."
+      ],
+      "id": "embedding.session",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "description": "Validated multiline navigation and safe diagnostic continuation surface",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/interaction.md#validated-submission-and-multiline-navigation",
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/use-cases.md"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34494834221",
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
+      ],
+      "guarantees": [
+        "Same prompt, width policy, viewport and renderer across Linux/macOS native interaction",
+        "Opt-in Up/Down move through logical lines then history at boundaries; direct mode keeps existing history bindings",
+        "Completion acceptance precedes validation; bracketed multiline paste remains one edit",
+        "Revision changes invalidate diagnostics; resize and serialized output preserve exact draft/cursor and current explanations",
+        "Bounded textual diagnostic markers remain understandable without styling; this is not general highlighting or a full-screen interface"
+      ],
+      "id": "presentation.multiline_ux",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "changed_inputs": [
+    ".github/workflows/ci.yml",
+    "crates/replai-c/src/lib.rs",
+    "docs/architecture.md",
+    "docs/engineering/validation-multiline.md",
+    "docs/interaction.md",
+    "docs/presentation.md",
+    "docs/use-cases.md",
+    "examples/completion.rs",
+    "examples/support/validation.rs",
+    "examples/validation-driven.rs",
+    "examples/validation.rs",
+    "src/analysis.rs",
+    "src/completion.rs",
+    "src/conformance.rs",
+    "src/core.rs",
+    "src/engine.rs",
+    "src/event.rs",
+    "src/interaction.rs",
+    "src/lib.rs",
+    "src/validation.rs",
+    "src/validation_tests.rs",
+    "tests/architecture.rs",
+    "tests/validation.rs",
+    "tools/perf/components.rs",
+    "tools/perf/pty_host.rs",
+    "tools/perf/validations.rs",
+    "tools/qualify.py",
+    "tools/validation_pty.py"
+  ],
+  "changes": [
+    {
+      "capability": "analysis.validation",
+      "compatibility": "compatible",
+      "description": "Optional host-owned revision-bound submission validation. Host semantics and scheduling remain external; no consumer action is assigned.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34494834221",
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
+      ],
+      "inputs": [
+        "src/lib.rs",
+        "src/core.rs",
+        "src/engine.rs",
+        "src/event.rs",
+        "src/interaction.rs",
+        "docs/presentation.md",
+        "docs/architecture.md",
+        "docs/interaction.md",
+        "src/conformance.rs",
+        ".github/workflows/ci.yml",
+        "tools/perf/components.rs",
+        "tools/qualify.py",
+        "src/analysis.rs",
+        "src/completion.rs",
+        "tests/architecture.rs",
+        "examples/completion.rs",
+        "src/validation.rs",
+        "src/validation_tests.rs",
+        "tests/validation.rs",
+        "examples/validation.rs",
+        "examples/validation-driven.rs",
+        "examples/support/validation.rs",
+        "tools/validation_pty.py",
+        "tools/perf/validations.rs",
+        "tools/perf/pty_host.rs",
+        "docs/use-cases.md",
+        "docs/engineering/validation-multiline.md",
+        "crates/replai-c/src/lib.rs"
+      ],
+      "kind": "ADDED",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "presentation.multiline_ux",
+      "compatibility": "compatible",
+      "description": "Validated multiline navigation and safe diagnostic continuation surface. Host semantics and scheduling remain external; no consumer action is assigned.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34494834221",
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
+      ],
+      "inputs": [
+        "src/lib.rs",
+        "src/core.rs",
+        "src/engine.rs",
+        "src/event.rs",
+        "src/interaction.rs",
+        "docs/presentation.md",
+        "docs/architecture.md",
+        "docs/interaction.md",
+        "src/conformance.rs",
+        ".github/workflows/ci.yml",
+        "tools/perf/components.rs",
+        "tools/qualify.py",
+        "src/analysis.rs",
+        "src/completion.rs",
+        "tests/architecture.rs",
+        "examples/completion.rs",
+        "src/validation.rs",
+        "src/validation_tests.rs",
+        "tests/validation.rs",
+        "examples/validation.rs",
+        "examples/validation-driven.rs",
+        "examples/support/validation.rs",
+        "tools/validation_pty.py",
+        "tools/perf/validations.rs",
+        "tools/perf/pty_host.rs",
+        "docs/use-cases.md",
+        "docs/engineering/validation-multiline.md",
+        "crates/replai-c/src/lib.rs"
+      ],
+      "kind": "ADDED",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "embedding.session",
+      "compatibility": "breaking",
+      "description": "Source compatibility: public native Event gains SubmissionRequested. Exhaustive event matches need another arm. Existing direct-submit runtime behavior and C ABI 1 remain unchanged.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34494834221",
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
+      ],
+      "inputs": [
+        "src/event.rs",
+        "src/interaction.rs",
+        "src/lib.rs"
+      ],
+      "kind": "BREAKING",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "embedding.driven",
+      "compatibility": "breaking",
+      "description": "Source compatibility: public native Event gains SubmissionRequested. Exhaustive event matches need another arm. Existing direct-submit runtime behavior and C ABI 1 remain unchanged.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34494834221",
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
+      ],
+      "inputs": [
+        "src/event.rs",
+        "src/interaction.rs",
+        "src/lib.rs"
+      ],
+      "kind": "BREAKING",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "current": {
+    "contract_id": "sha256:fa0cadf80c96e43e0a649c18cbc93049950be07f5a8f5020bcfffef57a19aab5",
+    "repository": "https://github.com/mothx9/replai",
+    "revision": "0abed4fa75a5684005c87df3bb36e2f997025d00",
+    "tree": "254a0c8f254ef79bd45313cba1d4c30709be566b"
+  },
+  "id": "sha256:a350e873f329930681749bd4c54909cf4387c6fc1e89df65e5a3c4768d294de9",
+  "kind": "delta",
+  "platforms": [
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34494834221",
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
+      ],
+      "id": "linux",
+      "status": "runtime-qualified",
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34494834221",
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
+      ],
+      "id": "macos",
+      "status": "runtime-qualified",
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34494834221",
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
+      ],
+      "id": "windows",
+      "status": "portable-core-qualified",
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "previous": {
+    "contract_id": "sha256:a318fcec26e83c2fc8f7e7f6b5d41f670b7c098e37f96803fcab8663ef2b735a",
+    "repository": "https://github.com/mothx9/replai",
+    "revision": "0fef74edd5d4d6d536560036473980a41e1da3f3",
+    "tree": "e86c5b385e993f124c7901677d6f6593b0f3fd71"
+  },
+  "schema_version": 1,
+  "surfaces": [
+    {
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/interaction.md",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/presentation.md"
+      ],
+      "id": "rust-native",
+      "kind": "rust-native",
+      "version": "pre-release"
+    },
+    {
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/c-api.md"
+      ],
+      "id": "c-abi-v1",
+      "kind": "c-abi",
+      "version": "1"
+    }
+  ]
+}

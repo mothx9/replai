@@ -4,7 +4,21 @@ REPLAI owns these producer declarations. They describe generic capabilities,
 surfaces, qualification and changes; they assign no consumer paths, commands or
 migration work. Consumer profiles must be authored by their own repositories.
 
-- [Current producer snapshot](producer.json), generation 7: qualified source/document
+- [Current producer snapshot](producer.json), generation 8: source/document carrier
+  `0abed4fa75a5684005c87df3bb36e2f997025d00`, tree
+  `254a0c8f254ef79bd45313cba1d4c30709be566b`. Runtime is identical to qualified
+  implementation `1da4dbf9162a2fea4d267e1aa473859ee64ae290`;
+  [CI](https://github.com/mothx9/replai/actions/runs/34494834221) passed 12/12 jobs,
+  including native Linux/macOS PTYs/memory and portable Windows. The
+  [I3/U2 dossier](../docs/engineering/validation-multiline.md) records full local
+  qualification, clean source, measurements and limitations.
+- [Validation/multiline delta](deltas/completion-validation.json) adds
+  `analysis.validation` and `presentation.multiline_ux`. It explicitly records
+  native source compatibility changes for `embedding.session` and
+  `embedding.driven`: exhaustive Rust Event matches must handle the new opt-in
+  SubmissionRequested variant. Default direct submission and C ABI 1 are
+  unchanged. No consumer migration or repin is assigned.
+- [Previous completion snapshot](checkpoints/0fef74edd5d4d6d536560036473980a41e1da3f3.json), generation 7: qualified source/document
   `0fef74edd5d4d6d536560036473980a41e1da3f3`, tree
   `e86c5b385e993f124c7901677d6f6593b0f3fd71`. The [I1/U1 dossier](../docs/engineering/completion-contract.md)
   separates implementation, measurement and qualification sources.

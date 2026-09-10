@@ -355,13 +355,11 @@
         "https://github.com/mothx9/replai/blob/3c0b14162cd322017bb718b71cc4b433c6100476/docs/interaction.md"
       ],
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34494834221",
-        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
+        "https://github.com/mothx9/replai/actions/runs/34353630259"
       ],
       "guarantees": [
         "Existing open/poll/completion/output/close behavior and bounded read-ahead remain available",
-        "Compatibility polling retains bounded periodic resize observation; C ABI 1 unchanged",
-        "Native Event adds opt-in SubmissionRequested; exhaustive Rust matches need an additional arm. Default runtime submission is unchanged."
+        "Compatibility polling retains bounded periodic resize observation; C ABI 1 unchanged"
       ],
       "id": "embedding.session",
       "maturity": "experimental",
@@ -379,14 +377,13 @@
         "https://github.com/mothx9/replai/blob/3c0b14162cd322017bb718b71cc4b433c6100476/docs/interaction.md"
       ],
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34494834221",
-        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
+        "https://github.com/mothx9/replai/actions/runs/34353630259",
+        "https://github.com/mothx9/replai/actions/runs/34355338986"
       ],
       "guarantees": [
         "No periodic library wake when idle without a deadline; no blocking input-ready advancement",
         "Host owns event waiting and resize notification; output mutations remain serialized",
-        "Deadline tokens reject early, stale and previous-session notifications",
-        "Native Event adds opt-in SubmissionRequested; exhaustive Rust matches need an additional arm. Default runtime submission is unchanged."
+        "Deadline tokens reject early, stale and previous-session notifications"
       ],
       "id": "embedding.driven",
       "maturity": "experimental",
@@ -582,102 +579,45 @@
       "surfaces": [
         "rust-native"
       ]
-    },
-    {
-      "description": "Optional host-owned revision-bound submission validation",
-      "documentation": [
-        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/interaction.md#validated-submission-and-multiline-navigation",
-        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/use-cases.md"
-      ],
-      "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34494834221",
-        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
-      ],
-      "guarantees": [
-        "Host grammar and scheduling remain external; Enter emits an immutable snapshot when validation is enabled",
-        "Complete atomically submits exactly the requested current draft; Incomplete inserts LF; Invalid preserves text and shows bounded safe diagnostics",
-        "Stale results cannot submit, edit or emit terminal bytes; successful decisions consume pending Enter authority",
-        "32 diagnostics, 4096 bytes per message and 65536 aggregate bytes; grapheme-safe optional snapshot ranges",
-        "Direct submission remains default; C ABI 1 cannot enable validation"
-      ],
-      "id": "analysis.validation",
-      "maturity": "experimental",
-      "platforms": [
-        "linux",
-        "macos",
-        "windows"
-      ],
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "description": "Validated multiline navigation and safe diagnostic continuation surface",
-      "documentation": [
-        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/interaction.md#validated-submission-and-multiline-navigation",
-        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/use-cases.md"
-      ],
-      "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34494834221",
-        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
-      ],
-      "guarantees": [
-        "Same prompt, width policy, viewport and renderer across Linux/macOS native interaction",
-        "Opt-in Up/Down move through logical lines then history at boundaries; direct mode keeps existing history bindings",
-        "Completion acceptance precedes validation; bracketed multiline paste remains one edit",
-        "Revision changes invalidate diagnostics; resize and serialized output preserve exact draft/cursor and current explanations",
-        "Bounded textual diagnostic markers remain understandable without styling; this is not general highlighting or a full-screen interface"
-      ],
-      "id": "presentation.multiline_ux",
-      "maturity": "experimental",
-      "platforms": [
-        "linux",
-        "macos",
-        "windows"
-      ],
-      "surfaces": [
-        "rust-native"
-      ]
     }
   ],
   "changes": [
     {
-      "capability": "analysis.validation",
+      "capability": "completion.candidates",
       "compatibility": "compatible",
-      "description": "Optional host-owned revision-bound submission validation. Host semantics and scheduling remain external; no consumer action is assigned.",
+      "description": "Bounded host-ordered revision-bound completion candidates. Host discovery and scheduling stay external; no consumer migration is assigned and C ABI 1 remains unchanged.",
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34494834221",
-        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
+        "https://github.com/mothx9/replai/actions/runs/34485342480",
+        "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/engineering/completion-contract.md"
       ],
       "inputs": [
         "src/lib.rs",
-        "src/core.rs",
-        "src/engine.rs",
-        "src/event.rs",
-        "src/interaction.rs",
-        "docs/presentation.md",
-        "docs/architecture.md",
-        "docs/interaction.md",
-        "src/conformance.rs",
-        ".github/workflows/ci.yml",
-        "tools/perf/components.rs",
-        "tools/qualify.py",
-        "src/analysis.rs",
         "src/completion.rs",
+        "src/core.rs",
+        "src/actions.rs",
+        "src/keymap.rs",
+        "src/input.rs",
+        "src/engine.rs",
+        "src/interaction.rs",
+        "src/conformance.rs",
+        "src/completion_tests.rs",
+        "tests/completion.rs",
+        "tests/pty.rs",
         "tests/architecture.rs",
         "examples/completion.rs",
-        "src/validation.rs",
-        "src/validation_tests.rs",
-        "tests/validation.rs",
-        "examples/validation.rs",
-        "examples/validation-driven.rs",
-        "examples/support/validation.rs",
-        "tools/validation_pty.py",
-        "tools/perf/validations.rs",
-        "tools/perf/pty_host.rs",
-        "docs/use-cases.md",
-        "docs/engineering/validation-multiline.md",
-        "crates/replai-c/src/lib.rs"
+        "examples/completion-driven.rs",
+        "tools/completion_pty.py",
+        "tools/test_completion_pty.py",
+        "tools/direct_completion_benchmark.py",
+        "tools/perf/direct_completion.rs",
+        "tools/perf/components.rs",
+        "tools/perf/completions.rs",
+        "tools/qualify.py",
+        ".github/workflows/ci.yml",
+        "docs/architecture.md",
+        "docs/interaction.md",
+        "docs/presentation.md",
+        "docs/engineering/completion-contract.md"
       ],
       "kind": "ADDED",
       "platforms": [
@@ -690,90 +630,43 @@
       ]
     },
     {
-      "capability": "presentation.multiline_ux",
+      "capability": "presentation.completion_ux",
       "compatibility": "compatible",
-      "description": "Validated multiline navigation and safe diagnostic continuation surface. Host semantics and scheduling remain external; no consumer action is assigned.",
+      "description": "Safe responsive temporary candidate selection through the shared renderer. Host discovery and scheduling stay external; no consumer migration is assigned and C ABI 1 remains unchanged.",
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34494834221",
-        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
+        "https://github.com/mothx9/replai/actions/runs/34485342480",
+        "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/engineering/completion-contract.md"
       ],
       "inputs": [
         "src/lib.rs",
-        "src/core.rs",
-        "src/engine.rs",
-        "src/event.rs",
-        "src/interaction.rs",
-        "docs/presentation.md",
-        "docs/architecture.md",
-        "docs/interaction.md",
-        "src/conformance.rs",
-        ".github/workflows/ci.yml",
-        "tools/perf/components.rs",
-        "tools/qualify.py",
-        "src/analysis.rs",
         "src/completion.rs",
+        "src/core.rs",
+        "src/actions.rs",
+        "src/keymap.rs",
+        "src/input.rs",
+        "src/engine.rs",
+        "src/interaction.rs",
+        "src/conformance.rs",
+        "src/completion_tests.rs",
+        "tests/completion.rs",
+        "tests/pty.rs",
         "tests/architecture.rs",
         "examples/completion.rs",
-        "src/validation.rs",
-        "src/validation_tests.rs",
-        "tests/validation.rs",
-        "examples/validation.rs",
-        "examples/validation-driven.rs",
-        "examples/support/validation.rs",
-        "tools/validation_pty.py",
-        "tools/perf/validations.rs",
-        "tools/perf/pty_host.rs",
-        "docs/use-cases.md",
-        "docs/engineering/validation-multiline.md",
-        "crates/replai-c/src/lib.rs"
+        "examples/completion-driven.rs",
+        "tools/completion_pty.py",
+        "tools/test_completion_pty.py",
+        "tools/direct_completion_benchmark.py",
+        "tools/perf/direct_completion.rs",
+        "tools/perf/components.rs",
+        "tools/perf/completions.rs",
+        "tools/qualify.py",
+        ".github/workflows/ci.yml",
+        "docs/architecture.md",
+        "docs/interaction.md",
+        "docs/presentation.md",
+        "docs/engineering/completion-contract.md"
       ],
       "kind": "ADDED",
-      "platforms": [
-        "linux",
-        "macos",
-        "windows"
-      ],
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capability": "embedding.session",
-      "compatibility": "breaking",
-      "description": "Source compatibility: public native Event gains SubmissionRequested. Exhaustive event matches need another arm. Existing direct-submit runtime behavior and C ABI 1 remain unchanged.",
-      "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34494834221",
-        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
-      ],
-      "inputs": [
-        "src/event.rs",
-        "src/interaction.rs",
-        "src/lib.rs"
-      ],
-      "kind": "BREAKING",
-      "platforms": [
-        "linux",
-        "macos",
-        "windows"
-      ],
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capability": "embedding.driven",
-      "compatibility": "breaking",
-      "description": "Source compatibility: public native Event gains SubmissionRequested. Exhaustive event matches need another arm. Existing direct-submit runtime behavior and C ABI 1 remain unchanged.",
-      "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34494834221",
-        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
-      ],
-      "inputs": [
-        "src/event.rs",
-        "src/interaction.rs",
-        "src/lib.rs"
-      ],
-      "kind": "BREAKING",
       "platforms": [
         "linux",
         "macos",
@@ -784,13 +677,12 @@
       ]
     }
   ],
-  "generation": 8,
-  "id": "sha256:fa0cadf80c96e43e0a649c18cbc93049950be07f5a8f5020bcfffef57a19aab5",
+  "generation": 7,
+  "id": "sha256:a318fcec26e83c2fc8f7e7f6b5d41f670b7c098e37f96803fcab8663ef2b735a",
   "inputs": [
     {
       "capabilities": [
         "analysis.revisions",
-        "analysis.validation",
         "completion.candidates",
         "embedding.blocking",
         "embedding.driven",
@@ -805,7 +697,6 @@
         "platform.posix_macos",
         "presentation.completion_ux",
         "presentation.composed_prompt",
-        "presentation.multiline_ux",
         "presentation.prompt",
         "presentation.status",
         "presentation.structured_output",
@@ -817,7 +708,7 @@
       ],
       "category": "api",
       "path": "src/lib.rs",
-      "sha256": "sha256:a1bdc49d9d91e933355a600dd465e8c775b089e140a9a4fd454a7d5f6c698137",
+      "sha256": "sha256:4de07ce1424408a897277d26684f9fa7a8b0e69210d9af876349aba9b029d7e6",
       "surfaces": [
         "rust-native"
       ]
@@ -825,7 +716,6 @@
     {
       "capabilities": [
         "analysis.revisions",
-        "analysis.validation",
         "completion.candidates",
         "interaction.completion_request",
         "interaction.editing",
@@ -835,12 +725,11 @@
         "platform.posix_linux",
         "platform.posix_macos",
         "presentation.completion_ux",
-        "presentation.multiline_ux",
         "presentation.prompt"
       ],
       "category": "behavior",
       "path": "src/core.rs",
-      "sha256": "sha256:89b1c711b8fe9f833318e1a0f4aa86917aa40a7fa61e3b3d1701cd7139cf2e7d",
+      "sha256": "sha256:9a6e1b19a0a70307a8f547abcc2b6a15a1b65336e0671281ca3d05d1e1f4b8a6",
       "surfaces": [
         "rust-native"
       ]
@@ -908,7 +797,6 @@
     {
       "capabilities": [
         "analysis.revisions",
-        "analysis.validation",
         "completion.candidates",
         "interaction.completion_request",
         "interaction.editing",
@@ -919,7 +807,6 @@
         "platform.posix_macos",
         "presentation.completion_ux",
         "presentation.composed_prompt",
-        "presentation.multiline_ux",
         "presentation.prompt",
         "presentation.status",
         "presentation.structured_output",
@@ -928,29 +815,25 @@
       ],
       "category": "behavior",
       "path": "src/engine.rs",
-      "sha256": "sha256:7f8b6cfa7b5979658b6f475de204a375389a280c4e912dd89afa705fea6cd48a",
+      "sha256": "sha256:98437ef97d6cd51493f505eb199f67c5ebac4fc544d9ff8dfae036adb6a6be76",
       "surfaces": [
         "rust-native"
       ]
     },
     {
       "capabilities": [
-        "analysis.validation",
-        "embedding.driven",
-        "embedding.session",
-        "interaction.completion_request",
         "interaction.editing",
-        "interaction.external_output",
         "interaction.history_navigation",
-        "platform.portable_engine",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
         "platform.posix_linux",
         "platform.posix_macos",
-        "presentation.multiline_ux",
-        "presentation.prompt"
+        "platform.portable_engine"
       ],
       "category": "behavior",
       "path": "src/event.rs",
-      "sha256": "sha256:48a05d5770bf45c4d5201d8480f61504fa678b7fa5e00b8a951497398587869e",
+      "sha256": "sha256:3b981a3643460622a65b6578dd556cc066763acfb074150228fef7408571f798",
       "surfaces": [
         "rust-native"
       ]
@@ -1005,7 +888,6 @@
     {
       "capabilities": [
         "analysis.revisions",
-        "analysis.validation",
         "completion.candidates",
         "embedding.blocking",
         "embedding.driven",
@@ -1020,7 +902,6 @@
         "platform.posix_macos",
         "presentation.completion_ux",
         "presentation.composed_prompt",
-        "presentation.multiline_ux",
         "presentation.prompt",
         "presentation.status",
         "presentation.structured_output",
@@ -1031,7 +912,7 @@
       ],
       "category": "api",
       "path": "src/interaction.rs",
-      "sha256": "sha256:d4546a2c895aac889c246453a27b28738f6c5cb78ddef60c73b4b92bcfc9fbbb",
+      "sha256": "sha256:d45f9a6d81cd32c107b3d1f26ac0b5b2c61d323fdf04593fc93ff7ba5abdbfcf",
       "surfaces": [
         "rust-native"
       ]
@@ -1134,7 +1015,6 @@
     },
     {
       "capabilities": [
-        "analysis.validation",
         "completion.candidates",
         "interaction.completion_request",
         "interaction.editing",
@@ -1145,7 +1025,6 @@
         "platform.posix_macos",
         "presentation.completion_ux",
         "presentation.composed_prompt",
-        "presentation.multiline_ux",
         "presentation.prompt",
         "presentation.status",
         "presentation.structured_output",
@@ -1155,7 +1034,7 @@
       ],
       "category": "documentation",
       "path": "docs/presentation.md",
-      "sha256": "sha256:4aa46b35fffedea5e9d328e137d15cc56443d221501741be6bdf797d6f72fdca",
+      "sha256": "sha256:23039335bcf172ba6e1b638f826eed34a66af85ae47d5d8420cc6a694bed76a7",
       "surfaces": [
         "rust-native"
       ]
@@ -1163,7 +1042,6 @@
     {
       "capabilities": [
         "analysis.revisions",
-        "analysis.validation",
         "completion.candidates",
         "embedding.blocking",
         "embedding.driven",
@@ -1178,7 +1056,6 @@
         "platform.posix_macos",
         "presentation.completion_ux",
         "presentation.composed_prompt",
-        "presentation.multiline_ux",
         "presentation.prompt",
         "presentation.status",
         "presentation.structured_output",
@@ -1188,7 +1065,7 @@
       ],
       "category": "documentation",
       "path": "docs/architecture.md",
-      "sha256": "sha256:32b868c94d70d300b3d93a7ba4381189bb78a7d86f4623359895e1534c295536",
+      "sha256": "sha256:5324d0bd90f64a3990ec9740a36f8f7b5508f24c9f18caf39094cac385fc2998",
       "surfaces": [
         "rust-native"
       ]
@@ -1196,7 +1073,6 @@
     {
       "capabilities": [
         "analysis.revisions",
-        "analysis.validation",
         "completion.candidates",
         "embedding.blocking",
         "embedding.driven",
@@ -1210,13 +1086,12 @@
         "platform.posix_linux",
         "platform.posix_macos",
         "presentation.completion_ux",
-        "presentation.multiline_ux",
         "presentation.prompt",
         "terminal.admission"
       ],
       "category": "documentation",
       "path": "docs/interaction.md",
-      "sha256": "sha256:361a1a4462f000c590e400bea591b2aba8378021909e0878cb48a09e74a3a1c3",
+      "sha256": "sha256:8c7b0fec91512051d14cc34656d53b6c748c558a81c0831d76b2031a3942838b",
       "surfaces": [
         "rust-native"
       ]
@@ -1297,7 +1172,6 @@
     {
       "capabilities": [
         "analysis.revisions",
-        "analysis.validation",
         "completion.candidates",
         "embedding.blocking",
         "embedding.driven",
@@ -1305,12 +1179,11 @@
         "embedding.session",
         "interaction.editing",
         "presentation.completion_ux",
-        "presentation.multiline_ux",
         "terminal.admission"
       ],
       "category": "qualification",
       "path": "src/conformance.rs",
-      "sha256": "sha256:bd51802977a2e2deaa52e40954e4d315cbeda92eaef02c81a64971eed0d85d4a",
+      "sha256": "sha256:8d0c6467041c7c3f29b06ba9627d992ee9414496d7b67fbb82454d615e971d15",
       "surfaces": [
         "rust-native"
       ]
@@ -1400,7 +1273,6 @@
       "capabilities": [
         "abi.c.v1",
         "analysis.revisions",
-        "analysis.validation",
         "completion.candidates",
         "embedding.blocking",
         "embedding.driven",
@@ -1408,12 +1280,11 @@
         "embedding.session",
         "interaction.editing",
         "presentation.completion_ux",
-        "presentation.multiline_ux",
         "terminal.admission"
       ],
       "category": "qualification",
       "path": ".github/workflows/ci.yml",
-      "sha256": "sha256:bf686ebca9440139bd286ea066e0a94198557049ecf59b1468608322c8d58a8c",
+      "sha256": "sha256:22346f22b4b11b48f71ae3923897ae55dc207a4b9e25b9080f5d3831581969c2",
       "surfaces": [
         "c-abi-v1",
         "rust-native"
@@ -1466,15 +1337,13 @@
     {
       "capabilities": [
         "analysis.revisions",
-        "analysis.validation",
         "completion.candidates",
         "presentation.completion_ux",
-        "presentation.multiline_ux",
         "terminal.capability_snapshot"
       ],
       "category": "qualification",
       "path": "tools/perf/components.rs",
-      "sha256": "sha256:f7a37cbcc5a9a3455cc681f4111bd9437454c236666923a2d3085653b893e1e4",
+      "sha256": "sha256:bb08205c54b3f46d710bfe8ddf8049083416017519c7d52fb48901d005794081",
       "surfaces": [
         "rust-native"
       ]
@@ -1507,14 +1376,12 @@
       "capabilities": [
         "abi.c.v1",
         "analysis.revisions",
-        "analysis.validation",
         "completion.candidates",
-        "presentation.completion_ux",
-        "presentation.multiline_ux"
+        "presentation.completion_ux"
       ],
       "category": "qualification",
       "path": "tools/qualify.py",
-      "sha256": "sha256:2192738ed5bad70330c53a31b14eb39e630d5953642643f67263b08511127a3a",
+      "sha256": "sha256:a7d143622328e1cbe62eb41c31368eb4da6390ebe5ff19c58684dd62fb7b9224",
       "surfaces": [
         "c-abi-v1",
         "rust-native"
@@ -1522,13 +1389,11 @@
     },
     {
       "capabilities": [
-        "analysis.revisions",
-        "analysis.validation",
-        "presentation.multiline_ux"
+        "analysis.revisions"
       ],
       "category": "api",
       "path": "src/analysis.rs",
-      "sha256": "sha256:c426e997177d032230baab2dfe9a8c34aaea4c193c51e5a184b71d85666aff48",
+      "sha256": "sha256:7d36a6d34715c0d5de380b7696e3fd93f6755bb4bb7b18ae2232607755eb06b1",
       "surfaces": [
         "rust-native"
       ]
@@ -1614,14 +1479,12 @@
     },
     {
       "capabilities": [
-        "analysis.validation",
         "completion.candidates",
-        "presentation.completion_ux",
-        "presentation.multiline_ux"
+        "presentation.completion_ux"
       ],
       "category": "api",
       "path": "src/completion.rs",
-      "sha256": "sha256:ed5c3c740a25b43c6a84c8fb9bb3967fc249e54c9a257391ca568b92fe29e54d",
+      "sha256": "sha256:608cabffae3b4bbadad20294e684a34898bcb25f1a1f364cddbdadcda6c3f361",
       "surfaces": [
         "rust-native"
       ]
@@ -1652,28 +1515,24 @@
     },
     {
       "capabilities": [
-        "analysis.validation",
         "completion.candidates",
-        "presentation.completion_ux",
-        "presentation.multiline_ux"
+        "presentation.completion_ux"
       ],
       "category": "qualification",
       "path": "tests/architecture.rs",
-      "sha256": "sha256:b69e401d9d60f371f5cc9686037aa5998cbe2019b9cfa96a13fa3f86e9c7ef8f",
+      "sha256": "sha256:da766e036ea3cf104965611e36dc604c5bf32085bcbc7c3185ccd8fd67bb4df2",
       "surfaces": [
         "rust-native"
       ]
     },
     {
       "capabilities": [
-        "analysis.validation",
         "completion.candidates",
-        "presentation.completion_ux",
-        "presentation.multiline_ux"
+        "presentation.completion_ux"
       ],
       "category": "qualification",
       "path": "examples/completion.rs",
-      "sha256": "sha256:04c08c720b7c4a366d5cea60ae68d06acab8c80de6bdccef425506d144a1adc8",
+      "sha256": "sha256:180d647bc88991ed016da4be71eab468a4d8407be7026799d93d7740af2e1e6b",
       "surfaces": [
         "rust-native"
       ]
@@ -1761,158 +1620,13 @@
       "surfaces": [
         "rust-native"
       ]
-    },
-    {
-      "capabilities": [
-        "analysis.validation",
-        "presentation.multiline_ux"
-      ],
-      "category": "api",
-      "path": "src/validation.rs",
-      "sha256": "sha256:10a8014a250cab27f9123b5d60933d7994a9f6fb5aa1487370f5742890fa1090",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.validation",
-        "presentation.multiline_ux"
-      ],
-      "category": "qualification",
-      "path": "src/validation_tests.rs",
-      "sha256": "sha256:b159baffcd6430188f584bf223d74c5c5aac40a2946411403885930be28b8c4c",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.validation",
-        "presentation.multiline_ux"
-      ],
-      "category": "qualification",
-      "path": "tests/validation.rs",
-      "sha256": "sha256:28b69f7a3554ae06e3d14a4ca85fa109c34540c3a4fa3546c07a4747998d4a22",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.validation",
-        "presentation.multiline_ux"
-      ],
-      "category": "qualification",
-      "path": "examples/validation.rs",
-      "sha256": "sha256:f061c72f01b2a24d57a11b515f42eb2eb60bfd97aed22c66d17899ddf4abeb56",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.validation",
-        "presentation.multiline_ux"
-      ],
-      "category": "qualification",
-      "path": "examples/validation-driven.rs",
-      "sha256": "sha256:52615d5a6ab21ef3caf0ad678c690f937b6909712d6f217690cb37ffc2ff9b55",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.validation",
-        "presentation.multiline_ux"
-      ],
-      "category": "qualification",
-      "path": "examples/support/validation.rs",
-      "sha256": "sha256:d2d0113dc208ec6a253bcf4a422480eabdd8c9727358d5dece4243d754b2cc12",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.validation",
-        "presentation.multiline_ux"
-      ],
-      "category": "qualification",
-      "path": "tools/validation_pty.py",
-      "sha256": "sha256:e795d97d45c81b9574e9c89001a8031ac10a0d20b44a295c53cc062037292201",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.validation",
-        "presentation.multiline_ux"
-      ],
-      "category": "qualification",
-      "path": "tools/perf/validations.rs",
-      "sha256": "sha256:02751ec787cc35f0b444f201cc470bc431b6947a4ac484cc70b11980cfc63359",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.validation",
-        "presentation.multiline_ux"
-      ],
-      "category": "qualification",
-      "path": "tools/perf/pty_host.rs",
-      "sha256": "sha256:d752e97ca09baae0309e16297e58e69b0b73c17529c4379c02ee815d5c69dc15",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.validation",
-        "presentation.multiline_ux"
-      ],
-      "category": "documentation",
-      "path": "docs/use-cases.md",
-      "sha256": "sha256:2fb6d040ad0c4f5aed950db26a79c37b3b04d2962a6f0bed8e33fb578997f33b",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.validation",
-        "presentation.multiline_ux"
-      ],
-      "category": "documentation",
-      "path": "docs/engineering/validation-multiline.md",
-      "sha256": "sha256:078ec897c5338900bc8db9753dba08a761022fc9e5cd59136168a47a4f557900",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.validation",
-        "presentation.multiline_ux"
-      ],
-      "category": "qualification",
-      "path": "crates/replai-c/src/lib.rs",
-      "sha256": "sha256:42f4d4f359e1a1bdba51a0f13d860da6b00c7232730c5554a1456c6baf4ebfc0",
-      "surfaces": [
-        "rust-native"
-      ]
     }
   ],
   "kind": "producer",
   "platforms": [
     {
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34494834221",
-        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
+        "https://github.com/mothx9/replai/actions/runs/34370575960"
       ],
       "id": "linux",
       "status": "runtime-qualified",
@@ -1923,8 +1637,7 @@
     },
     {
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34494834221",
-        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
+        "https://github.com/mothx9/replai/actions/runs/34370575960"
       ],
       "id": "macos",
       "status": "runtime-qualified",
@@ -1935,8 +1648,7 @@
     },
     {
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34494834221",
-        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
+        "https://github.com/mothx9/replai/actions/runs/34370575960"
       ],
       "id": "windows",
       "status": "portable-core-qualified",
@@ -1946,17 +1658,17 @@
     }
   ],
   "predecessor": {
-    "contract_id": "sha256:a318fcec26e83c2fc8f7e7f6b5d41f670b7c098e37f96803fcab8663ef2b735a",
+    "contract_id": "sha256:cc91f1b38452385e9f5c878b355a83a9fa736c33cef8cc07c0ef71e2a711ebfb",
     "repository": "https://github.com/mothx9/replai",
-    "revision": "0fef74edd5d4d6d536560036473980a41e1da3f3",
-    "tree": "e86c5b385e993f124c7901677d6f6593b0f3fd71"
+    "revision": "aa137e881065f0a0615fa8ae03c84c89f052bea3",
+    "tree": "9126e218fc4ee432a4146051da2ef05c9d4e2b4c"
   },
   "repository": "https://github.com/mothx9/replai",
   "schema_version": 1,
   "source": {
     "dirty": false,
-    "revision": "0abed4fa75a5684005c87df3bb36e2f997025d00",
-    "tree": "254a0c8f254ef79bd45313cba1d4c30709be566b"
+    "revision": "0fef74edd5d4d6d536560036473980a41e1da3f3",
+    "tree": "e86c5b385e993f124c7901677d6f6593b0f3fd71"
   },
   "surfaces": [
     {
