@@ -17,14 +17,14 @@ from linux import Session, attributes, winsize, ROOT
 
 
 class Reactor(Session):
-    def __init__(self, directory, prefix=(), binary="driven", prompt="driven"):
+    def __init__(self, directory, prefix=(), binary="driven", prompt="driven", styled=False):
         path = directory / 'events.sock'
         self.listener = socket.socket(socket.AF_UNIX)
         self.listener.bind(str(path)); self.listener.listen(1); self.listener.settimeout(20)
         self.operations = ['R 24 80']
-        super().__init__([*prefix, ROOT/'target/debug/examples'/binary, path])
+        super().__init__([*prefix, ROOT/'target/debug/examples'/binary, path], styled=styled)
         self.app, _ = self.listener.accept()
-        self.until(lambda: b'READY\n' in self.receipts and (prompt+'> ').encode() in self.output)
+        self.until(lambda: b'READY\n' in self.receipts and (prompt+'>').encode() in self.output)
 
     def pump(self, deadline):
         mark = len(self.output)

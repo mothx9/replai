@@ -377,3 +377,18 @@ long messages are ellipsized by grapheme. Full messages remain inspectable throu
 Interaction::diagnostics. This is submission feedback, not general syntax styling.
 The [submission contract](interaction.md#validated-submission-and-multiline-navigation)
 owns lifetime and precedence; [recipes](use-cases.md) show plain/styled use.
+
+## Derived editor display
+
+`AnalysisPresentation` supplies revision-bound `AnalysisSpan` ranges and one safe
+optional `Hint`. These describe presentation over canonical editor bytes, unlike
+Document spans which contain their own output text. Host token classes map into
+existing generic Role values. No syntax role taxonomy or parser lives in REPLAI.
+
+The [interaction contract](interaction.md#editor-analysis-presentation) defines
+atomic admission, lifetime, limits and composition. Frame construction inserts
+style runs at grapheme boundaries without changing canonical cell geometry.
+Continuation prompts use their own styles even inside a cross-line analysis span.
+Hints reserve no editor bytes, never wrap over canonical content and have explicit
+`[~...]` delimiters in plain and styled modes. Completion suppresses the hint;
+validation diagnostics remain a separate bounded surface. All use the same renderer.

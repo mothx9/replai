@@ -53,7 +53,7 @@ def run(work, prefix=(), plain=False):
     else: os.environ.pop('NO_COLOR', None)
     try:
         with tempfile.TemporaryDirectory(prefix='replai-completion-') as directory:
-            s = CompletionReactor(Path(directory), prefix, binary='completion-driven', prompt='complete')
+            s = CompletionReactor(Path(directory), prefix, binary='completion-driven', prompt='complete',styled=not plain)
             evidence = {}; damage = {}
             def measure(name, action):
                 s.screen(); mark=len(s.output); started=time.perf_counter_ns()

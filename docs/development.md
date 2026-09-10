@@ -205,3 +205,10 @@ The `--memory` variant executes the same active paths under Valgrind/Linux or
 native leaks/macOS. Both are part of the full qualifier and native CI. The
 [use-case map](use-cases.md) supplies manual recipes; the
 [dossier](engineering/validation-multiline.md) separates timing from correctness.
+
+I2 changes additionally run `cargo test --test analysis_presentation` and
+`python3 tools/analysis_presentation_pty.py --work /tmp/replai-analysis-presentation`,
+including `--memory` for native Valgrind/leaks. These gates are in the complete
+qualifier and native CI. The shared PTY launcher defaults to plain performance
+fixtures; correctness oracles explicitly opt into styled output and verify actual
+cell styling. Windows executes portable I2 payload/engine/layout tests only.

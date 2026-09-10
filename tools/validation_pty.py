@@ -34,7 +34,7 @@ def run(work, prefix=(), plain=False):
     else: os.environ.pop('NO_COLOR',None)
     try:
         with tempfile.TemporaryDirectory(prefix='replai-validate-') as directory:
-            s=CompletionReactor(Path(directory),prefix,binary='validation-driven',prompt='validate')
+            s=CompletionReactor(Path(directory),prefix,binary='validation-driven',prompt='validate',styled=not plain)
             evidence={'plain':plain,'damage':[]}
             def measure(name,op):
                 s.screen();before=len(s.output);start=time.perf_counter_ns();op();screen=s.screen()

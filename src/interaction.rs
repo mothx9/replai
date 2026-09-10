@@ -42,6 +42,11 @@ impl Interaction {
         }
         self.engine.set_submission_policy(policy)
     }
+    /// Current revision-bound derived display, if active. Never canonical editor text.
+    /// Close/abandon and draft/cursor changes discard it; output/resize retain it.
+    pub fn analysis_presentation(&self) -> Option<&crate::AnalysisPresentation> {
+        self.engine.analysis_presentation()
+    }
     /// Current Enter/vertical-navigation policy; no terminal acquisition required.
     pub fn submission_policy(&self) -> crate::SubmissionPolicy {
         self.engine.submission_policy()
@@ -306,6 +311,34 @@ impl Interaction {
         result
     }
 
+    /// Atomically replace derived editor styles/hint for this exact draft revision.
+    /// Stale delivery has no effects, even after close. Current delivery requires
+    /// an active terminal. Invalid ranges preserve the previous result. An empty
+    /// result clears it. Same-revision results replace in delivery order; the host
+    /// owns scheduling and context/job preference. No callbacks or waits occur.
+    ///
+    /// Spans use generic roles. Hints appear only at end-of-draft with free cells,
+    /// inside `[~...]` even without styling; menus suppress them. Hints never enter
+    /// editor text or submission. Use completion/replacement for insertion.
+    /// Calls remain serialized through exclusive ownership; I/O failures use the
+    /// same cleanup path as all other output transactions.
+    pub fn present_analysis(
+        &mut self,
+        result: crate::AnalysisPresentation,
+    ) -> Result<crate::AnalysisOutcome, crate::AnalysisPresentationError> {
+        let (outcome, effects) = self.engine.present_analysis(result)?;
+        if outcome == crate::AnalysisOutcome::Stale {
+            return Ok(outcome);
+        }
+        let result = self
+            .terminal
+            .as_mut()
+            .ok_or(Error::State)?
+            .apply(&mut self.engine, effects)
+            .map(|_| outcome);
+        self.reap();
+        result.map_err(Into::into)
+    }
     /// Install host-ordered candidates for their originating draft revision.
     /// Stale results produce no terminal bytes or state changes. All candidates
     /// validate before activation. Empty sets dismiss; even one item needs Enter.

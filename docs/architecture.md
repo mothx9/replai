@@ -334,3 +334,30 @@ host grammar. Complete returns its event through serialized result delivery;
 there is no second event queue or validation scheduler. The
 [interaction contract](interaction.md#validated-submission-and-multiline-navigation)
 and [I3/U2 evidence](engineering/validation-multiline.md) define the exact boundaries.
+
+## Revision-bound editor analysis presentation
+
+```mermaid
+flowchart TD
+    S[Immutable draft snapshot] --> H[Host parse and analysis]
+    H --> C[CompletionSet]
+    H --> P[AnalysisPresentation: spans and hint]
+    H --> V[ValidationResult]
+    C --> G[Engine provenance and structural validation]
+    P --> G
+    V --> G
+    G --> F[Same editor frame and render transition]
+```
+
+Editor remains the sole canonical bytes/cursor/history/revision owner. I2 state
+is optional boxed surface data above Editor; it contains no draft copy, parser
+or scheduler. Ordered span endpoints are validated in one forward grapheme
+traversal. Layout walks ordered spans while scanning canonical graphemes and
+emits generic Style runs. Prompt and temporary UI roles retain distinct scopes.
+The terminal encoder sees the existing mutations, with no new protocol path.
+
+An atomic current result replaces the prior I2 display. Actual draft changes
+invalidate it; resize/output retain it. Hints are derived suffixes, never preview
+mutations. I1 remains the insertion boundary and I3 the submission-decision
+boundary. [Detailed contract](interaction.md#editor-analysis-presentation) and
+[I2 evidence](engineering/analysis-presentation.md) delimit these responsibilities.

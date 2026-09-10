@@ -3,6 +3,10 @@
 fn state_and_geometry_do_not_import_resources_protocol_or_scheduling() {
     for (name, source) in [
         ("core", include_str!("../src/core.rs")),
+        (
+            "analysis_presentation",
+            include_str!("../src/analysis_presentation.rs"),
+        ),
         ("validation", include_str!("../src/validation.rs")),
         ("completion", include_str!("../src/completion.rs")),
         ("document", include_str!("../src/document.rs")),

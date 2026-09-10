@@ -225,7 +225,7 @@ fn viewport_width_and_unicode_are_bounded_and_ordered() {
             for _ in 0..12 {
                 let s = e.surface.as_ref().unwrap();
                 let c = s.completion.as_ref().unwrap();
-                let frame = c.frame(&e.editor, &s.prompt, s.size);
+                let frame = c.frame(&e.editor, &s.prompt, s.size, None);
                 assert!(
                     frame.lines.len() <= rows,
                     "{width}x{rows}: {} rows",

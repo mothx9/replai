@@ -69,7 +69,7 @@ pub(super) fn measure(h: &Harness) {
                         };
                         (e, c)
                     },
-                    |(e, c)| c.frame(&e.editor, &prompt(), (width, 24)),
+                    |(e, c)| c.frame(&e.editor, &prompt(), (width, 24), None),
                     |_, frame| json!({"visible_rows":frame.lines.len(),"width":frame.columns}),
                 );
                 for (name, action) in [

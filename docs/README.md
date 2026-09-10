@@ -35,3 +35,6 @@ in presentation because it still defines an executable oracle.
 
 [Use-case map](use-cases.md) owns runnable consumer/developer recipes.
 [I3/U2 evidence](engineering/validation-multiline.md) owns validation/multiline qualification.
+
+[I2 evidence](engineering/analysis-presentation.md) owns revision-bound editor styles,
+non-canonical hints, composition and their qualification.

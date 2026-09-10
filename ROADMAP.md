@@ -5,7 +5,7 @@
 | Axis | Current truth |
 | --- | --- |
 | Project target | Embeddable command-line interaction infrastructure: a simple entry that can grow into rich, long-lived host-driven interfaces over one engine. |
-| Current selected engineering boundary | **NONE**: I3/U2 are closed; no subsequent engineering boundary is selected or authorized. |
+| Current selected engineering boundary | **ANALYSIS.PRESENTATION.0 — ACTIVE**: implement and qualify I2 over I0/I1/I3. |
 | Latest major completed boundary | I3/U2 VALIDATION.MULTILINE: optional revision-bound host submission decisions, safe diagnostics and substantial multiline navigation. |
 | Most important structural gap | Hints/highlighting, history provider/search and configurable editing remain open above qualified analysis, completion and validation. |
 | Executable foundation | Platform-neutral engine; bounded Unicode/grapheme editor; history navigation; completion requests; paste, interrupts/EOF, resize, safe output and exact restoration. |
@@ -93,7 +93,7 @@ ESTABLISHED=28 PARTIAL=9 OPEN=5 LATER=4 TOTAL=46
 | ID | Property | Maturity | Current truth / exact boundary | Promotion condition | Program | Evidence / owner |
 | --- | --- | --- | --- | --- | --- | --- |
 | completion.candidates | I1 rich completion contract | 🟢 ESTABLISHED | Host-ordered bounded candidates bind DraftRevision; whole-set validation and atomic stale refusal/application. Native Rust only; C ABI 1 retains replacement. | Preserve host discovery/context ownership, bounds, rejection atomicity and delivery-order semantics. | I | [I1/U1 dossier][completion-contract]; [interaction][interaction] |
-| analysis.hints_highlight | I2 hints and highlighting | 🔴 OPEN | Document spans exist; editor hints, autosuggestions and host syntax spans do not. | Reuse revision-bound analysis with safe range/style validation and plain degradation. | I / U | [Presentation owner][presentation] |
+| analysis.hints_highlight | I2 hints and highlighting | 🔴 OPEN | I2 implementation and qualification are active; public promotion awaits the complete native/portable and performance evidence. | Reuse revision-bound analysis with safe range/style validation and plain degradation. | I / U | [Presentation owner][presentation] |
 | analysis.validation | I3 validation and submission policy | 🟢 ESTABLISHED | Optional host Complete/Incomplete/Invalid over immutable Enter snapshots; atomic stale refusal, exact submission and bounded diagnostics. Native Rust only. | Preserve host grammar/scheduling authority, rejected-result atomicity and completion precedence across platforms. | I | [I3/U2 dossier][validation-multiline]; [interaction][interaction] |
 | history.storage_search | I4 history provider/search | 🟡 PARTIAL | Memory navigation exists; no storage-provider or search boundary. | Separate navigation from storage with bounded search, draft return and host retention/privacy policy. | I | [Core][core]; [interaction][interaction] |
 | editing.keymap | I5 configurable editing | 🟡 PARTIAL | Normalized actions and a fixed compatibility keymap exist; no configurable modes, general undo or search. | Feed common edit operations from different mappings without changing decoder/storage authority. | I | [Keymap][keymap]; [F0][f0] |
@@ -177,7 +177,7 @@ to their recorded source, workload and environment.
 
 ## Current Execution Sequence
 
-VALIDATION.MULTILINE.0 is complete over I0/I1 and F1/P3/F2. Selection is `NONE`.
+ANALYSIS.PRESENTATION.0 is active over qualified I0/I1/I3 and F1/P3/F2. No following boundary is selected.
 I2 needs a dedicated safe editor-span/hint presentation contract; I4 needs search
 and provider ownership; I5 needs explicit configurable editing policy. The
 completed fixed multiline bindings do not select a full keymap design. Concrete
@@ -316,3 +316,5 @@ validate control consistency, **not the truth of a maturity promotion**. Follow
 [completion-contract]: docs/engineering/completion-contract.md
 
 [validation-multiline]: docs/engineering/validation-multiline.md
+
+[I2 qualification in progress](docs/engineering/analysis-presentation.md) records this boundary without promoting adjacent work.

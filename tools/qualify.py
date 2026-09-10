@@ -28,6 +28,8 @@ commands = [
     ['python3', 'tools/analysis_pty.py', '--work', str(work / 'analysis')],
     ['python3', 'tools/completion_pty.py', '--work', str(work / 'completion')],
     ['python3', 'tools/completion_pty.py', '--memory', '--work', str(work / 'completion-memory')],
+    ['python3', 'tools/analysis_presentation_pty.py', '--work', str(work / 'analysis-presentation')],
+    ['python3', 'tools/analysis_presentation_pty.py', '--memory', '--work', str(work / 'analysis-presentation-memory')],
     ['python3', 'tools/validation_pty.py', '--work', str(work / 'validation')],
     ['python3', 'tools/validation_pty.py', '--memory', '--work', str(work / 'validation-memory')],
     ['python3', 'tools/qualify_c.py', '--work', str(work)],

@@ -6,6 +6,11 @@ next work. All entries below are unreleased and carry no compatibility promise.
 
 ## Unreleased
 
+- Added native revision-bound editor style spans and non-canonical hints. Hosts
+  supply one bounded AnalysisPresentation; stale results have no display effects.
+  Completion/validation retain their separate insertion/submission contracts.
+  Plain hints remain explicitly marked; C ABI 1 has no new entry points.
+
 - Added opt-in native revision-bound submission validation with host-owned
   Complete/Incomplete/Invalid decisions, bounded safe diagnostics and logical
   multiline navigation. `Event::SubmissionRequested` extends the Rust enum;

@@ -188,6 +188,26 @@ Snapshots share immutable text when cloned; REPLAI never owns your parser or
 analysis scheduler. See the [analysis contract](docs/interaction.md#revision-aware-host-analysis)
 and [driven fixture](examples/analysis.rs).
 
+### Host-analyzed input
+
+Your application can derive editor style spans, hints, completions and validation
+from one immutable draft snapshot. REPLAI displays only current results; delayed
+results for an edited draft are refused without changing the screen.
+
+```sh
+cargo run --locked --example analysis-presentation
+```
+
+```text
+analyze> bu [~ild · Tab for candidates]
+```
+
+The host styles `bu` and supplies the hint. **Enter submits only `bu`**; Tab requests
+host candidates. `[~...]` remains visibly derived under NO_COLOR, and disappears
+while the completion menu is active. The [small host example](examples/analysis-presentation.rs)
+shares one parse across display, completion and brace validation.
+[Contract and limits](docs/interaction.md#editor-analysis-presentation).
+
 ### Rich completion
 
 Your application discovers and orders candidates from one immutable draft snapshot.

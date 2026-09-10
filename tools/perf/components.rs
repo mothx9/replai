@@ -1,5 +1,11 @@
 //! Private-source characterization binary, deliberately outside the production workspace.
 #![allow(dead_code)]
+#[path = "../../src/analysis_presentation.rs"]
+mod analysis_presentation;
+pub use analysis_presentation::{
+    AnalysisPresentation, AnalysisPresentationError, AnalysisSpan, Hint, MAX_ANALYSIS_SPANS,
+    MAX_HINT_BYTES,
+};
 #[path = "../../src/analysis.rs"]
 mod analysis;
 #[path = "../../src/validation.rs"]
@@ -64,6 +70,7 @@ mod completions;
 #[path = "../../src/document.rs"]
 mod document;
 mod documents;
+mod presented;
 mod validations;
 use actions::{Input, Request};
 pub use document::{Document, Text};
@@ -369,6 +376,7 @@ fn main() {
     documents::measure(&h);
     completions::measure(&h);
     validations::measure(&h);
+    presented::measure(&h);
     interaction_scaling(&h, smoke);
     h.measure(
         spec("control", "timer_black_box", 0, "none", 0),

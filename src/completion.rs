@@ -231,6 +231,7 @@ impl ActiveCompletion {
         editor: &Editor,
         prompt: &Prompt,
         size: (usize, usize),
+        analysis: Option<&crate::AnalysisPresentation>,
     ) -> crate::presentation::Frame {
         use crate::presentation::{Frame, Line, Point, Run};
         let height = size
@@ -243,11 +244,12 @@ impl ActiveCompletion {
         let first = self.selected / visible * visible;
         let end = (first + visible).min(self.set.candidates.len());
         let actual_height = end - first + header;
-        let mut frame = Frame::new(
+        let mut frame = Frame::analyzed(
             editor,
             prompt,
             size.0,
             size.1.saturating_sub(actual_height).max(2),
+            analysis,
         );
         let mut append = |runs: Vec<Run>, width: usize| {
             frame.lines.push(Line(runs));

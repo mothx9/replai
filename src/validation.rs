@@ -167,6 +167,7 @@ impl ValidationState {
         editor: &crate::Editor,
         prompt: &crate::Prompt,
         size: (usize, usize),
+        analysis: Option<&crate::AnalysisPresentation>,
     ) -> crate::presentation::Frame {
         use crate::{
             Role,
@@ -176,7 +177,16 @@ impl ValidationState {
         let height = (diagnostics.len() + 1)
             .min(5)
             .min(size.1.saturating_sub(2).max(1));
-        let mut frame = Frame::new(editor, prompt, size.0, size.1.saturating_sub(height).max(2));
+        let mut frame = Frame::analyzed(
+            editor,
+            prompt,
+            size.0,
+            size.1.saturating_sub(height).max(2),
+            analysis,
+        );
+        if let Some(a) = analysis {
+            a.append_hint(&mut frame);
+        }
         let header = format!("! Invalid input · {} diagnostics", diagnostics.len());
         for i in 0..height {
             let text = if i == 0 {

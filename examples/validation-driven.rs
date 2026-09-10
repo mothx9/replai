@@ -1,6 +1,9 @@
 //! Host-owned delayed validation and completion through an independent application source.
 //! No REPLAI compatibility poll is called. The host owns every wait and notification.
 #[cfg(any(target_os = "linux", target_os = "macos"))]
+#[path = "support/presented_analysis.rs"]
+mod presented_analysis;
+#[cfg(any(target_os = "linux", target_os = "macos"))]
 #[path = "support/validation.rs"]
 mod validator;
 #[cfg(any(target_os = "linux", target_os = "macos"))]
@@ -22,6 +25,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .transpose()?;
     let mut analysis: Option<replai::AnalysisSnapshot> = None;
     let mut validation: Option<replai::AnalysisSnapshot> = None;
+    let mut display_analysis: Option<presented_analysis::Parsed> = None;
     let mut interaction = Interaction::new(Editor::new(1_048_576, 100));
     interaction.set_submission_policy(replai::SubmissionPolicy::Validated)?;
     let mut timer = app
@@ -111,6 +115,47 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     )?)?;
                     eprintln!("VALIDATION {:?}", result.analysis);
                     outcome = result.event;
+                }
+                b'H' => {
+                    display_analysis = Some(presented_analysis::Parsed::new(
+                        interaction.analysis_snapshot(),
+                    ));
+                    eprintln!("DISPLAY_SNAPSHOT");
+                }
+                b'P' => {
+                    let result = interaction.present_analysis(
+                        display_analysis
+                            .as_ref()
+                            .ok_or("no display analysis")?
+                            .presentation()?,
+                    )?;
+                    eprintln!("PRESENTATION {result:?}");
+                }
+                b'K' => {
+                    let result = interaction.present_completions(
+                        display_analysis
+                            .as_ref()
+                            .ok_or("no display analysis")?
+                            .completions()?,
+                    )?;
+                    eprintln!("CANDIDATES {result:?}");
+                }
+                b'B' => {
+                    let result = interaction.apply_validation(
+                        display_analysis
+                            .as_ref()
+                            .ok_or("no display analysis")?
+                            .validation()?,
+                    )?;
+                    eprintln!("VALIDATION {:?}", result.analysis);
+                    outcome = result.event;
+                }
+                b'G' => {
+                    interaction.present_analysis(replai::AnalysisPresentation::new(
+                        interaction.revision(),
+                        vec![],
+                        None,
+                    )?)?;
                 }
                 b'T' => {
                     analysis = Some(interaction.analysis_snapshot());
@@ -239,6 +284,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 "DIAGNOSTICS {}",
                 interaction.diagnostics().map_or(0, |d| d.len())
             );
+            eprintln!("DISPLAY {}", interaction.analysis_presentation().is_some());
             eprintln!("REVISION {:?}", interaction.revision());
             match interaction.completion_selection() {
                 Some(s) => eprintln!("SELECTION {} {}", s.index, s.count),

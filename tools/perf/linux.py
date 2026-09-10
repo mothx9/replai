@@ -37,7 +37,7 @@ def attributes(fd):
 
 
 class Session:
-    def __init__(self, command, trace=None, terminal_stderr=False):
+    def __init__(self, command, trace=None, terminal_stderr=False, styled=False):
         self.master, self.slave = os.openpty()
         winsize(self.slave, 80)
         self.saved = attributes(self.slave)
@@ -53,10 +53,12 @@ class Session:
             fcntl.ioctl(0, termios.TIOCSCTTY, 0)
         control_read, control_write = os.pipe() if terminal_stderr else (None, None)
         exit_read, self.exit_write = os.pipe()
+        environment = {**os.environ, 'TERM': 'xterm-256color', 'NO_COLOR': '1', 'LC_ALL': 'C.UTF-8', 'P0_EXIT_FD':str(exit_read), **({'P0_RECEIPT_FD':str(control_write)} if terminal_stderr else {})}
+        if styled: environment.pop('NO_COLOR', None)
         self.process = subprocess.Popen(list(map(str, command)), stdin=self.slave,
             stdout=self.slave, stderr=self.slave if terminal_stderr else subprocess.PIPE, preexec_fn=controlling_terminal,
             pass_fds=(exit_read,control_write) if terminal_stderr else (exit_read,),
-            env={**os.environ, 'TERM': 'xterm-256color', 'NO_COLOR': '1', 'LC_ALL': 'C.UTF-8', 'P0_EXIT_FD':str(exit_read), **({'P0_RECEIPT_FD':str(control_write)} if terminal_stderr else {})})
+            env=environment)
         os.close(exit_read)
         if terminal_stderr:
             os.close(control_write)

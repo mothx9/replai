@@ -80,6 +80,11 @@ pub use completion::{
     CompletionAction, CompletionCandidate, CompletionError, CompletionSelection, CompletionSet,
     MAX_COMPLETION_BYTES, MAX_COMPLETION_CANDIDATES, MAX_COMPLETION_FIELD_BYTES,
 };
+mod analysis_presentation;
+pub use analysis_presentation::{
+    AnalysisPresentation, AnalysisPresentationError, AnalysisSpan, Hint, MAX_ANALYSIS_SPANS,
+    MAX_HINT_BYTES,
+};
 mod analysis;
 pub use analysis::{AnalysisOutcome, AnalysisSnapshot, DraftRevision};
 mod capabilities;

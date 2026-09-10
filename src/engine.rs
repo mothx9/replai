@@ -18,6 +18,7 @@ struct Surface {
     dirty: bool,
     damage: Damage,
     completion: Option<Box<crate::completion::ActiveCompletion>>,
+    analysis: Option<Box<crate::AnalysisPresentation>>,
 }
 pub(crate) struct Engine {
     pub editor: Editor,
@@ -49,6 +50,7 @@ impl Engine {
             dirty: true,
             damage: Damage::Rebuild,
             completion: None,
+            analysis: None,
         });
         Ok(Effects {
             mutations: self.redraw(),
@@ -63,13 +65,27 @@ impl Engine {
         let damage = if s.dirty { s.damage } else { Damage::Rebuild };
         s.dirty = false;
         if let Some(completion) = &s.completion {
-            s.renderer
-                .transition(completion.frame(&self.editor, &s.prompt, s.size))
+            s.renderer.transition(completion.frame(
+                &self.editor,
+                &s.prompt,
+                s.size,
+                s.analysis.as_deref(),
+            ))
         } else if let Some(v) = &self.validation
             && v.diagnostics.is_some()
         {
             s.renderer
-                .transition(v.frame(&self.editor, &s.prompt, s.size))
+                .transition(v.frame(&self.editor, &s.prompt, s.size, s.analysis.as_deref()))
+        } else if let Some(a) = &s.analysis {
+            let mut frame = crate::presentation::Frame::analyzed(
+                &self.editor,
+                &s.prompt,
+                s.size.0,
+                s.size.1,
+                Some(a),
+            );
+            a.append_hint(&mut frame);
+            s.renderer.transition(frame)
         } else {
             s.renderer
                 .redraw_changed(&self.editor, &s.prompt, s.size, damage)
@@ -211,6 +227,9 @@ impl Engine {
             damage = Damage::Rebuild;
         }
         if revision != self.editor.revision() {
+            if self.analysis_presentation().is_some() {
+                damage = Damage::Rebuild;
+            }
             self.invalidate_validation();
         }
         let s = self.surface.as_mut().unwrap();
@@ -359,6 +378,38 @@ impl Engine {
         s.damage = Damage::Rebuild;
         Ok((A::Applied, self.flush()))
     }
+    pub fn analysis_presentation(&self) -> Option<&crate::AnalysisPresentation> {
+        self.surface.as_ref()?.analysis.as_deref()
+    }
+    fn remove_analysis(&mut self) {
+        if let Some(s) = &mut self.surface
+            && s.analysis.take().is_some()
+        {
+            s.dirty = true;
+            s.damage = Damage::Rebuild;
+        }
+    }
+    pub fn present_analysis(
+        &mut self,
+        result: crate::AnalysisPresentation,
+    ) -> Result<(crate::AnalysisOutcome, Effects), crate::AnalysisPresentationError> {
+        if result.revision() != self.editor.revision() {
+            return Ok((crate::AnalysisOutcome::Stale, Effects::default()));
+        }
+        if !self.is_open() {
+            return Err(Error::State.into());
+        }
+        result.validate(self.editor.text())?;
+        let s = self.surface.as_mut().unwrap();
+        s.analysis = if result.is_empty() {
+            None
+        } else {
+            Some(Box::new(result))
+        };
+        s.dirty = true;
+        s.damage = Damage::Rebuild;
+        Ok((crate::AnalysisOutcome::Applied, self.flush()))
+    }
     pub fn submission_policy(&self) -> crate::SubmissionPolicy {
         if self.validation.is_some() {
             crate::SubmissionPolicy::Validated
@@ -391,6 +442,7 @@ impl Engine {
         removed
     }
     fn invalidate_validation(&mut self) {
+        self.remove_analysis();
         self.clear_diagnostics();
         if let Some(v) = &mut self.validation {
             v.pending = None;
@@ -644,3 +696,7 @@ mod completion_tests;
 #[cfg(test)]
 #[path = "validation_tests.rs"]
 mod validation_tests;
+
+#[cfg(test)]
+#[path = "analysis_presentation_tests.rs"]
+mod analysis_presentation_tests;

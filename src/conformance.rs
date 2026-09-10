@@ -801,3 +801,61 @@ fn validation_virtual_transport_stale_silence_read_ahead_and_failure_cleanup() {
         assert_eq!(d.0.borrow().restored, 1);
     }
 }
+
+#[test]
+fn analysis_display_uses_same_transport_and_failure_cleanup() {
+    use crate::{AnalysisOutcome, AnalysisPresentation, AnalysisSpan, Hint};
+    for plain in [false, true] {
+        let d = Virtual::new();
+        let mut e = Engine::new(Editor::new(100, 4));
+        let mut t = Terminal::start(
+            d.clone(),
+            &mut e,
+            Prompt::new("demo").unwrap(),
+            Theme::new(true, plain, None),
+        )
+        .unwrap();
+        feed(&d, &mut t, &mut e, b"bu");
+        let snapshot = e.editor.analysis_snapshot();
+        let p = AnalysisPresentation::new(
+            snapshot.revision(),
+            vec![AnalysisSpan::new(0..2, Role::Warning).unwrap()],
+            Some(Hint::new("ild", Role::Dim).unwrap()),
+        )
+        .unwrap();
+        let (_, fx) = e.present_analysis(p.clone()).unwrap();
+        t.apply(&mut e, fx).unwrap();
+        let screen = d.screen();
+        assert!(screen.screen().contents().contains("bu [~ild]"));
+        assert_eq!(
+            screen.screen().cell(0, 6).unwrap().fgcolor(),
+            if plain {
+                vt100::Color::Default
+            } else {
+                vt100::Color::Idx(179)
+            }
+        );
+        assert_eq!(screen.screen().cursor_position(), (0, 8));
+        assert_eq!(e.editor.analysis_snapshot(), snapshot);
+        feed(&d, &mut t, &mut e, b"\x1b[D");
+        let before = d.0.borrow().output.clone();
+        let writes = d.0.borrow().writes;
+        let (outcome, fx) = e.present_analysis(p).unwrap();
+        assert_eq!(outcome, AnalysisOutcome::Stale);
+        t.apply(&mut e, fx).unwrap();
+        assert_eq!(d.0.borrow().output, before);
+        assert_eq!(d.0.borrow().writes, writes);
+        let p = AnalysisPresentation::new(
+            e.editor.revision(),
+            vec![AnalysisSpan::new(0..2, Role::Accent).unwrap()],
+            None,
+        )
+        .unwrap();
+        let (_, fx) = e.present_analysis(p).unwrap();
+        d.0.borrow_mut().fail_write = true;
+        assert!(t.apply(&mut e, fx).is_err());
+        assert!(!e.is_open());
+        assert!(e.analysis_presentation().is_none());
+        assert_eq!(d.0.borrow().restored, 1);
+    }
+}

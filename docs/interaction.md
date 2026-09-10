@@ -507,3 +507,56 @@ this event nor policy; its direct-submit contract, records and symbols remain
 unchanged. The [use-case map](use-cases.md) separates deterministic hosts, model
 clients, standalone reports and external reactors. [Evidence](engineering/validation-multiline.md)
 records native and portable qualification separately.
+
+## Editor analysis presentation
+
+Native session/driven hosts may derive `AnalysisPresentation` from one
+`AnalysisSnapshot` and call `Interaction::present_analysis`. REPLAI never calls
+an analyzer. The host chooses cadence, parsing, roles, hint text and job/context
+freshness. The live interaction remains exclusively owned; immutable snapshots
+may leave it for externally scheduled work.
+
+```rust
+use replai::{AnalysisPresentation, AnalysisSpan, Hint, Role};
+// `snapshot` is retained from this interaction; the host chose these boundaries.
+let display = AnalysisPresentation::new(
+    snapshot.revision(),
+    vec![AnalysisSpan::new(0..2, Role::Accent)?],
+    Some(Hint::new("ild", Role::Dim)?),
+)?;
+let outcome = interaction.present_analysis(display)?;
+```
+
+`AnalysisOutcome::Stale` changes nothing and emits no bytes. A current result
+requires an active terminal. A malformed current result preserves prior display;
+I/O failure uses the normal cleanup path. Same-revision valid deliveries replace
+the whole result in delivery order. Empty spans/no hint clear it. Inspect current
+data with `analysis_presentation()`; this never grants editor mutation access.
+
+Spans are nonempty, ordered, nonoverlapping UTF-8 byte ranges with grapheme-aligned
+endpoints. Adjacent spans are admitted; no merging or precedence by list order.
+There are at most 4096 spans and 4096 safe hint bytes. Hints reject newline, tabs,
+controls and hidden directional controls; they carry generic roles, not ANSI.
+Bounds are checked before retention, and snapshot-dependent ranges before activation.
+
+Editor Default is overridden only within each span. Prompt/continuation,
+completion selection and diagnostics retain their own styles. The same frame
+builder and damage renderer handle all of them. Styling changes no text geometry.
+
+Hints are **non-canonical**. At end-of-draft they appear in remaining row space as
+` [~hint]`, grapheme-clipped without wrapping; fewer than five free cells suppress
+them. A non-end cursor or active completion menu suppresses the hint. Delimiters
+remain under NO_COLOR; plain spans add no substitute punctuation. Hints never
+enter submission/history. There is no hint acceptance key: supply a completion
+candidate or existing revision-bound replacement when insertion is desired.
+
+Output and resize preserve current display. Actual text/cursor changes (including
+history, paste, completion edits and Incomplete continuation) invalidate it;
+no-op/rejected edits do not. Menu dismissal restores a still-current hint;
+validation Invalid may coexist with spans and hint. Close, failure and submission
+release I2 surface state; close/reopen keeps I0 revision semantics unchanged.
+
+The [example](../examples/analysis-presentation.rs) uses one host parse to derive
+I1, I2 and I3 products. The [I2 dossier](engineering/analysis-presentation.md)
+records resource limits, native/portable evidence and performance. Blocking
+`read_line()` requires no analyzer. C ABI 1 does not expose this native Rust API.

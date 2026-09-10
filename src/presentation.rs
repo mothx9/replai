@@ -365,6 +365,15 @@ impl Layout {
 }
 impl Frame {
     pub fn new(editor: &Editor, prompt: &Prompt, columns: usize, rows: usize) -> Self {
+        Self::analyzed(editor, prompt, columns, rows, None)
+    }
+    pub fn analyzed(
+        editor: &Editor,
+        prompt: &Prompt,
+        columns: usize,
+        rows: usize,
+        analysis: Option<&crate::AnalysisPresentation>,
+    ) -> Self {
         let visible = rows.saturating_sub(1).max(1);
         let mut layout = Layout::new(columns, visible);
         if let Some(text) = &prompt.composed {
@@ -378,6 +387,9 @@ impl Frame {
             layout.text(" ");
         }
         let mut cursor = None;
+        let spans = analysis.map_or(&[][..], |a| a.spans());
+        let mut span_index = 0;
+        let mut editor_role = Role::Default;
         for (offset, grapheme) in editor.text().grapheme_indices(true) {
             if layout.full {
                 break;
@@ -397,19 +409,43 @@ impl Frame {
                 cursor = Some(layout.point);
                 layout.found_cursor();
             }
+            if !spans.is_empty() {
+                while span_index < spans.len() && spans[span_index].range().end <= offset {
+                    span_index += 1;
+                }
+                let role = spans
+                    .get(span_index)
+                    .filter(|s| s.range().start <= offset)
+                    .map_or(Role::Default, |s| s.role());
+                if role != editor_role {
+                    layout.style(Role::Default);
+                    layout.style(role);
+                    editor_role = role;
+                }
+            }
             if grapheme == "\n" {
                 if !layout.wrapped {
                     layout.newline();
                 }
                 layout.wrapped = false;
+                if !spans.is_empty() {
+                    layout.style(Role::Default);
+                }
                 if let Some(text) = &prompt.continued {
                     layout.semantic(text);
                 } else {
                     layout.text(&prompt.continuation);
                 }
+                if !spans.is_empty() {
+                    layout.style(Role::Default);
+                    layout.style(editor_role);
+                }
             } else {
                 layout.grapheme(grapheme, width);
             }
+        }
+        if !spans.is_empty() {
+            layout.style(Role::Default);
         }
         if editor.cursor() == editor.text().len() {
             cursor = Some(layout.point);

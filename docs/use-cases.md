@@ -144,3 +144,23 @@ resize, large paste, completion precedence and exact restoration. The [developme
 method](development.md) lists all tool prerequisites and full qualification.
 These commands test implemented contracts; they do not claim every emulator or
 application configuration is qualified.
+
+## Host-derived editor styles and hints
+
+```sh
+cargo run --locked --example analysis-presentation
+NO_COLOR=1 cargo run --locked --example analysis-presentation
+```
+
+Type `bu`: the host styles that draft and supplies an explicitly marked suffix:
+
+```text
+analyze> bu [~ild · Tab for candidates]
+```
+
+Enter submits only `bu`. Tab requests host candidates; Enter with a menu accepts
+one without submitting. Braces exercise host validation and multiline continuation.
+The example caches one host parse per draft revision and derives I1/I2/I3 results
+from it. `[~...]` is display only, including under NO_COLOR. Use session/driven
+integration to receive delayed host analysis; the simplest blocking API stays
+unchanged. See the [I2 contract](interaction.md#editor-analysis-presentation).
