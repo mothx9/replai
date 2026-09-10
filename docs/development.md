@@ -146,37 +146,54 @@ claiming a Windows terminal backend. Hosted latency is characterization only.
 
 ## README terminal preview
 
-The README shows two different host uses: an interactive
-[query console](../examples/query.rs) and a standalone
-[build report](../examples/report.rs). The [first image](../assets/terminal-results.png)
-shows completion, results, history and multiline draft restoration. The
-[second image](../assets/terminal-report.png) shows facts, pipeline rows, status
-and command help at full terminal width. Both examples use static fixtures;
-neither connects to a database nor executes a build/deployment.
+The signature [terminal capture](../assets/terminal-session.png) runs the
+[console example](../examples/console.rs) in an actual PTY. One local host
+submits an indented, validated block, opens a completion menu, then delivers a
+fixture result from its own timer. No commands are executed and no network service
+is contacted. Host code verifies unchanged draft/cursor/revision/selection across
+output. The capture additionally verifies real screen selection/cursor, separate
+acceptance and submission, invalid-input diagnostics, styled/plain equivalence,
+exact termios restoration and bracketed-paste cleanup.
 
-The optional [capture script](../tools/docs/capture_terminal.py) drives Linux PTYs
-with pyte 0.8.2 and Pillow 11.3.0. All content comes from the actual executables.
-The query capture checks completion, history return, multiline paste, a non-end
-cursor, a host notice, clean exit, exact termios restoration and paste cleanup.
-The standalone report verifies expected sections, clean exit and unchanged termios.
-Narrow/NO_COLOR behavior remains covered by the presentation qualification; the
-README does not repeat the same scene in a three-panel comparison.
+The [capture script](../tools/docs/capture_terminal.py) decodes actual PTY bytes
+with pyte and rasterizes those cells with Pillow and DejaVu Sans Mono. There is
+no reconstructed terminal transcript or edited bitmap. The image is 1524 × 720
+pixels at 84 terminal columns, with a 28-pixel raster font (about 17 pixels at
+README width). The dark background and separate title strip belong to the
+capture tooling; terminal text, colors, selection and cursor come from the
+executable. The opaque terminal crop remains readable on GitHub light and dark
+backgrounds. The existing light/dark logo variants are unchanged.
 
-Glyphs are rasterized directly at 2× density with DejaVu Sans Mono. Both images
-are 1796 pixels wide; the 28-pixel raster font appears at approximately 14 px at
-README width. Background and title strips belong to the capture. No existing
-bitmap is enlarged or altered.
+Reproduce on Linux with a current stable Rust toolchain, Python 3 and
+`fonts-dejavu-core` installed:
 
-To reproduce with optional capture dependencies in a disposable environment:
+```sh
+python3 -m venv /tmp/replai-capture-env
+/tmp/replai-capture-env/bin/pip install -r tools/docs/capture-requirements.txt
+cargo build --locked --example console
+/tmp/replai-capture-env/bin/python tools/docs/capture_terminal.py
+/tmp/replai-capture-env/bin/python tools/docs/capture_terminal.py --check
+```
+
+`--check` captures a fresh styled and NO_COLOR session, checks the interaction
+properties and compares the generated PNG byte-for-byte without modifying the
+repository. Raster identity is qualified for the pinned Python dependencies and
+DejaVu font; another font/version can change pixels without changing terminal
+semantics. The native terminal suites remain the platform qualification authority.
+The optional Python packages are documentation dependencies, not Cargo/library
+requirements. `python3 tools/docs/check_readme.py` compiles every Rust/C snippet,
+executes the blocking host in a PTY and checks the Document transcript.
+CI runs both checks on Linux; normal native/portable lanes remain unchanged.
+
+Earlier focused captures remain available here, outside the main README:
+[query/results](../assets/terminal-results.png), [standalone report](../assets/terminal-report.png),
+[completion](../assets/terminal-completion.png) and [validation](../assets/terminal-validation.png).
+Their original executables remain runnable. To regenerate those images explicitly:
 
 ```sh
 cargo build --locked --example query --example report --example completion --example validation
-python3 tools/docs/capture_terminal.py
+/tmp/replai-capture-env/bin/python tools/docs/capture_terminal.py --legacy
 ```
-
-These dependencies are not required for library builds or qualification.
-Screenshots illustrate behavior; the independent native PTY oracles remain the
-qualification authority.
 
 ## Analysis protocol qualification
 

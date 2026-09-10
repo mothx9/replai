@@ -6,152 +6,84 @@
 <h1 align="center">REPLAI</h1>
 
 <p align="center">
-  <strong>Command-line infrastructure for Rust and C.</strong><br>
-  Unicode input, structured presentation and terminal lifecycle.<br>
-  One interaction engine. Three levels of integration.
+  <strong>The application owns the language.<br>REPLAI owns the line.</strong>
 </p>
+<p align="center">Terminal interaction infrastructure for Rust and C.</p>
+<p align="center">Rust · C ABI 1 · Linux / macOS · MIT · pre-release</p>
+
+A small line reader is easy to embed. A long-lived console needs more: editable
+Unicode, completion, multiline input, output arriving mid-draft, and a terminal
+that is restored when the interaction ends.
+
+REPLAI keeps those mechanics below your application. Bring a parser, a command
+catalog, a model client or a debugger. Keep execution and the event loop.
+Use a blocking call when that is enough; take explicit control when it isn't.
+The editor and renderer stay the same. No full-screen framework is required.
 
 <p align="center">
-  <a href="https://github.com/mothx9/replai/actions/workflows/ci.yml"><img src="https://github.com/mothx9/replai/actions/workflows/ci.yml/badge.svg?branch=master" alt="CI on master"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license"></a>
-  <a href="Cargo.toml"><img src="https://img.shields.io/badge/status-pre--release-orange" alt="Pre-release"></a>
-  <a href="#rust"><img src="https://img.shields.io/badge/Rust-native-dea584?logo=rust" alt="Native Rust API"></a>
-  <a href="#c-and-c"><img src="https://img.shields.io/badge/C-ABI%201-649ad2" alt="C ABI 1"></a>
-  <a href="#platform-support"><img src="https://img.shields.io/badge/terminal-Linux%20%7C%20macOS-43865b" alt="Linux and macOS terminal runtime"></a>
+  <img src="assets/terminal-session.png" alt="Real REPLAI terminal: an indented multiline statement is submitted, then a host result arrives while bu and the selected bundle completion remain active." width="912">
 </p>
 
-<p align="center">
-  <a href="#quick-start">Quick start</a> ·
-  <a href="#choose-your-integration">Integration</a> ·
-  <a href="#structured-presentation">Presentation</a> ·
-  <a href="docs/README.md">Documentation</a> ·
-  <a href="ROADMAP.md">Roadmap</a>
-</p>
+Real PTY, host-owned semantics: validated multiline input, completion and output
+with the active draft, cursor and selection preserved.
 
-REPLAI is an embeddable terminal interaction library for developer tools,
-application consoles and operational command interfaces. It combines editable
-input, terminal-aware presentation and explicit resource ownership under the
-application's control.
+## Run it
 
-Use it to build database consoles, debugger frontends, administration tools and
-model clients. Your application defines the language and execution model; REPLAI
-provides the interaction layer.
-
-<p align="center">
-  <img src="assets/terminal-results.png" alt="Real session: completion, aligned results, history recall and a multiline draft preserved beneath host output." width="912">
-</p>
-
-## What you get
-
-| Capability | Integration value |
-| --- | --- |
-| **Unicode editing** | Grapheme-aware movement and deletion, bounded drafts and atomic bracketed paste when admitted by terminal policy |
-| **History and completion** | Exact draft restoration; host-ordered candidates with safe revision binding, selection and acceptance |
-| **Structured presentation** | Headings, aligned fields, lists, responsive tables and status messages from safe semantic text |
-| **Coordinated output** | Present results or notices during editing, then restore the draft and cursor exactly |
-| **Flexible embedding** | Blocking, explicit session and host-driven integration over the same engine; no required async runtime |
-| **Explicit terminal contracts** | Inspectable capabilities, deliberate degradation, typed outcomes and qualified restoration of terminal state |
-
-REPLAI operates in normal terminal scrollback and preserves the terminal's
-background. Commands, parsing, execution, application state and persistence remain
-host-owned. The library supplies line-oriented interaction rather than a shell or
-full-screen application framework.
-
-## Quick start
-
-Run the query-console example on **Linux or macOS** with Git and a current stable
-Rust toolchain:
+On Linux or macOS, with Git and a current stable Rust toolchain:
 
 ```sh
 git clone https://github.com/mothx9/replai.git
 cd replai
-cargo run --locked --example query -- --notice
+cargo run --locked --example console
 ```
 
-Type `SEL`, press **Tab**, then **Enter**. The example completes a fixed query and
-renders a local fixture dataset; it requires no database, credentials or service.
-The [complete host](examples/query.rs) shows completion, history admission,
-structured results and coordinated output through the public API.
+1. Type `begin {`, press Enter, then Tab and `task`. Enter continues the draft;
+   type `}` and press Enter to submit the complete block.
+2. Type `bu`, press Tab to see candidates, then Tab again to select `bundle`.
+3. Leave the menu open for two seconds. A host timer delivers a local result;
+   your draft and selection remain where you left them.
+4. Enter accepts the candidate. A second Enter submits. Ctrl-D on an empty
+   draft exits; Ctrl-C interrupts editing.
 
-| Interaction | Behavior to explore |
-| --- | --- |
-| Up / Down after typing a draft | Navigate history and return to the original draft |
-| Left / Right / Backspace | Edit at grapheme boundaries |
-| Paste `SELECT *` and `FROM deployments;` on separate lines | Edit one multiline draft before submission |
-| Keep a draft open for two seconds | A host notice arrives above the restored input |
-| Ctrl-L | Redraw the current interaction |
-| Ctrl-C / Ctrl-D on empty input | Interrupt editing / return EOF to the host |
-| `/exit` | Close this example |
+The [console host](examples/console.rs) uses fixed local data. It runs no build,
+contacts no service and shares one host analysis across styles, completion and
+brace validation. Pasted multiline text remains one draft.
 
-For a minimal blocking host or standalone presentation:
+## The ownership line
 
-```sh
-cargo run --locked --example simple
-cargo run --locked --example report
-cargo run --locked --example structured -- 68
-NO_COLOR=1 cargo run --locked --example structured -- 24
+```text
+YOUR APPLICATION
+commands · parser · execution · state · persistence
+candidate discovery · validation meaning · event loop
+                         │
+                  public contracts
+                         ▼
+REPLAI
+Rust: blocking / session / driven    C ABI 1: session
+                         │
+                one interaction engine
+editor · revision provenance · completion mechanics
+multiline · generic presentation · terminal lifecycle
+                         │
+                         ▼
+                Linux / macOS terminal
 ```
 
-## Use-case map
+**REPLAI owns** editing, history navigation, safe revision-bound application of
+host results, candidate navigation, rendering and coordinated output.
 
-| Build | Start here | What stays in your application |
-| --- | --- | --- |
-| Small deterministic CLI | `cargo run --locked --example simple` | Commands, evaluation and history admission |
-| Rich command console | `cargo run --locked --example completion` | Candidate discovery, meaning and order |
-| Validated multiline console | `cargo run --locked --example validation` | Grammar and Complete/Incomplete/Invalid decisions |
-| Turn-by-turn model chat | Blocking input, then host execution | Messages, provider calls, streaming and cancellation |
-| Chat/debugger with external events | `cargo run --locked --example driven` | Reactor, network/timer events and serialized output calls |
-| Reports or captured output | `cargo run --locked --example report` | Data and semantic classification |
+**Your application owns** the language, semantic classification, discovery,
+execution, persistence and scheduling. REPLAI never decides what a command means
+or starts an analysis job on your behalf.
 
-The examples run locally without a database or model. In `validation`, type `{`,
-Enter, `task`, Enter, `}`, Enter: the host receives one multiline statement.
-Invalid input keeps the draft and shows safe diagnostics; delayed decisions for
-an edited draft are refused. Completion acceptance and submission are separate.
+## Keep the small host small
 
-<p align="center">
-  <img src="assets/terminal-validation.png" alt="Real terminal: a host-validated multiline statement followed by an invalid draft with a safe diagnostic." width="912">
-</p>
-
-[Runnable recipes, keybindings and terminal configurations](docs/use-cases.md)
-cover application embedding and developer verification, including NO_COLOR,
-narrow output, real PTYs and native memory checks.
-
-## Choose your integration
-
-| Integration | Public entry points | Application responsibility |
-| --- | --- | --- |
-| **Blocking** | `Interaction::read_line` | Receive submitted input, interruption or EOF; run application logic |
-| **Session** | `open`, `poll`, `complete`, `close` | Dispatch events, resolve completion and coordinate output |
-| **Driven** | `wait_interest`, `advance` | Own the reactor; deliver readiness, deadlines and resize notifications |
-
-Start with the level your application needs. Each tier shares editor semantics,
-presentation and terminal acquisition/restoration. The driven tier integrates
-with application sockets, timers and event sources through borrowed POSIX
-readiness. With no pending deadline or external event, it requires no periodic
-REPLAI wake.
-
-Output operations remain serialized by the host. Compatibility `poll` retains
-periodic resize observation; driven hosts provide resize notifications. REPLAI
-installs no signal handlers and owns no background writer or application scheduler.
-
-[Blocking example](examples/simple.rs) · [Session example](examples/demo.rs) ·
-[External-loop example](examples/driven.rs) ·
-[Embedding contract](docs/interaction.md#embedding-tiers-and-wait-ownership)
-
-
-### Rust
-
-Integrate the native API through Cargo using an exact Git revision. This qualified
-checkpoint includes the three embedding tiers, structured presentation, rich
-completion, validated multiline input, editor analysis presentation and explicit
-terminal capabilities:
+Add the qualified runtime checkpoint to your own Cargo project:
 
 ```toml
 [dependencies]
 replai = { git = "https://github.com/mothx9/replai", rev = "da16302c33cdce5ef40978e02e9d8dff045c93f9" }
 ```
-
-A retained interaction provides a complete blocking input loop:
 
 ```rust
 use replai::{Editor, Interaction, Prompt, ReadOutcome};
@@ -160,92 +92,145 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut input = Interaction::new(Editor::new(65_536, 100));
     loop {
         match input.read_line(Prompt::new("demo")?)? {
-            ReadOutcome::Submitted(text) => {
-                println!("received: {text}"); // Your application runs here.
-                if !text.is_empty() {
-                    input.editor_mut()?.admit_history(&text)?;
-                }
-                input.editor_mut()?.clear();
-            }
-            ReadOutcome::Interrupted => input.editor_mut()?.clear(),
+            ReadOutcome::Submitted(text) => println!("received: {text}"),
+            ReadOutcome::Interrupted => {},
             ReadOutcome::EndOfInput => break,
         }
+        input.editor_mut()?.clear();
     }
     Ok(())
 }
 ```
 
-The terminal is restored before `read_line` returns. An editing interrupt is a
-typed result; the application decides whether it affects execution. Applications
-that require completion or coordinated output use the session or driven tier.
+The terminal is restored before the call returns. The host decides what to do
+with each outcome. The [retained-reader example](examples/simple.rs) also admits
+history explicitly. This is enough for a deterministic CLI or a turn-by-turn
+model chat: read input, run your application, show its result, read again.
 
-[Native API and lifecycle](docs/interaction.md) ·
-Generate local API documentation with `cargo doc --no-deps --open`.
+## Let the host analyze
 
-Retain a draft snapshot for application-owned analysis, then apply its replacement
-with `complete_at(snapshot.revision(), range, text)`. If editing has advanced,
-REPLAI returns `AnalysisOutcome::Stale` without touching the draft or screen.
-Snapshots share immutable text when cloned; REPLAI never owns your parser or
-analysis scheduler. See the [analysis contract](docs/interaction.md#revision-aware-host-analysis)
-and [driven fixture](examples/analysis.rs).
+An explicit session receives `Event::CompletionRequested`. The application
+chooses candidates from one immutable snapshot; REPLAI presents and applies them.
+For a host that recognizes `bu`:
 
-### Host-analyzed input
+```rust
+use replai::{AnalysisOutcome, CompletionCandidate, CompletionError, CompletionSet, Interaction};
 
-Your application can derive editor style spans, hints, completions and validation
-from one immutable draft snapshot. REPLAI displays only current results; delayed
-results for an edited draft are refused without changing the screen.
+fn offer_build(input: &mut Interaction) -> Result<AnalysisOutcome, CompletionError> {
+    let snapshot = input.analysis_snapshot();
+    let candidate = CompletionCandidate::new(0..snapshot.text().len(), "build ", "build")?
+        .with_annotation("Build the project")?;
+    input.present_completions(CompletionSet::new(snapshot.revision(), vec![candidate])?)
+}
+```
 
-```sh
-cargo run --locked --example analysis-presentation
+Display labels and inserted text can differ. Results may arrive later; if the
+draft or cursor changed, delivery returns `Stale` without changing the screen.
+The [completion host](examples/completion.rs) demonstrates multiple candidates;
+[analysis presentation](examples/analysis-presentation.rs) adds safe style spans
+and explicitly non-canonical hints. The host supplies both.
+
+### Enter asks; your parser answers
+
+Opt into `SubmissionPolicy::Validated` while closed. Enter then yields
+`Event::SubmissionRequested(snapshot)`. Return your decision against that revision:
+
+```rust
+use replai::{AnalysisSnapshot, Interaction, ValidationDisposition, ValidationError,
+             ValidationOutcome, ValidationResult};
+
+fn return_decision(input: &mut Interaction, request: AnalysisSnapshot,
+                   decision: ValidationDisposition) -> Result<ValidationOutcome, ValidationError> {
+    input.apply_validation(ValidationResult::new(request.revision(), decision)?)
+}
+```
+
+**Complete** submits exactly that draft. **Incomplete** inserts a newline and
+continues editing. **Invalid** retains the draft and presents safe diagnostics.
+Handle the returned `ValidationOutcome.event`; a completed submission arrives
+there. A stale decision does none of these.
+
+```text
+demo> begin {
+...     task
+... }
+[ok] host received 18 bytes; nothing executed.
+```
+
+The [small validator](examples/support/validation.rs) owns the brace grammar.
+REPLAI owns continuation layout, vertical navigation and Tab indentation in
+continuation whitespace. Completion-menu acceptance takes precedence over
+submission. Direct submission remains the default for small hosts.
+
+### Bring your own reactor
+
+```text
+terminal readiness ─┐
+network result ─────┼── your reactor ── serialized Interaction calls
+resize notification ┤
+REPLAI deadline ────┘
+```
+
+Use `wait_interest()` for ready work or a deadline, and `input_source()` for the
+borrowed POSIX readiness descriptor. Deliver terminal events with
+`advance(Wake::InputReady)`, `advance(Wake::Resize)` or `advance(Wake::Deadline(token))`.
+Application results use `output_document`, `external_output` or the analysis APIs.
+
+The [driven host](examples/driven.rs) owns the wait. Idle REPLAI requires no
+periodic wake without an event or deadline. The simpler session `poll()` keeps
+periodic resize observation. Neither tier installs signal handlers, owns an async
+runtime or permits concurrent independent writers.
+
+## Give output structure
+
+No ANSI strings, manual padding or application-specific rendering vocabulary:
+
+```rust
+use replai::{Block, Document, Severity, Text, Theme};
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let document = Document::new(vec![
+        Block::Heading { level: 1, text: Text::new("Workspace")? },
+        Block::KeyValue(vec![(Text::new("Mode")?, Text::new("local")?)]),
+        Block::Status { severity: Severity::Success, text: Text::new("Ready")? },
+    ])?;
+    print!("{}", document.render(60, Theme::new(false, false, None))?);
+    Ok(())
+}
 ```
 
 ```text
-analyze> bu [~ild · Tab for candidates]
+# Workspace
+Mode  local
+[ok] Ready
 ```
 
-The host styles `bu` and supplies the hint. **Enter submits only `bu`**; Tab requests
-host candidates. `[~...]` remains visibly derived under NO_COLOR, and disappears
-while the completion menu is active. The [small host example](examples/analysis-presentation.rs)
-shares one parse across display, completion and brace validation.
+The same document can go through `Interaction::output_document` during editing.
+Lists, responsive tables, literal blocks and composed prompts use the same safe
+text and cell geometry. NO_COLOR preserves structure; standalone plain rendering
+works without a TTY. See the [structured example](examples/structured.rs) and
+[standalone report](examples/report.rs).
 
-For multiline input, type `{` and press Enter. On the continuation line, Tab
-indents to the next four-space stop; after text, Tab requests completion.
-This is library behavior for hosts using `SubmissionPolicy::Validated`, shared
-by session and driven integration. See the [key guide](docs/use-cases.md#try-validated-multiline-input).
-[Contract and limits](docs/interaction.md#editor-analysis-presentation).
+## C and C++ are consumers of the same engine
 
-### Rich completion
+ABI 1 exposes opaque handles, explicit events and caller-owned UTF-8 buffers.
+For example, a C host can wait for the next observable outcome:
 
-Your application discovers and orders candidates from one immutable draft snapshot.
-REPLAI validates the revision, presents the choices and applies the accepted
-replacement. Delayed results for an older draft leave the screen untouched.
+```c
+#include "replai.h"
 
-```sh
-cargo run --locked --example completion
+replai_status next_event(replai_handle *input, replai_event *event) {
+    replai_status status;
+    do {
+        *event = (replai_event){.struct_size = sizeof *event,
+                               .abi_version = REPLAI_C_ABI_VERSION};
+        status = replai_poll(input, 100, event);
+    } while (status == REPLAI_OK && event->kind == REPLAI_EVENT_NONE);
+    return status;
+}
 ```
 
-Type `bu`, press Tab, then use Tab / Shift-Tab to select, Enter to accept or Escape
-to dismiss. The [small session host](examples/completion.rs) owns the catalog;
-the [driven example](examples/completion-driven.rs) demonstrates delayed delivery.
-Labels, annotations and inserted text may differ.
-
-<p align="center">
-  <img src="assets/terminal-completion.png" alt="Real session: build, bundle and burn candidates; bundle selected while the draft remains bu." width="912">
-</p>
-
-[Candidate lifecycle, safety and bounds](docs/interaction.md#revision-bound-completion-candidates).
-Rich completion is native Rust; C ABI 1 retains synchronous replacement.
-
-### C and C++
-
-C ABI 1 provides opaque handles, explicit event/status values and caller-owned
-UTF-8 buffers over the same native engine. The qualified interface supports
-session interaction, prompt configuration and plain coordinated output.
-Structured documents, blocking/driven entries and capability snapshots are
-currently native Rust surfaces.
-
-Stage a header, static/shared library and pkg-config metadata into an absent or
-empty prefix:
+Build staged static/shared artifacts and the [complete C host](examples/c/demo.c):
 
 ```sh
 cargo build --locked --release -p replai-c
@@ -256,163 +241,63 @@ cc examples/c/demo.c $(pkg-config --cflags --libs replai) \
 /tmp/replai-demo
 ```
 
-Artifact production requires Rust and Python 3. An installed C/C++ consumer uses
-its native toolchain and the staged artifacts, without Cargo or access to REPLAI
-sources. The qualification suite checks both linkage modes and C++ inclusion.
+Use an absent or empty staging directory. Installed consumers need a native
+C/C++ toolchain and the artifacts, not Rust or a REPLAI checkout. ABI 1 retains
+session polling, synchronous completion replacement, prompts and plain coordinated
+output. Rich candidates, analysis, validated submission, structured documents and
+driven embedding are currently **Rust-native only**. [Installation and ABI contract](docs/c-api.md).
 
-[Installation, static linkage and ABI ownership](docs/c-api.md) ·
-[Complete C host](examples/c/demo.c)
+## Scope and support
 
-## Structured presentation
+REPLAI is not a shell, parser, command framework, async runtime, full-screen TUI
+or background application scheduler. Those boundaries keep it embeddable.
 
-Give terminal output a consistent hierarchy without writing ANSI sequences or
-padding columns in application code. A `Document` describes generic structure;
-REPLAI resolves cell geometry, wrapping, semantic styling and narrow-width layout.
-
-<p align="center">
-  <img src="assets/terminal-report.png" alt="A standalone build-console fixture: workspace facts, pipeline results, actionable warnings and styled command help." width="912">
-</p>
-
-| Primitive | Presentation contract |
+| Platform | Current scope |
 | --- | --- |
-| Headings and spans | Hierarchy and inline emphasis using semantic roles |
-| Key/value fields | Label alignment, wrapped values and narrow-layout fallback |
-| Lists | Ordered/unordered items with bounded nesting |
-| Tables | Unicode cell alignment and stacked records when columns no longer fit |
-| Status and literal blocks | Severity remains visible without color; literal data stays safe |
-| Composed prompts | Styled context segments and multiline continuation |
+| Linux | Real terminal runtime: Rust blocking/session/driven; C ABI 1 static/shared |
+| macOS | Real terminal runtime: same Rust tiers; C ABI 1 static/dylib |
+| Windows | Portable editor, engine and presentation tests only; **no terminal backend** |
 
-The same document can render to a styled terminal, plain captured output or an
-active interaction. `NO_COLOR` preserves structure. The host determines the
-meaning of a result, warning or status; REPLAI determines its generic terminal
-representation.
+Interactive defaults require admitted cursor/erase mechanics and matching TTYs;
+unknown or `TERM=dumb` defaults refuse before raw mode. The compatibility session/C
+entry retains explicit VT assumptions. NO_COLOR is styling policy, not terminal
+capability discovery. Unicode width follows a deterministic policy, with known
+emulator/font differences. Exact limits belong to the [interaction contract](docs/interaction.md).
 
-<details>
-<summary><strong>Rust example: render a connection summary</strong></summary>
+Pre-release, MIT licensed. Distribution is pinned Git source and staged C
+artifacts. There is no crates.io release, declared MSRV, API freeze or long-term
+Rust/ABI compatibility commitment yet.
 
-```rust
-use replai::{Block, Document, Severity, Text, Theme};
+## Evidence, not adjectives
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let document = Document::new(vec![
-        Block::Heading { level: 1, text: Text::new("Connection")? },
-        Block::KeyValue(vec![
-            (Text::new("Endpoint")?, Text::new("http://127.0.0.1:18001")?),
-            (Text::new("Mode")?, Text::new("read-only")?),
-        ]),
-        Block::Status { severity: Severity::Success, text: Text::new("Ready")? },
-    ])?;
-    print!("{}", document.render(60, Theme::new(false, false, None))?);
-    Ok(())
-}
-```
+[CI on master](https://github.com/mothx9/replai/actions/workflows/ci.yml) executes
+the portable and native gates. The [qualified runtime checkpoint](https://github.com/mothx9/replai/actions/runs/34509792610)
+passed all 12 jobs; this README wave leaves its runtime source unchanged.
 
-Use `Interaction::output_document` to present the same document during editing
-and restore the exact draft/cursor afterward. The host determines what counts
-as a warning or a success; REPLAI lays out its generic representation.
-
-</details>
-
-Host text is validated against the safe-text contract. Structured values cannot
-inject terminal commands. Width follows the explicit UnicodeNarrow policy;
-actual emulator/font behavior can differ for ambiguous-width and emoji sequences.
-
-[Presentation, theme configuration and resource limits](docs/presentation.md)
-
-## Platform support
-
-| Platform | Interactive Rust | C ABI 1 | Executed qualification |
-| --- | --- | --- | --- |
-| **Linux** | Blocking, session, driven | Static/shared | Real PTYs, external reactor, exact restoration and Valgrind |
-| **macOS** | Blocking, session, driven | Static/dylib | Real PTYs, external reactor, exact restoration and native leak checks |
-| **Windows** | Portable engine/presentation | No runtime binding | Native deterministic tests; no terminal backend |
-
-Terminal admission separates observed resource facts, protocol assumptions,
-required mechanics and optional styling/paste policy. Hosts can inspect the
-resolved contract through `Interaction::capabilities()`.
-
-Environment-based interactive defaults refuse unknown or `TERM=dumb` terminals
-before raw mode; `NO_COLOR` disables styling. The session/C compatibility path
-retains its explicit VT assumptions. Standalone documents remain usable with
-non-TTY output. [Capability and degradation contract](docs/interaction.md#terminal-capabilities)
-
-**Distribution status:** pre-release, MIT licensed, available through pinned Git
-source and staged C artifacts. Rust APIs and C ABI 1 have executable qualification;
-there is no public API freeze, long-term ABI/SemVer commitment, declared MSRV or
-crates.io release yet. The [roadmap](ROADMAP.md) defines the release path.
-
-## Performance
-
-Performance is characterized across editor transitions, layout, rendering,
-encoding, allocations and terminal transport. The retained same-machine macOS
-comparison uses **1000-byte ASCII burst → middle insertion → submission**:
-
-| Implementation | Median |
-| --- | ---: |
-| **REPLAI** | **0.194 ms** |
-| reedline | 0.460 ms |
-| rustyline | 0.825 ms |
-
-These are exact-workload measurements at pinned checkpoints, not a general speed
-ranking or a new benchmark of every commit.
-[Methodology, distributions and comparisons](docs/engineering/macos-perf.md#final-same-run-comparisons-and-parity)
-
-The F2 component comparison observed unchanged allocation profiles, allocation-free
-capability resolution and no systematic steady-state slowdown. Driven idle adds
-no periodic library wake; admission is resolved at acquisition rather than per key.
-[Capability measurements](docs/engineering/terminal-capabilities.md#performance-boundaries) ·
-[Embedding measurements](docs/engineering/embedding.md) ·
-[Component methodology](docs/engineering/p0.md)
-
-## Architecture
-
-```mermaid
-flowchart TD
-    Host["Your application: commands, parser, execution, state"] --> Rust["Rust: blocking / session / driven"]
-    Host --> C["C ABI 1: session"]
-    Rust --> Engine["One interaction engine"]
-    C --> Engine
-    Engine --> Core["Grapheme editing · presentation · render transitions"]
-    Core --> Terminal["Protocol + resource backend: Linux / macOS"]
-```
-
-Application semantics stay above the public contract. Editor, layout and
-interaction state are platform-neutral; resource management and terminal protocol
-serialization have separate owners. The implementation crate forbids unsafe Rust.
-FFI unsafety is confined to the C adapter, which uses the native public API.
-
-[Architecture and ownership](docs/architecture.md)
-
-## Documentation and quality
-
-[CI](https://github.com/mothx9/replai/actions/workflows/ci.yml) verifies portable
-behavior and native terminal operation. Its observations include exact draft and
-cursor state, terminal restoration, descriptor ownership, error cleanup, ABI
-layouts/symbols and isolated installed consumers. Linux Valgrind and macOS native
-leak checks complement the Rust, C and PTY gates.
-
-| Resource | Scope |
+| Property | Executed evidence |
 | --- | --- |
-| [Documentation map](docs/README.md) | Contract and implementation authorities |
-| [Interaction](docs/interaction.md) | Embedding, events, lifecycle and capabilities |
-| [Presentation](docs/presentation.md) | Documents, themes, geometry and bounds |
-| [C API](docs/c-api.md) | Installation, linkage and ABI ownership |
-| [Development](docs/development.md) | Reproducible builds and qualification |
-| [Roadmap](ROADMAP.md) · [Changelog](CHANGELOG.md) | Maturity, release progression and contract evolution |
+| Terminal ownership | Real Linux/macOS PTYs: draft/cursor restoration, resize, descriptor lifecycle and failure cleanup |
+| Native memory and ABI | Linux Valgrind, macOS native leak checks, record/symbol checks, isolated static/shared C and C++ consumers |
+| Host analysis | Revision/stale models plus real delayed-result, completion, validation and output interactions |
+| Performance | Separate editor, layout/render, transport, allocation and analysis measurements at recorded source revisions |
 
-The screenshots come from the runnable query host in a real Linux PTY.
-[Capture method](docs/development.md#readme-terminal-preview).
+Performance dossiers identify the exact workload, machine and pinned source.
+The [matched comparison](docs/engineering/macos-perf.md#final-same-run-comparisons-and-parity)
+and [analysis costs](docs/engineering/analysis-presentation.md#performance-and-memory)
+are bounded measurements, not a universal ranking or a benchmark of every newer
+commit. The signature image has an [executable capture and restoration check](docs/development.md#readme-terminal-preview).
 
-For multi-repository integration, optional [producer metadata](.boundary/producer.json)
-publishes exact capability snapshots and deltas through BOUNDARY. It adds no build
-or runtime dependency and does not assign consumer migrations. Applications retain
-control of their pins and adoption decisions. [Contract discovery](.boundary/README.md)
+## Find the next layer
 
-## Contributing
+- **Start:** [examples and use-case recipes](docs/use-cases.md), including deterministic hosts and model clients.
+- **Embed:** [interaction](docs/interaction.md), [C installation](docs/c-api.md).
+- **Present:** [documents, themes and geometry](docs/presentation.md).
+- **Understand:** [architecture](docs/architecture.md), [documentation authorities](docs/README.md).
+- **Verify:** [development and qualification](docs/development.md).
+- **Track:** [roadmap](ROADMAP.md), [changelog](CHANGELOG.md).
 
-Report issues with the operating system, terminal, reproduction steps and expected
-versus observed behavior. Focused changes should include evidence at the affected
-contract boundary.
+For cross-repository coordination, optional [producer metadata](.boundary/README.md)
+records capability changes. It is not a build or runtime dependency.
 
-[Contribution guide](CONTRIBUTING.md) ·
-[Issue tracker](https://github.com/mothx9/replai/issues) · [MIT license](LICENSE)
+[Contribute](CONTRIBUTING.md) with a reproduction, terminal/OS details and evidence
+at the changed boundary. [Report an issue](https://github.com/mothx9/replai/issues) · [MIT license](LICENSE).

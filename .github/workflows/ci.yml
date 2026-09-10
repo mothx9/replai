@@ -72,6 +72,16 @@ jobs:
         run: cargo test --workspace --release
       - run: cargo clippy --workspace --all-targets --all-features -- -D warnings
       - run: cargo test --doc
+      - name: README snippets and real blocking host
+        run: python3 tools/docs/check_readme.py
+      - name: Reproduce the signature terminal capture
+        env:
+          CARGO_NET_OFFLINE: "true"
+        run: |
+          python3 -m venv "$RUNNER_TEMP/replai-capture-env"
+          "$RUNNER_TEMP/replai-capture-env/bin/pip" install -r tools/docs/capture-requirements.txt
+          cargo build --locked --example console
+          "$RUNNER_TEMP/replai-capture-env/bin/python" tools/docs/capture_terminal.py --check
       - name: Check tracked files stayed unchanged
         run: |
           git diff --check

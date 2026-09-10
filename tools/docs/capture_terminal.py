@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Capture real query-console and standalone report output: Pillow 11.3.0, pyte 0.8.2, DejaVu Sans Mono.
+"""Capture a real REPLAI console PTY: Pillow 11.3.0, pyte 0.8.2, DejaVu Sans Mono.
 Optional documentation tooling; all terminal contents come from the executable.
 """
 import copy
+import argparse
 import fcntl
 import os
 from pathlib import Path
@@ -12,6 +13,7 @@ import struct
 import subprocess
 import termios
 import time
+import tempfile
 
 import pyte
 from PIL import Image, ImageDraw, ImageFont
@@ -47,6 +49,13 @@ class Session:
     def send(self, data):
         assert os.write(self.master, data) == len(data)
         self.drain()
+
+    def until(self, condition):
+        deadline = time.monotonic() + 8
+        while not condition():
+            assert time.monotonic() < deadline, self.text()
+            assert self.process.poll() is None, self.text()
+            self.drain(0.05)
 
     def text(self):
         return "\n".join(row.rstrip() for row in self.screen.display).rstrip()
@@ -157,6 +166,37 @@ def report_capture(columns=100):
         os.close(slave)
 
 
+def signature_capture(plain=False):
+    session = Session(84, binary="console", plain=plain)
+    try:
+        session.until(lambda: "demo>" in session.text())
+        session.send(b"begin {\r\ttask\r}\r")
+        session.until(lambda: "[ok] host received 18 bytes" in session.text())
+        assert "...     task" in session.text()
+        session.send(b"bu\t\t")
+        session.until(lambda: "> bundle" in session.text())
+        cursor = session.screen.cursor.x
+        assert cursor == len("demo> bu")
+        session.until(lambda: "[host] Local result:" in session.text())
+        assert "demo> bu" in session.text() and "> bundle" in session.text()
+        assert "Build the project" in session.text()
+        assert session.screen.cursor.x == cursor
+        if plain:
+            assert all(cell.fg == "default" and not cell.bold
+                       for row in session.screen.buffer.values() for cell in row.values())
+        screen = copy.deepcopy(session.screen)
+        # The active editor's real selection is accepted, then submitted separately.
+        # Six bytes proves the non-canonical hint was never submitted.
+        session.send(b"\r\r")
+        session.until(lambda: "[ok] host received 6 bytes" in session.text())
+        session.send(b"}\r")
+        session.until(lambda: "Unmatched closing brace" in session.text())
+        print("\n".join(row.rstrip() for row in screen.display).rstrip())
+        return screen
+    finally:
+        session.close()
+
+
 def render(filename, panels):
     # Direct glyph rasterization at 2x. At README width this is approximately 14px.
     fontpath = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
@@ -195,6 +235,24 @@ def render(filename, panels):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--legacy", action="store_true", help="Reproduce the older focused captures")
+    parser.add_argument("--check", action="store_true", help="Verify the committed signature capture without modifying it")
+    args = parser.parse_args()
+    if not args.legacy:
+        screen = signature_capture()
+        plain = signature_capture(plain=True)
+        assert screen.display == plain.display
+        panels = [("REPLAI / one host, one interaction engine", screen)]
+        if args.check:
+            with tempfile.TemporaryDirectory() as directory:
+                out = Path(directory) / "terminal-session.png"
+                render(out, panels)
+                assert out.read_bytes() == (ROOT / "assets/terminal-session.png").read_bytes(), "Signature capture drift"
+        else:
+            render("terminal-session.png", panels)
+        print("PASS real PTY: indentation, completion, timed output, draft/cursor/selection restoration, submission, NO_COLOR, termios and paste cleanup")
+        raise SystemExit(0)
     render("terminal-results.png", [("REPLAI / completion, results, history and multiline editing",
                                      screen_capture(100, editing=True))])
     render("terminal-report.png", [("REPLAI / standalone build report, status and command help",
