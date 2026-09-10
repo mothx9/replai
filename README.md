@@ -1,5 +1,6 @@
 <p align="center">
-  <img src="assets/replai-logo.png" alt="REPLAI logo" width="240">
+  <img src="assets/replai-logo-dark.svg#gh-dark-mode-only" alt="REPLAI logo" width="240">
+  <img src="assets/replai-logo-light.svg#gh-light-mode-only" alt="REPLAI logo" width="240">
 </p>
 
 <h1 align="center">REPLAI</h1>
