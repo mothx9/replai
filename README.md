@@ -90,21 +90,22 @@ CLIs, model chats, advanced embedding and terminal configurations.
 
 ```text
 YOUR APPLICATION
-language · parser · execution · state · persistence
-candidate discovery · validation meaning · event loop
-                         │
-                  public contracts
-                         ▼
-Rust: blocking / session / driven    C ABI 1: session
-                         │
-                one interaction engine
-                         │
-        editor + revision provenance
-        presentation / layout / render
-                         │
-             protocol + resource driver
-                         ▼
-                Linux / macOS terminal
+language · parser · execution
+state · persistence · scheduling
+              │
+       public contracts
+              ▼
+Rust: blocking / session / driven
+C ABI 1: session adapter
+              │
+     one interaction engine
+              │
+ editor + revision provenance
+ presentation / layout / render
+              │
+ protocol + resource driver
+              ▼
+    Linux / macOS terminal
 ```
 
 These are responsibility boundaries, not threads. The deterministic engine does
@@ -116,12 +117,23 @@ not contain another editor.
 
 ```text
 REPLAI
-├── Editor                 draft, graphemes, history, DraftRevision
-├── Analysis contracts     snapshots, completion, validation, spans/hints
-├── Interaction            blocking / session / driven facades
-├── Presentation           prompts, documents, layout and render damage
-├── Terminal contract      admission, decoding, readiness, resize, deadlines
-└── Native realization     shared Linux/macOS resources and restoration
+├── Editor
+│   draft · graphemes · history
+│   DraftRevision
+├── Analysis contracts
+│   snapshots · completion
+│   validation · spans/hints
+├── Interaction
+│   blocking / session / driven
+├── Presentation
+│   prompts · documents
+│   layout · render damage
+├── Terminal contract
+│   admission · decoding
+│   readiness · resize · deadlines
+└── Native realization
+    Linux/macOS resources
+    terminal restoration
 ```
 
 `Editor` is usable without a terminal. `Interaction` combines its engine with an
@@ -188,9 +200,13 @@ required by this tier.
 ### Session
 
 ```text
-open → poll → host handles event → completion / validation / output → poll
-               └─ submit / interrupt / EOF → restored terminal
-close → explicit release or cancellation of the editing session
+open → poll → host handles event
+         ↑             │
+         └─ results / output
+
+submit / interrupt / EOF / close
+              ↓
+       restored terminal
 ```
 
 The [session example](examples/demo.rs) shows completion requests, history,
@@ -203,9 +219,13 @@ direct `editor_mut()` access is restricted to the closed state.
 
 ```text
 terminal readiness ─┐
-network result ─────┼── your reactor ── serialized Interaction calls
+network result ─────┤
 resize notification ┤
 REPLAI deadline ────┘
+          │
+     host reactor
+          │
+ serialized Interaction calls
 ```
 
 Use `open_driven` or `open_with_config`, then `wait_interest()` for ready work or
@@ -223,13 +243,14 @@ independent writers; the host serializes calls.
 
 ```text
 AnalysisSnapshot @ DraftRevision
-             │
-        host analysis
-             │
- completion / validation / presentation result
-             │
+              │
+         host analysis
+              │
+ completion / validation /
+ presentation result
+              │
        current revision?
-        yes → apply     no → Stale
+    yes → apply    no → Stale
 ```
 
 One immutable snapshot contains coherent text, cursor and revision and can be
@@ -265,10 +286,17 @@ submission. Delayed stale sets produce no menu, terminal bytes or draft mutation
 Opt into `SubmissionPolicy::Validated` while closed. Enter asks; the host decides:
 
 ```text
-Enter → SubmissionRequested(snapshot) → HOST
-    Complete   → submit exactly the validated revision
-    Incomplete → insert newline and continue editing
-    Invalid    → retain draft and present diagnostics
+Enter
+  ↓
+SubmissionRequested(snapshot)
+  ↓
+HOST
+├── Complete
+│   submit validated revision
+├── Incomplete
+│   newline + continued editing
+└── Invalid
+    retain draft + diagnostics
 ```
 
 Return the decision against its originating snapshot (delivery excerpt):
