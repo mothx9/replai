@@ -64,6 +64,8 @@ receipt. No macOS/Windows replay or native stress is implied by this smoke.
 | H001 | results / generated seed 1 | Harness unwrapped a candidate constructor for a deliberately reversed range | Harness defect; respect constructor rejection before attempting installation | Replayed 1,000 sequences; closed |
 | H002 | cabi / empty input | Harness expected a second destroy of the nulled owner to succeed | Harness defect; ABI 1 explicitly rejects the null handle with INVALID_ARGUMENT | Empty input and short fuzz replay passed; closed |
 | H003 | geometry / retained 11-byte regression | Harness unwrapped rendering when a heading did not fit a narrow geometry | Harness defect; compare deterministic render outcomes, inspect safe bytes only on success | Minimized with libFuzzer; [regression](../../tools/hardening/regressions/geometry/heading-too-narrow) retained; geometric budget restarts |
+| H004 | native / PTY hangup | Harness assumed is_open became false before a failed restoration was explicitly closed | Harness defect; is_open documents outstanding cleanup ownership. Assert explicit cleanup failure, close/release and stable descriptors | Native disconnected read/write smoke passed |
+| H005 | native / driven under Valgrind | Harness assumed a ready notification consumes the entire write despite the bounded work budget | Harness defect; drain WaitInterest::Ready before evaluating the semantic result | Native memory campaign replay required; no product scheduling change |
 
 100,000 generated seeds 1–100,000 passed on Linux ARM64, with 128 operations per
 editor/history sequence and 128 per host-result/lifecycle sequence. The five
@@ -95,3 +97,48 @@ Q2 thresholds are not registered by this initial dossier. The adopted formula
 and workload list remain in [G5](../release-scope.md#g5--q2-policy-e3-freeze-and-v0-release-qualification).
 Prefix-layout traversal on large multiline drafts and synchronous host-output
 blocking remain explicit limits. General U3 and deferred features are unchanged.
+
+## Native and controlled measurement entry points
+
+```sh
+python3 tools/hardening/native.py --work /tmp/replai-native-hardening
+python3 tools/hardening/native.py --memory --work /tmp/replai-native-memory
+python3 tools/hardening/test_hardening.py
+python3 tools/hardening/smoke.py
+```
+
+The native command runs 1,000 cycles for each Rust tier and ABI 1, a separately
+counted 10,000-event mixture, eight native failure classes repeated 100 times,
+and 100 descriptor-exhaustion repetitions in a child with NOFILE=64. The parent
+limit never changes. Valgrind/native leaks instrumentation applies to lifecycle,
+mixed and failure paths; descriptor exhaustion separately avoids confusing the
+memory tool's private descriptors with product resources. Native architecture is
+asserted by the manually dispatched
+[campaign workflow](../../.github/workflows/hardening.yml). Normal CI executes
+only deterministic smoke, regressions and harness guards.
+
+The first Linux ARM64 lifecycle run on harness `0aef173` passed 1,000 blocking,
+1,000 session, 1,000 driven and 1,000 ABI cycles; session/driven each exercised
+20,000 serialized actions. The separate mixed run passed 10,000 actions.
+Caller termios and descriptor counts matched after every connected cycle.
+These counts do not establish the still-required native memory/tool receipts.
+
+Q2 uses 31 named workloads in the isolated `bench` binary, five batches of 31
+repetitions with three warmups per batch. Setup, snapshot capture, verification
+and byte counting stay outside the timed operation. The allocation build uses
+the existing counting allocator independently of the latency build. Register
+before comparing, using fresh output directories:
+
+```sh
+cargo build --locked --release --manifest-path tools/hardening/Cargo.toml --bin bench
+cargo build --locked --release --manifest-path tools/hardening/Cargo.toml --bin bench --features allocations --target-dir tools/hardening/target/allocations
+python3 tools/hardening/regression.py register --work /tmp/replai-q2-control --binary tools/hardening/target/release/bench --allocation-binary tools/hardening/target/allocations/release/bench
+python3 tools/hardening/regression.py compare --work /tmp/replai-q2-candidate --registration /tmp/replai-q2-control/registered.json --control-binary tools/hardening/target/release/bench --binary tools/hardening/target/release/bench --allocation-binary tools/hardening/target/allocations/release/bench
+```
+
+The example compares one unchanged binary to exercise the policy. A changed
+candidate must use separate preserved control/candidate binaries and source
+identities. Threshold exceedances in both alternating runs block investigation;
+contemporaneous controls never raise the registered bound. Byte/allocation
+oracles are internal regression guards, not exact VT public compatibility.
+Hosted CI proves harness integrity, not controlled latency. Real observations,+environment and thresholds must be attached before Q2 promotion.

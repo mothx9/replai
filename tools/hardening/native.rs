@@ -57,11 +57,20 @@ mod posix {
             .unwrap()
                 > 0
         );
-        if driven {
-            t.advance(Wake::InputReady).unwrap()
-        } else {
-            t.poll(Duration::ZERO).unwrap()
+        for _ in 0..4096 {
+            let event = if driven {
+                t.advance(Wake::InputReady).unwrap()
+            } else {
+                t.poll(Duration::ZERO).unwrap()
+            };
+            if event.is_some() || !t.is_open() {
+                return event;
+            }
+            if t.wait_interest().unwrap() != WaitInterest::Ready {
+                return None;
+            }
         }
+        panic!("bounded input did not drain");
     }
     fn count_fds() -> usize {
         fs::read_dir(if cfg!(target_os = "linux") {
@@ -88,10 +97,182 @@ mod posix {
             theme: Theme::new(true, plain, None),
         }
     }
+    fn failures(repeats: usize, exhaustion: bool) {
+        let before_fds = count_fds();
+        if exhaustion {
+            // This binary is an isolated child. Never change its controller's limit.
+            rustix::process::setrlimit(
+                rustix::process::Resource::Nofile,
+                rustix::process::Rlimit {
+                    current: Some(64),
+                    maximum: Some(64),
+                },
+            )
+            .unwrap();
+        }
+        let classes = if exhaustion {
+            vec!["descriptor-exhaustion"]
+        } else {
+            vec![
+                "admission",
+                "geometry-acquire",
+                "write-acquire",
+                "geometry-active",
+                "read-hangup",
+                "write-hangup",
+                "capacity",
+                "host-payload",
+            ]
+        };
+        for class in &classes {
+            for _ in 0..repeats {
+                let (master, slave) = pty::pair();
+                size(&slave, 40, 10);
+                rustix::fs::fcntl_setfl(&master, rustix::fs::OFlags::NONBLOCK).unwrap();
+                let original = format!("{:?}", tcgetattr(&slave).unwrap());
+                let mut t = Interaction::new(Editor::new(256, 8));
+                match *class {
+                    "admission" => {
+                        let mut c = config(true, true);
+                        c.facts.cursor = FeatureSupport::Unknown;
+                        assert!(
+                            t.open_with_config(&slave, &slave, Prompt::new("fail").unwrap(), c)
+                                .is_err()
+                        );
+                        assert!(!t.is_open());
+                    }
+                    "geometry-acquire" => {
+                        size(&slave, 0, 0);
+                        assert!(
+                            t.open_with_config(
+                                &slave,
+                                &slave,
+                                Prompt::new("fail").unwrap(),
+                                config(true, true)
+                            )
+                            .is_err()
+                        );
+                        assert!(!t.is_open());
+                    }
+                    "write-acquire" => {
+                        let name = rustix::pty::ptsname(&master, Vec::new()).unwrap();
+                        let readonly = rustix::fs::open(
+                            name,
+                            rustix::fs::OFlags::RDONLY | rustix::fs::OFlags::NOCTTY,
+                            rustix::fs::Mode::empty(),
+                        )
+                        .unwrap();
+                        assert!(
+                            t.open_with_config(
+                                &slave,
+                                &readonly,
+                                Prompt::new("fail").unwrap(),
+                                config(true, true)
+                            )
+                            .is_err()
+                        );
+                        assert!(!t.is_open());
+                    }
+                    "descriptor-exhaustion" => {
+                        let mut held = Vec::new();
+                        while let Ok(f) = fs::File::open("/dev/null") {
+                            held.push(f);
+                        }
+                        assert!(
+                            t.open_with_config(
+                                &slave,
+                                &slave,
+                                Prompt::new("fail").unwrap(),
+                                config(true, true)
+                            )
+                            .is_err()
+                        );
+                        assert!(!t.is_open());
+                        drop(held);
+                        t.open_with_config(
+                            &slave,
+                            &slave,
+                            Prompt::new("retry").unwrap(),
+                            config(true, true),
+                        )
+                        .unwrap();
+                        let mut held = Vec::new();
+                        while let Ok(f) = fs::File::open("/dev/null") {
+                            held.push(f);
+                        }
+                        t.close().unwrap();
+                        drop(held);
+                    }
+                    _ => {
+                        t.open_with_config(
+                            &slave,
+                            &slave,
+                            Prompt::new("fail").unwrap(),
+                            config(true, true),
+                        )
+                        .unwrap();
+                        drain(&master);
+                        if class.ends_with("hangup") {
+                            drop(master);
+                            let result = if *class == "read-hangup" {
+                                t.advance(Wake::InputReady).map(|_| ())
+                            } else {
+                                t.external_output(Role::Default, "after disconnect")
+                            };
+                            assert!(
+                                result.is_err(),
+                                "unrestorable PTY must not fabricate success"
+                            );
+                            // Failed restoration retains a retryable resource.
+                            // Explicit close reports failure and releases ownership.
+                            assert!(t.close().is_err());
+                            assert!(!t.is_open());
+                            drop(t);
+                            drop(slave);
+                            assert_eq!(count_fds(), before_fds);
+                            continue;
+                        }
+                        if *class == "geometry-active" {
+                            size(&slave, 0, 0);
+                            assert!(t.advance(Wake::Resize).is_err());
+                            assert!(!t.is_open());
+                        } else {
+                            let before = t.analysis_snapshot();
+                            if *class == "capacity" {
+                                assert!(t.complete(0..0, &"x".repeat(257)).is_err());
+                            } else {
+                                assert!(t.complete(0..0, "\x1b[2J").is_err());
+                                assert!(
+                                    t.external_output(Role::Default, "\x1b]52;bad\x07").is_err()
+                                );
+                            }
+                            assert_eq!(t.revision(), before.revision());
+                            assert_eq!(t.editor().text(), before.text());
+                            assert!(drain(&master).is_empty());
+                        }
+                    }
+                }
+                t.close().unwrap();
+                assert_eq!(format!("{:?}", tcgetattr(&slave).unwrap()), original);
+                drop(t);
+                drop(master);
+                drop(slave);
+                assert_eq!(count_fds(), before_fds);
+            }
+        }
+        println!(
+            "{}",
+            serde_json::json!({"native_failure_classes":classes,"repetitions":repeats,"fd_stable":true,"restoration":"exact when connected; explicit failure after hangup"})
+        );
+    }
     pub fn main() {
         let args: Vec<_> = env::args().collect();
         let count: usize = args[2].parse().unwrap();
         assert!((1..=100_000).contains(&count));
+        if args[1] == "failures" || args[1] == "exhaustion" {
+            failures(count, args[1] == "exhaustion");
+            return;
+        }
         if args[1] == "blocking" {
             let before = format!("{:?}", tcgetattr(std::io::stdin()).unwrap());
             let mut t = Interaction::new(Editor::new(4096, 8));

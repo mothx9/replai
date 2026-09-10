@@ -90,3 +90,6 @@ pub use cabi::cabi_case;
 
 mod faults;
 pub use faults::fault_campaign;
+
+mod benchmarks;
+pub use benchmarks::benchmark;

@@ -10,6 +10,7 @@ publish = false
 cargo-fuzz = true
 
 [features]
+allocations = []
 fuzzing = ["dep:libfuzzer-sys"]
 
 [dependencies]
@@ -81,3 +82,7 @@ required-features = ["fuzzing"]
 [[bin]]
 name = "native"
 path = "native.rs"
+
+[[bin]]
+name = "bench"
+path = "bench.rs"

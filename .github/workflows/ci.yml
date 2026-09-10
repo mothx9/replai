@@ -145,6 +145,10 @@ jobs:
         run: cargo check --locked -p replai --lib
       - name: Deterministic engine, protocol, layout and virtual transport conformance
         run: cargo test --locked -p replai --lib --test core --test architecture --test unicode_model --test document --test analysis --test completion --test validation --test analysis_presentation
+      - name: Release-hardening deterministic smoke and harness guards (not full campaign)
+        run: |
+          python tools/hardening/test_hardening.py
+          python tools/hardening/smoke.py
       - name: Native library lint and documentation
         run: |
           cargo clippy --locked -p replai --lib -- -D warnings
