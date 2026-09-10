@@ -4,10 +4,19 @@ REPLAI owns these producer declarations. They describe generic capabilities,
 surfaces, qualification and changes; they assign no consumer paths, commands or
 migration work. Consumer profiles must be authored by their own repositories.
 
-- [Current producer snapshot](producer.json), generation 6: qualified source/document
-  `aa137e881065f0a0615fa8ae03c84c89f052bea3`, tree
-  `9126e218fc4ee432a4146051da2ef05c9d4e2b4c`. The [I0 dossier](../docs/engineering/analysis-protocol.md)
-  identifies the implementation, measured sources and native CI separately.
+- [Current producer snapshot](producer.json), generation 7: qualified source/document
+  `0fef74edd5d4d6d536560036473980a41e1da3f3`, tree
+  `e86c5b385e993f124c7901677d6f6593b0f3fd71`. The [I1/U1 dossier](../docs/engineering/completion-contract.md)
+  separates implementation, measurement and qualification sources.
+  [Native/portable CI](https://github.com/mothx9/replai/actions/runs/34485342480)
+  passed 12/12 jobs; complete local qualification and its clean-worktree gate passed.
+- [Completion contract delta](deltas/analysis-completion.json) adds
+  `completion.candidates` and `presentation.completion_ux`: host-owned discovery,
+  bounded revision-bound delivery, selection/acceptance and safe responsive
+  presentation through native Rust. C ABI 1 stays unchanged. No consumer migration
+  or repin is assigned.
+- [Previous analysis snapshot](checkpoints/aa137e881065f0a0615fa8ae03c84c89f052bea3.json)
+  retains generation 6 and its exact source/fingerprints.
 - [Analysis protocol delta](deltas/terminal-analysis.json): `analysis.revisions`
   adds shared immutable draft snapshots and atomic stale-result refusal through
   native Rust. C ABI 1 remains unchanged and synchronous. The Linux restoration
@@ -48,7 +57,7 @@ behavior, ABI and documentation inputs. Its external validation command is:
 
 ```sh
 boundary validate .boundary/producer.json --repo . \
-  --previous .boundary/checkpoints/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86.json
+  --previous .boundary/checkpoints/aa137e881065f0a0615fa8ae03c84c89f052bea3.json
 ```
 
 Run from a clean REPLAI checkout with BOUNDARY installed separately. Validation

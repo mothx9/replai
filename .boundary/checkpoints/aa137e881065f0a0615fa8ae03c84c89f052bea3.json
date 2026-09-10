@@ -521,103 +521,36 @@
       "surfaces": [
         "rust-native"
       ]
-    },
-    {
-      "description": "Bounded host-ordered revision-bound completion candidates",
-      "documentation": [
-        "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/interaction.md#revision-bound-completion-candidates",
-        "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/presentation.md#completion-surface"
-      ],
-      "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34485342480",
-        "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/engineering/completion-contract.md"
-      ],
-      "guarantees": [
-        "Hosts own discovery, order, ranking, application context and scheduling; no callback or executor is acquired",
-        "Per-candidate grapheme-aligned ranges, insertion, safe label and optional annotation are distinct; duplicates preserve host order",
-        "Sets bind the originating Editor DraftRevision; stale delivery refuses before validation or activation with zero terminal bytes",
-        "Whole-set validation is atomic; 4096 candidates, 65536 bytes per field and 4 MiB aggregate safe text are bounded",
-        "Same-revision explicit deliveries replace in delivery order; host request preference is not inferred",
-        "C ABI 1 retains its synchronous request/replacement contract unchanged"
-      ],
-      "id": "completion.candidates",
-      "maturity": "experimental",
-      "platforms": [
-        "linux",
-        "macos",
-        "windows"
-      ],
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "description": "Safe responsive temporary candidate selection through the shared renderer",
-      "documentation": [
-        "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/interaction.md#revision-bound-completion-candidates",
-        "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/presentation.md#completion-surface"
-      ],
-      "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34485342480",
-        "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/engineering/completion-contract.md"
-      ],
-      "guarantees": [
-        "Nonempty sets require explicit acceptance; zero candidates silently dismiss; selection never previews by mutating the draft",
-        "Tab/Shift-Tab navigate in host order; Enter accepts, Escape dismisses through the existing decoder deadline; arrows retain editing/history",
-        "Acceptance uses atomic revision-bound replacement; changed drafts dismiss candidates, no-op/rejected edits preserve current state",
-        "Resize and serialized external output restore exact draft/cursor/selection without changing revision",
-        "At most eight temporary rows, selected index/count and a textual selection marker preserve plain usability; labels/annotations may ellipsize without changing insertion",
-        "One engine/frame-transition renderer and existing F2 width/theme/admission model; Linux/macOS native runtime, Windows portable logic only"
-      ],
-      "id": "presentation.completion_ux",
-      "maturity": "experimental",
-      "platforms": [
-        "linux",
-        "macos",
-        "windows"
-      ],
-      "surfaces": [
-        "rust-native"
-      ]
     }
   ],
   "changes": [
     {
-      "capability": "completion.candidates",
+      "capability": "analysis.revisions",
       "compatibility": "compatible",
-      "description": "Bounded host-ordered revision-bound completion candidates. Host discovery and scheduling stay external; no consumer migration is assigned and C ABI 1 remains unchanged.",
+      "description": "Add one portable Editor-owned draft revision and shared immutable snapshot, plus atomic revision-bound replacement. Native session/driven hosts can apply delayed results without stale edits; blocking and C ABI 1 behavior stay compatible. No parser, candidate, hint or validation contract is introduced.",
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34485342480",
-        "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/engineering/completion-contract.md"
+        "https://github.com/mothx9/replai/actions/runs/34475749705",
+        "https://github.com/mothx9/replai/blob/aa137e881065f0a0615fa8ae03c84c89f052bea3/docs/engineering/analysis-protocol.md"
       ],
       "inputs": [
         "src/lib.rs",
-        "src/completion.rs",
+        "src/analysis.rs",
         "src/core.rs",
-        "src/actions.rs",
-        "src/keymap.rs",
-        "src/input.rs",
         "src/engine.rs",
         "src/interaction.rs",
         "src/conformance.rs",
-        "src/completion_tests.rs",
-        "tests/completion.rs",
-        "tests/pty.rs",
-        "tests/architecture.rs",
-        "examples/completion.rs",
-        "examples/completion-driven.rs",
-        "tools/completion_pty.py",
-        "tools/test_completion_pty.py",
-        "tools/direct_completion_benchmark.py",
-        "tools/perf/direct_completion.rs",
+        "tests/analysis.rs",
+        "tests/foundation.rs",
+        "examples/analysis.rs",
+        "tools/analysis_pty.py",
+        "tools/test_analysis_pty.py",
+        "tools/embedding_pty.py",
         "tools/perf/components.rs",
-        "tools/perf/completions.rs",
         "tools/qualify.py",
         ".github/workflows/ci.yml",
         "docs/architecture.md",
         "docs/interaction.md",
-        "docs/presentation.md",
-        "docs/engineering/completion-contract.md"
+        "docs/engineering/analysis-protocol.md"
       ],
       "kind": "ADDED",
       "platforms": [
@@ -630,60 +563,31 @@
       ]
     },
     {
-      "capability": "presentation.completion_ux",
+      "capability": "platform.posix_linux",
       "compatibility": "compatible",
-      "description": "Safe responsive temporary candidate selection through the shared renderer. Host discovery and scheduling stay external; no consumer migration is assigned and C ABI 1 remains unchanged.",
+      "description": "Observe the calling thread signal mask during unwind/restoration rather than the parallel test launcher thread; preserve process-wide handler/ignore checks and full native PTY/C/memory qualification.",
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34485342480",
-        "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/engineering/completion-contract.md"
+        "https://github.com/mothx9/replai/actions/runs/34475749705",
+        "https://github.com/mothx9/replai/blob/aa137e881065f0a0615fa8ae03c84c89f052bea3/docs/engineering/analysis-protocol.md"
       ],
       "inputs": [
-        "src/lib.rs",
-        "src/completion.rs",
-        "src/core.rs",
-        "src/actions.rs",
-        "src/keymap.rs",
-        "src/input.rs",
-        "src/engine.rs",
-        "src/interaction.rs",
-        "src/conformance.rs",
-        "src/completion_tests.rs",
-        "tests/completion.rs",
-        "tests/pty.rs",
-        "tests/architecture.rs",
-        "examples/completion.rs",
-        "examples/completion-driven.rs",
-        "tools/completion_pty.py",
-        "tools/test_completion_pty.py",
-        "tools/direct_completion_benchmark.py",
-        "tools/perf/direct_completion.rs",
-        "tools/perf/components.rs",
-        "tools/perf/completions.rs",
-        "tools/qualify.py",
-        ".github/workflows/ci.yml",
-        "docs/architecture.md",
-        "docs/interaction.md",
-        "docs/presentation.md",
-        "docs/engineering/completion-contract.md"
+        "tests/pty.rs"
       ],
-      "kind": "ADDED",
+      "kind": "QUALIFICATION_CHANGED",
       "platforms": [
-        "linux",
-        "macos",
-        "windows"
+        "linux"
       ],
       "surfaces": [
         "rust-native"
       ]
     }
   ],
-  "generation": 7,
-  "id": "sha256:a318fcec26e83c2fc8f7e7f6b5d41f670b7c098e37f96803fcab8663ef2b735a",
+  "generation": 6,
+  "id": "sha256:cc91f1b38452385e9f5c878b355a83a9fa736c33cef8cc07c0ef71e2a711ebfb",
   "inputs": [
     {
       "capabilities": [
         "analysis.revisions",
-        "completion.candidates",
         "embedding.blocking",
         "embedding.driven",
         "embedding.readiness",
@@ -695,7 +599,6 @@
         "platform.portable_engine",
         "platform.posix_linux",
         "platform.posix_macos",
-        "presentation.completion_ux",
         "presentation.composed_prompt",
         "presentation.prompt",
         "presentation.status",
@@ -708,7 +611,7 @@
       ],
       "category": "api",
       "path": "src/lib.rs",
-      "sha256": "sha256:4de07ce1424408a897277d26684f9fa7a8b0e69210d9af876349aba9b029d7e6",
+      "sha256": "sha256:c19657f9d78677e5dd866815929e00674784cd2dde90334afeaa237ae2d31b63",
       "surfaces": [
         "rust-native"
       ]
@@ -716,7 +619,6 @@
     {
       "capabilities": [
         "analysis.revisions",
-        "completion.candidates",
         "interaction.completion_request",
         "interaction.editing",
         "interaction.external_output",
@@ -724,72 +626,65 @@
         "platform.portable_engine",
         "platform.posix_linux",
         "platform.posix_macos",
-        "presentation.completion_ux",
         "presentation.prompt"
       ],
       "category": "behavior",
       "path": "src/core.rs",
-      "sha256": "sha256:9a6e1b19a0a70307a8f547abcc2b6a15a1b65336e0671281ca3d05d1e1f4b8a6",
+      "sha256": "sha256:e0dbd7a80da7d9ba55400ee10f7cc643f98095aec609b8a7f90a01e1c8b895b0",
       "surfaces": [
         "rust-native"
       ]
     },
     {
       "capabilities": [
-        "completion.candidates",
-        "interaction.completion_request",
         "interaction.editing",
-        "interaction.external_output",
         "interaction.history_navigation",
-        "platform.portable_engine",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
         "platform.posix_linux",
         "platform.posix_macos",
-        "presentation.completion_ux",
-        "presentation.prompt"
+        "platform.portable_engine"
       ],
       "category": "behavior",
       "path": "src/actions.rs",
-      "sha256": "sha256:72f5c10f87df2699d385e56f12e9094494c9eeb06d0e4ad297e490ce330c6605",
+      "sha256": "sha256:89eb222bfba7ccee2755e4f4ed384a86e1390d2106f281693ffa10158ae38c02",
       "surfaces": [
         "rust-native"
       ]
     },
     {
       "capabilities": [
-        "completion.candidates",
-        "interaction.completion_request",
         "interaction.editing",
-        "interaction.external_output",
         "interaction.history_navigation",
-        "platform.portable_engine",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
         "platform.posix_linux",
         "platform.posix_macos",
-        "presentation.completion_ux",
-        "presentation.prompt"
+        "platform.portable_engine"
       ],
       "category": "behavior",
       "path": "src/keymap.rs",
-      "sha256": "sha256:af7145660766c51c1167805842b0b002f9de73f38f239be03034a6dac2f52b95",
+      "sha256": "sha256:4defb56380d64902b814c917b424b6766f20c3fae05bef145a245ef447c2929b",
       "surfaces": [
         "rust-native"
       ]
     },
     {
       "capabilities": [
-        "completion.candidates",
-        "interaction.completion_request",
         "interaction.editing",
-        "interaction.external_output",
         "interaction.history_navigation",
-        "platform.portable_engine",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
         "platform.posix_linux",
         "platform.posix_macos",
-        "presentation.completion_ux",
-        "presentation.prompt"
+        "platform.portable_engine"
       ],
       "category": "behavior",
       "path": "src/input.rs",
-      "sha256": "sha256:39723e00add7a5fd5a2e44a1b9c6cb26b27a1cff1de0698707b2af718ff06c61",
+      "sha256": "sha256:63978c621e7056e6ebb43fc7a9636b2791947cc80d86b322bb3eba8bf8123f68",
       "surfaces": [
         "rust-native"
       ]
@@ -797,7 +692,6 @@
     {
       "capabilities": [
         "analysis.revisions",
-        "completion.candidates",
         "interaction.completion_request",
         "interaction.editing",
         "interaction.external_output",
@@ -805,7 +699,6 @@
         "platform.portable_engine",
         "platform.posix_linux",
         "platform.posix_macos",
-        "presentation.completion_ux",
         "presentation.composed_prompt",
         "presentation.prompt",
         "presentation.status",
@@ -815,7 +708,7 @@
       ],
       "category": "behavior",
       "path": "src/engine.rs",
-      "sha256": "sha256:98437ef97d6cd51493f505eb199f67c5ebac4fc544d9ff8dfae036adb6a6be76",
+      "sha256": "sha256:328900ae2a4940cfebb3d42619aa651063ccd25d8d8f0c576c915130a1fcd764",
       "surfaces": [
         "rust-native"
       ]
@@ -888,7 +781,6 @@
     {
       "capabilities": [
         "analysis.revisions",
-        "completion.candidates",
         "embedding.blocking",
         "embedding.driven",
         "embedding.readiness",
@@ -900,7 +792,6 @@
         "platform.portable_engine",
         "platform.posix_linux",
         "platform.posix_macos",
-        "presentation.completion_ux",
         "presentation.composed_prompt",
         "presentation.prompt",
         "presentation.status",
@@ -912,7 +803,7 @@
       ],
       "category": "api",
       "path": "src/interaction.rs",
-      "sha256": "sha256:d45f9a6d81cd32c107b3d1f26ac0b5b2c61d323fdf04593fc93ff7ba5abdbfcf",
+      "sha256": "sha256:89d10b0841d83ebb90e413107e313ba9eb9174828c6bbf878ca556c5c8b238f6",
       "surfaces": [
         "rust-native"
       ]
@@ -1015,7 +906,6 @@
     },
     {
       "capabilities": [
-        "completion.candidates",
         "interaction.completion_request",
         "interaction.editing",
         "interaction.external_output",
@@ -1023,7 +913,6 @@
         "platform.portable_engine",
         "platform.posix_linux",
         "platform.posix_macos",
-        "presentation.completion_ux",
         "presentation.composed_prompt",
         "presentation.prompt",
         "presentation.status",
@@ -1034,7 +923,7 @@
       ],
       "category": "documentation",
       "path": "docs/presentation.md",
-      "sha256": "sha256:23039335bcf172ba6e1b638f826eed34a66af85ae47d5d8420cc6a694bed76a7",
+      "sha256": "sha256:0879b33c743096eb10ab28eeaa83cad7302daae0f274fa3e9050ecb29eeecf08",
       "surfaces": [
         "rust-native"
       ]
@@ -1042,7 +931,6 @@
     {
       "capabilities": [
         "analysis.revisions",
-        "completion.candidates",
         "embedding.blocking",
         "embedding.driven",
         "embedding.readiness",
@@ -1054,7 +942,6 @@
         "platform.portable_engine",
         "platform.posix_linux",
         "platform.posix_macos",
-        "presentation.completion_ux",
         "presentation.composed_prompt",
         "presentation.prompt",
         "presentation.status",
@@ -1065,7 +952,7 @@
       ],
       "category": "documentation",
       "path": "docs/architecture.md",
-      "sha256": "sha256:5324d0bd90f64a3990ec9740a36f8f7b5508f24c9f18caf39094cac385fc2998",
+      "sha256": "sha256:d0c4f03c9e914d405592366bcb0549eef4ebedd017622ae157ddcdd35b2265b3",
       "surfaces": [
         "rust-native"
       ]
@@ -1073,7 +960,6 @@
     {
       "capabilities": [
         "analysis.revisions",
-        "completion.candidates",
         "embedding.blocking",
         "embedding.driven",
         "embedding.readiness",
@@ -1085,13 +971,12 @@
         "platform.portable_engine",
         "platform.posix_linux",
         "platform.posix_macos",
-        "presentation.completion_ux",
         "presentation.prompt",
         "terminal.admission"
       ],
       "category": "documentation",
       "path": "docs/interaction.md",
-      "sha256": "sha256:8c7b0fec91512051d14cc34656d53b6c748c558a81c0831d76b2031a3942838b",
+      "sha256": "sha256:79097b23c97019689b8452be04bb1fafd5e263a2a7250c9f439aa390177fb3da",
       "surfaces": [
         "rust-native"
       ]
@@ -1172,18 +1057,16 @@
     {
       "capabilities": [
         "analysis.revisions",
-        "completion.candidates",
         "embedding.blocking",
         "embedding.driven",
         "embedding.readiness",
         "embedding.session",
         "interaction.editing",
-        "presentation.completion_ux",
         "terminal.admission"
       ],
       "category": "qualification",
       "path": "src/conformance.rs",
-      "sha256": "sha256:8d0c6467041c7c3f29b06ba9627d992ee9414496d7b67fbb82454d615e971d15",
+      "sha256": "sha256:681398881d33478a63b89ffd0b956dd676ab5274189b6f436892ed3d08c90e6e",
       "surfaces": [
         "rust-native"
       ]
@@ -1273,18 +1156,16 @@
       "capabilities": [
         "abi.c.v1",
         "analysis.revisions",
-        "completion.candidates",
         "embedding.blocking",
         "embedding.driven",
         "embedding.readiness",
         "embedding.session",
         "interaction.editing",
-        "presentation.completion_ux",
         "terminal.admission"
       ],
       "category": "qualification",
       "path": ".github/workflows/ci.yml",
-      "sha256": "sha256:22346f22b4b11b48f71ae3923897ae55dc207a4b9e25b9080f5d3831581969c2",
+      "sha256": "sha256:31442da031ca428bb0612869411fe3c0b1d16db9bddf825fccc188f12c921c94",
       "surfaces": [
         "c-abi-v1",
         "rust-native"
@@ -1337,13 +1218,11 @@
     {
       "capabilities": [
         "analysis.revisions",
-        "completion.candidates",
-        "presentation.completion_ux",
         "terminal.capability_snapshot"
       ],
       "category": "qualification",
       "path": "tools/perf/components.rs",
-      "sha256": "sha256:bb08205c54b3f46d710bfe8ddf8049083416017519c7d52fb48901d005794081",
+      "sha256": "sha256:5c5d0edda5845c34ba7039c458d4768c6b8caa81fdb4e94d29a8dacaffcffd2a",
       "surfaces": [
         "rust-native"
       ]
@@ -1375,13 +1254,11 @@
     {
       "capabilities": [
         "abi.c.v1",
-        "analysis.revisions",
-        "completion.candidates",
-        "presentation.completion_ux"
+        "analysis.revisions"
       ],
       "category": "qualification",
       "path": "tools/qualify.py",
-      "sha256": "sha256:a7d143622328e1cbe62eb41c31368eb4da6390ebe5ff19c58684dd62fb7b9224",
+      "sha256": "sha256:91d371b097327b762cf0c4235730d082d30d42bfe4c39e64d2fadfc4872b5868",
       "surfaces": [
         "c-abi-v1",
         "rust-native"
@@ -1466,157 +1343,11 @@
     },
     {
       "capabilities": [
-        "completion.candidates",
-        "platform.posix_linux",
-        "presentation.completion_ux"
+        "platform.posix_linux"
       ],
       "category": "qualification",
       "path": "tests/pty.rs",
-      "sha256": "sha256:668eacf780b66bcd8a8ec300be27e7a9261e87c03d0669c2b4cf97419a38d75f",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.candidates",
-        "presentation.completion_ux"
-      ],
-      "category": "api",
-      "path": "src/completion.rs",
-      "sha256": "sha256:608cabffae3b4bbadad20294e684a34898bcb25f1a1f364cddbdadcda6c3f361",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.candidates",
-        "presentation.completion_ux"
-      ],
-      "category": "qualification",
-      "path": "src/completion_tests.rs",
-      "sha256": "sha256:d898d9b91478bad5094b2db403207e90b50fd234747d281e00a010beba210419",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.candidates",
-        "presentation.completion_ux"
-      ],
-      "category": "qualification",
-      "path": "tests/completion.rs",
-      "sha256": "sha256:c6f92cf01bdaeb39194b1774c0b4689be96417bca9d7b8f0b17002224da053ea",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.candidates",
-        "presentation.completion_ux"
-      ],
-      "category": "qualification",
-      "path": "tests/architecture.rs",
-      "sha256": "sha256:da766e036ea3cf104965611e36dc604c5bf32085bcbc7c3185ccd8fd67bb4df2",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.candidates",
-        "presentation.completion_ux"
-      ],
-      "category": "qualification",
-      "path": "examples/completion.rs",
-      "sha256": "sha256:180d647bc88991ed016da4be71eab468a4d8407be7026799d93d7740af2e1e6b",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.candidates",
-        "presentation.completion_ux"
-      ],
-      "category": "qualification",
-      "path": "examples/completion-driven.rs",
-      "sha256": "sha256:97231e7235117e0cf60fde3f1e87dc6f202429a44a686c7253a94edd442edc3e",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.candidates",
-        "presentation.completion_ux"
-      ],
-      "category": "qualification",
-      "path": "tools/completion_pty.py",
-      "sha256": "sha256:b43da050acdce521c125e3a30cbe55c0e55a048b133f9af6b33f800fcaa3af46",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.candidates",
-        "presentation.completion_ux"
-      ],
-      "category": "qualification",
-      "path": "tools/test_completion_pty.py",
-      "sha256": "sha256:b61b60787bcf46ff692eeaded9e4c32835aec49bef24225549da63f9f0be3f4b",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.candidates",
-        "presentation.completion_ux"
-      ],
-      "category": "qualification",
-      "path": "tools/direct_completion_benchmark.py",
-      "sha256": "sha256:2746c223ea537e9615b8edf8f67bb34ac8ca6e17020ae151e8f4ded5e4416bfe",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.candidates",
-        "presentation.completion_ux"
-      ],
-      "category": "qualification",
-      "path": "tools/perf/direct_completion.rs",
-      "sha256": "sha256:6ad18816eff9dcec4c750da0d512b907246b080b6bc74d374ef423976cbc1c24",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.candidates",
-        "presentation.completion_ux"
-      ],
-      "category": "qualification",
-      "path": "tools/perf/completions.rs",
-      "sha256": "sha256:ed23d6e4760322701c1887128b0cd21bf28e59a901ba21bfa2a0aa9b3e850481",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.candidates",
-        "presentation.completion_ux"
-      ],
-      "category": "qualification",
-      "path": "docs/engineering/completion-contract.md",
-      "sha256": "sha256:38fd2483820da2eb55053e5f310b25d4a87ffed5d49db654c2a490f70ce8f582",
+      "sha256": "sha256:50dcb5672bc1637bd7467579622cf69ed4a918d3b75f57cd9b2d0f75d425079c",
       "surfaces": [
         "rust-native"
       ]
@@ -1658,17 +1389,17 @@
     }
   ],
   "predecessor": {
-    "contract_id": "sha256:cc91f1b38452385e9f5c878b355a83a9fa736c33cef8cc07c0ef71e2a711ebfb",
+    "contract_id": "sha256:8f5da6129ab2f27cb86e881608feeb7f3e8dadf57cba1700664f087a29e4fa5d",
     "repository": "https://github.com/mothx9/replai",
-    "revision": "aa137e881065f0a0615fa8ae03c84c89f052bea3",
-    "tree": "9126e218fc4ee432a4146051da2ef05c9d4e2b4c"
+    "revision": "36fefcaebba8489d672eb1c5c2b4f5cb1d939d86",
+    "tree": "6ed9bbde9e820cfdff7a160870377d3aa9da0723"
   },
   "repository": "https://github.com/mothx9/replai",
   "schema_version": 1,
   "source": {
     "dirty": false,
-    "revision": "0fef74edd5d4d6d536560036473980a41e1da3f3",
-    "tree": "e86c5b385e993f124c7901677d6f6593b0f3fd71"
+    "revision": "aa137e881065f0a0615fa8ae03c84c89f052bea3",
+    "tree": "9126e218fc4ee432a4146051da2ef05c9d4e2b4c"
   },
   "surfaces": [
     {

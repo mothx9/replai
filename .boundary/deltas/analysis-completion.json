@@ -1,0 +1,255 @@
+{
+  "capability_contracts": [
+    {
+      "description": "Bounded host-ordered revision-bound completion candidates",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/interaction.md#revision-bound-completion-candidates",
+        "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/presentation.md#completion-surface"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34485342480",
+        "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/engineering/completion-contract.md"
+      ],
+      "guarantees": [
+        "Hosts own discovery, order, ranking, application context and scheduling; no callback or executor is acquired",
+        "Per-candidate grapheme-aligned ranges, insertion, safe label and optional annotation are distinct; duplicates preserve host order",
+        "Sets bind the originating Editor DraftRevision; stale delivery refuses before validation or activation with zero terminal bytes",
+        "Whole-set validation is atomic; 4096 candidates, 65536 bytes per field and 4 MiB aggregate safe text are bounded",
+        "Same-revision explicit deliveries replace in delivery order; host request preference is not inferred",
+        "C ABI 1 retains its synchronous request/replacement contract unchanged"
+      ],
+      "id": "completion.candidates",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "description": "Safe responsive temporary candidate selection through the shared renderer",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/interaction.md#revision-bound-completion-candidates",
+        "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/presentation.md#completion-surface"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34485342480",
+        "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/engineering/completion-contract.md"
+      ],
+      "guarantees": [
+        "Nonempty sets require explicit acceptance; zero candidates silently dismiss; selection never previews by mutating the draft",
+        "Tab/Shift-Tab navigate in host order; Enter accepts, Escape dismisses through the existing decoder deadline; arrows retain editing/history",
+        "Acceptance uses atomic revision-bound replacement; changed drafts dismiss candidates, no-op/rejected edits preserve current state",
+        "Resize and serialized external output restore exact draft/cursor/selection without changing revision",
+        "At most eight temporary rows, selected index/count and a textual selection marker preserve plain usability; labels/annotations may ellipsize without changing insertion",
+        "One engine/frame-transition renderer and existing F2 width/theme/admission model; Linux/macOS native runtime, Windows portable logic only"
+      ],
+      "id": "presentation.completion_ux",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "changed_inputs": [
+    ".github/workflows/ci.yml",
+    "docs/architecture.md",
+    "docs/engineering/completion-contract.md",
+    "docs/interaction.md",
+    "docs/presentation.md",
+    "examples/completion-driven.rs",
+    "examples/completion.rs",
+    "src/actions.rs",
+    "src/completion.rs",
+    "src/completion_tests.rs",
+    "src/conformance.rs",
+    "src/core.rs",
+    "src/engine.rs",
+    "src/input.rs",
+    "src/interaction.rs",
+    "src/keymap.rs",
+    "src/lib.rs",
+    "tests/architecture.rs",
+    "tests/completion.rs",
+    "tests/pty.rs",
+    "tools/completion_pty.py",
+    "tools/direct_completion_benchmark.py",
+    "tools/perf/completions.rs",
+    "tools/perf/components.rs",
+    "tools/perf/direct_completion.rs",
+    "tools/qualify.py",
+    "tools/test_completion_pty.py"
+  ],
+  "changes": [
+    {
+      "capability": "completion.candidates",
+      "compatibility": "compatible",
+      "description": "Bounded host-ordered revision-bound completion candidates. Host discovery and scheduling stay external; no consumer migration is assigned and C ABI 1 remains unchanged.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34485342480",
+        "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/engineering/completion-contract.md"
+      ],
+      "inputs": [
+        "src/lib.rs",
+        "src/completion.rs",
+        "src/core.rs",
+        "src/actions.rs",
+        "src/keymap.rs",
+        "src/input.rs",
+        "src/engine.rs",
+        "src/interaction.rs",
+        "src/conformance.rs",
+        "src/completion_tests.rs",
+        "tests/completion.rs",
+        "tests/pty.rs",
+        "tests/architecture.rs",
+        "examples/completion.rs",
+        "examples/completion-driven.rs",
+        "tools/completion_pty.py",
+        "tools/test_completion_pty.py",
+        "tools/direct_completion_benchmark.py",
+        "tools/perf/direct_completion.rs",
+        "tools/perf/components.rs",
+        "tools/perf/completions.rs",
+        "tools/qualify.py",
+        ".github/workflows/ci.yml",
+        "docs/architecture.md",
+        "docs/interaction.md",
+        "docs/presentation.md",
+        "docs/engineering/completion-contract.md"
+      ],
+      "kind": "ADDED",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "presentation.completion_ux",
+      "compatibility": "compatible",
+      "description": "Safe responsive temporary candidate selection through the shared renderer. Host discovery and scheduling stay external; no consumer migration is assigned and C ABI 1 remains unchanged.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34485342480",
+        "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/engineering/completion-contract.md"
+      ],
+      "inputs": [
+        "src/lib.rs",
+        "src/completion.rs",
+        "src/core.rs",
+        "src/actions.rs",
+        "src/keymap.rs",
+        "src/input.rs",
+        "src/engine.rs",
+        "src/interaction.rs",
+        "src/conformance.rs",
+        "src/completion_tests.rs",
+        "tests/completion.rs",
+        "tests/pty.rs",
+        "tests/architecture.rs",
+        "examples/completion.rs",
+        "examples/completion-driven.rs",
+        "tools/completion_pty.py",
+        "tools/test_completion_pty.py",
+        "tools/direct_completion_benchmark.py",
+        "tools/perf/direct_completion.rs",
+        "tools/perf/components.rs",
+        "tools/perf/completions.rs",
+        "tools/qualify.py",
+        ".github/workflows/ci.yml",
+        "docs/architecture.md",
+        "docs/interaction.md",
+        "docs/presentation.md",
+        "docs/engineering/completion-contract.md"
+      ],
+      "kind": "ADDED",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "current": {
+    "contract_id": "sha256:a318fcec26e83c2fc8f7e7f6b5d41f670b7c098e37f96803fcab8663ef2b735a",
+    "repository": "https://github.com/mothx9/replai",
+    "revision": "0fef74edd5d4d6d536560036473980a41e1da3f3",
+    "tree": "e86c5b385e993f124c7901677d6f6593b0f3fd71"
+  },
+  "id": "sha256:ae073aeff79b6b5489ade79278aedcf75eb3b8990664737d406a16987d3dedd5",
+  "kind": "delta",
+  "platforms": [
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34370575960"
+      ],
+      "id": "linux",
+      "status": "runtime-qualified",
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34370575960"
+      ],
+      "id": "macos",
+      "status": "runtime-qualified",
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34370575960"
+      ],
+      "id": "windows",
+      "status": "portable-core-qualified",
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "previous": {
+    "contract_id": "sha256:cc91f1b38452385e9f5c878b355a83a9fa736c33cef8cc07c0ef71e2a711ebfb",
+    "repository": "https://github.com/mothx9/replai",
+    "revision": "aa137e881065f0a0615fa8ae03c84c89f052bea3",
+    "tree": "9126e218fc4ee432a4146051da2ef05c9d4e2b4c"
+  },
+  "schema_version": 1,
+  "surfaces": [
+    {
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/interaction.md",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/presentation.md"
+      ],
+      "id": "rust-native",
+      "kind": "rust-native",
+      "version": "pre-release"
+    },
+    {
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/c-api.md"
+      ],
+      "id": "c-abi-v1",
+      "kind": "c-abi",
+      "version": "1"
+    }
+  ]
+}
