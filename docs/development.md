@@ -162,7 +162,9 @@ pixels at 84 terminal columns, with a 28-pixel raster font (about 17 pixels at
 README width). The dark background and separate title strip belong to the
 capture tooling; terminal text, colors, selection and cursor come from the
 executable. The opaque terminal crop remains readable on GitHub light and dark
-backgrounds. The existing light/dark logo variants are unchanged.
+backgrounds. The README uses the supplied REPL brand kit version 2 primary SVGs
+for light/dark mode, preserving their paths, proportions and violet palette.
+Logo assets are independent of the terminal capture and its byte comparison.
 
 Reproduce on Linux with a current stable Rust toolchain, Python 3 and
 `fonts-dejavu-core` installed:
