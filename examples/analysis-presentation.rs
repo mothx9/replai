@@ -6,6 +6,9 @@ mod host;
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     use replai::*;
     use std::time::Duration;
+    // Optional qualification fixture: delay the first nonempty display until editing advances.
+    let mut delay_first = std::env::args().any(|a| a == "--delayed-analysis");
+    let mut delayed = None;
     let mut input = Interaction::new(Editor::new(1_048_576, 100));
     input.set_submission_policy(SubmissionPolicy::Validated)?;
     println!(
@@ -23,7 +26,18 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             let mut event = input.poll(Duration::from_millis(100))?;
             if input.is_open() && revision != Some(input.revision()) {
                 let current = host::Parsed::new(input.analysis_snapshot());
-                input.present_analysis(current.presentation()?)?;
+                if let Some(old) = delayed.take() {
+                    let outcome = input.present_analysis(old)?;
+                    assert_eq!(outcome, AnalysisOutcome::Stale);
+                    eprintln!("DELAYED_PRESENTATION {outcome:?}");
+                }
+                if delay_first && !input.editor().text().is_empty() {
+                    delayed = Some(current.presentation()?);
+                    delay_first = false;
+                    eprintln!("ANALYSIS_PENDING");
+                } else {
+                    input.present_analysis(current.presentation()?)?;
+                }
                 revision = Some(input.revision());
                 parsed = Some(current);
             }

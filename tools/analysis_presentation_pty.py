@@ -47,7 +47,11 @@ def run(work,prefix=(),plain=False):
                 s.event(b'X');s.restored();s.reopen()
                 s.edit(b'bu','bu',2);present();validation_key(s,b'\r');s.event(b'B');assert not s.state()['open'];assert b'host' not in s.state()['text'].encode();assert s.state()['text']=='bu';s.restored();s.reopen()
                 # Hint cannot be submitted. History/paste preserve canonical bytes only.
-                s.edit(b'\x1b[A','bu',2);assert '[~' not in s.screen()['text'];s.event(b'X');s.reopen()
+                s.edit(b'x','x',1);present();s.edit(b'\x1b[A','bu',2);assert re.findall(rb'DISPLAY (true|false)\n',s.receipts)[-1]==b'false';s.event(b'X');s.reopen()
+                s.edit(b'bu','bu',2);present();r=revision(s);s.event(b'K');key(s,b'\t');key(s,b'\r')
+                assert s.state()['text']=='bundle' and revision(s)!=r and re.findall(rb'DISPLAY (true|false)\n',s.receipts)[-1]==b'false'
+                present();pasted='界e\u0301👩‍💻';s.edit(b'\x1b[200~'+pasted.encode()+b'\x1b[201~','bundle'+pasted,len(('bundle'+pasted).encode()))
+                assert re.findall(rb'DISPLAY (true|false)\n',s.receipts)[-1]==b'false';s.event(b'X');s.restored();s.reopen()
                 for lines in [10,100,1000]:
                     text=('row 界 e\u0301 👩‍💻 '+'x'*40+'\n')*lines
                     s.edit(b'\x1b[200~'+text.encode()+b'\x1b[201~',text,len(text.encode()));r=revision(s);present()
@@ -74,13 +78,17 @@ def run(work,prefix=(),plain=False):
         if old is None:os.environ.pop('NO_COLOR',None)
         else:os.environ['NO_COLOR']=old
 
-def session():
+def session(delayed=False):
     wrapper='import os,subprocess,sys; r=subprocess.call(sys.argv[1:]); print("EXIT_READY",file=sys.stderr,flush=True); os.read(int(os.environ["P0_EXIT_FD"]),1); sys.exit(r)'
-    s=Session([sys.executable,'-c',wrapper,ROOT/'target/debug/examples/analysis-presentation'])
+    s=Session([sys.executable,'-c',wrapper,ROOT/'target/debug/examples/analysis-presentation',*(['--delayed-analysis'] if delayed else [])])
     try:
-        s.until(lambda:b'analyze>' in s.output);s.send(b'bu');s.until(lambda:b'[~ild' in s.output)
-        s.send(b'\r');s.until(lambda:b'host received: bu' in s.output);s.send(b'\x04');s.finish()
-        return dict(synchronous=True,canonical_submission='bu',exact_restoration=True)
+        s.until(lambda:b'analyze>' in s.output);s.send(b'bu')
+        if delayed:
+            s.until(lambda:b'ANALYSIS_PENDING' in s.receipts);s.send(b'!');s.until(lambda:b'DELAYED_PRESENTATION Stale' in s.receipts)
+        else:s.until(lambda:b'[~ild' in s.output)
+        s.send(b'\r');submitted=b'host received: '+(b'bu!' if delayed else b'bu')+b'\r\n'
+        s.until(lambda:b'analyze>' in s.output.partition(submitted)[2]);s.send(b'\x04');s.finish()
+        return dict(synchronous=True,delayed_stale=delayed,canonical_submission='bu!' if delayed else 'bu',exact_restoration=True)
     except BaseException:s.abort();raise
 
 def main():
@@ -91,7 +99,7 @@ def main():
         if sys.platform=='linux':
             exe=shutil.which('valgrind');assert exe,'Valgrind required';prefix=[exe,'--leak-check=full','--show-leak-kinds=all','--errors-for-leak-kinds=definite,indirect','--error-exitcode=99','--log-file='+str(a.work/'valgrind-%p.log')]
         else:prefix=['/usr/bin/leaks','--atExit','--']
-    result=dict(platform=sys.platform,memory_command=prefix,styled=run(a.work,prefix),plain=run(a.work,prefix,True),session=session())
+    result=dict(platform=sys.platform,memory_command=prefix,styled=run(a.work,prefix),plain=run(a.work,prefix,True),session=session(),delayed_session=session(True))
     if a.memory and sys.platform=='linux':
         logs=list(a.work.glob('valgrind-*.log'));assert len(logs)==2
         for log in logs:assert 'ERROR SUMMARY: 0 errors' in log.read_text()
