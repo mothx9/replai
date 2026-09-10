@@ -1,0 +1,1343 @@
+{
+  "revision": "1da4dbf9162a2fea4d267e1aa473859ee64ae290",
+  "tree": "abe89cbd73616282b72c453668d8db50ae52a650",
+  "ci": "https://github.com/mothx9/replai/actions/runs/34494834221",
+  "ci_successful_jobs": 12,
+  "jobs": {
+    "linux/replai-validation": {
+      "platform": "linux",
+      "memory_command": [],
+      "styled": {
+        "plain": false,
+        "damage": [
+          {
+            "operation": "incomplete",
+            "bytes": 29,
+            "elapsed_us": 2034.561
+          },
+          {
+            "operation": "invalid",
+            "bytes": 130,
+            "elapsed_us": 2139.039
+          },
+          {
+            "operation": "resize_20",
+            "bytes": 124,
+            "elapsed_us": 1701.058
+          },
+          {
+            "operation": "resize_40",
+            "bytes": 148,
+            "elapsed_us": 1820.267
+          },
+          {
+            "operation": "resize_80",
+            "bytes": 148,
+            "elapsed_us": 1994.54
+          },
+          {
+            "operation": "resize_132",
+            "bytes": 148,
+            "elapsed_us": 2155.022
+          },
+          {
+            "operation": "output",
+            "bytes": 205,
+            "elapsed_us": 2398.901
+          },
+          {
+            "operation": "complete",
+            "bytes": 40,
+            "elapsed_us": 2382.155
+          },
+          {
+            "operation": "large_10_output",
+            "bytes": 838,
+            "elapsed_us": 4485.44
+          },
+          {
+            "operation": "large_10_movement",
+            "bytes": 10,
+            "elapsed_us": 5187.941
+          },
+          {
+            "operation": "large_10_movement",
+            "bytes": 10,
+            "elapsed_us": 5153.819
+          },
+          {
+            "operation": "large_10_movement",
+            "bytes": 9,
+            "elapsed_us": 5119.096
+          },
+          {
+            "operation": "large_10_middle_output",
+            "bytes": 912,
+            "elapsed_us": 5243.394
+          },
+          {
+            "operation": "large_100_output",
+            "bytes": 838,
+            "elapsed_us": 8919.603
+          },
+          {
+            "operation": "large_100_movement",
+            "bytes": 94,
+            "elapsed_us": 7237.224
+          },
+          {
+            "operation": "large_100_movement",
+            "bytes": 90,
+            "elapsed_us": 9969.708
+          },
+          {
+            "operation": "large_100_movement",
+            "bytes": 73,
+            "elapsed_us": 9926.303
+          },
+          {
+            "operation": "large_100_middle_output",
+            "bytes": 906,
+            "elapsed_us": 8521.462
+          },
+          {
+            "operation": "large_1000_output",
+            "bytes": 838,
+            "elapsed_us": 45883.645
+          },
+          {
+            "operation": "large_1000_movement",
+            "bytes": 94,
+            "elapsed_us": 18916.462
+          },
+          {
+            "operation": "large_1000_movement",
+            "bytes": 90,
+            "elapsed_us": 47637.683
+          },
+          {
+            "operation": "large_1000_movement",
+            "bytes": 73,
+            "elapsed_us": 48075.243
+          },
+          {
+            "operation": "large_1000_middle_output",
+            "bytes": 906,
+            "elapsed_us": 34690.461
+          }
+        ],
+        "validated_text": "begin {\ntask!\n}",
+        "unicode_validation": true,
+        "large": [
+          {
+            "lines": 10,
+            "bytes": 690,
+            "screen": {
+              "cursor": "6 4",
+              "text": "application event: draft preserved\nvalidate> row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n! Invalid input \u00b7 1 diagnostics\n! [0..0] Expected closing delimiter",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          },
+          {
+            "lines": 100,
+            "bytes": 6900,
+            "screen": {
+              "cursor": "9 4",
+              "text": "application event: draft preserved\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n! Invalid input \u00b7 1 diagnostics\n! [0..0] Expected closing delimiter",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          },
+          {
+            "lines": 1000,
+            "bytes": 69000,
+            "screen": {
+              "cursor": "9 4",
+              "text": "application event: draft preserved\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n! Invalid input \u00b7 1 diagnostics\n! [0..0] Expected closing delimiter",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          }
+        ],
+        "lifecycles": 12,
+        "exact_restoration": true,
+        "stale_silent": true,
+        "completion_precedence": true
+      },
+      "plain": {
+        "plain": true,
+        "damage": [
+          {
+            "operation": "incomplete",
+            "bytes": 29,
+            "elapsed_us": 1994.703
+          },
+          {
+            "operation": "invalid",
+            "bytes": 130,
+            "elapsed_us": 2144.869
+          },
+          {
+            "operation": "resize_20",
+            "bytes": 124,
+            "elapsed_us": 1703.343
+          },
+          {
+            "operation": "resize_40",
+            "bytes": 148,
+            "elapsed_us": 1836.093
+          },
+          {
+            "operation": "resize_80",
+            "bytes": 148,
+            "elapsed_us": 1950.406
+          },
+          {
+            "operation": "resize_132",
+            "bytes": 148,
+            "elapsed_us": 2149.026
+          },
+          {
+            "operation": "output",
+            "bytes": 205,
+            "elapsed_us": 2276.989
+          },
+          {
+            "operation": "complete",
+            "bytes": 40,
+            "elapsed_us": 2176.047
+          },
+          {
+            "operation": "large_10_output",
+            "bytes": 838,
+            "elapsed_us": 4783.073
+          },
+          {
+            "operation": "large_10_movement",
+            "bytes": 10,
+            "elapsed_us": 4814.681
+          },
+          {
+            "operation": "large_10_movement",
+            "bytes": 10,
+            "elapsed_us": 4764.255
+          },
+          {
+            "operation": "large_10_movement",
+            "bytes": 9,
+            "elapsed_us": 4911.693
+          },
+          {
+            "operation": "large_10_middle_output",
+            "bytes": 912,
+            "elapsed_us": 5026.341
+          },
+          {
+            "operation": "large_100_output",
+            "bytes": 838,
+            "elapsed_us": 9340.687
+          },
+          {
+            "operation": "large_100_movement",
+            "bytes": 94,
+            "elapsed_us": 6996.947
+          },
+          {
+            "operation": "large_100_movement",
+            "bytes": 90,
+            "elapsed_us": 9539.688
+          },
+          {
+            "operation": "large_100_movement",
+            "bytes": 73,
+            "elapsed_us": 9477.865
+          },
+          {
+            "operation": "large_100_middle_output",
+            "bytes": 906,
+            "elapsed_us": 8195.157
+          },
+          {
+            "operation": "large_1000_output",
+            "bytes": 838,
+            "elapsed_us": 44763.806
+          },
+          {
+            "operation": "large_1000_movement",
+            "bytes": 94,
+            "elapsed_us": 18067.537
+          },
+          {
+            "operation": "large_1000_movement",
+            "bytes": 90,
+            "elapsed_us": 47040.032
+          },
+          {
+            "operation": "large_1000_movement",
+            "bytes": 73,
+            "elapsed_us": 47797.377
+          },
+          {
+            "operation": "large_1000_middle_output",
+            "bytes": 906,
+            "elapsed_us": 33310.618
+          }
+        ],
+        "validated_text": "begin {\ntask!\n}",
+        "unicode_validation": true,
+        "large": [
+          {
+            "lines": 10,
+            "bytes": 690,
+            "screen": {
+              "cursor": "6 4",
+              "text": "application event: draft preserved\nvalidate> row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n! Invalid input \u00b7 1 diagnostics\n! [0..0] Expected closing delimiter",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          },
+          {
+            "lines": 100,
+            "bytes": 6900,
+            "screen": {
+              "cursor": "9 4",
+              "text": "application event: draft preserved\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n! Invalid input \u00b7 1 diagnostics\n! [0..0] Expected closing delimiter",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          },
+          {
+            "lines": 1000,
+            "bytes": 69000,
+            "screen": {
+              "cursor": "9 4",
+              "text": "application event: draft preserved\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n! Invalid input \u00b7 1 diagnostics\n! [0..0] Expected closing delimiter",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          }
+        ],
+        "lifecycles": 12,
+        "exact_restoration": true,
+        "stale_silent": true,
+        "completion_precedence": true
+      },
+      "session": {
+        "synchronous_validation": true,
+        "submitted": "{\ntask\n}",
+        "exact_restoration": true
+      }
+    },
+    "linux/replai-validation-memory": {
+      "platform": "linux",
+      "memory_command": [
+        "/usr/bin/valgrind",
+        "--leak-check=full",
+        "--show-leak-kinds=all",
+        "--errors-for-leak-kinds=definite,indirect",
+        "--error-exitcode=99",
+        "--log-file=/home/runner/work/_temp/replai-validation-memory/valgrind-%p.log"
+      ],
+      "styled": {
+        "plain": false,
+        "damage": [
+          {
+            "operation": "incomplete",
+            "bytes": 29,
+            "elapsed_us": 26302.817
+          },
+          {
+            "operation": "invalid",
+            "bytes": 130,
+            "elapsed_us": 28202.625
+          },
+          {
+            "operation": "resize_20",
+            "bytes": 124,
+            "elapsed_us": 15976.074
+          },
+          {
+            "operation": "resize_40",
+            "bytes": 148,
+            "elapsed_us": 3592.926
+          },
+          {
+            "operation": "resize_80",
+            "bytes": 148,
+            "elapsed_us": 3826.929
+          },
+          {
+            "operation": "resize_132",
+            "bytes": 148,
+            "elapsed_us": 4076.586
+          },
+          {
+            "operation": "output",
+            "bytes": 205,
+            "elapsed_us": 44118.108
+          },
+          {
+            "operation": "complete",
+            "bytes": 40,
+            "elapsed_us": 24707.468
+          },
+          {
+            "operation": "large_10_output",
+            "bytes": 838,
+            "elapsed_us": 21420.764
+          },
+          {
+            "operation": "large_10_movement",
+            "bytes": 10,
+            "elapsed_us": 25437.529
+          },
+          {
+            "operation": "large_10_movement",
+            "bytes": 10,
+            "elapsed_us": 21123.546
+          },
+          {
+            "operation": "large_10_movement",
+            "bytes": 9,
+            "elapsed_us": 20151.879
+          },
+          {
+            "operation": "large_10_middle_output",
+            "bytes": 912,
+            "elapsed_us": 21173.671
+          },
+          {
+            "operation": "large_100_output",
+            "bytes": 838,
+            "elapsed_us": 149148.617
+          },
+          {
+            "operation": "large_100_movement",
+            "bytes": 94,
+            "elapsed_us": 59120.201
+          },
+          {
+            "operation": "large_100_movement",
+            "bytes": 90,
+            "elapsed_us": 148641.376
+          },
+          {
+            "operation": "large_100_movement",
+            "bytes": 73,
+            "elapsed_us": 151127.725
+          },
+          {
+            "operation": "large_100_middle_output",
+            "bytes": 906,
+            "elapsed_us": 102355.105
+          },
+          {
+            "operation": "large_1000_output",
+            "bytes": 838,
+            "elapsed_us": 1422387.34
+          },
+          {
+            "operation": "large_1000_movement",
+            "bytes": 94,
+            "elapsed_us": 431771.527
+          },
+          {
+            "operation": "large_1000_movement",
+            "bytes": 90,
+            "elapsed_us": 1425866.394
+          },
+          {
+            "operation": "large_1000_movement",
+            "bytes": 73,
+            "elapsed_us": 1416352.628
+          },
+          {
+            "operation": "large_1000_middle_output",
+            "bytes": 906,
+            "elapsed_us": 931313.282
+          }
+        ],
+        "validated_text": "begin {\ntask!\n}",
+        "unicode_validation": true,
+        "large": [
+          {
+            "lines": 10,
+            "bytes": 690,
+            "screen": {
+              "cursor": "6 4",
+              "text": "application event: draft preserved\nvalidate> row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n! Invalid input \u00b7 1 diagnostics\n! [0..0] Expected closing delimiter",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          },
+          {
+            "lines": 100,
+            "bytes": 6900,
+            "screen": {
+              "cursor": "9 4",
+              "text": "application event: draft preserved\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n! Invalid input \u00b7 1 diagnostics\n! [0..0] Expected closing delimiter",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          },
+          {
+            "lines": 1000,
+            "bytes": 69000,
+            "screen": {
+              "cursor": "9 4",
+              "text": "application event: draft preserved\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n! Invalid input \u00b7 1 diagnostics\n! [0..0] Expected closing delimiter",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          }
+        ],
+        "lifecycles": 12,
+        "exact_restoration": true,
+        "stale_silent": true,
+        "completion_precedence": true
+      },
+      "plain": {
+        "plain": true,
+        "damage": [
+          {
+            "operation": "incomplete",
+            "bytes": 29,
+            "elapsed_us": 26790.927
+          },
+          {
+            "operation": "invalid",
+            "bytes": 130,
+            "elapsed_us": 27354.398
+          },
+          {
+            "operation": "resize_20",
+            "bytes": 124,
+            "elapsed_us": 15559.747
+          },
+          {
+            "operation": "resize_40",
+            "bytes": 148,
+            "elapsed_us": 3582.009
+          },
+          {
+            "operation": "resize_80",
+            "bytes": 148,
+            "elapsed_us": 3755.065
+          },
+          {
+            "operation": "resize_132",
+            "bytes": 148,
+            "elapsed_us": 4067.557
+          },
+          {
+            "operation": "output",
+            "bytes": 205,
+            "elapsed_us": 44295.541
+          },
+          {
+            "operation": "complete",
+            "bytes": 40,
+            "elapsed_us": 24384.873
+          },
+          {
+            "operation": "large_10_output",
+            "bytes": 838,
+            "elapsed_us": 21875.524
+          },
+          {
+            "operation": "large_10_movement",
+            "bytes": 10,
+            "elapsed_us": 26489.341
+          },
+          {
+            "operation": "large_10_movement",
+            "bytes": 10,
+            "elapsed_us": 21232.157
+          },
+          {
+            "operation": "large_10_movement",
+            "bytes": 9,
+            "elapsed_us": 20515.601
+          },
+          {
+            "operation": "large_10_middle_output",
+            "bytes": 912,
+            "elapsed_us": 21136.939
+          },
+          {
+            "operation": "large_100_output",
+            "bytes": 838,
+            "elapsed_us": 152449.693
+          },
+          {
+            "operation": "large_100_movement",
+            "bytes": 94,
+            "elapsed_us": 61746.954
+          },
+          {
+            "operation": "large_100_movement",
+            "bytes": 90,
+            "elapsed_us": 153093.465
+          },
+          {
+            "operation": "large_100_movement",
+            "bytes": 73,
+            "elapsed_us": 153186.637
+          },
+          {
+            "operation": "large_100_middle_output",
+            "bytes": 906,
+            "elapsed_us": 103944.676
+          },
+          {
+            "operation": "large_1000_output",
+            "bytes": 838,
+            "elapsed_us": 1453128.271
+          },
+          {
+            "operation": "large_1000_movement",
+            "bytes": 94,
+            "elapsed_us": 455002.014
+          },
+          {
+            "operation": "large_1000_movement",
+            "bytes": 90,
+            "elapsed_us": 1457035.216
+          },
+          {
+            "operation": "large_1000_movement",
+            "bytes": 73,
+            "elapsed_us": 1442627.531
+          },
+          {
+            "operation": "large_1000_middle_output",
+            "bytes": 906,
+            "elapsed_us": 953020.945
+          }
+        ],
+        "validated_text": "begin {\ntask!\n}",
+        "unicode_validation": true,
+        "large": [
+          {
+            "lines": 10,
+            "bytes": 690,
+            "screen": {
+              "cursor": "6 4",
+              "text": "application event: draft preserved\nvalidate> row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n! Invalid input \u00b7 1 diagnostics\n! [0..0] Expected closing delimiter",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          },
+          {
+            "lines": 100,
+            "bytes": 6900,
+            "screen": {
+              "cursor": "9 4",
+              "text": "application event: draft preserved\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n! Invalid input \u00b7 1 diagnostics\n! [0..0] Expected closing delimiter",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          },
+          {
+            "lines": 1000,
+            "bytes": 69000,
+            "screen": {
+              "cursor": "9 4",
+              "text": "application event: draft preserved\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n! Invalid input \u00b7 1 diagnostics\n! [0..0] Expected closing delimiter",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          }
+        ],
+        "lifecycles": 12,
+        "exact_restoration": true,
+        "stale_silent": true,
+        "completion_precedence": true
+      },
+      "session": {
+        "synchronous_validation": true,
+        "submitted": "{\ntask\n}",
+        "exact_restoration": true
+      }
+    },
+    "macos/replai-validation": {
+      "platform": "darwin",
+      "memory_command": [],
+      "styled": {
+        "plain": false,
+        "damage": [
+          {
+            "operation": "incomplete",
+            "bytes": 29,
+            "elapsed_us": 4219.167
+          },
+          {
+            "operation": "invalid",
+            "bytes": 130,
+            "elapsed_us": 4773.25
+          },
+          {
+            "operation": "resize_20",
+            "bytes": 124,
+            "elapsed_us": 5765.834
+          },
+          {
+            "operation": "resize_40",
+            "bytes": 148,
+            "elapsed_us": 5755.542
+          },
+          {
+            "operation": "resize_80",
+            "bytes": 148,
+            "elapsed_us": 5617.75
+          },
+          {
+            "operation": "resize_132",
+            "bytes": 148,
+            "elapsed_us": 4731.083
+          },
+          {
+            "operation": "output",
+            "bytes": 205,
+            "elapsed_us": 4880.334
+          },
+          {
+            "operation": "complete",
+            "bytes": 40,
+            "elapsed_us": 5754.333
+          },
+          {
+            "operation": "large_10_output",
+            "bytes": 838,
+            "elapsed_us": 13430.25
+          },
+          {
+            "operation": "large_10_movement",
+            "bytes": 10,
+            "elapsed_us": 7716.459
+          },
+          {
+            "operation": "large_10_movement",
+            "bytes": 10,
+            "elapsed_us": 7850.875
+          },
+          {
+            "operation": "large_10_movement",
+            "bytes": 9,
+            "elapsed_us": 10613.125
+          },
+          {
+            "operation": "large_10_middle_output",
+            "bytes": 912,
+            "elapsed_us": 8752.25
+          },
+          {
+            "operation": "large_100_output",
+            "bytes": 838,
+            "elapsed_us": 12182.792
+          },
+          {
+            "operation": "large_100_movement",
+            "bytes": 94,
+            "elapsed_us": 18874.25
+          },
+          {
+            "operation": "large_100_movement",
+            "bytes": 90,
+            "elapsed_us": 16117.542
+          },
+          {
+            "operation": "large_100_movement",
+            "bytes": 73,
+            "elapsed_us": 25476.542
+          },
+          {
+            "operation": "large_100_middle_output",
+            "bytes": 906,
+            "elapsed_us": 20763.792
+          },
+          {
+            "operation": "large_1000_output",
+            "bytes": 838,
+            "elapsed_us": 69988.167
+          },
+          {
+            "operation": "large_1000_movement",
+            "bytes": 94,
+            "elapsed_us": 30945.416
+          },
+          {
+            "operation": "large_1000_movement",
+            "bytes": 90,
+            "elapsed_us": 66354.875
+          },
+          {
+            "operation": "large_1000_movement",
+            "bytes": 73,
+            "elapsed_us": 95353.458
+          },
+          {
+            "operation": "large_1000_middle_output",
+            "bytes": 906,
+            "elapsed_us": 38751.167
+          }
+        ],
+        "validated_text": "begin {\ntask!\n}",
+        "unicode_validation": true,
+        "large": [
+          {
+            "lines": 10,
+            "bytes": 690,
+            "screen": {
+              "cursor": "6 4",
+              "text": "application event: draft preserved\nvalidate> row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n! Invalid input \u00b7 1 diagnostics\n! [0..0] Expected closing delimiter",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          },
+          {
+            "lines": 100,
+            "bytes": 6900,
+            "screen": {
+              "cursor": "9 4",
+              "text": "application event: draft preserved\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n! Invalid input \u00b7 1 diagnostics\n! [0..0] Expected closing delimiter",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          },
+          {
+            "lines": 1000,
+            "bytes": 69000,
+            "screen": {
+              "cursor": "9 4",
+              "text": "application event: draft preserved\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n! Invalid input \u00b7 1 diagnostics\n! [0..0] Expected closing delimiter",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          }
+        ],
+        "lifecycles": 12,
+        "exact_restoration": true,
+        "stale_silent": true,
+        "completion_precedence": true
+      },
+      "plain": {
+        "plain": true,
+        "damage": [
+          {
+            "operation": "incomplete",
+            "bytes": 29,
+            "elapsed_us": 5110.542
+          },
+          {
+            "operation": "invalid",
+            "bytes": 130,
+            "elapsed_us": 6035.833
+          },
+          {
+            "operation": "resize_20",
+            "bytes": 124,
+            "elapsed_us": 5846.125
+          },
+          {
+            "operation": "resize_40",
+            "bytes": 148,
+            "elapsed_us": 7439.583
+          },
+          {
+            "operation": "resize_80",
+            "bytes": 148,
+            "elapsed_us": 5556.166
+          },
+          {
+            "operation": "resize_132",
+            "bytes": 148,
+            "elapsed_us": 5543.5
+          },
+          {
+            "operation": "output",
+            "bytes": 205,
+            "elapsed_us": 4833.0
+          },
+          {
+            "operation": "complete",
+            "bytes": 40,
+            "elapsed_us": 5711.208
+          },
+          {
+            "operation": "large_10_output",
+            "bytes": 838,
+            "elapsed_us": 6841.25
+          },
+          {
+            "operation": "large_10_movement",
+            "bytes": 10,
+            "elapsed_us": 6927.916
+          },
+          {
+            "operation": "large_10_movement",
+            "bytes": 10,
+            "elapsed_us": 7107.625
+          },
+          {
+            "operation": "large_10_movement",
+            "bytes": 9,
+            "elapsed_us": 7802.209
+          },
+          {
+            "operation": "large_10_middle_output",
+            "bytes": 912,
+            "elapsed_us": 7737.084
+          },
+          {
+            "operation": "large_100_output",
+            "bytes": 838,
+            "elapsed_us": 9504.75
+          },
+          {
+            "operation": "large_100_movement",
+            "bytes": 94,
+            "elapsed_us": 9649.541
+          },
+          {
+            "operation": "large_100_movement",
+            "bytes": 90,
+            "elapsed_us": 13028.208
+          },
+          {
+            "operation": "large_100_movement",
+            "bytes": 73,
+            "elapsed_us": 11528.667
+          },
+          {
+            "operation": "large_100_middle_output",
+            "bytes": 906,
+            "elapsed_us": 9968.75
+          },
+          {
+            "operation": "large_1000_output",
+            "bytes": 838,
+            "elapsed_us": 43410.708
+          },
+          {
+            "operation": "large_1000_movement",
+            "bytes": 94,
+            "elapsed_us": 21134.208
+          },
+          {
+            "operation": "large_1000_movement",
+            "bytes": 90,
+            "elapsed_us": 44732.834
+          },
+          {
+            "operation": "large_1000_movement",
+            "bytes": 73,
+            "elapsed_us": 51907.666
+          },
+          {
+            "operation": "large_1000_middle_output",
+            "bytes": 906,
+            "elapsed_us": 35282.333
+          }
+        ],
+        "validated_text": "begin {\ntask!\n}",
+        "unicode_validation": true,
+        "large": [
+          {
+            "lines": 10,
+            "bytes": 690,
+            "screen": {
+              "cursor": "6 4",
+              "text": "application event: draft preserved\nvalidate> row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n! Invalid input \u00b7 1 diagnostics\n! [0..0] Expected closing delimiter",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          },
+          {
+            "lines": 100,
+            "bytes": 6900,
+            "screen": {
+              "cursor": "9 4",
+              "text": "application event: draft preserved\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n! Invalid input \u00b7 1 diagnostics\n! [0..0] Expected closing delimiter",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          },
+          {
+            "lines": 1000,
+            "bytes": 69000,
+            "screen": {
+              "cursor": "9 4",
+              "text": "application event: draft preserved\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n! Invalid input \u00b7 1 diagnostics\n! [0..0] Expected closing delimiter",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          }
+        ],
+        "lifecycles": 12,
+        "exact_restoration": true,
+        "stale_silent": true,
+        "completion_precedence": true
+      },
+      "session": {
+        "synchronous_validation": true,
+        "submitted": "{\ntask\n}",
+        "exact_restoration": true
+      }
+    },
+    "macos/replai-validation-memory": {
+      "platform": "darwin",
+      "memory_command": [
+        "/usr/bin/leaks",
+        "--atExit",
+        "--"
+      ],
+      "styled": {
+        "plain": false,
+        "damage": [
+          {
+            "operation": "incomplete",
+            "bytes": 29,
+            "elapsed_us": 4114.459
+          },
+          {
+            "operation": "invalid",
+            "bytes": 130,
+            "elapsed_us": 4299.542
+          },
+          {
+            "operation": "resize_20",
+            "bytes": 124,
+            "elapsed_us": 3662.333
+          },
+          {
+            "operation": "resize_40",
+            "bytes": 148,
+            "elapsed_us": 3448.875
+          },
+          {
+            "operation": "resize_80",
+            "bytes": 148,
+            "elapsed_us": 4214.541
+          },
+          {
+            "operation": "resize_132",
+            "bytes": 148,
+            "elapsed_us": 4245.209
+          },
+          {
+            "operation": "output",
+            "bytes": 205,
+            "elapsed_us": 4486.708
+          },
+          {
+            "operation": "complete",
+            "bytes": 40,
+            "elapsed_us": 3972.375
+          },
+          {
+            "operation": "large_10_output",
+            "bytes": 838,
+            "elapsed_us": 5897.791
+          },
+          {
+            "operation": "large_10_movement",
+            "bytes": 10,
+            "elapsed_us": 6638.042
+          },
+          {
+            "operation": "large_10_movement",
+            "bytes": 10,
+            "elapsed_us": 5953.958
+          },
+          {
+            "operation": "large_10_movement",
+            "bytes": 9,
+            "elapsed_us": 6098.75
+          },
+          {
+            "operation": "large_10_middle_output",
+            "bytes": 912,
+            "elapsed_us": 6495.834
+          },
+          {
+            "operation": "large_100_output",
+            "bytes": 838,
+            "elapsed_us": 11811.667
+          },
+          {
+            "operation": "large_100_movement",
+            "bytes": 94,
+            "elapsed_us": 10377.75
+          },
+          {
+            "operation": "large_100_movement",
+            "bytes": 90,
+            "elapsed_us": 12768.166
+          },
+          {
+            "operation": "large_100_movement",
+            "bytes": 73,
+            "elapsed_us": 12527.166
+          },
+          {
+            "operation": "large_100_middle_output",
+            "bytes": 906,
+            "elapsed_us": 12916.125
+          },
+          {
+            "operation": "large_1000_output",
+            "bytes": 838,
+            "elapsed_us": 74631.75
+          },
+          {
+            "operation": "large_1000_movement",
+            "bytes": 94,
+            "elapsed_us": 51110.417
+          },
+          {
+            "operation": "large_1000_movement",
+            "bytes": 90,
+            "elapsed_us": 79415.75
+          },
+          {
+            "operation": "large_1000_movement",
+            "bytes": 73,
+            "elapsed_us": 81367.334
+          },
+          {
+            "operation": "large_1000_middle_output",
+            "bytes": 906,
+            "elapsed_us": 65596.167
+          }
+        ],
+        "validated_text": "begin {\ntask!\n}",
+        "unicode_validation": true,
+        "large": [
+          {
+            "lines": 10,
+            "bytes": 690,
+            "screen": {
+              "cursor": "6 4",
+              "text": "application event: draft preserved\nvalidate> row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n! Invalid input \u00b7 1 diagnostics\n! [0..0] Expected closing delimiter",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          },
+          {
+            "lines": 100,
+            "bytes": 6900,
+            "screen": {
+              "cursor": "9 4",
+              "text": "application event: draft preserved\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n! Invalid input \u00b7 1 diagnostics\n! [0..0] Expected closing delimiter",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          },
+          {
+            "lines": 1000,
+            "bytes": 69000,
+            "screen": {
+              "cursor": "9 4",
+              "text": "application event: draft preserved\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n! Invalid input \u00b7 1 diagnostics\n! [0..0] Expected closing delimiter",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          }
+        ],
+        "lifecycles": 12,
+        "exact_restoration": true,
+        "stale_silent": true,
+        "completion_precedence": true
+      },
+      "plain": {
+        "plain": true,
+        "damage": [
+          {
+            "operation": "incomplete",
+            "bytes": 29,
+            "elapsed_us": 6685.708
+          },
+          {
+            "operation": "invalid",
+            "bytes": 130,
+            "elapsed_us": 6474.417
+          },
+          {
+            "operation": "resize_20",
+            "bytes": 124,
+            "elapsed_us": 5142.917
+          },
+          {
+            "operation": "resize_40",
+            "bytes": 148,
+            "elapsed_us": 4586.583
+          },
+          {
+            "operation": "resize_80",
+            "bytes": 148,
+            "elapsed_us": 4641.125
+          },
+          {
+            "operation": "resize_132",
+            "bytes": 148,
+            "elapsed_us": 4988.959
+          },
+          {
+            "operation": "output",
+            "bytes": 205,
+            "elapsed_us": 5358.0
+          },
+          {
+            "operation": "complete",
+            "bytes": 40,
+            "elapsed_us": 5791.625
+          },
+          {
+            "operation": "large_10_output",
+            "bytes": 838,
+            "elapsed_us": 8777.5
+          },
+          {
+            "operation": "large_10_movement",
+            "bytes": 10,
+            "elapsed_us": 7634.916
+          },
+          {
+            "operation": "large_10_movement",
+            "bytes": 10,
+            "elapsed_us": 7906.875
+          },
+          {
+            "operation": "large_10_movement",
+            "bytes": 9,
+            "elapsed_us": 10112.042
+          },
+          {
+            "operation": "large_10_middle_output",
+            "bytes": 912,
+            "elapsed_us": 12389.792
+          },
+          {
+            "operation": "large_100_output",
+            "bytes": 838,
+            "elapsed_us": 22454.833
+          },
+          {
+            "operation": "large_100_movement",
+            "bytes": 94,
+            "elapsed_us": 17339.25
+          },
+          {
+            "operation": "large_100_movement",
+            "bytes": 90,
+            "elapsed_us": 19606.0
+          },
+          {
+            "operation": "large_100_movement",
+            "bytes": 73,
+            "elapsed_us": 14969.958
+          },
+          {
+            "operation": "large_100_middle_output",
+            "bytes": 906,
+            "elapsed_us": 12636.292
+          },
+          {
+            "operation": "large_1000_output",
+            "bytes": 838,
+            "elapsed_us": 96106.583
+          },
+          {
+            "operation": "large_1000_movement",
+            "bytes": 94,
+            "elapsed_us": 59223.5
+          },
+          {
+            "operation": "large_1000_movement",
+            "bytes": 90,
+            "elapsed_us": 93399.75
+          },
+          {
+            "operation": "large_1000_movement",
+            "bytes": 73,
+            "elapsed_us": 101243.75
+          },
+          {
+            "operation": "large_1000_middle_output",
+            "bytes": 906,
+            "elapsed_us": 65815.667
+          }
+        ],
+        "validated_text": "begin {\ntask!\n}",
+        "unicode_validation": true,
+        "large": [
+          {
+            "lines": 10,
+            "bytes": 690,
+            "screen": {
+              "cursor": "6 4",
+              "text": "application event: draft preserved\nvalidate> row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n! Invalid input \u00b7 1 diagnostics\n! [0..0] Expected closing delimiter",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          },
+          {
+            "lines": 100,
+            "bytes": 6900,
+            "screen": {
+              "cursor": "9 4",
+              "text": "application event: draft preserved\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n! Invalid input \u00b7 1 diagnostics\n! [0..0] Expected closing delimiter",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          },
+          {
+            "lines": 1000,
+            "bytes": 69000,
+            "screen": {
+              "cursor": "9 4",
+              "text": "application event: draft preserved\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n... row xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n! Invalid input \u00b7 1 diagnostics\n! [0..0] Expected closing delimiter",
+              "alternate": "false",
+              "paste": "true",
+              "background_default": "true"
+            }
+          }
+        ],
+        "lifecycles": 12,
+        "exact_restoration": true,
+        "stale_silent": true,
+        "completion_precedence": true
+      },
+      "session": {
+        "synchronous_validation": true,
+        "submitted": "{\ntask\n}",
+        "exact_restoration": true
+      }
+    }
+  }
+}

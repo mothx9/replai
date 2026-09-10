@@ -141,12 +141,12 @@ installs no signal handlers and owns no background writer or application schedul
 ### Rust
 
 Integrate the native API through Cargo using an exact Git revision. This qualified
-checkpoint includes the three embedding tiers, structured presentation and the
-terminal capability contract:
+checkpoint includes the three embedding tiers, structured presentation, rich
+completion, validated multiline input and explicit terminal capabilities:
 
 ```toml
 [dependencies]
-replai = { git = "https://github.com/mothx9/replai", rev = "59c70db459e2bf1ae8fff43c29ed9557813de9d8" }
+replai = { git = "https://github.com/mothx9/replai", rev = "1da4dbf9162a2fea4d267e1aa473859ee64ae290" }
 ```
 
 A retained interaction provides a complete blocking input loop:
