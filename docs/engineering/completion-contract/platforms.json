@@ -1,0 +1,501 @@
+{
+  "revision": "9f245f115a12d781f1fb279d1b8da08b89f780ec",
+  "ci": "https://github.com/mothx9/replai/actions/runs/34482778339",
+  "jobs": {
+    "macos-latest/Rich completion through session and external host readiness": {
+      "platform": "darwin",
+      "memory_command": [],
+      "styled": {
+        "delayed_stale_zero_bytes": true,
+        "fresh_accept_after_resize_output": true,
+        "bounded_1000_viewport": {
+          "cursor": "1 16",
+          "text": "application event: draft preserved\ncomplete> build \n1000 / 1000  Tab next \u00b7 Enter accept \u00b7 Esc dismiss\n  994: bundle \u754c\ud83d\udc69\u200d\ud83d\udcbb  Produce a bundle\n  995: burn \u754c\ud83d\udc69\u200d\ud83d\udcbb    Run a stress exercise\n  996: build \u754c\ud83d\udc69\u200d\ud83d\udcbb   Build the project\n  997: bundle \u754c\ud83d\udc69\u200d\ud83d\udcbb  Produce a bundle\n  998: burn \u754c\ud83d\udc69\u200d\ud83d\udcbb    Run a stress exercise\n> 999: build \u754c\ud83d\udc69\u200d\ud83d\udcbb   Build the project",
+          "alternate": "false",
+          "paste": "true",
+          "background_default": "true"
+        },
+        "restored_lifecycles": 12,
+        "plain": false,
+        "damage": {
+          "show": {
+            "bytes": 184,
+            "observer_elapsed_ns": 5075042
+          },
+          "next": {
+            "bytes": 139,
+            "observer_elapsed_ns": 5903667
+          },
+          "previous": {
+            "bytes": 139,
+            "observer_elapsed_ns": 3878042
+          },
+          "resize_20": {
+            "bytes": 137,
+            "observer_elapsed_ns": 4533583
+          },
+          "resize_40": {
+            "bytes": 221,
+            "observer_elapsed_ns": 4942750
+          },
+          "resize_80": {
+            "bytes": 224,
+            "observer_elapsed_ns": 4093291
+          },
+          "resize_132": {
+            "bytes": 224,
+            "observer_elapsed_ns": 8169000
+          },
+          "output": {
+            "bytes": 281,
+            "observer_elapsed_ns": 4878917
+          },
+          "accept": {
+            "bytes": 62,
+            "observer_elapsed_ns": 4860209
+          },
+          "dismiss": {
+            "bytes": 44,
+            "observer_elapsed_ns": 268107792
+          }
+        },
+        "exact_restoration": true
+      },
+      "plain": {
+        "delayed_stale_zero_bytes": true,
+        "fresh_accept_after_resize_output": true,
+        "bounded_1000_viewport": {
+          "cursor": "1 16",
+          "text": "application event: draft preserved\ncomplete> build \n1000 / 1000  Tab next \u00b7 Enter accept \u00b7 Esc dismiss\n  994: bundle \u754c\ud83d\udc69\u200d\ud83d\udcbb  Produce a bundle\n  995: burn \u754c\ud83d\udc69\u200d\ud83d\udcbb    Run a stress exercise\n  996: build \u754c\ud83d\udc69\u200d\ud83d\udcbb   Build the project\n  997: bundle \u754c\ud83d\udc69\u200d\ud83d\udcbb  Produce a bundle\n  998: burn \u754c\ud83d\udc69\u200d\ud83d\udcbb    Run a stress exercise\n> 999: build \u754c\ud83d\udc69\u200d\ud83d\udcbb   Build the project",
+          "alternate": "false",
+          "paste": "true",
+          "background_default": "true"
+        },
+        "restored_lifecycles": 12,
+        "plain": true,
+        "damage": {
+          "show": {
+            "bytes": 184,
+            "observer_elapsed_ns": 6093583
+          },
+          "next": {
+            "bytes": 139,
+            "observer_elapsed_ns": 4236625
+          },
+          "previous": {
+            "bytes": 139,
+            "observer_elapsed_ns": 4821458
+          },
+          "resize_20": {
+            "bytes": 137,
+            "observer_elapsed_ns": 4509334
+          },
+          "resize_40": {
+            "bytes": 221,
+            "observer_elapsed_ns": 5702584
+          },
+          "resize_80": {
+            "bytes": 224,
+            "observer_elapsed_ns": 4616000
+          },
+          "resize_132": {
+            "bytes": 224,
+            "observer_elapsed_ns": 7707875
+          },
+          "output": {
+            "bytes": 281,
+            "observer_elapsed_ns": 5579708
+          },
+          "accept": {
+            "bytes": 62,
+            "observer_elapsed_ns": 5493208
+          },
+          "dismiss": {
+            "bytes": 44,
+            "observer_elapsed_ns": 274363375
+          }
+        },
+        "exact_restoration": true
+      },
+      "session": {
+        "synchronous_candidates": true,
+        "accepted": "bundle",
+        "exact_restoration": true
+      }
+    },
+    "macos-latest/Active completion lifecycle under native memory tooling": {
+      "platform": "darwin",
+      "memory_command": [
+        "/usr/bin/leaks",
+        "--atExit",
+        "--"
+      ],
+      "styled": {
+        "delayed_stale_zero_bytes": true,
+        "fresh_accept_after_resize_output": true,
+        "bounded_1000_viewport": {
+          "cursor": "1 16",
+          "text": "application event: draft preserved\ncomplete> build \n1000 / 1000  Tab next \u00b7 Enter accept \u00b7 Esc dismiss\n  994: bundle \u754c\ud83d\udc69\u200d\ud83d\udcbb  Produce a bundle\n  995: burn \u754c\ud83d\udc69\u200d\ud83d\udcbb    Run a stress exercise\n  996: build \u754c\ud83d\udc69\u200d\ud83d\udcbb   Build the project\n  997: bundle \u754c\ud83d\udc69\u200d\ud83d\udcbb  Produce a bundle\n  998: burn \u754c\ud83d\udc69\u200d\ud83d\udcbb    Run a stress exercise\n> 999: build \u754c\ud83d\udc69\u200d\ud83d\udcbb   Build the project",
+          "alternate": "false",
+          "paste": "true",
+          "background_default": "true"
+        },
+        "restored_lifecycles": 12,
+        "plain": false,
+        "damage": {
+          "show": {
+            "bytes": 184,
+            "observer_elapsed_ns": 5493750
+          },
+          "next": {
+            "bytes": 139,
+            "observer_elapsed_ns": 6988500
+          },
+          "previous": {
+            "bytes": 139,
+            "observer_elapsed_ns": 6514500
+          },
+          "resize_20": {
+            "bytes": 137,
+            "observer_elapsed_ns": 5610125
+          },
+          "resize_40": {
+            "bytes": 221,
+            "observer_elapsed_ns": 5518542
+          },
+          "resize_80": {
+            "bytes": 224,
+            "observer_elapsed_ns": 5634458
+          },
+          "resize_132": {
+            "bytes": 224,
+            "observer_elapsed_ns": 5718666
+          },
+          "output": {
+            "bytes": 281,
+            "observer_elapsed_ns": 10759584
+          },
+          "accept": {
+            "bytes": 62,
+            "observer_elapsed_ns": 5633625
+          },
+          "dismiss": {
+            "bytes": 44,
+            "observer_elapsed_ns": 271639166
+          }
+        },
+        "exact_restoration": true
+      },
+      "plain": {
+        "delayed_stale_zero_bytes": true,
+        "fresh_accept_after_resize_output": true,
+        "bounded_1000_viewport": {
+          "cursor": "1 16",
+          "text": "application event: draft preserved\ncomplete> build \n1000 / 1000  Tab next \u00b7 Enter accept \u00b7 Esc dismiss\n  994: bundle \u754c\ud83d\udc69\u200d\ud83d\udcbb  Produce a bundle\n  995: burn \u754c\ud83d\udc69\u200d\ud83d\udcbb    Run a stress exercise\n  996: build \u754c\ud83d\udc69\u200d\ud83d\udcbb   Build the project\n  997: bundle \u754c\ud83d\udc69\u200d\ud83d\udcbb  Produce a bundle\n  998: burn \u754c\ud83d\udc69\u200d\ud83d\udcbb    Run a stress exercise\n> 999: build \u754c\ud83d\udc69\u200d\ud83d\udcbb   Build the project",
+          "alternate": "false",
+          "paste": "true",
+          "background_default": "true"
+        },
+        "restored_lifecycles": 12,
+        "plain": true,
+        "damage": {
+          "show": {
+            "bytes": 184,
+            "observer_elapsed_ns": 5729583
+          },
+          "next": {
+            "bytes": 139,
+            "observer_elapsed_ns": 6190208
+          },
+          "previous": {
+            "bytes": 139,
+            "observer_elapsed_ns": 5522375
+          },
+          "resize_20": {
+            "bytes": 137,
+            "observer_elapsed_ns": 5400542
+          },
+          "resize_40": {
+            "bytes": 221,
+            "observer_elapsed_ns": 5701792
+          },
+          "resize_80": {
+            "bytes": 224,
+            "observer_elapsed_ns": 5876667
+          },
+          "resize_132": {
+            "bytes": 224,
+            "observer_elapsed_ns": 5980875
+          },
+          "output": {
+            "bytes": 281,
+            "observer_elapsed_ns": 6663958
+          },
+          "accept": {
+            "bytes": 62,
+            "observer_elapsed_ns": 5554000
+          },
+          "dismiss": {
+            "bytes": 44,
+            "observer_elapsed_ns": 266407875
+          }
+        },
+        "exact_restoration": true
+      },
+      "session": {
+        "synchronous_candidates": true,
+        "accepted": "bundle",
+        "exact_restoration": true
+      }
+    },
+    "ubuntu-latest/Rich completion through session and external host readiness": {
+      "platform": "linux",
+      "memory_command": [],
+      "styled": {
+        "delayed_stale_zero_bytes": true,
+        "fresh_accept_after_resize_output": true,
+        "bounded_1000_viewport": {
+          "cursor": "1 16",
+          "text": "application event: draft preserved\ncomplete> build \n1000 / 1000  Tab next \u00b7 Enter accept \u00b7 Esc dismiss\n  994: bundle \u754c\ud83d\udc69\u200d\ud83d\udcbb  Produce a bundle\n  995: burn \u754c\ud83d\udc69\u200d\ud83d\udcbb    Run a stress exercise\n  996: build \u754c\ud83d\udc69\u200d\ud83d\udcbb   Build the project\n  997: bundle \u754c\ud83d\udc69\u200d\ud83d\udcbb  Produce a bundle\n  998: burn \u754c\ud83d\udc69\u200d\ud83d\udcbb    Run a stress exercise\n> 999: build \u754c\ud83d\udc69\u200d\ud83d\udcbb   Build the project",
+          "alternate": "false",
+          "paste": "true",
+          "background_default": "true"
+        },
+        "restored_lifecycles": 12,
+        "plain": false,
+        "damage": {
+          "show": {
+            "bytes": 184,
+            "observer_elapsed_ns": 2100903
+          },
+          "next": {
+            "bytes": 139,
+            "observer_elapsed_ns": 2068964
+          },
+          "previous": {
+            "bytes": 139,
+            "observer_elapsed_ns": 2436493
+          },
+          "resize_20": {
+            "bytes": 137,
+            "observer_elapsed_ns": 1712896
+          },
+          "resize_40": {
+            "bytes": 221,
+            "observer_elapsed_ns": 2053205
+          },
+          "resize_80": {
+            "bytes": 224,
+            "observer_elapsed_ns": 2281892
+          },
+          "resize_132": {
+            "bytes": 224,
+            "observer_elapsed_ns": 2823343
+          },
+          "output": {
+            "bytes": 281,
+            "observer_elapsed_ns": 3073510
+          },
+          "accept": {
+            "bytes": 62,
+            "observer_elapsed_ns": 2639830
+          },
+          "dismiss": {
+            "bytes": 44,
+            "observer_elapsed_ns": 253741587
+          }
+        },
+        "exact_restoration": true
+      },
+      "plain": {
+        "delayed_stale_zero_bytes": true,
+        "fresh_accept_after_resize_output": true,
+        "bounded_1000_viewport": {
+          "cursor": "1 16",
+          "text": "application event: draft preserved\ncomplete> build \n1000 / 1000  Tab next \u00b7 Enter accept \u00b7 Esc dismiss\n  994: bundle \u754c\ud83d\udc69\u200d\ud83d\udcbb  Produce a bundle\n  995: burn \u754c\ud83d\udc69\u200d\ud83d\udcbb    Run a stress exercise\n  996: build \u754c\ud83d\udc69\u200d\ud83d\udcbb   Build the project\n  997: bundle \u754c\ud83d\udc69\u200d\ud83d\udcbb  Produce a bundle\n  998: burn \u754c\ud83d\udc69\u200d\ud83d\udcbb    Run a stress exercise\n> 999: build \u754c\ud83d\udc69\u200d\ud83d\udcbb   Build the project",
+          "alternate": "false",
+          "paste": "true",
+          "background_default": "true"
+        },
+        "restored_lifecycles": 12,
+        "plain": true,
+        "damage": {
+          "show": {
+            "bytes": 184,
+            "observer_elapsed_ns": 1905699
+          },
+          "next": {
+            "bytes": 139,
+            "observer_elapsed_ns": 1969168
+          },
+          "previous": {
+            "bytes": 139,
+            "observer_elapsed_ns": 2000787
+          },
+          "resize_20": {
+            "bytes": 137,
+            "observer_elapsed_ns": 1672724
+          },
+          "resize_40": {
+            "bytes": 221,
+            "observer_elapsed_ns": 1967544
+          },
+          "resize_80": {
+            "bytes": 224,
+            "observer_elapsed_ns": 2202052
+          },
+          "resize_132": {
+            "bytes": 224,
+            "observer_elapsed_ns": 2598383
+          },
+          "output": {
+            "bytes": 281,
+            "observer_elapsed_ns": 2820868
+          },
+          "accept": {
+            "bytes": 62,
+            "observer_elapsed_ns": 2540164
+          },
+          "dismiss": {
+            "bytes": 44,
+            "observer_elapsed_ns": 253665454
+          }
+        },
+        "exact_restoration": true
+      },
+      "session": {
+        "synchronous_candidates": true,
+        "accepted": "bundle",
+        "exact_restoration": true
+      }
+    },
+    "ubuntu-latest/Active completion lifecycle under native memory tooling": {
+      "platform": "linux",
+      "memory_command": [
+        "/usr/bin/valgrind",
+        "--leak-check=full",
+        "--show-leak-kinds=all",
+        "--errors-for-leak-kinds=definite,indirect",
+        "--error-exitcode=99",
+        "--log-file=/home/runner/work/_temp/replai-completion-memory/valgrind-%p.log"
+      ],
+      "styled": {
+        "delayed_stale_zero_bytes": true,
+        "fresh_accept_after_resize_output": true,
+        "bounded_1000_viewport": {
+          "cursor": "1 16",
+          "text": "application event: draft preserved\ncomplete> build \n1000 / 1000  Tab next \u00b7 Enter accept \u00b7 Esc dismiss\n  994: bundle \u754c\ud83d\udc69\u200d\ud83d\udcbb  Produce a bundle\n  995: burn \u754c\ud83d\udc69\u200d\ud83d\udcbb    Run a stress exercise\n  996: build \u754c\ud83d\udc69\u200d\ud83d\udcbb   Build the project\n  997: bundle \u754c\ud83d\udc69\u200d\ud83d\udcbb  Produce a bundle\n  998: burn \u754c\ud83d\udc69\u200d\ud83d\udcbb    Run a stress exercise\n> 999: build \u754c\ud83d\udc69\u200d\ud83d\udcbb   Build the project",
+          "alternate": "false",
+          "paste": "true",
+          "background_default": "true"
+        },
+        "restored_lifecycles": 12,
+        "plain": false,
+        "damage": {
+          "show": {
+            "bytes": 184,
+            "observer_elapsed_ns": 32121408
+          },
+          "next": {
+            "bytes": 139,
+            "observer_elapsed_ns": 8798501
+          },
+          "previous": {
+            "bytes": 139,
+            "observer_elapsed_ns": 4771755
+          },
+          "resize_20": {
+            "bytes": 137,
+            "observer_elapsed_ns": 12620606
+          },
+          "resize_40": {
+            "bytes": 221,
+            "observer_elapsed_ns": 4877071
+          },
+          "resize_80": {
+            "bytes": 224,
+            "observer_elapsed_ns": 4361611
+          },
+          "resize_132": {
+            "bytes": 224,
+            "observer_elapsed_ns": 4653354
+          },
+          "output": {
+            "bytes": 281,
+            "observer_elapsed_ns": 45746536
+          },
+          "accept": {
+            "bytes": 62,
+            "observer_elapsed_ns": 7486586
+          },
+          "dismiss": {
+            "bytes": 44,
+            "observer_elapsed_ns": 261395931
+          }
+        },
+        "exact_restoration": true
+      },
+      "plain": {
+        "delayed_stale_zero_bytes": true,
+        "fresh_accept_after_resize_output": true,
+        "bounded_1000_viewport": {
+          "cursor": "1 16",
+          "text": "application event: draft preserved\ncomplete> build \n1000 / 1000  Tab next \u00b7 Enter accept \u00b7 Esc dismiss\n  994: bundle \u754c\ud83d\udc69\u200d\ud83d\udcbb  Produce a bundle\n  995: burn \u754c\ud83d\udc69\u200d\ud83d\udcbb    Run a stress exercise\n  996: build \u754c\ud83d\udc69\u200d\ud83d\udcbb   Build the project\n  997: bundle \u754c\ud83d\udc69\u200d\ud83d\udcbb  Produce a bundle\n  998: burn \u754c\ud83d\udc69\u200d\ud83d\udcbb    Run a stress exercise\n> 999: build \u754c\ud83d\udc69\u200d\ud83d\udcbb   Build the project",
+          "alternate": "false",
+          "paste": "true",
+          "background_default": "true"
+        },
+        "restored_lifecycles": 12,
+        "plain": true,
+        "damage": {
+          "show": {
+            "bytes": 184,
+            "observer_elapsed_ns": 32870805
+          },
+          "next": {
+            "bytes": 139,
+            "observer_elapsed_ns": 8855498
+          },
+          "previous": {
+            "bytes": 139,
+            "observer_elapsed_ns": 4855051
+          },
+          "resize_20": {
+            "bytes": 137,
+            "observer_elapsed_ns": 12718038
+          },
+          "resize_40": {
+            "bytes": 221,
+            "observer_elapsed_ns": 4750946
+          },
+          "resize_80": {
+            "bytes": 224,
+            "observer_elapsed_ns": 4194509
+          },
+          "resize_132": {
+            "bytes": 224,
+            "observer_elapsed_ns": 4600576
+          },
+          "output": {
+            "bytes": 281,
+            "observer_elapsed_ns": 46324083
+          },
+          "accept": {
+            "bytes": 62,
+            "observer_elapsed_ns": 7567016
+          },
+          "dismiss": {
+            "bytes": 44,
+            "observer_elapsed_ns": 261306915
+          }
+        },
+        "exact_restoration": true
+      },
+      "session": {
+        "synchronous_candidates": true,
+        "accepted": "bundle",
+        "exact_restoration": true
+      }
+    }
+  }
+}

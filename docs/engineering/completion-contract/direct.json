@@ -1,0 +1,2135 @@
+{
+  "fixture_sha256": "6ad18816eff9dcec4c750da0d512b907246b080b6bc74d374ef423976cbc1c24",
+  "machine": "spark-7c3d",
+  "scope": "1 KiB ASCII draft, revision-bound replacement with build; open/drain/close excluded, terminal write included; separate timing/allocation binaries",
+  "sources": {
+    "before": {
+      "revision": "fea24ddaf6f987a8966bd149b5bcb16a51e892bd",
+      "tree": "85c252f4a4e2efdcbb3b4e5f3f586a437ffc3261",
+      "results": {
+        "latency": {
+          "binary_sha256": "28fc97abd60f1f903aff360b9e40a92513f3e74fac2bb5aad95766730d9bcc39",
+          "measurements": [
+            {
+              "allocation_samples": null,
+              "input_bytes": 1024,
+              "operation": "Editor::replace_at",
+              "replacement": "build",
+              "samples_us": [
+                0.032,
+                0.048,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.048,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.048,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032
+              ],
+              "terminal_bytes": [],
+              "median_us": 0.032
+            },
+            {
+              "allocation_samples": null,
+              "input_bytes": 1024,
+              "operation": "Interaction::complete_at",
+              "replacement": "build",
+              "samples_us": [
+                2.48,
+                2.32,
+                2.32,
+                2.16,
+                2.176,
+                2.512,
+                2.2560000000000002,
+                2.272,
+                2.384,
+                2.272,
+                2.4,
+                2.16,
+                2.24,
+                2.1919999999999997,
+                2.384,
+                2.304,
+                2.1919999999999997,
+                2.32,
+                2.032,
+                2.144,
+                2.144,
+                2.096,
+                2.176,
+                2.176,
+                2.1919999999999997,
+                2.2079999999999997,
+                2.1119999999999997,
+                2.08,
+                2.048,
+                2.08,
+                2.176,
+                2.128,
+                2.064,
+                2.1919999999999997,
+                1.904,
+                1.968,
+                2.016,
+                2.128,
+                2.1919999999999997,
+                2.0,
+                2.1119999999999997,
+                2.048,
+                2.016,
+                2.144,
+                2.0,
+                1.92,
+                1.888,
+                2.016,
+                1.92,
+                2.0,
+                1.968,
+                2.016,
+                2.16,
+                2.3360000000000003,
+                2.0,
+                2.144,
+                2.048,
+                2.032,
+                1.9520000000000002,
+                1.984,
+                1.9520000000000002,
+                2.128,
+                1.968
+              ],
+              "terminal_bytes": [
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132
+              ],
+              "median_us": 2.128
+            }
+          ]
+        },
+        "allocation": {
+          "binary_sha256": "ea8747e51149ede5c22cd5691aa96029a3cc3f45934b9e299644ef682f8fe414",
+          "measurements": [
+            {
+              "allocation_samples": [
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                }
+              ],
+              "input_bytes": 1024,
+              "operation": "Editor::replace_at",
+              "replacement": "build",
+              "samples_us": null,
+              "terminal_bytes": []
+            },
+            {
+              "allocation_samples": [
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                }
+              ],
+              "input_bytes": 1024,
+              "operation": "Interaction::complete_at",
+              "replacement": "build",
+              "samples_us": null,
+              "terminal_bytes": [
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "after": {
+      "revision": "9f245f115a12d781f1fb279d1b8da08b89f780ec",
+      "tree": "400982b62309e94f77304591e3cfdeeb09ca033f",
+      "results": {
+        "latency": {
+          "binary_sha256": "d54ba2b6a1d27ef2657c5d54b8da49820606722555aace3a39c792251fe6b543",
+          "measurements": [
+            {
+              "allocation_samples": null,
+              "input_bytes": 1024,
+              "operation": "Editor::replace_at",
+              "replacement": "build",
+              "samples_us": [
+                0.048,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.048,
+                0.032,
+                0.032,
+                0.048,
+                0.032,
+                0.032,
+                0.032,
+                0.048,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.048,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.048,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.048,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.048,
+                0.032,
+                0.048,
+                0.048,
+                0.032,
+                0.032,
+                0.032,
+                0.048,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.032,
+                0.048,
+                0.032,
+                0.032,
+                0.032,
+                0.048
+              ],
+              "terminal_bytes": [],
+              "median_us": 0.032
+            },
+            {
+              "allocation_samples": null,
+              "input_bytes": 1024,
+              "operation": "Interaction::complete_at",
+              "replacement": "build",
+              "samples_us": [
+                2.3520000000000003,
+                2.1919999999999997,
+                2.1919999999999997,
+                2.2239999999999998,
+                2.1119999999999997,
+                2.176,
+                2.2079999999999997,
+                2.32,
+                2.3520000000000003,
+                2.2079999999999997,
+                2.304,
+                2.2239999999999998,
+                2.1919999999999997,
+                2.2079999999999997,
+                3.088,
+                2.64,
+                2.2560000000000002,
+                2.32,
+                2.1119999999999997,
+                2.384,
+                2.144,
+                2.1919999999999997,
+                2.2239999999999998,
+                2.2560000000000002,
+                2.144,
+                2.176,
+                2.304,
+                2.16,
+                2.176,
+                2.176,
+                2.08,
+                2.24,
+                2.1119999999999997,
+                2.2239999999999998,
+                2.048,
+                2.08,
+                2.2079999999999997,
+                2.2560000000000002,
+                2.144,
+                2.144,
+                2.1119999999999997,
+                2.2239999999999998,
+                2.144,
+                2.3360000000000003,
+                2.08,
+                2.144,
+                2.176,
+                2.08,
+                2.1119999999999997,
+                2.048,
+                2.096,
+                2.08,
+                2.096,
+                2.1119999999999997,
+                2.08,
+                2.064,
+                2.032,
+                2.304,
+                2.113,
+                2.1119999999999997,
+                2.016,
+                2.144,
+                2.048
+              ],
+              "terminal_bytes": [
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132
+              ],
+              "median_us": 2.176
+            }
+          ]
+        },
+        "allocation": {
+          "binary_sha256": "ac848ae95cae758e2efa4f03bedc1d829a54c9a7065053b7bcb74483b5b7b5dc",
+          "measurements": [
+            {
+              "allocation_samples": [
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                },
+                {
+                  "allocation_calls": 0,
+                  "peak_live_delta_bytes": 0,
+                  "requested_bytes": 0,
+                  "retained_delta_bytes": 0
+                }
+              ],
+              "input_bytes": 1024,
+              "operation": "Editor::replace_at",
+              "replacement": "build",
+              "samples_us": null,
+              "terminal_bytes": []
+            },
+            {
+              "allocation_samples": [
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                },
+                {
+                  "allocation_calls": 21,
+                  "peak_live_delta_bytes": 1680,
+                  "requested_bytes": 3808,
+                  "retained_delta_bytes": -3192
+                }
+              ],
+              "input_bytes": 1024,
+              "operation": "Interaction::complete_at",
+              "replacement": "build",
+              "samples_us": null,
+              "terminal_bytes": [
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132,
+                132
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}

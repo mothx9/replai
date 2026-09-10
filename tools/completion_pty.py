@@ -74,6 +74,9 @@ def run(work, prefix=(), plain=False):
                 evidence['delayed_stale_zero_bytes']=True
                 screen=measure('show',lambda:s.event(b'F'))
                 assert selection(s)==(0,3) and '> build' in screen['text']
+                current_menu=selection(s); current_screen=s.screen(); mark=len(s.output)
+                s.event(b'A')  # An older result must not replace a newer visible menu.
+                assert selection(s)==current_menu and s.screen()==current_screen and len(s.output)==mark
                 current=revision(s); draft=(s.state()['text'],s.state()['cursor'])
                 screen=measure('next',lambda:key(s,b'\t'))
                 assert selection(s)==(1,3) and '> bundle' in screen['text']
