@@ -65,6 +65,10 @@ IDs/states/counts, program references and unique engineering selection, ABI iden
 tables against the schema, Markdown table delimiters, and Mermaid syntax. Its negative fixtures must prove
 that rejected documents produce a file-specific error. It does not infer prose
 accuracy, verify live external URLs or prove capability by counting tests.
+Release-scope checks require one valid classification for every non-established
+maturity row, exact maturity agreement, evidence links and consistent class counts.
+These are documentation controls, not execution of the future
+[release qualification gates](release-scope.md#required-evidence-before-freeze-and-tagging).
 
 For Rust behavior:
 

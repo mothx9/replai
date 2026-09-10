@@ -15,6 +15,7 @@ over prose; summaries link to the owner instead of restating its contract.
 | How do I reconcile, validate and report a change? | [Development](development.md) |
 | Which rules must a coding agent follow? | [Agent instructions](../AGENTS.md) |
 | What is demonstrated, limited and next? | [Project status](../ROADMAP.md) |
+| What is the selected first-release support and acceptance contract? | [Release scope](release-scope.md); classifications and selection remain in ROADMAP |
 | What proves the F0 ownership refoundation? | [F0 engineering evidence](engineering/f0.md) |
 | How are performance and embedding costs measured? | [P0 characterization](engineering/p0.md) |
 | What proves macOS runtime and common performance convergence? | [macOS/performance evidence](engineering/macos-perf.md) |

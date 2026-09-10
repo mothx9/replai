@@ -15,7 +15,7 @@ OWNERS = {
     "README.md", "CONTRIBUTING.md", "AGENTS.md", "ROADMAP.md", "CHANGELOG.md",
     "docs/README.md", "docs/repl.md", "docs/architecture.md",
     "docs/interaction.md", "docs/presentation.md", "docs/c-api.md",
-    "docs/development.md",
+    "docs/development.md", "docs/release-scope.md",
 }
 
 
@@ -154,7 +154,7 @@ def check_roadmap(text):
     if programs != set("FPIOUXQEV"):
         reject("missing strategic program")
 
-    counts, ids = dict.fromkeys(MATURITY, 0), set()
+    counts, ids, maturity = dict.fromkeys(MATURITY, 0), set(), {}
     for cells in rows(section("maturity")):
         if len(cells) != 7 or not all(cells):
             reject("maturity rows require seven nonempty fields")
@@ -163,6 +163,7 @@ def check_roadmap(text):
         if not re.fullmatch(r"[a-z][a-z0-9_]*(?:\.[a-z][a-z0-9_]*)+", identity) or identity in ids:
             reject(f"invalid or duplicate maturity ID: {identity}")
         ids.add(identity)
+        maturity[identity] = state
         valid = [name for name, icon in MATURITY.items() if state == f"{icon} {name}"]
         if not valid:
             reject(f"invalid maturity state: {identity}")
@@ -178,6 +179,34 @@ def check_roadmap(text):
     expected = " ".join(f"{state}={count}" for state, count in counts.items()) + f" TOTAL={sum(counts.values())}"
     if section("maturity-counts").strip() != expected:
         reject(f"maturity counts differ; expected {expected}")
+
+    # Release inclusion is independent of maturity, but cannot omit an open gap.
+    classes = dict.fromkeys(("MUST_V0_1", "SHOULD_V0_1", "V0_2", "LATER", "OUT_OF_SCOPE"), 0)
+    remaining = {key for key, state in maturity.items() if state != "🟢 ESTABLISHED"}
+    classified = set()
+    for cells in rows(section("release-scope")):
+        if cells[0] == "Capability":
+            continue
+        if len(cells) != 5 or not all(cells):
+            reject("release scope requires five nonempty fields")
+            continue
+        identity, state, category, _, evidence = cells
+        if identity in classified:
+            reject(f"duplicate release capability: {identity}")
+        classified.add(identity)
+        if maturity.get(identity) != state:
+            reject(f"release maturity differs from canonical row: {identity}")
+        if category not in classes:
+            reject(f"invalid release class: {identity}")
+        else:
+            classes[category] += 1
+        if not re.search(r"\[[^]]+\]\([^)]+\)", evidence):
+            reject(f"missing release evidence link: {identity}")
+    if classified != remaining:
+        reject(f"release scope coverage differs; missing={sorted(remaining - classified)}, extra={sorted(classified - remaining)}")
+    expected = " ".join(f"{key}={value}" for key, value in classes.items()) + f" TOTAL={sum(classes.values())}"
+    if section("release-counts").strip() != expected:
+        reject(f"release counts differ; expected {expected}")
 
     selected = re.findall(
         r"^\| Current selected engineering boundary \| \*\*([A-Z0-9.]+)(?: — (SELECTED_NOT_STARTED|ACTIVE))?\*\*",

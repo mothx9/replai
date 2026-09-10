@@ -5,9 +5,9 @@
 | Axis | Current truth |
 | --- | --- |
 | Project target | Embeddable command-line interaction infrastructure: a simple entry that can grow into rich, long-lived host-driven interfaces over one engine. |
-| Current selected engineering boundary | **NONE**: I2 is closed; no following engineering boundary is selected or authorized. |
+| Current selected engineering boundary | **RELEASE.HARDENING.0 — SELECTED_NOT_STARTED**: scoped Q0/Q1/Q2 evidence for the existing v0.1 surface; selection is not implementation authorization. |
 | Latest major completed boundary | I2 ANALYSIS.PRESENTATION: revision-bound host editor spans and non-canonical hints, composable with completion and validation. |
-| Most important structural gap | History provider/search and configurable editing remain open; broader robustness, packaging and API-freeze evidence still govern first-release readiness. |
+| Most important structural gap | Adversarial/resource campaigns, measured regression policy and installable/frozen release artifacts are missing. I4/I5 are deferred from v0.1, not completed. |
 | Executable foundation | Platform-neutral engine; bounded Unicode/grapheme editor; history navigation; completion requests; paste, interrupts/EOF, resize, safe output and exact restoration. |
 | Qualified platforms | Linux/macOS: real Rust/C terminal runtime. Windows: portable engine/document tests only, no terminal backend. |
 | Current Rust surface | Editor/Interaction, blocking results, session events, portable wake/deadline/admission types, borrowed POSIX readiness, revision/snapshot/stale outcomes, bounded completion candidates/selection, submission requests/dispositions, diagnostics, editor analysis spans/hints, prompts/themes and structured documents. Pre-release, without API freeze. |
@@ -15,8 +15,8 @@
 | Performance posture | P0/P1/P2 preserved at matched workloads; driven idle requires no periodic library wake, while compatibility polling retains its 100 ms resize observation. No universal latency gate. |
 | Presentation posture | Safe spans, headings, facts, lists, responsive tables/status, composed prompts/themes and deterministic plain output. Bounded completion and validated multiline interaction are qualified; bounded host editor spans/hints are qualified; broader visual refinement remains separate. |
 | Consumer posture | Native Rust and C consumers are external owners. Exact pins, adoption, application mappings and publication are their decisions; producer metadata assigns no migrations. |
-| Public-release posture | Pre-release; no stable Rust API, ABI longevity, SemVer or MSRV promise and no release date. |
-| Next decision point | Evaluate I4 history/search, I5 editing policy and Q/E readiness against concrete embedding needs; no next implementation is selected. |
+| Public-release posture | Pre-release. The v0.1 candidate envelope and compatibility requirements are selected in [release scope](docs/release-scope.md); no freeze, package publication or current stability promotion. |
+| Next decision point | Authorize the selected hardening boundary separately. Three engineering waves plus one publication wave remain; no new runtime feature is required by the selected scope. |
 
 This is the sole authority for **public macro state, maturity, strategic programs,
 dependency ordering and release progression**. [README](README.md) owns first use;
@@ -26,7 +26,7 @@ APIs. F1/P3/F2 are complete at their stated scope. I0 is complete at its stated 
 
 Navigate: [maturity](#system-maturity) · [programs](#strategic-programs) ·
 [completed boundaries](#completed-boundaries) · [sequence](#current-execution-sequence) ·
-[release](#release-progression) · [promotion](#promotion-and-living-update-discipline).
+[release scope](#first-release-scope) · [release gates](#release-progression) · [promotion](#promotion-and-living-update-discipline).
 
 ## System Maturity
 
@@ -129,9 +129,9 @@ ESTABLISHED=29 PARTIAL=9 OPEN=4 LATER=4 TOTAL=46
 | ecosystem.consumers | E1 consumer diversity | 🟡 PARTIAL | Two independent Rust/C product integrations and neutral fixtures; no broad shell/DB/debugger/streaming matrix. | Execute genuinely different hosts against exact contracts, with their own semantic controls. | E | [C example][c-example]; [Rust example][rust-example]; [historical extraction][extraction] |
 | ecosystem.cookbook | E2 integration patterns | 🟡 PARTIAL | Executable Rust/C examples and ownership docs exist; qualified three-tier examples exist; a diverse integration cookbook remains incomplete. | Derive copyable recipes from the qualified E1/F1/P3 consumers. | E / F | [Rust example][rust-example]; [C contract][c-api] |
 | ecosystem.contract_handoff | Producer contract publication | 🟢 ESTABLISHED | Repository-owned snapshots/fingerprints and consumer-neutral delta; no runtime dependency or assigned migrations. | Keep metadata aligned with exact qualified source; consumers author their own profiles/receipts. | E | [Producer metadata][producer]; [exact publication][carrier] |
-| release.api_freeze | E3 API freeze candidate | ⚪ LATER | Pre-release shapes; ABI identity is not a long-term compatibility promise. | Audit all selected public ownership, lifecycle, errors, language and portability contracts after E1 evidence. | E / V | [Architecture owner][architecture]; [C contract][c-api] |
-| release.qualification | V0 release qualification | ⚪ LATER | Boundary-specific evidence exists, not a first-release support envelope. | Close the release progression below with exact platform/API/ABI/package claims and reproducible gates. | V | [Development method][development]; [CI][ci] |
-| release.public | V1 first public commitment | ⚪ LATER | No package publication or stable compatibility promise is authorized. | Explicit release decision after V0; publish only the qualified support/compatibility scope. | V | [Release progression](#release-progression); [development][development] |
+| release.api_freeze | E3 API freeze candidate | ⚪ LATER | Pre-release shapes; first-release audit is mandatory but not started. ABI identity is not yet a long-term compatibility promise. | Audit all selected public ownership, lifecycle, errors, language and portability contracts after E1 evidence. | E / V | [Architecture owner][architecture]; [C contract][c-api] |
+| release.qualification | V0 release qualification | ⚪ LATER | Candidate support envelope selected; no integrated frozen-source/package release qualification yet. | Close the release progression below with exact platform/API/ABI/package claims and reproducible gates. | V | [Development method][development]; [CI][ci] |
+| release.public | V1 first public commitment | ⚪ LATER | No package publication or effective stable compatibility promise; V1 requires separate authorization after V0. | Explicit release decision after V0; publish only the qualified support/compatibility scope. | V | [Release progression](#release-progression); [development][development] |
 <!-- maturity:end -->
 
 ## Strategic Programs
@@ -152,7 +152,7 @@ can run independently when their prerequisites are explicit.
 | X | System realizations below one generic engine | 🟡 PARTIAL | X0 separation; Linux and X1 macOS runtime; Windows portable core | X2 runtime and its C acquisition design space; other systems later | F1/F2 resource contract; shared Q conformance | Fake support from compilation; speculative OS stubs |
 | Q | Reproducible correctness/resource/performance promotion | 🟡 PARTIAL | Deterministic/PTY/ABI oracles, failure cleanup, memory tools, benchmark integrity | Q0 fuzz/property breadth; Q1 storms/exhaustion; Q2 stable regression thresholds | Runs alongside each changed boundary; P0 noise evidence | Test-count maturity; unexecuted platform claims |
 | E | Reproducible, understandable independent embedding | 🟡 PARTIAL | Cargo/C installation, examples, two consumers, producer handoff metadata | E0 CMake/package consolidation; E1 diversity; E2 recipes; E3 freeze later | F1/P3 and real platform claims; Q evidence | Consumer migrations by default; mandatory BOUNDARY dependency |
-| V | First defensible public compatibility commitment | ⚪ LATER | Exact pre-release source/ABI qualification and CI | V0 support envelope; V1 publication decision | E3 candidate plus Q/X/package qualification | Date-driven release; incidental SemVer/API promises |
+| V | First defensible public compatibility commitment | ⚪ LATER | Exact pre-release source/ABI qualification and CI; selected v0.1 envelope | V0 integrated candidate/artifact qualification; V1 publication decision | E3 candidate plus Q/X/package qualification | Date-driven release; incidental SemVer/API promises |
 <!-- programs:end -->
 
 ## Completed Boundaries
@@ -176,22 +176,72 @@ to their recorded source, workload and environment.
 | I3/U2 VALIDATION.MULTILINE | Implementation `1da4dbf9162a2fea4d267e1aa473859ee64ae290`; [native/portable, memory and performance evidence][validation-multiline]. C ABI 1 stays exact; Rust Event gains opt-in SubmissionRequested. |
 | I2 ANALYSIS.PRESENTATION | Implementation `e0ab06bc2e9111b41968842b459c51a68855aa13`; fixture carrier `27981f0dbb22305f96a07bb7e4c7fafbbf81e90b`; [native/portable, memory and performance evidence][analysis-presentation]. Editor and C ABI 1 unchanged. |
 
+## First Release Scope
+
+The adopted v0.1 candidate is the current Rust interaction/analysis/presentation
+surface on Linux/macOS, portable Windows core, and bounded C ABI 1 sessions.
+Output is synchronous and host-serialized. No sustained active-edit stream or
+independent writer service is promised. [Release scope](docs/release-scope.md)
+owns the detailed support, compatibility, packaging and G1–G6 acceptance contract.
+It is a release design, not another maturity/status authority.
+
+Every non-established property is classified below.
+
+<!-- release-counts:start -->
+MUST_V0_1=9 SHOULD_V0_1=1 V0_2=6 LATER=1 OUT_OF_SCOPE=0 TOTAL=17
+<!-- release-counts:end -->
+
+No adopted remaining row is discarded as OUT_OF_SCOPE; host history databases, parser/command semantics and application
+scheduling remain architectural exclusions. V0_2 means the first post-release
+planning pool, not a delivery promise. Maturity is unchanged by classification.
+
+<!-- release-scope:start -->
+| Capability | Current maturity | v0.1 class | Rationale | Required evidence |
+| --- | --- | --- | --- | --- |
+| history.storage_search | 🟡 PARTIAL | V0_2 | I4: bounded navigation suffices; provider/reverse search is not advertised by v0.1. Persistence policy stays host-owned. | [History decision](docs/release-scope.md#history); later search/provider contract qualification |
+| editing.keymap | 🟡 PARTIAL | V0_2 | I5: fixed documented bindings suffice; word editing/configuration/undo can follow. Vi remains later within this broader row. | [Editing decision](docs/release-scope.md#editing-policy-and-visual-refinement); G2 preserves current bindings |
+| input.sensitive | ⚪ LATER | LATER | I6: ordinary editing is not secret entry; leakage-safe masked input is separately scoped. | [Sensitive-input exclusion](docs/release-scope.md#editing-policy-and-visual-refinement); separate future leakage/history campaign |
+| presentation.visual_system | 🟡 PARTIAL | SHOULD_V0_1 | U3 broad refinement is optional; existing-surface keyboard/plain usability is mandatory G2. | [Usability floor](docs/release-scope.md#g2--q1-resource-stress-and-baseline-usability); record omitted refinements without claiming U3 closure |
+| output.streaming | 🔴 OPEN | V0_2 | O1: host streams after close or serializes bounded notices; no sustained active-edit throughput contract. | [Output envelope](docs/release-scope.md#output-model-clients-and-long-lived-hosts); G2/G4 finite serialized-output proof |
+| output.multiplexed | 🔴 OPEN | V0_2 | O2: host event multiplexing already exists; independent writers/arbitration are excluded. | [Output envelope](docs/release-scope.md#output-model-clients-and-long-lived-hosts); later arbitration/scheduling contract |
+| output.transient | 🔴 OPEN | V0_2 | O3: persistent status output is sufficient; in-place expiry/replacement is not advertised. | [Output envelope](docs/release-scope.md#output-model-clients-and-long-lived-hosts); later lifetime/removal qualification |
+| platform.windows_runtime | 🔴 OPEN | V0_2 | X2: deliberate Linux/macOS release; portable Windows tests do not imply runtime support. | [Platform envelope](docs/release-scope.md#candidate-support-envelope); future real Windows acquisition/restoration |
+| robustness.fuzz_property | 🟡 PARTIAL | MUST_V0_1 | Q0: deterministic cases alone do not bound malformed-input/state risks of the chosen public surface. | [G1](docs/release-scope.md#g1--q0-adversarial-state-qualification): fuzz campaigns, generated model sequences and retained corpus |
+| robustness.resource_stress | 🟡 PARTIAL | MUST_V0_1 | Q1: terminal ownership requires storm/exhaustion/failure evidence before a compatibility commitment. | [G2](docs/release-scope.md#g2--q1-resource-stress-and-baseline-usability): native cycles, injection, resource and usability checks |
+| performance.regression | 🟡 PARTIAL | MUST_V0_1 | Q2: freeze named workloads, deterministic costs and measured noise rules; no universal latency promise. | [G5 policy](docs/release-scope.md#g5--q2-policy-e3-freeze-and-v0-release-qualification), established before E3 |
+| packaging.integration | 🟡 PARTIAL | MUST_V0_1 | E0: registry Rust package, C SDK/install metadata, MSRV and CMake consumption must work outside a checkout. | [G3](docs/release-scope.md#g3--e0-installability-and-toolchain): packaged/install-tree and relocation tests |
+| ecosystem.consumers | 🟡 PARTIAL | MUST_V0_1 | E1: old Rust/C product pins do not qualify the richer current surface or sufficient semantic diversity. | [G4](docs/release-scope.md#g4--e1e2-independent-integration): independent debugger-style packaged host plus Rust/C matrix |
+| ecosystem.cookbook | 🟡 PARTIAL | MUST_V0_1 | E2: release paths must be usable without source archaeology; broader recipe coverage can remain partial. | [G4](docs/release-scope.md#g4--e1e2-independent-integration): executed recipes and explicit exclusions |
+| release.api_freeze | ⚪ LATER | MUST_V0_1 | E3: audit every selected public contract after hardening and independent package consumers; not 1.0. | [G5](docs/release-scope.md#g5--q2-policy-e3-freeze-and-v0-release-qualification): API/ABI/MSRV and migration review |
+| release.qualification | ⚪ LATER | MUST_V0_1 | V0: one exact candidate source and artifact set must satisfy the complete envelope. | [G5](docs/release-scope.md#g5--q2-policy-e3-freeze-and-v0-release-qualification): frozen candidate and installed-artifact qualification |
+| release.public | ⚪ LATER | MUST_V0_1 | V1: a first public release includes actual publication/verification, not merely a tag proposal. | [G6](docs/release-scope.md#g6--v1-publication): separate authorization, packages/tag and download verification |
+<!-- release-scope:end -->
+
+Existing 29 ESTABLISHED rows retain their scoped contracts and release regression
+gates. No row, program or broader Q/E/U property is promoted by this review.
+LATER maturity for E3/V0/V1 records unstarted downstream work; its MUST release
+classification makes the dependency explicit without claiming implementation.
+
 ## Current Execution Sequence
 
-ANALYSIS.PRESENTATION.0 is complete over qualified I0/I1/I3 and F1/P3/F2. Selection is `NONE`.
-I4 needs search and provider ownership; I5 needs explicit configurable editing policy. The
-completed fixed multiline bindings do not select a full keymap design. Concrete
-host needs and evidence must choose the next intersection; none is started here.
+The next selected boundary is `RELEASE.HARDENING.0`. It is not started or
+authorized here. Evidence supports finishing the current interaction surface
+before adding I4/I5 or output modes. The exact remaining plan is **three engineering
+waves plus one separately authorized publication wave**, in this dependency order:
 
-| Dependency frontier | Next decision / evidence | Explicit limit |
+| Boundary | Bounded closure | Prerequisite / exit |
 | --- | --- | --- |
-| F1/P3/F2 qualified foundation | Reuse one engine, host-owned readiness and explicit admission in later contracts. | Linux/macOS qualification does not establish Windows runtime or active capability discovery. |
-| I0 qualified provenance | Reuse snapshots and stale-safe application for future host analysis contracts. | No parser or hint/highlight semantics follow from revision identity; I1/U1, I2 and I3/U2 have independent qualification. |
-| I4/I5 with U3; O1–O3 | Select bounded analysis/output/presentation intersections, measured against P baselines and Q stress. | An application reactor is not independent concurrent writers or O2 arbitration. |
-| X/E/Q and release | Retain native runtime/portable limits, strengthen failure and consumer diversity, then evaluate API freeze. | No Windows runtime, release or consumer repin follows automatically. |
+| RELEASE.HARDENING.0 | Q0 fuzz/property, Q1 resource/failure stress and mandatory current-surface usability, Q2 regression policy | Current runtime baseline; [G1/G2 and Q2](docs/release-scope.md#required-evidence-before-freeze-and-tagging) pass before freeze; no new interaction feature |
+| RELEASE.PACKAGING.0 | E0 crate/C SDK/CMake/MSRV; E1 distinct external fixture; E2 executed recipes | Hardening evidence; [G3/G4](docs/release-scope.md#g3--e0-installability-and-toolchain); source SDK and packaged consumers, not a required prebuilt binary matrix |
+| RELEASE.CANDIDATE.0 | E3 full API/ABI review and V0 frozen candidate qualification | G1–G4 plus Q2 passed; [G5](docs/release-scope.md#g5--q2-policy-e3-freeze-and-v0-release-qualification) on final source/artifact identities, no publication |
+| RELEASE.PUBLICATION.0 | V1 public compatibility commitment and package/tag delivery | Separate explicit release authorization after V0; [G6](docs/release-scope.md#g6--v1-publication), verified downloads/docs |
 
-Evidence may reorder these dependencies. No later scope is started or authorized
-by this sequence; each needs its own explicit engineering decision.
+Preparation may overlap only under a later authorized wave's scope; exits are
+ordered. A correctness finding requires repair/requalification, not automatic
+feature expansion. If it exposes a new architectural dependency, revise this
+sequence explicitly rather than pretending the wave count is immutable.
+I4/I5/O1–O3/X2 stay visible in the post-release pool; I6 stays later. No next
+engineering implementation or consumer repin is authorized by this selection.
 
 ## Ownership and Consumer Posture
 
@@ -220,18 +270,21 @@ implemented source contract. Neither substitutes for the other.
 
 ## Release Progression
 
+The [selected first-release scope](#first-release-scope) fixes what v0.1 means;
+[release acceptance](docs/release-scope.md#required-evidence-before-freeze-and-tagging)
+defines its gates. Current implementation evidence is not a release receipt.
+
 | Gate | Required promotion evidence |
 | --- | --- |
-| Embedding and capabilities | F1/P3 ownership and F2 degradation are coherent; selected Rust/C exposure is explicit, with unsupported surfaces named. |
-| Robustness and platform envelope | Relevant Q0/Q1 failure/invariant coverage, justified Q2 metrics and real X runtime evidence for every claimed platform. Windows need not block a deliberately narrower release, but must never be implied supported. |
-| Reproducible ecosystem | E0 clean packages/installations, E1 different real hosts and E2 usable recipes; no adjacent source or accidental system library. |
-| E3 freeze candidate | Review public types, errors, lifetimes, resource ownership, API/ABI evolution and compatibility policy against those consumers. |
-| V0 release qualification | Repeat the exact chosen support envelope with pinned artifacts, docs and reproducible CI; record exclusions and residual risks. |
-| V1 public commitment | Separate authorization to publish packages and the first compatibility promise. No date or version number alone establishes readiness. |
+| G1/G2 and Q2 | Bounded fuzz/state campaigns, native stress/cleanup and minimum plain/keyboard usability; meaningful regression thresholds before API freeze |
+| G3/G4 | crates.io-ready Rust package and versioned C source SDK; MSRV/current stable, relocated CMake/pkg-config, external Rust/C/C++ hosts and executable recipes |
+| E3 / G5 | Ratified 0.1.x Rust/ABI/MSRV compatibility, full public-surface audit, exact frozen candidate and artifact-qualified native/portable evidence |
+| V1 / G6 | Separate publication authorization; release only the qualified crate/SDK/tag and verify downloaded artifacts and hosted docs |
 
-The adopted capability map is broader than the eventual first release. A smaller
-release requires an explicit scope decision here; it cannot erase unresolved
-rows or silently treat excluded features as completed.
+No date is selected. Linux/macOS runtime plus Windows portable core is deliberate;
+C ABI 1 does not need full Rust parity. History search, configurable keymaps,
+streaming arbitration and a Windows terminal backend do not block this envelope.
+Deferred features are not complete, and a release claim cannot exceed its gates.
 
 ## Explicit Nonclaims
 

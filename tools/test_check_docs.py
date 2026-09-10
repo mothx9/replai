@@ -130,6 +130,28 @@ class DocumentationGuard(unittest.TestCase):
         self.reject("invalid or duplicate program")
         target.write_text(original)
 
+    def test_release_scope_covers_remaining_maturity_without_promoting_it(self):
+        target = self.root / "ROADMAP.md"
+        original = target.read_text()
+        scope = original.split("<!-- release-scope:start -->")[1].split("<!-- release-scope:end -->")[0]
+        row = next(line for line in scope.splitlines() if line.startswith("| history.storage_search |"))
+        count = re.search(r"MUST_V0_1=\d+", original)[0]
+        mutations = [
+            (row, "", "release scope coverage differs"),
+            (row, row + "\n" + row, "duplicate release capability"),
+            (row, row.replace("V0_2", "OPTIONAL"), "invalid release class"),
+            (row, row.replace("🟡 PARTIAL", "🟢 ESTABLISHED"), "release maturity differs"),
+            (row, row.replace("history.storage_search", "unknown.capability"), "release scope coverage differs"),
+            (row, row.rsplit("|", 2)[0] + "| Unlinked claim |", "missing release evidence link"),
+            (count, "MUST_V0_1=9999", "release counts differ"),
+            ("<!-- release-scope:end -->", "", "ordered release-scope section"),
+        ]
+        for before, after, expected in mutations:
+            with self.subTest(expected=expected):
+                target.write_text(original.replace(before, after, 1))
+                self.reject(expected)
+        target.write_text(original)
+
     def test_table_delimiters_are_required_even_when_control_rows_are_valid(self):
         target = self.root / "ROADMAP.md"
         original = target.read_text()
