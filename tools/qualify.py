@@ -17,6 +17,7 @@ commands = [
     ['python3', '-B', 'tools/test_check_docs.py'],
     ['python3', '-B', 'tools/test_c_pty.py'],
     ['python3', '-B', 'tools/test_analysis_pty.py'],
+    ['python3', '-B', 'tools/test_completion_pty.py'],
     ['cargo', 'fmt', '--check'],
     ['cargo', 'check', '--workspace', '--all-targets'],
     ['cargo', 'test', '--workspace', '--all-targets'],

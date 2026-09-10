@@ -141,13 +141,17 @@ def run(work, prefix=(), plain=False):
         else: os.environ['NO_COLOR']=old
 
 
+def session_reopened(output):
+    return b'demo> ' in output.partition(b'host received: bundle')[2]
+
+
 def session():
     wrapper='import os,subprocess,sys; r=subprocess.call(sys.argv[1:]); print("EXIT_READY",file=sys.stderr,flush=True); os.read(int(os.environ["P0_EXIT_FD"]),1); sys.exit(r)'
     s=Session([sys.executable,'-c',wrapper,ROOT/'target/debug/examples/completion'])
     try:
         s.until(lambda:b'demo> ' in s.output)
         s.send(b'bu\t');s.until(lambda:b'Build the project' in s.output)
-        s.send(b'\t\r\r');s.until(lambda:b'host received: bundle' in s.output)
+        s.send(b'\t\r\r');s.until(lambda:session_reopened(s.output))
         s.send(b'\x04');s.finish()
         return dict(synchronous_candidates=True,accepted='bundle',exact_restoration=True)
     except BaseException: s.abort();raise

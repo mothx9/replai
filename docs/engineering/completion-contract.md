@@ -48,7 +48,10 @@ This is tested with B then A at the same revision, not called latest-request-win
 
 The observer waits for complete operation acknowledgements and expected semantic
 states. Memory-tool execution can split one ready burst; an intermediate STATE
-receipt is not proof that an entire supplied sequence has completed.
+receipt is not proof that an entire supplied sequence has completed. The session
+observer must also wait for the new prompt after submission before sending EOF: a
+host result line precedes re-acquisition and is not proof that raw editing mode
+has reopened. Fragmentation tests enforce this boundary without timing sleeps.
 
 ## Measurement method
 
