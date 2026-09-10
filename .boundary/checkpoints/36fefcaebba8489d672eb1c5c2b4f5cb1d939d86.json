@@ -493,26 +493,29 @@
       "surfaces": [
         "rust-native"
       ]
-    },
+    }
+  ],
+  "changes": [
     {
-      "description": "Immutable revision-identified draft snapshots and atomic stale-result refusal",
-      "documentation": [
-        "https://github.com/mothx9/replai/blob/aa137e881065f0a0615fa8ae03c84c89f052bea3/docs/interaction.md#revision-aware-host-analysis"
-      ],
+      "capability": "terminal.admission",
+      "compatibility": "compatible",
+      "description": "Admission now resolves observed resources, explicit protocol evidence, requirements and optional policy once for every native tier. Strong host protocol evidence may replace TERM hints without erasing NO_COLOR policy. Missing native geometry is a typed Rust capability mismatch; C ABI 1 status and legacy session assumptions remain unchanged.",
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34475749705",
-        "https://github.com/mothx9/replai/blob/aa137e881065f0a0615fa8ae03c84c89f052bea3/docs/engineering/analysis-protocol.md"
+        "https://github.com/mothx9/replai/actions/runs/34370575960",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
       ],
-      "guarantees": [
-        "One opaque identity scoped to the originating retained Editor; successful text/cursor changes advance, no-ops and rejected edits do not",
-        "Submit, editing interrupt and EOF end the semantic draft; unchanged close/reopen, resize and coordinated output preserve draft provenance",
-        "Snapshots own immutable shared text, cursor and revision; hosts own all parsing, context, scheduling and derived payloads",
-        "Revision-bound replacement refuses stale results before validation or mutation, without history or terminal output effects",
-        "Checked 128-bit exhaustion panics before mutation rather than wrapping; unrelated editors are separate identity domains",
-        "Rust Editor is portable; native Interaction completion is qualified on Linux/macOS; C ABI 1 remains synchronous and unchanged"
+      "inputs": [
+        "src/lib.rs",
+        "src/capabilities.rs",
+        "src/interaction.rs",
+        "src/system.rs",
+        "src/terminal.rs",
+        "src/presentation.rs",
+        "docs/architecture.md",
+        "docs/interaction.md",
+        "tools/embedding_pty.py"
       ],
-      "id": "analysis.revisions",
-      "maturity": "experimental",
+      "kind": "BEHAVIOR_CHANGED",
       "platforms": [
         "linux",
         "macos",
@@ -521,36 +524,21 @@
       "surfaces": [
         "rust-native"
       ]
-    }
-  ],
-  "changes": [
+    },
     {
-      "capability": "analysis.revisions",
+      "capability": "terminal.width_policy",
       "compatibility": "compatible",
-      "description": "Add one portable Editor-owned draft revision and shared immutable snapshot, plus atomic revision-bound replacement. Native session/driven hosts can apply delayed results without stale edits; blocking and C ABI 1 behavior stay compatible. No parser, candidate, hint or validation contract is introduced.",
+      "description": "Expose the deterministic UnicodeNarrow safe-text cell query; existing layout and document width algorithms delegate to the same implementation without changing geometry.",
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34475749705",
-        "https://github.com/mothx9/replai/blob/aa137e881065f0a0615fa8ae03c84c89f052bea3/docs/engineering/analysis-protocol.md"
+        "https://github.com/mothx9/replai/actions/runs/34370575960",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
       ],
       "inputs": [
+        "src/width.rs",
+        "src/document.rs",
+        "src/presentation.rs",
         "src/lib.rs",
-        "src/analysis.rs",
-        "src/core.rs",
-        "src/engine.rs",
-        "src/interaction.rs",
-        "src/conformance.rs",
-        "tests/analysis.rs",
-        "tests/foundation.rs",
-        "examples/analysis.rs",
-        "tools/analysis_pty.py",
-        "tools/test_analysis_pty.py",
-        "tools/embedding_pty.py",
-        "tools/perf/components.rs",
-        "tools/qualify.py",
-        ".github/workflows/ci.yml",
-        "docs/architecture.md",
-        "docs/interaction.md",
-        "docs/engineering/analysis-protocol.md"
+        "docs/presentation.md"
       ],
       "kind": "ADDED",
       "platforms": [
@@ -563,31 +551,114 @@
       ]
     },
     {
-      "capability": "platform.posix_linux",
+      "capability": "terminal.capability_snapshot",
       "compatibility": "compatible",
-      "description": "Observe the calling thread signal mask during unwind/restoration rather than the parallel test launcher thread; preserve process-wide handler/ignore checks and full native PTY/C/memory qualification.",
+      "description": "Expose portable realization/requirements/degradation types and retained native capability inspection. Native observations and virtual resolver evidence are identified separately.",
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34475749705",
-        "https://github.com/mothx9/replai/blob/aa137e881065f0a0615fa8ae03c84c89f052bea3/docs/engineering/analysis-protocol.md"
+        "https://github.com/mothx9/replai/actions/runs/34370575960",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
       ],
       "inputs": [
-        "tests/pty.rs"
+        "src/lib.rs",
+        "src/capabilities.rs",
+        "src/interaction.rs",
+        "tests/capabilities.rs",
+        "tests/capabilities_pty.rs",
+        "docs/engineering/terminal-capabilities.md",
+        "tools/perf/components.rs"
+      ],
+      "kind": "ADDED",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "abi.c.v1",
+      "compatibility": "compatible",
+      "description": "Preserve exact ABI declarations, layouts, symbols and numeric error categories. The PTY observer drains and rechecks final events before judging process exit; negative/missing-event tests retain failure behavior. Isolated C/static/shared/C++ and native memory checks rerun.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34370575960",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
+      ],
+      "inputs": [
+        "tools/c_pty.py",
+        "tools/test_c_pty.py",
+        "tools/qualify.py",
+        ".github/workflows/ci.yml"
       ],
       "kind": "QUALIFICATION_CHANGED",
       "platforms": [
+        "linux",
+        "macos"
+      ],
+      "surfaces": [
+        "c-abi-v1"
+      ]
+    },
+    {
+      "capability": "platform.posix_linux",
+      "compatibility": "compatible",
+      "description": "Requalify existing platform scope with portable capability matrices and, on native POSIX systems, real degraded/negative PTY profiles and unchanged lifecycle/memory gates.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34370575960",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
+      ],
+      "inputs": [],
+      "kind": "QUALIFICATION_CHANGED",
+      "platforms": [
         "linux"
+      ],
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "capability": "platform.posix_macos",
+      "compatibility": "compatible",
+      "description": "Requalify existing platform scope with portable capability matrices and, on native POSIX systems, real degraded/negative PTY profiles and unchanged lifecycle/memory gates.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34370575960",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
+      ],
+      "inputs": [],
+      "kind": "QUALIFICATION_CHANGED",
+      "platforms": [
+        "macos"
+      ],
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "capability": "platform.portable_engine",
+      "compatibility": "compatible",
+      "description": "Requalify existing platform scope with portable capability matrices and, on native POSIX systems, real degraded/negative PTY profiles and unchanged lifecycle/memory gates.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34370575960",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
+      ],
+      "inputs": [],
+      "kind": "QUALIFICATION_CHANGED",
+      "platforms": [
+        "windows"
       ],
       "surfaces": [
         "rust-native"
       ]
     }
   ],
-  "generation": 6,
-  "id": "sha256:cc91f1b38452385e9f5c878b355a83a9fa736c33cef8cc07c0ef71e2a711ebfb",
+  "generation": 5,
+  "id": "sha256:8f5da6129ab2f27cb86e881608feeb7f3e8dadf57cba1700664f087a29e4fa5d",
   "inputs": [
     {
       "capabilities": [
-        "analysis.revisions",
         "embedding.blocking",
         "embedding.driven",
         "embedding.readiness",
@@ -611,26 +682,25 @@
       ],
       "category": "api",
       "path": "src/lib.rs",
-      "sha256": "sha256:c19657f9d78677e5dd866815929e00674784cd2dde90334afeaa237ae2d31b63",
+      "sha256": "sha256:58f37d9e51ea801ca457b002dd798838c07a722248620b08ca9bdcb255230a25",
       "surfaces": [
         "rust-native"
       ]
     },
     {
       "capabilities": [
-        "analysis.revisions",
-        "interaction.completion_request",
         "interaction.editing",
-        "interaction.external_output",
         "interaction.history_navigation",
-        "platform.portable_engine",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
         "platform.posix_linux",
         "platform.posix_macos",
-        "presentation.prompt"
+        "platform.portable_engine"
       ],
       "category": "behavior",
       "path": "src/core.rs",
-      "sha256": "sha256:e0dbd7a80da7d9ba55400ee10f7cc643f98095aec609b8a7f90a01e1c8b895b0",
+      "sha256": "sha256:7ea45a6693c011a6f8bf5626072b7b18edfb3b7e21300a093b9ae0c0da7b8e37",
       "surfaces": [
         "rust-native"
       ]
@@ -691,24 +761,23 @@
     },
     {
       "capabilities": [
-        "analysis.revisions",
-        "interaction.completion_request",
         "interaction.editing",
-        "interaction.external_output",
         "interaction.history_navigation",
-        "platform.portable_engine",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
         "platform.posix_linux",
         "platform.posix_macos",
-        "presentation.composed_prompt",
-        "presentation.prompt",
-        "presentation.status",
+        "platform.portable_engine",
         "presentation.structured_output",
         "presentation.table",
+        "presentation.status",
+        "presentation.composed_prompt",
         "presentation.theme"
       ],
       "category": "behavior",
       "path": "src/engine.rs",
-      "sha256": "sha256:328900ae2a4940cfebb3d42619aa651063ccd25d8d8f0c576c915130a1fcd764",
+      "sha256": "sha256:a86fd86a5d2cf78f8374bd83841fad25e5048d15f2030dea209e4f96a9a0b092",
       "surfaces": [
         "rust-native"
       ]
@@ -780,7 +849,6 @@
     },
     {
       "capabilities": [
-        "analysis.revisions",
         "embedding.blocking",
         "embedding.driven",
         "embedding.readiness",
@@ -803,7 +871,7 @@
       ],
       "category": "api",
       "path": "src/interaction.rs",
-      "sha256": "sha256:89d10b0841d83ebb90e413107e313ba9eb9174828c6bbf878ca556c5c8b238f6",
+      "sha256": "sha256:0570e3f6db31f89425e0fb383e1392df85ac25c4f2e55cbbe06796c2ab500521",
       "surfaces": [
         "rust-native"
       ]
@@ -930,7 +998,6 @@
     },
     {
       "capabilities": [
-        "analysis.revisions",
         "embedding.blocking",
         "embedding.driven",
         "embedding.readiness",
@@ -952,14 +1019,13 @@
       ],
       "category": "documentation",
       "path": "docs/architecture.md",
-      "sha256": "sha256:d0c4f03c9e914d405592366bcb0549eef4ebedd017622ae157ddcdd35b2265b3",
+      "sha256": "sha256:001546c21f58739a01ca65252148f9971bd3fdd74ed86279f686b8ea44512930",
       "surfaces": [
         "rust-native"
       ]
     },
     {
       "capabilities": [
-        "analysis.revisions",
         "embedding.blocking",
         "embedding.driven",
         "embedding.readiness",
@@ -976,7 +1042,7 @@
       ],
       "category": "documentation",
       "path": "docs/interaction.md",
-      "sha256": "sha256:79097b23c97019689b8452be04bb1fafd5e263a2a7250c9f439aa390177fb3da",
+      "sha256": "sha256:218d1013820ca450b33c0a8bbe521f953d52dda1d6f52caff32a943576c3c7a1",
       "surfaces": [
         "rust-native"
       ]
@@ -1056,17 +1122,16 @@
     },
     {
       "capabilities": [
-        "analysis.revisions",
+        "interaction.editing",
         "embedding.blocking",
+        "embedding.session",
         "embedding.driven",
         "embedding.readiness",
-        "embedding.session",
-        "interaction.editing",
         "terminal.admission"
       ],
       "category": "qualification",
       "path": "src/conformance.rs",
-      "sha256": "sha256:681398881d33478a63b89ffd0b956dd676ab5274189b6f436892ed3d08c90e6e",
+      "sha256": "sha256:2303b882ed5ce013c41779aef0f6b405f3a720928e8ac60be322efda547e8236",
       "surfaces": [
         "rust-native"
       ]
@@ -1089,7 +1154,6 @@
     },
     {
       "capabilities": [
-        "analysis.revisions",
         "embedding.blocking",
         "embedding.driven",
         "embedding.readiness",
@@ -1099,7 +1163,7 @@
       ],
       "category": "qualification",
       "path": "tools/embedding_pty.py",
-      "sha256": "sha256:5ac80ff06274d2f8f0065ecf9c48ebd355607ec70ef9366f2af24a83b8c723bb",
+      "sha256": "sha256:2c296e37a055af80a30eb9c002a1f4501e91cf8ff8145670408a79eaa380b22a",
       "surfaces": [
         "rust-native"
       ]
@@ -1155,7 +1219,6 @@
     {
       "capabilities": [
         "abi.c.v1",
-        "analysis.revisions",
         "embedding.blocking",
         "embedding.driven",
         "embedding.readiness",
@@ -1165,7 +1228,7 @@
       ],
       "category": "qualification",
       "path": ".github/workflows/ci.yml",
-      "sha256": "sha256:31442da031ca428bb0612869411fe3c0b1d16db9bddf825fccc188f12c921c94",
+      "sha256": "sha256:4a0912b59c02b940ea83b9a27ccb860e9dd70df2bbca2422237650342cea303b",
       "surfaces": [
         "c-abi-v1",
         "rust-native"
@@ -1217,12 +1280,11 @@
     },
     {
       "capabilities": [
-        "analysis.revisions",
         "terminal.capability_snapshot"
       ],
       "category": "qualification",
       "path": "tools/perf/components.rs",
-      "sha256": "sha256:5c5d0edda5845c34ba7039c458d4768c6b8caa81fdb4e94d29a8dacaffcffd2a",
+      "sha256": "sha256:c8fd033b16d7babe1a8e881de9551c2f9dd801bc62023f4540f67cc5d27fd468",
       "surfaces": [
         "rust-native"
       ]
@@ -1253,103 +1315,14 @@
     },
     {
       "capabilities": [
-        "abi.c.v1",
-        "analysis.revisions"
+        "abi.c.v1"
       ],
       "category": "qualification",
       "path": "tools/qualify.py",
-      "sha256": "sha256:91d371b097327b762cf0c4235730d082d30d42bfe4c39e64d2fadfc4872b5868",
+      "sha256": "sha256:9d6d266f8aa8aea9456ea5929d45375c21ea2f2f377f8a4274afca5608d2bcef",
       "surfaces": [
-        "c-abi-v1",
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.revisions"
-      ],
-      "category": "api",
-      "path": "src/analysis.rs",
-      "sha256": "sha256:7d36a6d34715c0d5de380b7696e3fd93f6755bb4bb7b18ae2232607755eb06b1",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.revisions"
-      ],
-      "category": "qualification",
-      "path": "tests/analysis.rs",
-      "sha256": "sha256:a4d7c6efe268324bcbefdeb3591d7b81fefba5731ddeddd5f0bc7cc653e3e6c5",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.revisions"
-      ],
-      "category": "qualification",
-      "path": "tests/foundation.rs",
-      "sha256": "sha256:ef15f5c3a9bf0eaf45495e25e21c05051a010923e1a63d763bf5b55a58db46bc",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.revisions"
-      ],
-      "category": "qualification",
-      "path": "examples/analysis.rs",
-      "sha256": "sha256:773fcd048f5b14f0a11dd47f4a551eab9b8667ee4bfab01b0dacdf138dad1c67",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.revisions"
-      ],
-      "category": "qualification",
-      "path": "tools/analysis_pty.py",
-      "sha256": "sha256:93e7c9569757334ef4a8a6529585c055d8d0c408a20116a35668df4206d2a502",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.revisions"
-      ],
-      "category": "qualification",
-      "path": "tools/test_analysis_pty.py",
-      "sha256": "sha256:44193e9177d713d695b11c1cb4fd381d221e05b3b33c4235285b3abe4f8e3fab",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.revisions"
-      ],
-      "category": "qualification",
-      "path": "docs/engineering/analysis-protocol.md",
-      "sha256": "sha256:0e3453c58f98ce172f33ecdd9d7ce239bee007762ea8f1b9134b0bde38b3adbd",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "platform.posix_linux"
-      ],
-      "category": "qualification",
-      "path": "tests/pty.rs",
-      "sha256": "sha256:50dcb5672bc1637bd7467579622cf69ed4a918d3b75f57cd9b2d0f75d425079c",
-      "surfaces": [
-        "rust-native"
+        "rust-native",
+        "c-abi-v1"
       ]
     }
   ],
@@ -1389,17 +1362,17 @@
     }
   ],
   "predecessor": {
-    "contract_id": "sha256:8f5da6129ab2f27cb86e881608feeb7f3e8dadf57cba1700664f087a29e4fa5d",
+    "contract_id": "sha256:eed02d803996d5c6a272c216d15488321dfef9a20e32b2e28f4512b3cd474d96",
     "repository": "https://github.com/mothx9/replai",
-    "revision": "36fefcaebba8489d672eb1c5c2b4f5cb1d939d86",
-    "tree": "6ed9bbde9e820cfdff7a160870377d3aa9da0723"
+    "revision": "7f144d9e98a12bc1d3bbfc09bbcda547cecf2bd5",
+    "tree": "8589809ac8898913af193525f884ff7edf07a204"
   },
   "repository": "https://github.com/mothx9/replai",
   "schema_version": 1,
   "source": {
     "dirty": false,
-    "revision": "aa137e881065f0a0615fa8ae03c84c89f052bea3",
-    "tree": "9126e218fc4ee432a4146051da2ef05c9d4e2b4c"
+    "revision": "36fefcaebba8489d672eb1c5c2b4f5cb1d939d86",
+    "tree": "6ed9bbde9e820cfdff7a160870377d3aa9da0723"
   },
   "surfaces": [
     {

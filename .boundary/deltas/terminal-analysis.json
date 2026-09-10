@@ -1,0 +1,203 @@
+{
+  "capability_contracts": [
+    {
+      "description": "Immutable revision-identified draft snapshots and atomic stale-result refusal",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/aa137e881065f0a0615fa8ae03c84c89f052bea3/docs/interaction.md#revision-aware-host-analysis"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34475749705",
+        "https://github.com/mothx9/replai/blob/aa137e881065f0a0615fa8ae03c84c89f052bea3/docs/engineering/analysis-protocol.md"
+      ],
+      "guarantees": [
+        "One opaque identity scoped to the originating retained Editor; successful text/cursor changes advance, no-ops and rejected edits do not",
+        "Submit, editing interrupt and EOF end the semantic draft; unchanged close/reopen, resize and coordinated output preserve draft provenance",
+        "Snapshots own immutable shared text, cursor and revision; hosts own all parsing, context, scheduling and derived payloads",
+        "Revision-bound replacement refuses stale results before validation or mutation, without history or terminal output effects",
+        "Checked 128-bit exhaustion panics before mutation rather than wrapping; unrelated editors are separate identity domains",
+        "Rust Editor is portable; native Interaction completion is qualified on Linux/macOS; C ABI 1 remains synchronous and unchanged"
+      ],
+      "id": "analysis.revisions",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "description": "Qualified Linux terminal resource binding",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/architecture.md#system-and-protocol-realizations"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34370575960",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
+      ],
+      "guarantees": [
+        "Exact termios restoration, paste lifecycle, resource exclusion and descriptor ownership",
+        "Real Rust/C PTYs and Linux Valgrind qualification"
+      ],
+      "id": "platform.posix_linux",
+      "maturity": "experimental",
+      "platforms": [
+        "linux"
+      ],
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    }
+  ],
+  "changed_inputs": [
+    ".github/workflows/ci.yml",
+    "docs/architecture.md",
+    "docs/engineering/analysis-protocol.md",
+    "docs/interaction.md",
+    "examples/analysis.rs",
+    "src/analysis.rs",
+    "src/conformance.rs",
+    "src/core.rs",
+    "src/engine.rs",
+    "src/interaction.rs",
+    "src/lib.rs",
+    "tests/analysis.rs",
+    "tests/foundation.rs",
+    "tests/pty.rs",
+    "tools/analysis_pty.py",
+    "tools/embedding_pty.py",
+    "tools/perf/components.rs",
+    "tools/qualify.py",
+    "tools/test_analysis_pty.py"
+  ],
+  "changes": [
+    {
+      "capability": "analysis.revisions",
+      "compatibility": "compatible",
+      "description": "Add one portable Editor-owned draft revision and shared immutable snapshot, plus atomic revision-bound replacement. Native session/driven hosts can apply delayed results without stale edits; blocking and C ABI 1 behavior stay compatible. No parser, candidate, hint or validation contract is introduced.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34475749705",
+        "https://github.com/mothx9/replai/blob/aa137e881065f0a0615fa8ae03c84c89f052bea3/docs/engineering/analysis-protocol.md"
+      ],
+      "inputs": [
+        "src/lib.rs",
+        "src/analysis.rs",
+        "src/core.rs",
+        "src/engine.rs",
+        "src/interaction.rs",
+        "src/conformance.rs",
+        "tests/analysis.rs",
+        "tests/foundation.rs",
+        "examples/analysis.rs",
+        "tools/analysis_pty.py",
+        "tools/test_analysis_pty.py",
+        "tools/embedding_pty.py",
+        "tools/perf/components.rs",
+        "tools/qualify.py",
+        ".github/workflows/ci.yml",
+        "docs/architecture.md",
+        "docs/interaction.md",
+        "docs/engineering/analysis-protocol.md"
+      ],
+      "kind": "ADDED",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "platform.posix_linux",
+      "compatibility": "compatible",
+      "description": "Observe the calling thread signal mask during unwind/restoration rather than the parallel test launcher thread; preserve process-wide handler/ignore checks and full native PTY/C/memory qualification.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34475749705",
+        "https://github.com/mothx9/replai/blob/aa137e881065f0a0615fa8ae03c84c89f052bea3/docs/engineering/analysis-protocol.md"
+      ],
+      "inputs": [
+        "tests/pty.rs"
+      ],
+      "kind": "QUALIFICATION_CHANGED",
+      "platforms": [
+        "linux"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "current": {
+    "contract_id": "sha256:cc91f1b38452385e9f5c878b355a83a9fa736c33cef8cc07c0ef71e2a711ebfb",
+    "repository": "https://github.com/mothx9/replai",
+    "revision": "aa137e881065f0a0615fa8ae03c84c89f052bea3",
+    "tree": "9126e218fc4ee432a4146051da2ef05c9d4e2b4c"
+  },
+  "id": "sha256:aeacfd6b2a2398ae83a11179a948c0004f3de05d99105de6b9575a6654c9162e",
+  "kind": "delta",
+  "platforms": [
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34370575960"
+      ],
+      "id": "linux",
+      "status": "runtime-qualified",
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34370575960"
+      ],
+      "id": "macos",
+      "status": "runtime-qualified",
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34370575960"
+      ],
+      "id": "windows",
+      "status": "portable-core-qualified",
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "previous": {
+    "contract_id": "sha256:8f5da6129ab2f27cb86e881608feeb7f3e8dadf57cba1700664f087a29e4fa5d",
+    "repository": "https://github.com/mothx9/replai",
+    "revision": "36fefcaebba8489d672eb1c5c2b4f5cb1d939d86",
+    "tree": "6ed9bbde9e820cfdff7a160870377d3aa9da0723"
+  },
+  "schema_version": 1,
+  "surfaces": [
+    {
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/interaction.md",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/presentation.md"
+      ],
+      "id": "rust-native",
+      "kind": "rust-native",
+      "version": "pre-release"
+    },
+    {
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/c-api.md"
+      ],
+      "id": "c-abi-v1",
+      "kind": "c-abi",
+      "version": "1"
+    }
+  ]
+}

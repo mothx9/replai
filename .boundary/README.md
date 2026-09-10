@@ -4,10 +4,16 @@ REPLAI owns these producer declarations. They describe generic capabilities,
 surfaces, qualification and changes; they assign no consumer paths, commands or
 migration work. Consumer profiles must be authored by their own repositories.
 
-- [Current producer snapshot](producer.json), generation 5: qualified source/document
-  `36fefcaebba8489d672eb1c5c2b4f5cb1d939d86`, tree
-  `6ed9bbde9e820cfdff7a160870377d3aa9da0723`. The [F2 dossier](../docs/engineering/terminal-capabilities.md)
-  separately identifies the implementation, measured source and native CI revision.
+- [Current producer snapshot](producer.json), generation 6: qualified source/document
+  `aa137e881065f0a0615fa8ae03c84c89f052bea3`, tree
+  `9126e218fc4ee432a4146051da2ef05c9d4e2b4c`. The [I0 dossier](../docs/engineering/analysis-protocol.md)
+  identifies the implementation, measured sources and native CI separately.
+- [Analysis protocol delta](deltas/terminal-analysis.json): `analysis.revisions`
+  adds shared immutable draft snapshots and atomic stale-result refusal through
+  native Rust. C ABI 1 remains unchanged and synchronous. The Linux restoration
+  observer now checks the calling thread's signal mask. No consumer action is assigned.
+- [Previous terminal-capability snapshot](checkpoints/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86.json)
+  retains generation 5 and its exact source/fingerprints.
 - [Terminal capability delta](deltas/embedding-terminal-capabilities.json): unified
   admission, portable capability snapshot and deterministic width query. C ABI 1
   remains exact; its qualification is refreshed, including final-event observation.
@@ -42,7 +48,7 @@ behavior, ABI and documentation inputs. Its external validation command is:
 
 ```sh
 boundary validate .boundary/producer.json --repo . \
-  --previous .boundary/checkpoints/7f144d9e98a12bc1d3bbfc09bbcda547cecf2bd5.json
+  --previous .boundary/checkpoints/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86.json
 ```
 
 Run from a clean REPLAI checkout with BOUNDARY installed separately. Validation
