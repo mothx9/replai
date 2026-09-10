@@ -22,6 +22,8 @@ pub(crate) fn binding(key: Key) -> Result<Input, &'static str> {
         Key::Enter => Input::Request(R::Submit),
         Key::Interrupt => Input::Request(R::Interrupt),
         Key::Tab => Input::Request(R::Completion),
+        Key::BackTab => Input::Request(R::CompletionPrevious),
+        Key::Escape => Input::Request(R::DismissCompletion),
         Key::Eof => Input::Request(R::DeleteOrEof),
         Key::Clear => Input::Request(R::Redraw),
         Key::Rejected(error) => Input::Rejected(error),

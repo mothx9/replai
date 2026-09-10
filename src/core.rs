@@ -128,7 +128,11 @@ impl Editor {
                     .expect("complete editor text supplies all grapheme context"))
     }
     /// Replace a grapheme-aligned byte range atomically. Cursor follows replacement.
-    pub fn replace(&mut self, range: Range<usize>, text: &str) -> Result<(), EditError> {
+    pub(crate) fn validate_replacement(
+        &self,
+        range: &Range<usize>,
+        text: &str,
+    ) -> Result<(), EditError> {
         if range.start > range.end
             || range.end > self.text.len()
             || !self.boundary(range.start)
@@ -143,6 +147,11 @@ impl Editor {
         if text.len() > self.limit - remaining {
             return Err(EditError::Capacity);
         }
+        Ok(())
+    }
+    /// Replace a grapheme-aligned byte range atomically. Cursor follows replacement.
+    pub fn replace(&mut self, range: Range<usize>, text: &str) -> Result<(), EditError> {
+        self.validate_replacement(&range, text)?;
         let wanted = range.start + text.len();
         if &self.text[range.clone()] == text && wanted == self.cursor {
             return Ok(());

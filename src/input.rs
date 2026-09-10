@@ -12,6 +12,8 @@ pub(crate) enum Key {
     Backspace,
     Delete,
     Tab,
+    BackTab,
+    Escape,
     Up,
     Down,
     Left,
@@ -55,6 +57,7 @@ impl Decoder {
         match std::mem::take(&mut self.state) {
             State::Ready => None,
             State::Paste { .. } => Some(Key::IncompletePaste),
+            State::Escape(bytes) if bytes == b"\x1b" => Some(Key::Escape),
             State::Utf8(_) => Some(Key::Rejected(EditError::InvalidUtf8)),
             _ => Some(Key::Rejected(EditError::InvalidSequence)),
         }
@@ -197,6 +200,7 @@ fn append(bytes: &mut Vec<u8>, byte: u8, limit: usize, overflow: &mut bool) {
 }
 fn sequence(bytes: &[u8]) -> Key {
     match bytes {
+        b"\x1b[Z" => Key::BackTab,
         b"\x1b[A" => Key::Up,
         b"\x1b[B" => Key::Down,
         b"\x1b[C" => Key::Right,
@@ -286,7 +290,11 @@ mod tests {
             for b in prefix {
                 assert!(d.feed(*b).is_none());
             }
-            assert!(matches!(d.expire(), Some(Key::Rejected(_))));
+            if prefix == b"\x1b" {
+                assert_eq!(d.expire(), Some(Key::Escape));
+            } else {
+                assert!(matches!(d.expire(), Some(Key::Rejected(_))));
+            }
             assert_eq!(d.feed(b'a'), Some(Key::Text("a".into())));
         }
         let mut d = Decoder::new(8);

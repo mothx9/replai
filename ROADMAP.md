@@ -5,7 +5,7 @@
 | Axis | Current truth |
 | --- | --- |
 | Project target | Embeddable command-line interaction infrastructure: a simple entry that can grow into rich, long-lived host-driven interfaces over one engine. |
-| Current selected engineering boundary | **NONE**: I0 is closed; no later interaction boundary is selected or authorized. |
+| Current selected engineering boundary | **COMPLETION.CONTRACT.0 — ACTIVE**: I1/U1 candidate delivery and presentation are being qualified over I0. |
 | Latest major completed boundary | I0 analysis protocol: shared immutable snapshots, draft revision identity and stale-safe replacement; [native/portable and performance qualification][analysis-protocol]. |
 | Most important structural gap | Rich completion, hints/highlighting and validation remain open above the qualified shared draft-provenance boundary. |
 | Executable foundation | Platform-neutral engine; bounded Unicode/grapheme editor; history navigation; completion requests; paste, interrupts/EOF, resize, safe output and exact restoration. |
@@ -175,11 +175,10 @@ to their recorded source, workload and environment.
 
 ## Current Execution Sequence
 
-ANALYSIS.PROTOCOL.0 is complete over the qualified F1/P3/F2 foundation. Current
-selection is `NONE`. Shared draft provenance and stale refusal permit separate
-I1/U1, I2 and I3/U2 decisions; their ordering requires concrete host use cases,
-not another provenance or terminal ownership rewrite.
-No later completion, hint, validation or UX boundary is selected or authorized.
+COMPLETION.CONTRACT.0 combines I1/U1 over qualified I0 provenance and the
+F1/P3/F2 embedding foundation. Candidate delivery and temporary selection must
+qualify together; neither a data structure alone nor one rendered menu closes
+the boundary. I2, I3/U2 and history remain separate, unstarted decisions.
 
 | Dependency frontier | Next decision / evidence | Explicit limit |
 | --- | --- | --- |

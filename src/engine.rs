@@ -17,6 +17,7 @@ struct Surface {
     renderer: Renderer,
     dirty: bool,
     damage: Damage,
+    completion: Option<Box<crate::completion::ActiveCompletion>>,
 }
 pub(crate) struct Engine {
     pub editor: Editor,
@@ -45,6 +46,7 @@ impl Engine {
             renderer: Renderer::default(),
             dirty: true,
             damage: Damage::Rebuild,
+            completion: None,
         });
         Ok(Effects {
             mutations: self.redraw(),
@@ -58,8 +60,13 @@ impl Engine {
             .expect("active surface checked by caller");
         let damage = if s.dirty { s.damage } else { Damage::Rebuild };
         s.dirty = false;
-        s.renderer
-            .redraw_changed(&self.editor, &s.prompt, s.size, damage)
+        if let Some(completion) = &s.completion {
+            s.renderer
+                .transition(completion.frame(&self.editor, &s.prompt, s.size))
+        } else {
+            s.renderer
+                .redraw_changed(&self.editor, &s.prompt, s.size, damage)
+        }
     }
     pub fn apply(&mut self, input: Input) -> Result<Effects, Error> {
         self.apply_inner(input, false)
@@ -88,6 +95,20 @@ impl Engine {
         if !self.is_open() {
             return Err(Error::State);
         }
+        if self.completion_selection().is_some() {
+            use crate::CompletionAction as C;
+            let action = match input {
+                Input::Request(Request::Completion) => Some(C::Next),
+                Input::Request(Request::CompletionPrevious) => Some(C::Previous),
+                Input::Request(Request::Submit) => Some(C::Accept),
+                Input::Request(Request::DismissCompletion) => Some(C::Dismiss),
+                _ => None,
+            };
+            if let Some(action) = action {
+                return self.completion_action(action).map(|(_, effects)| effects);
+            }
+        }
+        let revision = self.editor.revision();
         let mut mutations = Vec::new();
         let previous_len = self.editor.text().len();
         let at_end = self.editor.cursor() == previous_len;
@@ -140,6 +161,10 @@ impl Engine {
             Input::Request(Request::Completion) => {
                 return Ok(self.observable(Event::CompletionRequested));
             }
+            Input::Request(Request::CompletionPrevious | Request::DismissCompletion) => {
+                // Preserve compatibility rejection outside a completion surface.
+                return Ok(self.observable(Event::Rejected(crate::EditError::InvalidSequence)));
+            }
             Input::Request(Request::Redraw) => {
                 mutations.extend(self.surface.as_mut().unwrap().renderer.clear())
             }
@@ -161,6 +186,9 @@ impl Engine {
             damage = Damage::Rebuild;
         }
         let s = self.surface.as_mut().unwrap();
+        if revision != self.editor.revision() && s.completion.take().is_some() {
+            damage = Damage::Rebuild;
+        }
         if s.dirty && s.damage != damage {
             damage = Damage::Rebuild;
         }
@@ -175,6 +203,7 @@ impl Engine {
         })
     }
     fn finish(&mut self, event: Event) -> Effects {
+        self.remove_completion();
         self.editor.end_draft();
         let mut effects = self.flush();
         let mut surface = self.surface.take().unwrap();
@@ -185,6 +214,7 @@ impl Engine {
         effects
     }
     pub fn close(&mut self) -> Effects {
+        self.remove_completion();
         let mut effects = self.flush();
         if let Some(mut s) = self.surface.take() {
             effects.mutations.extend(s.renderer.leave(false));
@@ -198,7 +228,11 @@ impl Engine {
         if !self.is_open() {
             return Err(Error::State);
         }
+        let revision = self.editor.revision();
         self.editor.replace(range, text)?;
+        if revision != self.editor.revision() {
+            self.remove_completion();
+        }
         self.surface.as_mut().unwrap().damage = Damage::Rebuild;
         Ok(Effects {
             mutations: self.redraw(),
@@ -220,6 +254,73 @@ impl Engine {
         // Exclusive engine ownership keeps comparison, validation and mutation
         // one operation. Both completion paths use the same editor and redraw.
         Ok((crate::AnalysisOutcome::Applied, self.complete(range, text)?))
+    }
+    pub fn completion_selection(&self) -> Option<crate::CompletionSelection> {
+        self.surface
+            .as_ref()?
+            .completion
+            .as_ref()
+            .map(|c| c.selection())
+    }
+    fn remove_completion(&mut self) {
+        if let Some(s) = &mut self.surface
+            && s.completion.take().is_some()
+        {
+            s.dirty = true;
+            s.damage = Damage::Rebuild;
+        }
+    }
+    pub fn present_completions(
+        &mut self,
+        set: crate::CompletionSet,
+    ) -> Result<(crate::AnalysisOutcome, Effects), crate::CompletionError> {
+        if !self.is_open() {
+            return Err(Error::State.into());
+        }
+        if set.revision() != self.editor.revision() {
+            return Ok((crate::AnalysisOutcome::Stale, Effects::default()));
+        }
+        set.validate(&self.editor)?;
+        self.remove_completion();
+        if !set.candidates().is_empty() {
+            let s = self.surface.as_mut().unwrap();
+            s.completion = Some(Box::new(crate::completion::ActiveCompletion {
+                set,
+                selected: 0,
+            }));
+            s.dirty = true;
+            s.damage = Damage::Rebuild;
+        }
+        Ok((crate::AnalysisOutcome::Applied, self.flush()))
+    }
+    pub fn completion_action(
+        &mut self,
+        action: crate::CompletionAction,
+    ) -> Result<(crate::AnalysisOutcome, Effects), Error> {
+        use crate::{AnalysisOutcome as A, CompletionAction as C};
+        let s = self.surface.as_mut().ok_or(Error::State)?;
+        let c = s.completion.as_mut().ok_or(Error::State)?;
+        if c.set.revision() != self.editor.revision() {
+            // Defensive invariant: every public mutation already dismisses.
+            return Ok((A::Stale, Effects::default()));
+        }
+        match action {
+            C::Next | C::Previous => c.navigate(action == C::Previous),
+            C::Accept => {
+                let candidate = c.candidate();
+                self.editor.replace_at(
+                    c.set.revision(),
+                    candidate.range(),
+                    candidate.replacement(),
+                )?;
+                self.remove_completion();
+            }
+            C::Dismiss => self.remove_completion(),
+        }
+        let s = self.surface.as_mut().unwrap();
+        s.dirty = true;
+        s.damage = Damage::Rebuild;
+        Ok((A::Applied, self.flush()))
     }
     pub fn output_document(&mut self, document: &crate::Document) -> Result<Effects, Error> {
         let size = self.surface.as_ref().ok_or(Error::State)?.size;
@@ -415,3 +516,7 @@ mod tests {
         }
     }
 }
+
+#[cfg(test)]
+#[path = "completion_tests.rs"]
+mod completion_tests;

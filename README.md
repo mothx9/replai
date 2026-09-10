@@ -45,7 +45,7 @@ provides the interaction layer.
 | Capability | Integration value |
 | --- | --- |
 | **Unicode editing** | Grapheme-aware movement and deletion, bounded drafts and atomic bracketed paste when admitted by terminal policy |
-| **History and completion** | Exact draft restoration, host-owned candidates and revision-bound replacement that refuses stale analysis |
+| **History and completion** | Exact draft restoration; host-ordered candidates with safe revision binding, selection and acceptance |
 | **Structured presentation** | Headings, aligned fields, lists, responsive tables and status messages from safe semantic text |
 | **Coordinated output** | Present results or notices during editing, then restore the draft and cursor exactly |
 | **Flexible embedding** | Blocking, explicit session and host-driven integration over the same engine; no required async runtime |
@@ -162,6 +162,28 @@ REPLAI returns `AnalysisOutcome::Stale` without touching the draft or screen.
 Snapshots share immutable text when cloned; REPLAI never owns your parser or
 analysis scheduler. See the [analysis contract](docs/interaction.md#revision-aware-host-analysis)
 and [driven fixture](examples/analysis.rs).
+
+### Rich completion
+
+Your application discovers and orders candidates from one immutable draft snapshot.
+REPLAI validates the revision, presents the choices and applies the accepted
+replacement. Delayed results for an older draft leave the screen untouched.
+
+```sh
+cargo run --locked --example completion
+```
+
+Type `bu`, press Tab, then use Tab / Shift-Tab to select, Enter to accept or Escape
+to dismiss. The [small session host](examples/completion.rs) owns the catalog;
+the [driven example](examples/completion-driven.rs) demonstrates delayed delivery.
+Labels, annotations and inserted text may differ.
+
+<p align="center">
+  <img src="assets/terminal-completion.png" alt="Real session: build, bundle and burn candidates; bundle selected while the draft remains bu." width="912">
+</p>
+
+[Candidate lifecycle, safety and bounds](docs/interaction.md#revision-bound-completion-candidates).
+Rich completion is native Rust; C ABI 1 retains synchronous replacement.
 
 ### C and C++
 

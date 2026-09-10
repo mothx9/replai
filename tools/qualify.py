@@ -25,6 +25,8 @@ commands = [
     ['cargo', 'test', '--test', 'capabilities_pty', '--', '--nocapture'],
     ['python3', 'tools/embedding_pty.py', '--work', str(work / 'embedding')],
     ['python3', 'tools/analysis_pty.py', '--work', str(work / 'analysis')],
+    ['python3', 'tools/completion_pty.py', '--work', str(work / 'completion')],
+    ['python3', 'tools/completion_pty.py', '--memory', '--work', str(work / 'completion-memory')],
     ['python3', 'tools/qualify_c.py', '--work', str(work)],
     ['cargo', 'test', '--workspace', '--release'],
     ['git', 'diff', '--check'],

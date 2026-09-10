@@ -17,6 +17,8 @@ pub(crate) enum Request {
     Submit,
     Interrupt,
     Completion,
+    CompletionPrevious,
+    DismissCompletion,
     DeleteOrEof,
     Redraw,
 }

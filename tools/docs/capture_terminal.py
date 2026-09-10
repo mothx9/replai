@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class Session:
-    def __init__(self, columns, *, plain=False, notice=False):
+    def __init__(self, columns, *, plain=False, notice=False, binary="query"):
         self.master, self.slave = pty.openpty()
         fcntl.ioctl(self.slave, termios.TIOCSWINSZ, struct.pack("HHHH", 48, columns, 0, 0))
         self.before = termios.tcgetattr(self.slave)
@@ -29,7 +29,7 @@ class Session:
         if plain:
             env["NO_COLOR"] = "1"
         self.process = subprocess.Popen(
-            [str(ROOT / "target/debug/examples/query"), *(["--notice"] if notice else [])],
+            [str(ROOT / "target/debug/examples" / binary), *(["--notice"] if notice else [])],
             stdin=self.slave, stdout=self.slave, stderr=self.slave, env=env, cwd=ROOT,
         )
         self.screen = pyte.Screen(columns, 48)
@@ -91,6 +91,21 @@ def screen_capture(columns, *, plain=False, editing=False):
             assert all(cell.fg == "default" and not cell.bold
                        for row in session.screen.buffer.values() for cell in row.values())
         print(f"{columns} columns / NO_COLOR={plain}\n{session.text()}\n")
+        return copy.deepcopy(session.screen)
+    finally:
+        session.close()
+
+
+def completion_capture(columns=100):
+    session = Session(columns, binary="completion")
+    try:
+        session.drain()
+        session.send(b"check\r")
+        session.send(b"bu\t\t")
+        assert "host received: check" in session.text()
+        assert "> bundle" in session.text() and "Build the project" in session.text()
+        assert session.screen.cursor.x == len("demo> bu")
+        print(session.text())
         return copy.deepcopy(session.screen)
     finally:
         session.close()
@@ -167,3 +182,5 @@ if __name__ == "__main__":
                                      screen_capture(100, editing=True))])
     render("terminal-report.png", [("REPLAI / standalone build report, status and command help",
                                     report_capture())])
+
+    render("terminal-completion.png", [("REPLAI / host candidates, explicit selection and acceptance", completion_capture())])

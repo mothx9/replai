@@ -870,3 +870,66 @@ fn structured_output_preserves_draft_cursor_and_posix_lifecycle() {
         }
     }
 }
+
+#[test]
+fn completion_drop_read_failure_and_typeahead_use_existing_lifecycle() {
+    use replai::{CompletionCandidate, CompletionSet};
+    let _serial = serial();
+    let (master, slave) = pty(40, 8);
+    let before = termios(&slave);
+    let install = |t: &mut Interaction| {
+        let r = t.revision();
+        let candidates = vec![
+            CompletionCandidate::new(0..t.editor().text().len(), "build", "build").unwrap(),
+            CompletionCandidate::new(0..t.editor().text().len(), "bundle", "bundle").unwrap(),
+        ];
+        t.present_completions(CompletionSet::new(r, candidates).unwrap())
+            .unwrap();
+    };
+    {
+        let mut t = Interaction::new(Editor::new(100, 10));
+        t.open(&slave, &slave, prompt()).unwrap();
+        drain(&master);
+        write(&master, b"bu\t\t\r\rnext\r").unwrap();
+        assert_eq!(
+            t.poll(Duration::from_millis(20)).unwrap(),
+            Some(Event::CompletionRequested)
+        );
+        assert_eq!(t.editor().text(), "bu");
+        install(&mut t);
+        drain(&master);
+        assert_eq!(
+            t.poll(Duration::from_millis(20)).unwrap(),
+            Some(Event::Submitted("bundle".into()))
+        );
+        assert_eq!(termios(&slave), before);
+        t.editor_mut().unwrap().clear();
+        t.open(&slave, &slave, prompt()).unwrap();
+        drain(&master);
+        assert_eq!(
+            t.poll(Duration::from_millis(20)).unwrap(),
+            Some(Event::Submitted("next".into()))
+        );
+        t.editor_mut().unwrap().clear();
+        t.open(&slave, &slave, prompt()).unwrap();
+        install(&mut t);
+        drain(&master);
+        // Drop, including active temporary presentation, uses normal restoration.
+    }
+    assert_eq!(termios(&slave), before);
+    assert!(drain(&master).windows(8).any(|w| w == b"\x1b[?2004l"));
+    let name = ttyname(&slave, Vec::new()).unwrap();
+    let writeonly = open(&name, OFlags::WRONLY | OFlags::NOCTTY, Mode::empty()).unwrap();
+    let mut t = Interaction::new(Editor::new(100, 10));
+    t.open(&writeonly, &slave, prompt()).unwrap();
+    install(&mut t);
+    drain(&master);
+    write(&master, b"x").unwrap();
+    assert!(matches!(
+        t.poll(Duration::from_millis(20)),
+        Err(Error::Io(_))
+    ));
+    assert!(!t.is_open() && t.completion_selection().is_none());
+    assert_eq!(termios(&slave), before);
+    assert!(drain(&master).windows(8).any(|w| w == b"\x1b[?2004l"));
+}

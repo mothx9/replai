@@ -41,8 +41,9 @@ The adapter expires pending sequences after a 250 ms idle interval, observed
 by the selected scheduler: compatibility polling or an explicit host deadline.
 Each compatibility poll waits at most 100 ms. This is an idle bound, not a
 fixed total sequence length/time guess; tests deliver each byte with a delay
-longer than 25 ms. Expired UTF-8/escape input produces `Event::Rejected` and
-keeps the draft. Host starvation can delay observation.
+longer than 25 ms. Expired UTF-8/incomplete escape input produces `Event::Rejected` and
+keeps the draft. A lone Escape dismisses an active completion surface; without
+one it retains the same rejection. Host starvation can delay observation.
 
 Already-ready semantic edits may share one presentation update. Completion,
 submission, interruption, EOF, rejection and Ctrl-L remain observable boundaries;
@@ -361,3 +362,91 @@ Linux/macOS share one realization; Windows runs portable model tests without a
 terminal backend. No active probing, alternate editor or emulator database is
 introduced. [Width policy](presentation.md#display-width-contract) ·
 [Profile evidence](engineering/terminal-capabilities.md).
+
+## Revision-bound completion candidates
+
+Native Rust session/driven hosts may return a `CompletionSet` from one
+`AnalysisSnapshot`. Candidate discovery, filtering, order, ranking and context
+freshness remain host responsibilities. REPLAI owns temporary selection and
+atomic application. No provider callback, worker, executor or analysis queue is
+installed. The smallest `read_line` tier continues to decline completion requests.
+
+```rust
+use replai::{AnalysisOutcome, CompletionCandidate, CompletionSet, Interaction};
+# #[cfg(any(target_os = "linux", target_os = "macos"))]
+fn deliver(interaction: &mut Interaction) -> Result<(), Box<dyn std::error::Error>> {
+    let snapshot = interaction.analysis_snapshot();
+    // The host supplies meaning, replacement range and candidate order.
+    let candidates = vec![
+        CompletionCandidate::new(0..snapshot.text().len(), "build ", "build")?
+            .with_annotation("Build the project")?,
+        CompletionCandidate::new(0..snapshot.text().len(), "bundle ", "bundle")?
+            .with_annotation("Produce a bundle")?,
+    ];
+    match interaction.present_completions(CompletionSet::new(snapshot.revision(), candidates)?)? {
+        AnalysisOutcome::Applied => {},
+        AnalysisOutcome::Stale => { /* host discards or schedules fresh discovery */ },
+    }
+    Ok(())
+}
+```
+
+Each candidate has its own grapheme-aligned UTF-8 byte range, replacement,
+nonempty display label and optional annotation. Display and insertion need not
+match. Labels/annotations reject all control characters, including LF/TAB;
+replacement admits editor LF/TAB. Candidate fields additionally reject bidi
+formatting controls and invisible direction/word markers; ZWJ, variation selectors
+and combining marks remain valid Unicode. No field accepts terminal escape control.
+
+Limits are 4,096 candidates, 65,536 bytes per field and 4 MiB combined retained
+text, plus bounded candidate metadata. Constructors validate before copying;
+installation checks every range and resulting editor capacity before activating
+anything. No partial activation or silent semantic truncation occurs. Host order
+and exact duplicates are preserved. `CompletionError` distinguishes limits,
+invalid display text, edit rejection and ordinary interaction/terminal errors.
+
+`present_completions` first checks lifecycle and revision. A stale set returns
+`AnalysisOutcome::Stale` without terminal bytes, rendering, editor mutation or
+replacement of an existing valid menu. Zero candidates silently dismiss current
+presentation. Every nonempty set, including one candidate, requires acceptance.
+This keeps delayed delivery from unexpectedly inserting text.
+
+| Active candidate surface | Operation |
+| --- | --- |
+| Tab | Select next candidate, wrapping in host order |
+| Shift-Tab | Select previous candidate, wrapping |
+| Enter | Accept selected candidate; a subsequent Enter submits |
+| Escape | Dismiss after the existing 250 ms lone-Escape decoder deadline |
+| Up/Down | Existing history navigation; a changed draft dismisses candidates |
+| Left/Right, Home/End, insertion/deletion, paste | Existing editing; revision changes dismiss candidates |
+| Ctrl-L, resize, serialized external output | Redraw/restore current candidates and selection |
+| Ctrl-C, EOF, close, Drop | End the terminal surface and release candidate storage |
+
+`completion_action(Next/Previous/Accept/Dismiss)` provides the same serialized
+operations to the host. With no menu it returns `Error::State`.
+`completion_selection()` exposes revision, zero-based index and count, with no
+resource ownership. Outside an active menu, Tab still returns
+`CompletionRequested`; lone Escape and Shift-Tab retain sequence-rejection
+behavior. Paste contents never invoke menu shortcuts.
+
+Navigation and dismissal do not mutate Editor or advance revision. Acceptance
+checks the current revision and uses the existing atomic range replacement;
+it dismisses the menu even if the replacement is an I0 no-op. No-op acceptance
+retains revision; a real edit advances it once. Failed edits and no-op cursor
+commands preserve a still-current menu. External output and resize preserve
+selection and revision. Explicit close/reopen preserves I0 draft identity but
+ends temporary candidate presentation. Read-ahead retains the existing bounded
+ownership and event ordering.
+
+Two results for the same draft revision are both current. Explicit deliveries
+replace presentation in **delivery order**, starting selection at index zero.
+REPLAI does not infer latest-request preference: hosts must discard superseded
+jobs or changed application context before delivery. No second request counter
+or hidden common-prefix/fuzzy expansion is introduced.
+
+See the [runnable session host](../examples/completion.rs),
+[external reactor](../examples/completion-driven.rs),
+[presentation policy](presentation.md#completion-surface) and
+[qualification dossier](engineering/completion-contract.md).
+C ABI 1 retains synchronous request/replacement only; rich candidates are native
+Rust, with a future cross-language design reserved for E3.

@@ -57,7 +57,7 @@ consume semantic mutations without parsing an escape-coded frame.
 | [interaction](../src/interaction.rs), [event](../src/event.rs) | Three native facades and portable outcomes/errors | Product loop, language or command authority |
 
 **Generic terminal presentation belongs to the library; semantic classification
-and content belong to the host.** The host still owns completion discovery/selection,
+and content belong to the host.** The host still owns completion discovery/order/meaning,
 history admission/privacy, labels, execution, cancellation meaning and output
 content. There is no application registry, parser, filesystem completion or
 network dependency inside the engine.
@@ -285,3 +285,29 @@ Legacy session/C opens use an explicit compatibility profile through the same
 resolver. Their VT assumptions remain `Assumed`, even under TERM=dumb.
 [Precedence and admission](interaction.md#terminal-capabilities) ·
 [Qualification](engineering/terminal-capabilities.md).
+
+
+## Candidate delivery and temporary selection
+
+```mermaid
+flowchart TD
+    Host["Host: discover, order, classify candidates"] --> Set["CompletionSet at DraftRevision"]
+    Set --> Validate["REPLAI: stale check and structural validation"]
+    Validate --> Surface["Temporary selection and bounded viewport"]
+    Surface --> Accept["Explicit accept: atomic Editor replacement"]
+    Surface --> Render["Shared logical frame and incremental renderer"]
+    Accept --> Revision["Changed draft receives new revision"]
+```
+
+[completion.rs](../src/completion.rs) owns bounded safe data and portable menu
+geometry. Engine owns the active selection inside its interaction surface,
+separately from Editor. Selection is allocated only when nonempty candidates are
+installed. Keymap translates physical Tab/Shift-Tab/Escape into generic requests;
+Engine dispatches them according to whether candidates are active. Resources
+and protocol serialization do not implement completion policy.
+
+The existing frame transition consumes the combined draft/menu frame. No second
+renderer, editor or deadline system exists. Draft changes invalidate selection;
+terminal-only changes do not. The [contract](interaction.md#revision-bound-completion-candidates)
+and [dossier](engineering/completion-contract.md) define ordering, bounds and
+qualification. Native Rust exposes this addition; C ABI 1 stays unchanged.

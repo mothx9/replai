@@ -686,3 +686,50 @@ fn analysis_decoder_atomicity_and_virtual_transport_output() {
     assert_eq!(writes, d.0.borrow().writes);
     assert_eq!(now.revision(), e.editor.revision());
 }
+
+#[test]
+fn completion_virtual_transport_preserves_screen_and_cleans_write_failure() {
+    use crate::{CompletionAction, CompletionCandidate, CompletionSet};
+    for plain in [false, true] {
+        let d = Virtual::new();
+        let mut e = Engine::new(Editor::new(128, 3));
+        e.editor.insert("bu").unwrap();
+        let theme = Theme::new(!plain, true, Some("xterm"));
+        let mut t =
+            Terminal::start(d.clone(), &mut e, Prompt::new("demo").unwrap(), theme).unwrap();
+        let old = e.editor.revision();
+        let set = CompletionSet::new(
+            old,
+            vec![
+                CompletionCandidate::new(0..2, "build", "build").unwrap(),
+                CompletionCandidate::new(0..2, "bundle", "bundle").unwrap(),
+            ],
+        )
+        .unwrap();
+        let (_, fx) = e.present_completions(set).unwrap();
+        t.apply(&mut e, fx).unwrap();
+        assert!(d.screen().screen().contents().contains("> build"));
+        d.feed(b"\t");
+        t.advance(&mut e, crate::Wake::InputReady).unwrap();
+        assert_eq!(e.editor.revision(), old);
+        assert!(d.screen().screen().contents().contains("> bundle"));
+        let fx = e.external_output(Role::Warning, "host output").unwrap();
+        t.apply(&mut e, fx).unwrap();
+        assert!(d.screen().screen().contents().contains("> bundle"));
+        assert_eq!(d.screen().screen().cursor_position(), (1, 8));
+        let (_, fx) = e.completion_action(CompletionAction::Accept).unwrap();
+        t.apply(&mut e, fx).unwrap();
+        assert_eq!(e.editor.text(), "bundle");
+        assert!(!d.screen().screen().contents().contains("> build"));
+        let set = CompletionSet::new(
+            e.editor.revision(),
+            vec![CompletionCandidate::new(0..6, "x", "x").unwrap()],
+        )
+        .unwrap();
+        let (_, fx) = e.present_completions(set).unwrap();
+        d.0.borrow_mut().fail_write = true;
+        assert!(t.apply(&mut e, fx).is_err());
+        assert!(!e.is_open() && e.completion_selection().is_none());
+        assert_eq!(d.0.borrow().restored, 1);
+    }
+}

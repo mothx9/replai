@@ -283,6 +283,45 @@ impl Interaction {
         result
     }
 
+    /// Install host-ordered candidates for their originating draft revision.
+    /// Stale results produce no terminal bytes or state changes. All candidates
+    /// validate before activation. Empty sets dismiss; even one item needs Enter.
+    /// Same-revision deliveries replace in delivery order; host job preference
+    /// and context freshness remain host-owned. Failure uses normal cleanup.
+    pub fn present_completions(
+        &mut self,
+        set: crate::CompletionSet,
+    ) -> Result<crate::AnalysisOutcome, crate::CompletionError> {
+        let terminal = self.terminal.as_mut().ok_or(Error::State)?;
+        let (outcome, effects) = self.engine.present_completions(set)?;
+        if outcome == crate::AnalysisOutcome::Stale {
+            return Ok(outcome);
+        }
+        let result = terminal.apply(&mut self.engine, effects).map(|_| outcome);
+        self.reap();
+        result.map_err(Into::into)
+    }
+    /// Inspect temporary selection without borrowing candidate storage or a resource.
+    pub fn completion_selection(&self) -> Option<crate::CompletionSelection> {
+        self.engine.completion_selection()
+    }
+    /// Navigate, accept or dismiss an active menu through exclusive ownership.
+    /// No active menu is a State error. Navigation/dismissal leave revision intact.
+    /// Acceptance validates and replaces once; I0 no-op rules still apply.
+    /// Tab/Shift-Tab, Enter and Escape expose these same operations to terminal input.
+    pub fn completion_action(
+        &mut self,
+        action: crate::CompletionAction,
+    ) -> Result<crate::AnalysisOutcome, Error> {
+        let terminal = self.terminal.as_mut().ok_or(Error::State)?;
+        let (outcome, effects) = self.engine.completion_action(action)?;
+        if outcome == crate::AnalysisOutcome::Stale {
+            return Ok(outcome);
+        }
+        let result = terminal.apply(&mut self.engine, effects).map(|_| outcome);
+        self.reap();
+        result
+    }
     /// Apply a host-selected grapheme-aligned replacement and redraw.
     /// Invalid edits preserve text/cursor and leave the interaction active.
     pub fn complete(&mut self, range: Range<usize>, replacement: &str) -> Result<(), Error> {

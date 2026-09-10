@@ -340,3 +340,29 @@ applies resolved styling to prompts and documents alike. NO_COLOR is policy and
 cannot rewrite a supported fact as unavailable. `Presentation` resolution works
 with captured output and no cursor/TTY requirement. An explicit plain Theme and
 `Document::render` remain supported convenience paths.
+
+## Completion surface
+
+A current `CompletionSet` adds temporary rows below the editable draft in the
+same logical frame and renderer. The text cursor remains in the draft. The
+selected label has a textual `> ` prefix and Accent role; other labels use
+Default and annotations/count use Dim. Theme and F2 admission resolve styling.
+NO_COLOR preserves selection, boundaries and the position/count header.
+
+The menu uses at most eight rows, reserves an editable viewport, and adapts to
+terminal height. A count such as `3 / 27` identifies position and offscreen
+alternatives. The viewport follows the selected candidate in fixed pages without
+changing host order. All labels remain selectable. At 20 columns annotations
+are omitted; from 40 columns labels and annotations share one row. Long display
+fields are grapheme/cell-aware ellipsized; the insertion value is never shortened.
+Extremely small admitted terminals may show only the marker and a shortened
+label. F2's UnicodeNarrow width assumptions continue to apply.
+
+Navigation changes selection/count rows through the existing frame transition;
+it does not clear the screen or alter the draft. Resize recomputes the frame
+while retaining selection. Safe serialized output erases the combined temporary
+surface, emits the host document, and restores draft, cursor and candidates.
+Acceptance/dismissal/close remove menu rows before leaving the input surface.
+There is no alternate screen, horizontal scrolling, editor highlighting or
+concurrent output actor. The [completion contract](interaction.md#revision-bound-completion-candidates)
+owns candidate validity and lifecycle.

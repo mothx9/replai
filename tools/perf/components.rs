@@ -2,7 +2,12 @@
 #![allow(dead_code)]
 #[path = "../../src/analysis.rs"]
 mod analysis;
+#[path = "../../src/completion.rs"]
+mod completion;
 pub use analysis::{AnalysisOutcome, AnalysisSnapshot, DraftRevision};
+pub use completion::{
+    CompletionAction, CompletionCandidate, CompletionError, CompletionSelection, CompletionSet,
+};
 #[path = "../../src/actions.rs"]
 mod actions;
 #[path = "../../src/capabilities.rs"]
@@ -48,6 +53,7 @@ pub use event::{Error, Event};
 pub use interaction::Interaction;
 pub use presentation::{Foreground, Prompt, Role, Style, Theme};
 mod allocation;
+mod completions;
 #[path = "../../src/document.rs"]
 mod document;
 mod documents;
@@ -353,6 +359,7 @@ fn main() {
     );
     render_edges(&h);
     documents::measure(&h);
+    completions::measure(&h);
     interaction_scaling(&h, smoke);
     h.measure(
         spec("control", "timer_black_box", 0, "none", 0),

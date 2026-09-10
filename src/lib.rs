@@ -69,6 +69,11 @@
 //! # }
 //! ```
 
+mod completion;
+pub use completion::{
+    CompletionAction, CompletionCandidate, CompletionError, CompletionSelection, CompletionSet,
+    MAX_COMPLETION_BYTES, MAX_COMPLETION_CANDIDATES, MAX_COMPLETION_FIELD_BYTES,
+};
 mod analysis;
 pub use analysis::{AnalysisOutcome, AnalysisSnapshot, DraftRevision};
 mod capabilities;

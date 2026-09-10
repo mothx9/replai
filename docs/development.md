@@ -188,3 +188,12 @@ arrival, stale screen preservation, history and repeated resource lifecycles.
 These run in the complete qualifier and native CI; Windows executes the portable
 model only. Snapshot allocation/clone measurements live in the existing isolated
 performance harness under the `analysis/` component filter.
+
+
+Completion changes additionally run `python3 tools/completion_pty.py --work /tmp/replai-completion`
+and its `--memory` variant (Valgrind on Linux, native leaks on macOS). The same
+external-reactor observer validates delayed delivery, menu restoration, resize,
+read-ahead and termios; the session example validates synchronous delivery.
+`tests/completion.rs`, Engine completion tests and virtual transport conformance
+execute on the Windows portable lane too. `tools/perf/completions.rs` records
+bounded candidate costs separately from ordinary editing benchmarks.
