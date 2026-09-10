@@ -397,7 +397,10 @@ fn pty_unwinding_close_and_exclusivity() {
     let before = termios(&slave);
     #[cfg(target_os = "linux")]
     let signals = || {
-        std::fs::read_to_string("/proc/self/status")
+        // SigBlk is per-thread. /proc/self/status observes the test launcher,
+        // whose mask may change while libtest creates other test threads.
+        // Handler/ignore dispositions remain process-wide in this thread view.
+        std::fs::read_to_string("/proc/thread-self/status")
             .unwrap()
             .lines()
             .filter(|l| {
