@@ -2,6 +2,13 @@
 #![allow(dead_code)]
 #[path = "../../src/analysis.rs"]
 mod analysis;
+#[path = "../../src/validation.rs"]
+mod validation;
+pub use validation::{
+    Diagnostic, MAX_DIAGNOSTIC_BYTES, MAX_DIAGNOSTICS, MAX_VALIDATION_BYTES, SubmissionPolicy,
+    ValidationDisposition, ValidationError, ValidationOutcome, ValidationResult,
+};
+
 #[path = "../../src/completion.rs"]
 mod completion;
 pub use analysis::{AnalysisOutcome, AnalysisSnapshot, DraftRevision};
@@ -57,6 +64,7 @@ mod completions;
 #[path = "../../src/document.rs"]
 mod document;
 mod documents;
+mod validations;
 use actions::{Input, Request};
 pub use document::{Document, Text};
 use engine::Engine;
@@ -360,6 +368,7 @@ fn main() {
     render_edges(&h);
     documents::measure(&h);
     completions::measure(&h);
+    validations::measure(&h);
     interaction_scaling(&h, smoke);
     h.measure(
         spec("control", "timer_black_box", 0, "none", 0),

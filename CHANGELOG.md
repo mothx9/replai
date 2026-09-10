@@ -6,6 +6,13 @@ next work. All entries below are unreleased and carry no compatibility promise.
 
 ## Unreleased
 
+- Added opt-in native revision-bound submission validation with host-owned
+  Complete/Incomplete/Invalid decisions, bounded safe diagnostics and logical
+  multiline navigation. `Event::SubmissionRequested` extends the Rust enum;
+  exhaustive event matches need an additional arm. Default direct submission,
+  the minimal blocking entry and C ABI 1 retain their prior behavior. No parser,
+  validator executor, general highlighting or validation C entry is added.
+
 - Added native blocking reads and external readiness/deadline/resize driving over
   the retained Interaction engine. Existing session polling and C ABI 1 remain
   available. New terminal fact/policy admission separates optional styling/paste

@@ -170,7 +170,7 @@ bitmap is enlarged or altered.
 To reproduce with optional capture dependencies in a disposable environment:
 
 ```sh
-cargo build --locked --example query --example report
+cargo build --locked --example query --example report --example completion --example validation
 python3 tools/docs/capture_terminal.py
 ```
 
@@ -197,3 +197,11 @@ read-ahead and termios; the session example validates synchronous delivery.
 `tests/completion.rs`, Engine completion tests and virtual transport conformance
 execute on the Windows portable lane too. `tools/perf/completions.rs` records
 bounded candidate costs separately from ordinary editing benchmarks.
+
+
+Validation/multiline changes run `cargo test --test validation`, portable Engine
+conformance and `python3 tools/validation_pty.py --work /tmp/replai-validation`.
+The `--memory` variant executes the same active paths under Valgrind/Linux or
+native leaks/macOS. Both are part of the full qualifier and native CI. The
+[use-case map](use-cases.md) supplies manual recipes; the
+[dossier](engineering/validation-multiline.md) separates timing from correctness.

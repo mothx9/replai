@@ -22,12 +22,14 @@ struct Surface {
 pub(crate) struct Engine {
     pub editor: Editor,
     surface: Option<Surface>,
+    validation: Option<Box<crate::validation::ValidationState>>,
 }
 impl Engine {
     pub fn new(editor: Editor) -> Self {
         Self {
             editor,
             surface: None,
+            validation: None,
         }
     }
     pub fn is_open(&self) -> bool {
@@ -63,6 +65,11 @@ impl Engine {
         if let Some(completion) = &s.completion {
             s.renderer
                 .transition(completion.frame(&self.editor, &s.prompt, s.size))
+        } else if let Some(v) = &self.validation
+            && v.diagnostics.is_some()
+        {
+            s.renderer
+                .transition(v.frame(&self.editor, &s.prompt, s.size))
         } else {
             s.renderer
                 .redraw_changed(&self.editor, &s.prompt, s.size, damage)
@@ -146,10 +153,23 @@ impl Engine {
                 EditCommand::End => self.editor.end(),
                 EditCommand::Backspace => self.editor.backspace(),
                 EditCommand::Delete => self.editor.delete(),
-                EditCommand::HistoryPrevious => self.editor.history_up(),
-                EditCommand::HistoryNext => self.editor.history_down(),
+                EditCommand::HistoryPrevious => {
+                    if self.validation.is_none() || !self.editor.line_up() {
+                        self.editor.history_up();
+                    }
+                }
+                EditCommand::HistoryNext => {
+                    if self.validation.is_none() || !self.editor.line_down() {
+                        self.editor.history_down();
+                    }
+                }
             },
             Input::Request(Request::Submit) => {
+                if let Some(v) = &mut self.validation {
+                    v.pending = Some(self.editor.revision());
+                    return Ok(self
+                        .observable(Event::SubmissionRequested(self.editor.analysis_snapshot())));
+                }
                 return Ok(self.finish(Event::Submitted(self.editor.text().into())));
             }
             Input::Request(Request::Interrupt) => return Ok(self.finish(Event::Interrupted)),
@@ -162,6 +182,11 @@ impl Engine {
                 return Ok(self.observable(Event::CompletionRequested));
             }
             Input::Request(Request::CompletionPrevious | Request::DismissCompletion) => {
+                if matches!(input, Input::Request(Request::DismissCompletion))
+                    && self.clear_diagnostics()
+                {
+                    return Ok(self.flush());
+                }
                 // Preserve compatibility rejection outside a completion surface.
                 return Ok(self.observable(Event::Rejected(crate::EditError::InvalidSequence)));
             }
@@ -185,6 +210,9 @@ impl Engine {
         if damage == Damage::BackspaceAscii && previous_len != self.editor.text().len() + 1 {
             damage = Damage::Rebuild;
         }
+        if revision != self.editor.revision() {
+            self.invalidate_validation();
+        }
         let s = self.surface.as_mut().unwrap();
         if revision != self.editor.revision() && s.completion.take().is_some() {
             damage = Damage::Rebuild;
@@ -204,6 +232,7 @@ impl Engine {
     }
     fn finish(&mut self, event: Event) -> Effects {
         self.remove_completion();
+        self.invalidate_validation();
         self.editor.end_draft();
         let mut effects = self.flush();
         let mut surface = self.surface.take().unwrap();
@@ -215,6 +244,7 @@ impl Engine {
     }
     pub fn close(&mut self) -> Effects {
         self.remove_completion();
+        self.invalidate_validation();
         let mut effects = self.flush();
         if let Some(mut s) = self.surface.take() {
             effects.mutations.extend(s.renderer.leave(false));
@@ -222,6 +252,7 @@ impl Engine {
         effects
     }
     pub fn abandon(&mut self) {
+        self.invalidate_validation();
         self.surface = None;
     }
     pub fn complete(&mut self, range: Range<usize>, text: &str) -> Result<Effects, Error> {
@@ -231,6 +262,7 @@ impl Engine {
         let revision = self.editor.revision();
         self.editor.replace(range, text)?;
         if revision != self.editor.revision() {
+            self.invalidate_validation();
             self.remove_completion();
         }
         self.surface.as_mut().unwrap().damage = Damage::Rebuild;
@@ -281,6 +313,7 @@ impl Engine {
             return Ok((crate::AnalysisOutcome::Stale, Effects::default()));
         }
         set.validate(&self.editor)?;
+        self.clear_diagnostics();
         self.remove_completion();
         if !set.candidates().is_empty() {
             let s = self.surface.as_mut().unwrap();
@@ -308,11 +341,15 @@ impl Engine {
             C::Next | C::Previous => c.navigate(action == C::Previous),
             C::Accept => {
                 let candidate = c.candidate();
+                let revision = self.editor.revision();
                 self.editor.replace_at(
                     c.set.revision(),
                     candidate.range(),
                     candidate.replacement(),
                 )?;
+                if self.editor.revision() != revision {
+                    self.invalidate_validation();
+                }
                 self.remove_completion();
             }
             C::Dismiss => self.remove_completion(),
@@ -321,6 +358,89 @@ impl Engine {
         s.dirty = true;
         s.damage = Damage::Rebuild;
         Ok((A::Applied, self.flush()))
+    }
+    pub fn submission_policy(&self) -> crate::SubmissionPolicy {
+        if self.validation.is_some() {
+            crate::SubmissionPolicy::Validated
+        } else {
+            crate::SubmissionPolicy::Direct
+        }
+    }
+    pub fn set_submission_policy(&mut self, policy: crate::SubmissionPolicy) -> Result<(), Error> {
+        if self.is_open() {
+            return Err(Error::State);
+        }
+        self.validation = match policy {
+            crate::SubmissionPolicy::Direct => None,
+            crate::SubmissionPolicy::Validated => Some(Box::default()),
+        };
+        Ok(())
+    }
+    pub fn diagnostics(&self) -> Option<&[crate::Diagnostic]> {
+        self.validation.as_ref()?.diagnostics.as_deref()
+    }
+    fn clear_diagnostics(&mut self) -> bool {
+        let removed = self
+            .validation
+            .as_mut()
+            .is_some_and(|v| v.diagnostics.take().is_some());
+        if removed && let Some(s) = &mut self.surface {
+            s.dirty = true;
+            s.damage = Damage::Rebuild;
+        }
+        removed
+    }
+    fn invalidate_validation(&mut self) {
+        self.clear_diagnostics();
+        if let Some(v) = &mut self.validation {
+            v.pending = None;
+        }
+    }
+    pub fn apply_validation(
+        &mut self,
+        result: crate::ValidationResult,
+    ) -> Result<(crate::AnalysisOutcome, Effects), crate::ValidationError> {
+        use crate::{AnalysisOutcome as A, ValidationDisposition as V, ValidationError as E};
+        // Stale provenance wins even after a submission closed the terminal.
+        if result.revision() != self.editor.revision() {
+            return Ok((A::Stale, Effects::default()));
+        }
+        if !self.is_open() {
+            return Err(Error::State.into());
+        }
+        if self.validation.as_ref().and_then(|v| v.pending) != Some(result.revision()) {
+            return Err(E::NoRequest);
+        }
+        if let V::Invalid(diagnostics) = result.disposition() {
+            for d in diagnostics {
+                if let Some(range) = d.range() {
+                    self.editor.validate_replacement(&range, "")?;
+                }
+            }
+        }
+        let effects = match result.into_disposition() {
+            V::Complete => self.finish(Event::Submitted(self.editor.text().into())),
+            V::Incomplete => {
+                self.editor.insert("\n")?;
+                self.invalidate_validation();
+                self.remove_completion();
+                let s = self.surface.as_mut().unwrap();
+                s.dirty = true;
+                s.damage = Damage::Rebuild;
+                self.flush()
+            }
+            V::Invalid(diagnostics) => {
+                self.remove_completion();
+                let v = self.validation.as_mut().unwrap();
+                v.pending = None;
+                v.diagnostics = Some(diagnostics);
+                let s = self.surface.as_mut().unwrap();
+                s.dirty = true;
+                s.damage = Damage::Rebuild;
+                self.flush()
+            }
+        };
+        Ok((A::Applied, effects))
     }
     pub fn output_document(&mut self, document: &crate::Document) -> Result<Effects, Error> {
         let size = self.surface.as_ref().ok_or(Error::State)?.size;
@@ -520,3 +640,7 @@ mod tests {
 #[cfg(test)]
 #[path = "completion_tests.rs"]
 mod completion_tests;
+
+#[cfg(test)]
+#[path = "validation_tests.rs"]
+mod validation_tests;

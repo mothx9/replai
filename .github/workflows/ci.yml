@@ -134,7 +134,7 @@ jobs:
       - name: Compile platform-neutral public library
         run: cargo check --locked -p replai --lib
       - name: Deterministic engine, protocol, layout and virtual transport conformance
-        run: cargo test --locked -p replai --lib --test core --test architecture --test unicode_model --test document --test analysis --test completion
+        run: cargo test --locked -p replai --lib --test core --test architecture --test unicode_model --test document --test analysis --test completion --test validation
       - name: Native library lint and documentation
         run: |
           cargo clippy --locked -p replai --lib -- -D warnings
@@ -165,11 +165,15 @@ jobs:
         run: python3 tools/analysis_pty.py --work "$RUNNER_TEMP/replai-analysis"
       - name: Rich completion through session and external host readiness
         run: python3 tools/completion_pty.py --work "$RUNNER_TEMP/replai-completion"
+      - name: Validated multiline through session and external readiness
+        run: python3 tools/validation_pty.py --work "$RUNNER_TEMP/replai-validation"
       - name: Capability profiles with real native resources
         run: cargo test --locked --test capabilities_pty -- --nocapture
       - name: Install Linux embedding memory tool
         if: runner.os == 'Linux'
         run: sudo apt-get update && sudo apt-get install -y valgrind
+      - name: Active validation under native memory tooling
+        run: python3 tools/validation_pty.py --memory --work "$RUNNER_TEMP/replai-validation-memory"
       - name: Active completion lifecycle under native memory tooling
         run: python3 tools/completion_pty.py --memory --work "$RUNNER_TEMP/replai-completion-memory"
       - name: Real reactor lifecycle under native memory tooling
@@ -183,6 +187,8 @@ jobs:
             ${{ runner.temp }}/replai-embedding
             ${{ runner.temp }}/replai-embedding-memory
             ${{ runner.temp }}/replai-analysis
+            ${{ runner.temp }}/replai-validation
+            ${{ runner.temp }}/replai-validation-memory
 
   native-macos:
     name: macOS C ABI and real terminal

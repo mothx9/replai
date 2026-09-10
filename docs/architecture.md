@@ -311,3 +311,26 @@ renderer, editor or deadline system exists. Draft changes invalidate selection;
 terminal-only changes do not. The [contract](interaction.md#revision-bound-completion-candidates)
 and [dossier](engineering/completion-contract.md) define ordering, bounds and
 qualification. Native Rust exposes this addition; C ABI 1 stays unchanged.
+
+
+## Host validation over the revision boundary
+
+```mermaid
+flowchart TD
+    Enter[Enter without completion menu] --> Request[SubmissionRequested snapshot N]
+    Request --> Host[Host parser and submission policy]
+    Host --> Result[ValidationResult N]
+    Result --> Check[Engine checks revision and pending Enter]
+    Check --> Complete[Complete: existing finish and restoration]
+    Check --> Incomplete[Incomplete: atomic LF edit and continuation]
+    Check --> Invalid[Invalid: bounded safe diagnostic frame]
+    Check --> Stale[Stale: no mutations or terminal output]
+```
+
+Editor owns identity and logical vertical navigation. Optional Engine state owns
+pending Enter authority and one current diagnostic presentation. Terminal still
+owns the same protocol/resource lifecycle. Neither renderer nor backend knows the
+host grammar. Complete returns its event through serialized result delivery;
+there is no second event queue or validation scheduler. The
+[interaction contract](interaction.md#validated-submission-and-multiline-navigation)
+and [I3/U2 evidence](engineering/validation-multiline.md) define the exact boundaries.

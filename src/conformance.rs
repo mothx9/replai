@@ -733,3 +733,71 @@ fn completion_virtual_transport_preserves_screen_and_cleans_write_failure() {
         assert_eq!(d.0.borrow().restored, 1);
     }
 }
+
+#[test]
+fn validation_virtual_transport_stale_silence_read_ahead_and_failure_cleanup() {
+    use crate::{
+        AnalysisOutcome, Diagnostic, SubmissionPolicy, ValidationDisposition as V,
+        ValidationResult, Wake,
+    };
+    for fail_write in [false, true] {
+        let d = Virtual::new();
+        let mut e = Engine::new(Editor::new(1024, 2));
+        e.set_submission_policy(SubmissionPolicy::Validated)
+            .unwrap();
+        let mut t = Terminal::start(
+            d.clone(),
+            &mut e,
+            Prompt::new("v").unwrap(),
+            Theme::new(false, false, None),
+        )
+        .unwrap();
+        d.feed(b"first\rsecond");
+        let Event::SubmissionRequested(snapshot) =
+            t.advance(&mut e, Wake::InputReady).unwrap().unwrap()
+        else {
+            panic!("request")
+        };
+        assert_eq!(snapshot.text(), "first");
+        assert!(!t.pending.is_empty());
+        t.advance(&mut e, Wake::InputReady).unwrap();
+        let before = d.0.borrow().output.clone();
+        let writes = d.0.borrow().writes;
+        for disposition in [V::Complete, V::Incomplete, V::Invalid(vec![])] {
+            let (out, fx) = e
+                .apply_validation(ValidationResult::new(snapshot.revision(), disposition).unwrap())
+                .unwrap();
+            assert_eq!(out, AnalysisOutcome::Stale);
+            t.apply(&mut e, fx).unwrap();
+            assert_eq!(before, d.0.borrow().output);
+            assert_eq!(writes, d.0.borrow().writes);
+        }
+        d.feed(b"\r");
+        t.advance(&mut e, Wake::InputReady).unwrap();
+        let (_, fx) = e
+            .apply_validation(
+                ValidationResult::new(
+                    e.editor.revision(),
+                    V::Invalid(vec![Diagnostic::new("error", None).unwrap()]),
+                )
+                .unwrap(),
+            )
+            .unwrap();
+        t.apply(&mut e, fx).unwrap();
+        assert!(e.diagnostics().is_some());
+        if fail_write {
+            d.0.borrow_mut().fail_write = true;
+            let fx = e.external_output(Role::Dim, "notice").unwrap();
+            assert!(t.apply(&mut e, fx).is_err());
+            assert!(!e.is_open());
+            assert!(e.diagnostics().is_none());
+        } else {
+            d.0.borrow_mut().fail_read = true;
+            assert!(t.advance(&mut e, Wake::InputReady).is_err());
+            assert!(!e.is_open());
+            assert!(e.diagnostics().is_none());
+        }
+        assert!(!t.active);
+        assert_eq!(d.0.borrow().restored, 1);
+    }
+}

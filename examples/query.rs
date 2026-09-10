@@ -55,6 +55,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 notice = false;
             }
             match input.poll(Duration::from_millis(100))? {
+                Some(Event::SubmissionRequested(_)) => unreachable!("direct submission"),
                 None => {}
                 Some(Event::CompletionRequested) => {
                     if QUERY.starts_with(input.editor().text()) {

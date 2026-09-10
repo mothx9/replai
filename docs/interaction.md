@@ -450,3 +450,60 @@ See the [runnable session host](../examples/completion.rs),
 [qualification dossier](engineering/completion-contract.md).
 C ABI 1 retains synchronous request/replacement only; rich candidates are native
 Rust, with a future cross-language design reserved for E3.
+
+
+## Validated submission and multiline navigation
+
+`SubmissionPolicy::Direct` remains the default. Opt into `Validated` with
+`set_submission_policy` while closed; the policy survives reopen. The tiny
+`read_line` entry requires Direct and refuses a validated configuration before
+acquisition. Session and driven paths share the same validation engine.
+
+Enter emits `Event::SubmissionRequested(AnalysisSnapshot)` and leaves editing
+active. The host computes and delivers `ValidationResult` through
+`apply_validation`. The result contains the originating DraftRevision and one
+`ValidationDisposition`: Complete, Incomplete or Invalid. No parser or callback
+is installed. See the [runnable validator](../examples/validation.rs).
+
+| Current pending decision | Atomic effect |
+| --- | --- |
+| Complete | Submit exact current bytes, end draft identity, restore terminal; return Submitted in ValidationOutcome.event once |
+| Incomplete | Insert LF at cursor through Editor, advance revision, retain editing |
+| Invalid | Validate all diagnostic ranges, retain text/cursor/revision and display safe explanations |
+| Stale revision | Return AnalysisOutcome::Stale, no event, mutation or terminal bytes, including after close |
+| No pending Enter | ValidationError::NoRequest; a host cannot submit unsolicited validation |
+| Malformed range/capacity | ValidationError::Edit; preserve request and draft so the host can correct its result |
+
+Each successful response consumes the pending request. Repeated Enter at one
+revision coalesces; same-revision job preference remains host-owned. There is no
+second revision counter. Close/reopen clears pending requests and diagnostics
+without changing an otherwise unchanged draft revision. Submit/interrupt/EOF
+retain I0's semantic draft termination. Editing remains permitted while validation
+runs; any revision change invalidates both pending authority and diagnostics.
+
+`Diagnostic` has a safe nonempty single-line message and optional grapheme-aligned
+UTF-8 byte range. Limits: 32 diagnostics, 4096 bytes/message, 65536 total message
+bytes. Controls and hidden bidi/control-like characters are rejected before copying;
+ZWJ and combining text remain admitted. Invalid is a host semantic result, not
+an EditError. No warning ontology, fix-its or general syntax highlighting is added.
+
+The bounded surface shows a textual invalid marker, diagnostic count and up to
+four messages; long messages are ellipsized by grapheme and terminal cell width.
+Optional ranges display byte offsets. Full content remains available through
+`diagnostics()`. Resize and serialized output preserve current explanations;
+Escape dismisses presentation only. A successfully installed completion set
+replaces diagnostic presentation. Enter with a completion menu accepts a candidate
+only; a later Enter requests validation.
+
+Validated Up/Down uses Editor::line_up/line_down: logical LF lines first, history
+at first/last line. Columns use the width policy, four-cell tabs and short-line
+clamping; soft wraps use Left/Right. Ctrl-A/Ctrl-E retain whole-draft Home/End.
+No force-submit bypass or new configurable keymap is supplied. Ordinary
+replacement can insert LF explicitly; bracketed multiline paste remains one edit.
+
+Adding SubmissionRequested is a native Rust enum extension: exhaustive matches
+must account for it. Existing default behavior is unchanged. ABI 1 exposes neither
+this event nor policy; its direct-submit contract, records and symbols remain
+unchanged. The [use-case map](use-cases.md) separates deterministic hosts, model
+clients, standalone reports and external reactors. [Evidence](engineering/validation-multiline.md)
+records native and portable qualification separately.

@@ -5,7 +5,7 @@
 | Axis | Current truth |
 | --- | --- |
 | Project target | Embeddable command-line interaction infrastructure: a simple entry that can grow into rich, long-lived host-driven interfaces over one engine. |
-| Current selected engineering boundary | **NONE**: I1/U1 are closed; no subsequent engineering boundary is selected or authorized. |
+| Current selected engineering boundary | **VALIDATION.MULTILINE.0 — ACTIVE**: I3/U2 implementation and qualification; no later boundary is authorized. |
 | Latest major completed boundary | I1/U1 COMPLETION.CONTRACT: bounded revision-bound candidates and responsive temporary selection over one engine. |
 | Most important structural gap | Hints/highlighting and validation/multiline policy remain open above qualified revision provenance and rich completion. |
 | Executable foundation | Platform-neutral engine; bounded Unicode/grapheme editor; history navigation; completion requests; paste, interrupts/EOF, resize, safe output and exact restoration. |
@@ -176,8 +176,8 @@ to their recorded source, workload and environment.
 
 ## Current Execution Sequence
 
-COMPLETION.CONTRACT.0 is complete over I0 and the F1/P3/F2 foundation.
-Selection is `NONE`. Revision provenance and host-owned candidate delivery now
+VALIDATION.MULTILINE.0 is active over qualified I0/I1 and F1/P3/F2.
+I3/U2 remain unpromoted pending native, memory and performance qualification. Revision provenance and host-owned candidate delivery now
 have a qualified UI; this does not choose between I2 hints/highlighting,
 I3/U2 validation/multiline policy or I4 history. I3/U2 are tightly coupled because
 submission policy affects multiline interaction; I2 requires its own editor-span

@@ -366,3 +366,14 @@ Acceptance/dismissal/close remove menu rows before leaving the input surface.
 There is no alternate screen, horizontal scrolling, editor highlighting or
 concurrent output actor. The [completion contract](interaction.md#revision-bound-completion-candidates)
 owns candidate validity and lifecycle.
+
+
+## Validation diagnostics and multiline continuation
+
+Opt-in validated submission uses the same prompt continuation, cell layout,
+viewport and incremental renderer. One current bounded diagnostic surface reserves
+at most five rows, with a textual invalid marker, count and optional byte ranges;
+long messages are ellipsized by grapheme. Full messages remain inspectable through
+Interaction::diagnostics. This is submission feedback, not general syntax styling.
+The [submission contract](interaction.md#validated-submission-and-multiline-navigation)
+owns lifetime and precedence; [recipes](use-cases.md) show plain/styled use.

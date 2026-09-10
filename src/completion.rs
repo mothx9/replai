@@ -51,7 +51,7 @@ impl From<Error> for CompletionError {
         Self::Interaction(e)
     }
 }
-fn hidden_control(c: char) -> bool {
+pub(crate) fn hidden_control(c: char) -> bool {
     matches!(c, '\u{061c}' | '\u{200b}' | '\u{200e}' | '\u{200f}' | '\u{202a}'..='\u{202e}' | '\u{2060}' | '\u{2066}'..='\u{2069}' | '\u{feff}')
 }
 fn field(text: &str, display: bool) -> Result<(), CompletionError> {
@@ -321,7 +321,7 @@ impl ActiveCompletion {
         frame
     }
 }
-fn clip(text: &str, columns: usize) -> String {
+pub(crate) fn clip(text: &str, columns: usize) -> String {
     if crate::width::cells(text) <= columns {
         return text.into();
     }

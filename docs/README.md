@@ -32,3 +32,6 @@ Completed genesis and reconstruction reports live in Git:
 and [source archaeology](https://github.com/mothx9/replai/blob/57792794ee1ef6f460a91130e7e79e0d21b94956/docs/archaeology.md).
 Their surviving contracts are owned above. The pinned donor comparison remains
 in presentation because it still defines an executable oracle.
+
+[Use-case map](use-cases.md) owns runnable consumer/developer recipes.
+[I3/U2 evidence](engineering/validation-multiline.md) owns validation/multiline qualification.

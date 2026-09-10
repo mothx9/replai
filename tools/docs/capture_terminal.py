@@ -96,6 +96,23 @@ def screen_capture(columns, *, plain=False, editing=False):
         session.close()
 
 
+def validation_capture(columns=100):
+    session = Session(columns, binary="validation")
+    try:
+        session.drain()
+        session.send(b"\x0c")
+        session.send(b"begin {\r  build\r}\r")
+        assert "host received" in session.text()
+        session.send(b"}")
+        session.send(b"\r")
+        assert "! Invalid input" in session.text()
+        assert "Unmatched closing brace" in session.text()
+        print(session.text())
+        return copy.deepcopy(session.screen)
+    finally:
+        session.close()
+
+
 def completion_capture(columns=100):
     session = Session(columns, binary="completion")
     try:
@@ -184,3 +201,5 @@ if __name__ == "__main__":
                                     report_capture())])
 
     render("terminal-completion.png", [("REPLAI / host candidates, explicit selection and acceptance", completion_capture())])
+
+    render("terminal-validation.png", [("REPLAI / host validation, multiline continuation and safe diagnostics", validation_capture())])

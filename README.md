@@ -91,6 +91,30 @@ cargo run --locked --example structured -- 68
 NO_COLOR=1 cargo run --locked --example structured -- 24
 ```
 
+## Use-case map
+
+| Build | Start here | What stays in your application |
+| --- | --- | --- |
+| Small deterministic CLI | `cargo run --locked --example simple` | Commands, evaluation and history admission |
+| Rich command console | `cargo run --locked --example completion` | Candidate discovery, meaning and order |
+| Validated multiline console | `cargo run --locked --example validation` | Grammar and Complete/Incomplete/Invalid decisions |
+| Turn-by-turn model chat | Blocking input, then host execution | Messages, provider calls, streaming and cancellation |
+| Chat/debugger with external events | `cargo run --locked --example driven` | Reactor, network/timer events and serialized output calls |
+| Reports or captured output | `cargo run --locked --example report` | Data and semantic classification |
+
+The examples run locally without a database or model. In `validation`, type `{`,
+Enter, `task`, Enter, `}`, Enter: the host receives one multiline statement.
+Invalid input keeps the draft and shows safe diagnostics; delayed decisions for
+an edited draft are refused. Completion acceptance and submission are separate.
+
+<p align="center">
+  <img src="assets/terminal-validation.png" alt="Real terminal: a host-validated multiline statement followed by an invalid draft with a safe diagnostic." width="912">
+</p>
+
+[Runnable recipes, keybindings and terminal configurations](docs/use-cases.md)
+cover application embedding and developer verification, including NO_COLOR,
+narrow output, real PTYs and native memory checks.
+
 ## Choose your integration
 
 | Integration | Public entry points | Application responsibility |

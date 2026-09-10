@@ -158,6 +158,7 @@ fn main() {
                 eprintln!("{}", serde_json::json!({"rejected":error.to_string()}));
             }
             Some(Event::Interrupted | Event::EndOfInput) => break,
+            Some(Event::SubmissionRequested(_)) => unreachable!("direct benchmark"),
             None => {}
         }
     }

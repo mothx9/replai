@@ -177,6 +177,54 @@ impl Editor {
         self.selected = None;
         self.draft = None;
     }
+    /// Move to the previous logical LF-delimited line at the current display column.
+    /// Returns false only at the first logical line. Short lines clamp to their end;
+    /// tabs use four-cell stops relative to the logical line, independently of prompt.
+    /// Soft wraps remain navigable with Left/Right. No history policy is applied here.
+    pub fn line_up(&mut self) -> bool {
+        self.vertical(false)
+    }
+    /// Move to the next logical line using the same geometry as [`Self::line_up`].
+    /// Returns false at the last line; cursor changes advance the draft revision.
+    pub fn line_down(&mut self) -> bool {
+        self.vertical(true)
+    }
+    fn vertical(&mut self, down: bool) -> bool {
+        let start = self.text[..self.cursor].rfind('\n').map_or(0, |i| i + 1);
+        let next = self.text[self.cursor..]
+            .find('\n')
+            .map(|i| self.cursor + i + 1);
+        let target = if down {
+            let Some(next) = next else { return false };
+            next
+        } else {
+            if start == 0 {
+                return false;
+            }
+            self.text[..start - 1].rfind('\n').map_or(0, |i| i + 1)
+        };
+        let width = |g: &str, col: usize| {
+            if g == "\t" {
+                4 - col % 4
+            } else {
+                crate::width::cells(g)
+            }
+        };
+        let desired = self.text[start..self.cursor]
+            .graphemes(true)
+            .fold(0, |col, g| col + width(g, col));
+        let mut col = 0;
+        let mut cursor = target;
+        for g in self.text[target..].graphemes(true) {
+            if g == "\n" || col + width(g, col) > desired {
+                break;
+            }
+            col += width(g, col);
+            cursor += g.len();
+        }
+        self.move_cursor(cursor);
+        true
+    }
     /// Move left one extended grapheme, stopping at the beginning.
     pub fn left(&mut self) {
         let cursor = self.text[..self.cursor]

@@ -178,6 +178,7 @@ unsafe fn event_result(h: &mut Handle, event: Option<Event>, out: *mut ReplaiEve
         }
         Some(Event::Interrupted) => (REPLAI_EVENT_INTERRUPTED, REPLAI_OK),
         Some(Event::EndOfInput) => (REPLAI_EVENT_END_OF_INPUT, REPLAI_OK),
+        Some(Event::SubmissionRequested(_)) => unreachable!("ABI 1 uses direct submission"),
         Some(Event::CompletionRequested) => (REPLAI_EVENT_COMPLETION_REQUESTED, REPLAI_OK),
         Some(Event::Rejected(e)) => (REPLAI_EVENT_EDIT_REJECTED, edit(e)),
     };

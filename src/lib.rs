@@ -62,6 +62,7 @@
 //!         Some(Event::Interrupted | Event::EndOfInput) => break,
 //!         Some(Event::CompletionRequested) => { /* host may call complete */ }
 //!         Some(Event::Rejected(error)) => { /* host may report error */ }
+//!         Some(Event::SubmissionRequested(_)) => { /* opt-in host validation */ }
 //!         None => {}
 //!     }
 //! }
@@ -69,6 +70,11 @@
 //! # }
 //! ```
 
+mod validation;
+pub use validation::{
+    Diagnostic, MAX_DIAGNOSTIC_BYTES, MAX_DIAGNOSTICS, MAX_VALIDATION_BYTES, SubmissionPolicy,
+    ValidationDisposition, ValidationError, ValidationOutcome, ValidationResult,
+};
 mod completion;
 pub use completion::{
     CompletionAction, CompletionCandidate, CompletionError, CompletionSelection, CompletionSet,

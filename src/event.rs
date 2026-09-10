@@ -62,6 +62,9 @@ pub enum Event {
     EndOfInput,
     /// Tab requests host completion using [`crate::Interaction::editor`].
     CompletionRequested,
+    /// Opt-in Enter request. The host returns a revision-bound validation result.
+    /// Editing remains active; this immutable view may be retained while it continues.
+    SubmissionRequested(crate::AnalysisSnapshot),
     /// Invalid input or capacity rejection; the unchanged draft remains editable.
     Rejected(EditError),
 }

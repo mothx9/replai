@@ -34,6 +34,23 @@ impl Interaction {
             pending: VecDeque::new(),
         }
     }
+    /// Configure opt-in host validation while closed. Direct remains the default.
+    /// The policy persists across reopen; pending requests and diagnostics do not.
+    pub fn set_submission_policy(&mut self, policy: crate::SubmissionPolicy) -> Result<(), Error> {
+        if self.is_open() {
+            return Err(Error::State);
+        }
+        self.engine.set_submission_policy(policy)
+    }
+    /// Current Enter/vertical-navigation policy; no terminal acquisition required.
+    pub fn submission_policy(&self) -> crate::SubmissionPolicy {
+        self.engine.submission_policy()
+    }
+    /// Complete retained diagnostic messages for the current invalid draft, including
+    /// explanations omitted/ellipsized by the bounded temporary display.
+    pub fn diagnostics(&self) -> Option<&[crate::Diagnostic]> {
+        self.engine.diagnostics()
+    }
     /// Current draft identity within the retained editor, including while closed.
     pub fn revision(&self) -> DraftRevision {
         self.engine.editor.revision()
@@ -102,6 +119,9 @@ impl Interaction {
     /// On success the terminal is closed. Errors attempt cleanup; explicit close
     /// can retry a retained failed restoration. No application signal policy is installed.
     pub fn read_line(&mut self, prompt: Prompt) -> Result<crate::ReadOutcome, Error> {
+        if self.submission_policy() != crate::SubmissionPolicy::Direct {
+            return Err(Error::State);
+        }
         self.open_admitted(
             &std::io::stdin(),
             &std::io::stdout(),
@@ -118,6 +138,9 @@ impl Interaction {
                     self.external_output(Role::Warning, &error.to_string())?
                 }
                 Some(Event::CompletionRequested) | None => {}
+                Some(Event::SubmissionRequested(_)) => {
+                    unreachable!("blocking entry requires direct submission")
+                }
             }
         }
     }
@@ -321,6 +344,33 @@ impl Interaction {
         let result = terminal.apply(&mut self.engine, effects).map(|_| outcome);
         self.reap();
         result
+    }
+    /// Deliver one decision for a pending Enter request. Exclusive ownership makes
+    /// revision check, range validation and mutation/submission one logical operation.
+    /// Stale results perform no I/O, including after terminal restoration. Complete
+    /// returns Submitted here exactly once, not again through poll/advance.
+    /// Malformed current data leaves the pending request and draft unchanged.
+    pub fn apply_validation(
+        &mut self,
+        result: crate::ValidationResult,
+    ) -> Result<crate::ValidationOutcome, crate::ValidationError> {
+        let (analysis, effects) = self.engine.apply_validation(result)?;
+        if analysis == crate::AnalysisOutcome::Stale {
+            return Ok(crate::ValidationOutcome {
+                analysis,
+                event: None,
+            });
+        }
+        let event = self
+            .terminal
+            .as_mut()
+            .ok_or(Error::State)?
+            .apply(&mut self.engine, effects);
+        self.reap();
+        Ok(crate::ValidationOutcome {
+            analysis,
+            event: event?,
+        })
     }
     /// Apply a host-selected grapheme-aligned replacement and redraw.
     /// Invalid edits preserve text/cursor and leave the interaction active.

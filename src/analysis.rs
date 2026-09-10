@@ -22,7 +22,7 @@ impl DraftRevision {
 /// Creation copies the draft once. Cloning shares its immutable text allocation;
 /// the host can parse once and distribute derived results under the same revision.
 /// This value is Send + Sync; it does not make the live interaction shared.
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub struct AnalysisSnapshot {
     revision: DraftRevision,
     text: Arc<str>,

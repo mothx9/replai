@@ -45,6 +45,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 Some(Event::Rejected(error)) => {
                     interaction.external_output(replai::Role::Warning, &error.to_string())?
                 }
+                Some(Event::SubmissionRequested(_)) => unreachable!("direct submission"),
                 None => {}
             }
         }
