@@ -9,7 +9,11 @@
   <strong>The application owns the language.<br>REPLAI owns the line.</strong>
 </p>
 <p align="center">Terminal interaction infrastructure for Rust and C.</p>
-<p align="center">Rust · C ABI 1 · Linux / macOS · MIT · pre-release</p>
+<p align="center">Rust · C ABI 1 · Linux / macOS · pre-release</p>
+<p align="center">
+  <a href="https://github.com/mothx9/replai/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/mothx9/replai/ci.yml?branch=master&amp;label=CI&amp;color=8D5CF5&amp;labelColor=30363d" alt="CI status"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-8D5CF5?labelColor=30363d" alt="MIT license"></a>
+</p>
 
 A small line reader is easy to embed. A long-lived console needs more: editable
 Unicode, completion, multiline input, output arriving mid-draft, and a terminal
