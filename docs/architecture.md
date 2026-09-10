@@ -93,6 +93,23 @@ Environment discovery delegates to capabilities; the legacy sequence method
 delegates to the VT palette. Layout consumes roles, never these sequences.
 This small public compatibility exception does not make VT the render model.
 
+## Draft analysis ownership
+
+The `Editor` owns the only `DraftRevision` because it owns every text/cursor
+mutation, including closed and standalone editing. The engine ends that same
+revision on semantic submit/interrupt/EOF; resource close/reopen does not create
+a second counter. `analysis.rs` contains only opaque identity, shared immutable
+snapshot storage and typed application outcome. It has no terminal dependency.
+
+A snapshot leaves the host-owned interaction without borrowing its mutable draft.
+One host parse may feed multiple derivations; REPLAI owns neither their payloads
+nor execution. `complete_at` uses the same completion/editor/render path after an
+exclusive revision check. A stale result produces no mutations. This adds no
+scheduler, lock, parser, feature-specific result envelope or analysis cache.
+[Interaction semantics](interaction.md#revision-aware-host-analysis) define domain,
+lifecycle, failure and memory ownership; the [I0 dossier](engineering/analysis-protocol.md)
+records executable evidence. Future I1/I2/I3 reuse this provenance boundary.
+
 ## Input and outcome boundaries
 
 VT decoding produces recognized keys or a complete paste payload. The fixed

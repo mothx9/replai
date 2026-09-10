@@ -62,6 +62,7 @@ fn distributable_contains_source_license_and_development_contract() {
         "Cargo.lock",
         "src/lib.rs",
         "src/core.rs",
+        "src/analysis.rs",
         "src/input.rs",
         "src/presentation.rs",
         "src/terminal.rs",

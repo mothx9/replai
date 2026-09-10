@@ -5,7 +5,7 @@
 | Axis | Current truth |
 | --- | --- |
 | Project target | Embeddable command-line interaction infrastructure: a simple entry that can grow into rich, long-lived host-driven interfaces over one engine. |
-| Current selected engineering boundary | **NONE**: F2 is closed; no next engineering boundary is selected or authorized. |
+| Current selected engineering boundary | **ANALYSIS.PROTOCOL.0 — ACTIVE**: I0 revision provenance and stale-result refusal; later interaction work remains unauthorized. |
 | Latest major completed boundary | F2 terminal capabilities: unified facts, requirements, degradation and width contract; Linux/macOS real profiles and Windows portable evidence; [F2 dossier][f2]. |
 | Most important structural gap | I0 revision-aware host analysis remains open. Rich completion, validation and asynchronous result ownership need their own semantic contract. |
 | Executable foundation | Platform-neutral engine; bounded Unicode/grapheme editor; history navigation; completion requests; paste, interrupts/EOF, resize, safe output and exact restoration. |
@@ -16,13 +16,13 @@
 | Presentation posture | Safe spans, headings, facts, lists, responsive tables/status, composed prompts/themes and deterministic plain output. Completion UI and broader visual refinement remain incomplete. |
 | Consumer posture | Native Rust and C consumers are external owners. Exact pins, adoption, application mappings and publication are their decisions; producer metadata assigns no migrations. |
 | Public-release posture | Pre-release; no stable Rust API, ABI longevity, SemVer or MSRV promise and no release date. |
-| Next decision point | Assess I0 over the qualified F1/P3/F2 foundation: draft revision identity and stale-result refusal. This dependency rationale does not select or start I0. |
+| Next decision point | Qualify I0 over F1/P3/F2: exact revision transitions, delayed stale refusal, native PTYs and hot-path preservation. |
 
 This is the sole authority for **public macro state, maturity, strategic programs,
 dependency ordering and release progression**. [README](README.md) owns first use;
 [architecture][architecture] and contracts own implementation truth; engineering
 dossiers own bounded evidence; Git owns chronology. Planned properties are not
-APIs. F1/P3/F2 are complete at their stated scope. I0 and later implementation require a separate selection and authorization.
+APIs. F1/P3/F2 are complete at their stated scope. I0 is explicitly authorized and active; later boundaries require separate authorization.
 
 Navigate: [maturity](#system-maturity) · [programs](#strategic-programs) ·
 [completed boundaries](#completed-boundaries) · [sequence](#current-execution-sequence) ·
@@ -64,7 +64,7 @@ ESTABLISHED=23 PARTIAL=11 OPEN=8 LATER=4 TOTAL=46
 | embedding.session | Explicit interaction ownership | 🟢 ESTABLISHED | Movable state, scoped open/poll/close/reopen and host-owned execution; Linux/macOS acquisition. | Preserve lifecycle/error semantics and public/native C composition. | F | [Interaction][interaction]; [facade][facade]; [C contract][c-api] |
 | embedding.tiers | F1 simple and layered embedding | 🟢 ESTABLISHED | One retained Interaction supplies typed blocking reads, explicit sessions and host driving on Linux/macOS; C ABI 1 retains session compatibility. | Preserve all three native facades over one engine, with real acquisition/restoration and explicit cross-language limits. | F / P | [Embedding qualification][embedding]; [interaction][interaction] |
 | embedding.driver | P3 public event driver | 🟢 ESTABLISHED | Host-owned readiness wait, opaque monotonic deadlines and explicit resize; no required periodic driven idle wake. Pending input and observable ordering retained. | Preserve real native reactor, deadline, resize, output and resource oracles without acquiring host scheduling. | P / F | [Embedding qualification][embedding]; [driver][driver] |
-| analysis.revisions | I0 shared host analysis | 🔴 OPEN | No public revision-aware shared completion/hint/validation snapshot. | Prove one host analysis can serve multiple features and stale results cannot modify a newer draft. | I / F | [Architecture owner][architecture]; [engine][engine-tests] |
+| analysis.revisions | I0 shared host analysis | 🔴 OPEN | Revision/snapshot and stale-safe replacement are implemented; joint portable/native/performance qualification is in progress. | Prove one host analysis can serve multiple features and stale results cannot modify a newer draft. | I / F | [Architecture owner][architecture]; [engine][engine-tests] |
 
 ### Presentation
 
@@ -174,10 +174,9 @@ to their recorded source, workload and environment.
 
 ## Current Execution Sequence
 
-TERMINAL.CAPABILITIES.0 (F2) is complete after joint F1/P3. Current selection is `NONE`. Scheduling and admission are now explicit; I0 is the next dependency
-question because host analysis needs revision identity and stale-result refusal,
-not another terminal loop or capability policy. That rationale is an assessment
-frontier, not permission to implement or automatically select I0.
+ANALYSIS.PROTOCOL.0 is active over the qualified F1/P3/F2 foundation. It establishes
+shared draft provenance and stale-result refusal without acquiring host analysis.
+No later completion, hint, validation or UX boundary is selected or authorized.
 
 | Dependency frontier | Next decision / evidence | Explicit limit |
 | --- | --- | --- |

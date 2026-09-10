@@ -1,4 +1,4 @@
-use crate::{Editor, Error, engine::Engine};
+use crate::{AnalysisSnapshot, DraftRevision, Editor, Error, engine::Engine};
 #[cfg(any(target_os = "linux", target_os = "macos"))]
 use crate::{
     Event, Prompt, Role, Theme,
@@ -33,6 +33,14 @@ impl Interaction {
             #[cfg(any(target_os = "linux", target_os = "macos"))]
             pending: VecDeque::new(),
         }
+    }
+    /// Current draft identity within the retained editor, including while closed.
+    pub fn revision(&self) -> DraftRevision {
+        self.engine.editor.revision()
+    }
+    /// Retain one immutable view while this interaction continues to advance.
+    pub fn analysis_snapshot(&self) -> AnalysisSnapshot {
+        self.engine.editor.analysis_snapshot()
     }
     /// Inspect draft text and byte cursor in any lifecycle state.
     pub fn editor(&self) -> &Editor {
@@ -253,6 +261,28 @@ impl Interaction {
         self.reap();
         result
     }
+    /// Apply existing completion replacement only to its originating current draft.
+    ///
+    /// Calls are serialized by exclusive ownership. Stale results return without
+    /// validation, rendering or terminal I/O. A closed interaction returns State.
+    /// Current malformed replacements return Edit errors. No host analysis runs here.
+    #[cfg(any(target_os = "linux", target_os = "macos"))]
+    pub fn complete_at(
+        &mut self,
+        revision: DraftRevision,
+        range: Range<usize>,
+        replacement: &str,
+    ) -> Result<crate::AnalysisOutcome, Error> {
+        let terminal = self.terminal.as_mut().ok_or(Error::State)?;
+        let (outcome, effects) = self.engine.complete_at(revision, range, replacement)?;
+        if outcome == crate::AnalysisOutcome::Stale {
+            return Ok(outcome);
+        }
+        let result = terminal.apply(&mut self.engine, effects).map(|_| outcome);
+        self.reap();
+        result
+    }
+
     /// Apply a host-selected grapheme-aligned replacement and redraw.
     /// Invalid edits preserve text/cursor and leave the interaction active.
     pub fn complete(&mut self, range: Range<usize>, replacement: &str) -> Result<(), Error> {

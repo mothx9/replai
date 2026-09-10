@@ -175,6 +175,7 @@ impl Engine {
         })
     }
     fn finish(&mut self, event: Event) -> Effects {
+        self.editor.end_draft();
         let mut effects = self.flush();
         let mut surface = self.surface.take().unwrap();
         effects
@@ -203,6 +204,22 @@ impl Engine {
             mutations: self.redraw(),
             event: None,
         })
+    }
+    pub fn complete_at(
+        &mut self,
+        revision: crate::DraftRevision,
+        range: Range<usize>,
+        text: &str,
+    ) -> Result<(crate::AnalysisOutcome, Effects), Error> {
+        if !self.is_open() {
+            return Err(Error::State);
+        }
+        if revision != self.editor.revision() {
+            return Ok((crate::AnalysisOutcome::Stale, Effects::default()));
+        }
+        // Exclusive engine ownership keeps comparison, validation and mutation
+        // one operation. Both completion paths use the same editor and redraw.
+        Ok((crate::AnalysisOutcome::Applied, self.complete(range, text)?))
     }
     pub fn output_document(&mut self, document: &crate::Document) -> Result<Effects, Error> {
         let size = self.surface.as_ref().ok_or(Error::State)?.size;

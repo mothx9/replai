@@ -177,3 +177,14 @@ python3 tools/docs/capture_terminal.py
 These dependencies are not required for library builds or qualification.
 Screenshots illustrate behavior; the independent native PTY oracles remain the
 qualification authority.
+
+## Analysis protocol qualification
+
+`cargo test --test analysis` runs the portable revision model (including 20,000
+generated mutations); library conformance adds semantic lifecycle, decoder and
+output invariants. `python3 tools/analysis_pty.py --work /tmp/replai-analysis`
+uses the same Linux/macOS external-reactor oracle, with delayed host result
+arrival, stale screen preservation, history and repeated resource lifecycles.
+These run in the complete qualifier and native CI; Windows executes the portable
+model only. Snapshot allocation/clone measurements live in the existing isolated
+performance harness under the `analysis/` component filter.

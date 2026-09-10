@@ -45,7 +45,7 @@ provides the interaction layer.
 | Capability | Integration value |
 | --- | --- |
 | **Unicode editing** | Grapheme-aware movement and deletion, bounded drafts and atomic bracketed paste when admitted by terminal policy |
-| **History and completion** | Exact return to an unfinished draft; validated completion replacement with application-owned candidates and history admission |
+| **History and completion** | Exact draft restoration, host-owned candidates and revision-bound replacement that refuses stale analysis |
 | **Structured presentation** | Headings, aligned fields, lists, responsive tables and status messages from safe semantic text |
 | **Coordinated output** | Present results or notices during editing, then restore the draft and cursor exactly |
 | **Flexible embedding** | Blocking, explicit session and host-driven integration over the same engine; no required async runtime |
@@ -181,6 +181,13 @@ sources. The qualification suite checks both linkage modes and C++ inclusion.
 
 [Installation, static linkage and ABI ownership](docs/c-api.md) ·
 [Complete C host](examples/c/demo.c)
+
+Retain a draft snapshot for application-owned analysis, then apply its replacement
+with `complete_at(snapshot.revision(), range, text)`. If editing has advanced,
+REPLAI returns `AnalysisOutcome::Stale` without touching the draft or screen.
+Snapshots share immutable text when cloned; REPLAI never owns your parser or
+analysis scheduler. See the [analysis contract](docs/interaction.md#revision-aware-host-analysis)
+and [driven fixture](examples/analysis.rs).
 
 ## Structured presentation
 

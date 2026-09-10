@@ -130,6 +130,53 @@ one chosen replacement. Range endpoints must be ordered grapheme boundaries.
 Zero candidates, ambiguity, refusal or lookup failure need no mutation. The
 same atomic validation applies to Unicode and oversized replacements.
 
+## Revision-aware host analysis
+
+`Editor::analysis_snapshot()` and `Interaction::analysis_snapshot()` return one
+coherent `AnalysisSnapshot`: private revision, immutable text and byte cursor,
+exposed by accessors. Creation copies text once into `Arc<str>`; cloning shares
+that allocation. The snapshot is Send + Sync and survives live edits. The host
+owns parsing, derived payloads, context, scheduling and cancellation. REPLAI
+runs no analysis callbacks, jobs, futures or cache.
+
+`DraftRevision` supports copy and equality within its originating retained
+Editor. It has no public arithmetic, ordering or global uniqueness. A host with
+several editors must route each result to the originating editor; replacing an
+Editor creates a new domain. Equality between unrelated domains is meaningless.
+
+| Transition | Revision rule |
+| --- | --- |
+| Successful text or cursor change | New identity, including history recall/return, paste and completion |
+| No-op movement/replacement/clear; rejected edit | Retain identity |
+| History admission alone | Retain identity; stored history is not snapshot context |
+| Submit, editing interrupt, transport EOF or empty Ctrl-D | End the semantic draft and advance identity, even if retained bytes are unchanged |
+| Close/reopen, including a different prompt | Retain identity if the draft is unchanged |
+| Resize, output, theme, capability, readiness or partial decoder state | Retain identity unless an actual editor transition results |
+
+Returning to earlier bytes/cursor after an intervening change never revives old
+analysis. Paste is one atomic editor insertion after successful decoding, not a
+revision per protocol byte. The private 128-bit counter uses checked increments;
+on exhaustion a state-changing operation panics **before mutation**, never wraps.
+No snapshot allocation occurs on ordinary editing paths.
+
+Use `Editor::replace_at(revision, range, text)` or the active native
+`Interaction::complete_at(revision, range, text)` to compare, validate and apply
+under one exclusive mutable borrow. `AnalysisOutcome::Stale` performs no edit,
+history change, redraw or terminal I/O. It is checked before range/text validation.
+`Applied` admits a current valid replacement, including a no-op; malformed current
+edits retain the existing edit errors. Closed interaction application returns
+`Error::State`. A current edit followed by an I/O failure has the existing cleanup
+semantics: the edit committed, terminal cleanup is attempted, and the error is
+reported. A snapshot is not a transaction rollback mechanism.
+
+Unversioned `complete` remains available for immediate synchronous completion and
+C ABI 1. I0 adds no C symbols; C callers retain their synchronous contract. Native
+blocking callers need not use snapshots. Session and driven hosts can retain a
+snapshot, continue input/deadline/resize/output work, then serially apply a result.
+The [external-reactor example](../examples/analysis.rs) demonstrates that flow;
+[qualification](engineering/analysis-protocol.md) separates portable and real PTY
+proof. Rich candidates, hints/highlighting and validation remain later contracts.
+
 ## History
 
 History is configured by entry count and input byte bound. Admission is explicit,

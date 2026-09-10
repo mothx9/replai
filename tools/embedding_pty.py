@@ -17,14 +17,14 @@ from linux import Session, attributes, winsize, ROOT
 
 
 class Reactor(Session):
-    def __init__(self, directory, prefix=()):
+    def __init__(self, directory, prefix=(), binary="driven", prompt="driven"):
         path = directory / 'events.sock'
         self.listener = socket.socket(socket.AF_UNIX)
         self.listener.bind(str(path)); self.listener.listen(1); self.listener.settimeout(20)
         self.operations = ['R 24 80']
-        super().__init__([*prefix, ROOT/'target/debug/examples/driven', path])
+        super().__init__([*prefix, ROOT/'target/debug/examples'/binary, path])
         self.app, _ = self.listener.accept()
-        self.until(lambda: b'READY\n' in self.receipts and b'driven> ' in self.output)
+        self.until(lambda: b'READY\n' in self.receipts and (prompt+'> ').encode() in self.output)
 
     def pump(self, deadline):
         mark = len(self.output)
@@ -47,7 +47,7 @@ class Reactor(Session):
     def edit(self, data, text, cursor):
         mark = len(self.receipts)
         self.send(data)
-        self.until(lambda: b'STATE ' in self.receipts[mark:] and self.state()['text'] == text and self.state()['cursor'] == cursor)
+        self.until(lambda: re.search(rb'STATE (true|false) \d+ \d+ [0-9a-f]*\n', self.receipts[mark:]) is not None and self.state()['text'] == text and self.state()['cursor'] == cursor)
         return self.state()
 
     def screen(self):

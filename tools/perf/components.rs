@@ -1,5 +1,8 @@
 //! Private-source characterization binary, deliberately outside the production workspace.
 #![allow(dead_code)]
+#[path = "../../src/analysis.rs"]
+mod analysis;
+pub use analysis::{AnalysisOutcome, AnalysisSnapshot, DraftRevision};
 #[path = "../../src/actions.rs"]
 mod actions;
 #[path = "../../src/capabilities.rs"]
@@ -886,6 +889,33 @@ fn main() {
             e.history_up();
         }
         assert_eq!(e.text(), "keep");
+    }
+    for size in [0, 64, 1024, 65_536, 1_048_576] {
+        h.measure(
+            spec("analysis", "snapshot", size, "ascii", 0),
+            || editor(&"x".repeat(size), size),
+            |e| e.analysis_snapshot(),
+            |e, snapshot| {
+                assert_eq!(
+                    (snapshot.text(), snapshot.cursor(), snapshot.revision()),
+                    (e.text(), e.cursor(), e.revision())
+                );
+                json!({"retained_text_bytes":snapshot.text().len(),
+                    "editor_stack_bytes":std::mem::size_of::<Editor>(),
+                    "interaction_stack_bytes":std::mem::size_of::<Interaction>(),
+                    "revision_stack_bytes":std::mem::size_of::<DraftRevision>(),
+                    "snapshot_stack_bytes":std::mem::size_of::<AnalysisSnapshot>()})
+            },
+        );
+        h.measure(
+            spec("analysis", "snapshot_clone", size, "ascii", 0),
+            || editor(&"x".repeat(size), size).analysis_snapshot(),
+            |snapshot| snapshot.clone(),
+            |original, cloned| {
+                assert_eq!(original.text().as_ptr(), cloned.text().as_ptr());
+                json!({"copied_text_bytes":0})
+            },
+        );
     }
     h.measure(spec("memory","base_interaction",0,"none",0),||(),|_|Interaction::new(Editor::new(LIMIT,100)),|_,i|{assert!(!i.is_open());json!({"editor_stack_bytes":std::mem::size_of::<Editor>(),"interaction_stack_bytes":std::mem::size_of::<Interaction>(),"deadline_stack_bytes":std::mem::size_of::<Deadline>(),"wait_interest_stack_bytes":std::mem::size_of::<WaitInterest>(),"wake_stack_bytes":std::mem::size_of::<Wake>()})});
     h.measure(

@@ -1,3 +1,4 @@
+use crate::{AnalysisOutcome, AnalysisSnapshot, DraftRevision};
 use std::{collections::VecDeque, fmt, ops::Range};
 use unicode_segmentation::{GraphemeCursor, UnicodeSegmentation};
 
@@ -42,8 +43,12 @@ pub(crate) fn valid_text(text: &str) -> bool {
 /// Offsets are UTF-8 byte offsets at extended grapheme boundaries. Home and End
 /// refer to the entire input, including multiline input. History admission is
 /// explicit; navigating an edited recalled entry never changes stored history.
+/// Analysis revision bookkeeping allocates nothing. On exhaustion of the private
+/// 128-bit revision domain, a state-changing operation panics before mutation.
+/// No-op and rejected edits retain their revision.
 #[derive(Debug)]
 pub struct Editor {
+    revision: DraftRevision,
     text: String,
     cursor: usize,
     limit: usize,
@@ -57,6 +62,7 @@ impl Editor {
     /// Create an empty editor with byte and history-entry limits. Zero is allowed.
     pub fn new(max_bytes: usize, history_entries: usize) -> Self {
         Self {
+            revision: DraftRevision::INITIAL,
             text: String::new(),
             cursor: 0,
             limit: max_bytes,
@@ -64,6 +70,41 @@ impl Editor {
             history_limit: history_entries,
             selected: None,
             draft: None,
+        }
+    }
+    /// Current analysis identity, scoped to this retained editor.
+    pub fn revision(&self) -> DraftRevision {
+        self.revision
+    }
+    /// Copy one coherent view for retained host analysis; clones share the text.
+    pub fn analysis_snapshot(&self) -> AnalysisSnapshot {
+        AnalysisSnapshot::new(self.revision, &self.text, self.cursor)
+    }
+    /// Replace only if the originating revision is still current.
+    ///
+    /// Staleness is checked before validation; stale input cannot change text,
+    /// cursor or history navigation, even if its range or text is invalid.
+    pub fn replace_at(
+        &mut self,
+        revision: DraftRevision,
+        range: Range<usize>,
+        text: &str,
+    ) -> Result<AnalysisOutcome, EditError> {
+        if revision != self.revision {
+            return Ok(AnalysisOutcome::Stale);
+        }
+        self.replace(range, text)?;
+        Ok(AnalysisOutcome::Applied)
+    }
+    // Checked before every mutation. Exhaustion panics before altering state;
+    // wrapping must never make an ancient snapshot eligible again.
+    pub(crate) fn end_draft(&mut self) {
+        self.revision.advance();
+    }
+    fn move_cursor(&mut self, cursor: usize) {
+        if cursor != self.cursor {
+            self.revision.advance();
+            self.cursor = cursor;
         }
     }
     /// Current input, without application interpretation.
@@ -103,6 +144,10 @@ impl Editor {
             return Err(EditError::Capacity);
         }
         let wanted = range.start + text.len();
+        if &self.text[range.clone()] == text && wanted == self.cursor {
+            return Ok(());
+        }
+        self.revision.advance();
         self.text.replace_range(range, text);
         // Joining marks/ZWJ may merge both sides of the insertion.
         self.cursor = wanted;
@@ -115,6 +160,9 @@ impl Editor {
     }
     /// Clear the active input and navigation draft; retain admitted history.
     pub fn clear(&mut self) {
+        if !self.text.is_empty() {
+            self.revision.advance();
+        }
         self.text.clear();
         self.cursor = 0;
         self.selected = None;
@@ -122,38 +170,51 @@ impl Editor {
     }
     /// Move left one extended grapheme, stopping at the beginning.
     pub fn left(&mut self) {
-        self.cursor = self.text[..self.cursor]
+        let cursor = self.text[..self.cursor]
             .grapheme_indices(true)
             .next_back()
             .map_or(0, |(i, _)| i);
+        self.move_cursor(cursor);
     }
     /// Move right one extended grapheme, stopping at the end.
     pub fn right(&mut self) {
         if let Some(g) = self.text[self.cursor..].graphemes(true).next() {
-            self.cursor += g.len();
+            self.move_cursor(self.cursor + g.len());
         }
     }
     /// Move to the beginning of the entire input.
     pub fn home(&mut self) {
-        self.cursor = 0;
+        self.move_cursor(0);
     }
     /// Move to the end of the entire input.
     pub fn end(&mut self) {
-        self.cursor = self.text.len();
+        self.move_cursor(self.text.len());
     }
     /// Remove the preceding extended grapheme, or do nothing at the beginning.
     pub fn backspace(&mut self) {
         let end = self.cursor;
-        self.left();
-        self.text.drain(self.cursor..end);
+        if end == 0 {
+            return;
+        }
+        let start = self.text[..end]
+            .grapheme_indices(true)
+            .next_back()
+            .unwrap()
+            .0;
+        self.revision.advance();
+        self.cursor = start;
+        self.text.drain(start..end);
         self.snap_cursor();
     }
     /// Remove the following extended grapheme, or do nothing at the end.
     pub fn delete(&mut self) {
         let start = self.cursor;
-        self.right();
-        self.text.drain(start..self.cursor);
-        self.cursor = start;
+        let Some(g) = self.text[start..].graphemes(true).next() else {
+            return;
+        };
+        let end = start + g.len();
+        self.revision.advance();
+        self.text.drain(start..end);
         self.snap_cursor();
     }
     fn snap_cursor(&mut self) {
@@ -200,16 +261,16 @@ impl Editor {
         if self.history.is_empty() || self.selected == Some(0) {
             return;
         }
-        let index = self.selected.map_or_else(
-            || {
-                self.draft = Some((self.text.clone(), self.cursor));
-                self.history.len() - 1
-            },
-            |i| i - 1,
-        );
+        let index = self.selected.map_or(self.history.len() - 1, |i| i - 1);
+        if self.text != self.history[index] || self.cursor != self.history[index].len() {
+            self.revision.advance();
+        }
+        if self.selected.is_none() {
+            self.draft = Some((self.text.clone(), self.cursor));
+        }
         self.selected = Some(index);
         self.text.clone_from(&self.history[index]);
-        self.end();
+        self.cursor = self.text.len();
     }
     /// Recall the next entry, or return to the original draft and cursor.
     pub fn history_down(&mut self) {
@@ -217,15 +278,63 @@ impl Editor {
             return;
         };
         if index + 1 < self.history.len() {
+            if self.text != self.history[index + 1] || self.cursor != self.history[index + 1].len()
+            {
+                self.revision.advance();
+            }
             self.selected = Some(index + 1);
             self.text.clone_from(&self.history[index + 1]);
-            self.end();
+            self.cursor = self.text.len();
         } else {
+            if self
+                .draft
+                .as_ref()
+                .is_some_and(|(text, cursor)| *text != self.text || *cursor != self.cursor)
+            {
+                self.revision.advance();
+            }
             if let Some((text, cursor)) = self.draft.take() {
                 self.text = text;
                 self.cursor = cursor;
             }
             self.selected = None;
+        }
+    }
+}
+
+#[cfg(test)]
+mod analysis_tests {
+    use super::*;
+    #[test]
+    fn exhausted_editor_refuses_before_visible_or_navigation_mutation() {
+        for operation in 0..12 {
+            let mut e = Editor::new(64, 2);
+            e.insert("draft").unwrap();
+            e.admit_history("older").unwrap();
+            e.history_up();
+            e.left();
+            if operation == 11 {
+                e.selected = None;
+            }
+            e.revision = DraftRevision::EXHAUSTED;
+            let before = format!("{e:?}");
+            let result =
+                std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| match operation {
+                    0 => e.insert("x").unwrap(),
+                    1 => e.clear(),
+                    2 => e.left(),
+                    3 => e.right(),
+                    4 => e.home(),
+                    5 => e.end(),
+                    6 => e.backspace(),
+                    7 => e.delete(),
+                    8 => e.history_down(),
+                    9 => e.replace(0..1, "O").unwrap(),
+                    10 => e.end_draft(),
+                    _ => e.history_up(),
+                }));
+            assert!(result.is_err());
+            assert_eq!(format!("{e:?}"), before);
         }
     }
 }

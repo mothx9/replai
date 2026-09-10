@@ -607,3 +607,82 @@ fn public_scheduling_values_are_portable_and_single_owner_mutation_is_sufficient
     send_sync::<crate::Wake>();
     send_sync::<crate::TerminalConfig>();
 }
+
+#[test]
+fn analysis_lifecycle_output_resize_and_stale_effects() {
+    use crate::AnalysisOutcome;
+    let mut e = Engine::new(Editor::new(256, 4));
+    e.editor.insert("draft界").unwrap();
+    e.editor.admit_history("previous").unwrap();
+    let original = e.editor.analysis_snapshot();
+    e.start(Prompt::new("analysis").unwrap(), (80, 24)).unwrap();
+    e.apply(Input::Resize(40, 20)).unwrap();
+    e.external_output(Role::Warning, "notice").unwrap();
+    e.output_document(
+        &crate::Document::new(vec![crate::Block::Paragraph(
+            crate::Text::new("record").unwrap(),
+        )])
+        .unwrap(),
+    )
+    .unwrap();
+    e.close();
+    assert_eq!(original.revision(), e.editor.revision());
+    e.start(Prompt::new("again").unwrap(), (80, 24)).unwrap();
+    assert_eq!(original.revision(), e.editor.revision());
+    e.apply(Input::Edit(E::Left)).unwrap();
+    let current = e.editor.analysis_snapshot();
+    let (outcome, effects) = e
+        .complete_at(original.revision(), 0..usize::MAX, "\x1b")
+        .unwrap();
+    assert_eq!(outcome, AnalysisOutcome::Stale);
+    assert!(effects.mutations.is_empty() && effects.event.is_none());
+    assert_eq!(
+        (e.editor.text(), e.editor.cursor(), e.editor.revision()),
+        (current.text(), current.cursor(), current.revision())
+    );
+    for request in [R::Submit, R::Interrupt] {
+        let old = e.editor.revision();
+        e.apply(Input::Request(request)).unwrap();
+        assert_ne!(old, e.editor.revision());
+        e.start(Prompt::new("again").unwrap(), (80, 24)).unwrap();
+        assert_eq!(
+            e.complete_at(old, 0..0, "bad").unwrap().0,
+            AnalysisOutcome::Stale
+        );
+    }
+    let old = e.editor.revision();
+    e.apply(Input::TransportEof).unwrap();
+    assert_ne!(old, e.editor.revision());
+}
+
+#[test]
+fn analysis_decoder_atomicity_and_virtual_transport_output() {
+    let d = Virtual::new();
+    let (mut e, mut t) = start(&d);
+    let r = e.editor.revision();
+    d.feed(b"\x1b[");
+    t.poll(&mut e, Duration::ZERO).unwrap();
+    assert_eq!(r, e.editor.revision());
+    d.feed(b"D");
+    t.poll(&mut e, Duration::ZERO).unwrap(); // Left at zero is a no-op.
+    assert_eq!(r, e.editor.revision());
+    d.feed(b"\xff");
+    t.poll(&mut e, Duration::ZERO).unwrap();
+    assert_eq!(r, e.editor.revision());
+    d.feed(b"\x1b[200~a\r\n");
+    t.poll(&mut e, Duration::ZERO).unwrap();
+    assert_eq!(r, e.editor.revision());
+    d.feed("界\x1b[201~".as_bytes());
+    t.poll(&mut e, Duration::ZERO).unwrap();
+    // Paste control filtering/normalization is the existing decoder contract.
+    let mut expected = r;
+    expected.advance();
+    assert_eq!(expected, e.editor.revision(), "one atomic paste edit");
+    let now = e.editor.analysis_snapshot();
+    let writes = d.0.borrow().writes;
+    let (result, effects) = e.complete_at(r, 0..0, "bad").unwrap();
+    assert_eq!(result, crate::AnalysisOutcome::Stale);
+    assert!(effects.mutations.is_empty());
+    assert_eq!(writes, d.0.borrow().writes);
+    assert_eq!(now.revision(), e.editor.revision());
+}

@@ -19,6 +19,21 @@
 //! # Ok::<(), replai::EditError>(())
 //! ```
 //!
+//! Retain a coherent draft for host-owned analysis while editing continues:
+//!
+//! ```
+//! use replai::{AnalysisOutcome, Editor};
+//! let mut editor = Editor::new(1024, 20);
+//! editor.insert("run ta")?;
+//! let snapshot = editor.analysis_snapshot();
+//! // The host may parse snapshot once and share it with several derivations.
+//! editor.insert("sk")?;
+//! assert_eq!(editor.replace_at(snapshot.revision(), 4..6, "task")?,
+//!            AnalysisOutcome::Stale);
+//! assert_eq!(snapshot.text(), "run ta");
+//! # Ok::<(), replai::EditError>(())
+//! ```
+//!
 //! Structured information can also be rendered without an active terminal:
 //!
 //! ```
@@ -54,6 +69,8 @@
 //! # }
 //! ```
 
+mod analysis;
+pub use analysis::{AnalysisOutcome, AnalysisSnapshot, DraftRevision};
 mod capabilities;
 mod width;
 pub use width::WidthPolicy;

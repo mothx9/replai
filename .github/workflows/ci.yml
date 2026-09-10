@@ -28,6 +28,8 @@ jobs:
         run: python3 -B tools/test_check_docs.py
       - name: PTY observer exit ordering
         run: python3 -B tools/test_c_pty.py
+      - name: Fragmented analysis observer receipts
+        run: python3 -B tools/test_analysis_pty.py
       - name: Generated ABI declarations stay authoritative
         run: python3 tools/generate_abi.py --check
       - name: Check repository stayed unchanged
@@ -130,7 +132,7 @@ jobs:
       - name: Compile platform-neutral public library
         run: cargo check --locked -p replai --lib
       - name: Deterministic engine, protocol, layout and virtual transport conformance
-        run: cargo test --locked -p replai --lib --test core --test architecture --test unicode_model --test document
+        run: cargo test --locked -p replai --lib --test core --test architecture --test unicode_model --test document --test analysis
       - name: Native library lint and documentation
         run: |
           cargo clippy --locked -p replai --lib -- -D warnings
@@ -157,6 +159,8 @@ jobs:
           toolchain: stable
       - name: Blocking and host reactor real PTYs, deadlines, resize and resources
         run: python3 tools/embedding_pty.py --work "$RUNNER_TEMP/replai-embedding"
+      - name: Revision-bound delayed analysis through a real external reactor
+        run: python3 tools/analysis_pty.py --work "$RUNNER_TEMP/replai-analysis"
       - name: Capability profiles with real native resources
         run: cargo test --locked --test capabilities_pty -- --nocapture
       - name: Install Linux embedding memory tool
@@ -172,6 +176,7 @@ jobs:
           path: |
             ${{ runner.temp }}/replai-embedding
             ${{ runner.temp }}/replai-embedding-memory
+            ${{ runner.temp }}/replai-analysis
 
   native-macos:
     name: macOS C ABI and real terminal
