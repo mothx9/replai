@@ -9,3 +9,6 @@ __pycache__/
 # Isolated performance builds (structured baseline lives in engineering evidence).
 /tools/perf/target/
 /tools/perf/comparisons/target/
+/tools/hardening/target/
+/tools/hardening/corpus/
+/tools/hardening/artifacts/

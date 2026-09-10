@@ -39,3 +39,6 @@ in presentation because it still defines an executable oracle.
 
 [I2 evidence](engineering/analysis-presentation.md) owns revision-bound editor styles,
 non-canonical hints, composition and their qualification.
+
+[Release hardening](engineering/release-hardening.md) records adversarial campaign,
+resource-failure and regression-policy evidence against the selected v0.1 scope.

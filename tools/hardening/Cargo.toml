@@ -1,0 +1,78 @@
+[package]
+name = "replai-hardening"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[workspace]
+
+[package.metadata]
+cargo-fuzz = true
+
+[features]
+fuzzing = ["dep:libfuzzer-sys"]
+
+[dependencies]
+unicode-segmentation = "=1.13.3"
+unicode-width = { version = "=0.2.2", default-features = false }
+serde_json = "1"
+vt100 = "=0.16.2"
+libfuzzer-sys = { version = "0.4", optional = true }
+
+[target.'cfg(any(target_os = "linux", target_os = "macos"))'.dependencies]
+rustix = { version = "=1.1.4", features = ["termios", "event", "fs", "pty", "process"] }
+replai-c = { path = "../../crates/replai-c" }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+nix = { version = "=0.31.3", default-features = false, features = ["event", "poll"] }
+
+[lib]
+path = "lib.rs"
+
+[[bin]]
+name = "replay"
+path = "replay.rs"
+
+[profile.release]
+debug = 1
+panic = "unwind"
+
+[[bin]]
+name = "protocol"
+path = "fuzz_targets/protocol.rs"
+test = false
+doc = false
+bench = false
+required-features = ["fuzzing"]
+
+[[bin]]
+name = "editor"
+path = "fuzz_targets/editor.rs"
+test = false
+doc = false
+bench = false
+required-features = ["fuzzing"]
+
+[[bin]]
+name = "results"
+path = "fuzz_targets/results.rs"
+test = false
+doc = false
+bench = false
+required-features = ["fuzzing"]
+
+[[bin]]
+name = "geometry"
+path = "fuzz_targets/geometry.rs"
+test = false
+doc = false
+bench = false
+required-features = ["fuzzing"]
+
+[[bin]]
+name = "cabi"
+path = "fuzz_targets/cabi.rs"
+test = false
+doc = false
+bench = false
+required-features = ["fuzzing"]

@@ -5,7 +5,7 @@
 | Axis | Current truth |
 | --- | --- |
 | Project target | Embeddable command-line interaction infrastructure: a simple entry that can grow into rich, long-lived host-driven interfaces over one engine. |
-| Current selected engineering boundary | **RELEASE.HARDENING.0 — SELECTED_NOT_STARTED**: scoped Q0/Q1/Q2 evidence for the existing v0.1 surface; selection is not implementation authorization. |
+| Current selected engineering boundary | **RELEASE.HARDENING.0 — ACTIVE**: authorized scoped Q0/Q1/Q2 campaign against the existing v0.1 surface; [execution evidence](docs/engineering/release-hardening.md), no maturity promotion from harness availability. |
 | Latest major completed boundary | I2 ANALYSIS.PRESENTATION: revision-bound host editor spans and non-canonical hints, composable with completion and validation. |
 | Most important structural gap | Adversarial/resource campaigns, measured regression policy and installable/frozen release artifacts are missing. I4/I5 are deferred from v0.1, not completed. |
 | Executable foundation | Platform-neutral engine; bounded Unicode/grapheme editor; history navigation; completion requests; paste, interrupts/EOF, resize, safe output and exact restoration. |
@@ -224,8 +224,8 @@ classification makes the dependency explicit without claiming implementation.
 
 ## Current Execution Sequence
 
-The next selected boundary is `RELEASE.HARDENING.0`. It is not started or
-authorized here. Evidence supports finishing the current interaction surface
+The selected boundary is `RELEASE.HARDENING.0`, now explicitly authorized and
+active. Evidence supports finishing the current interaction surface
 before adding I4/I5 or output modes. The exact remaining plan is **three engineering
 waves plus one separately authorized publication wave**, in this dependency order:
 
