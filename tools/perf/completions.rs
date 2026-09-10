@@ -14,7 +14,7 @@ fn set(revision: DraftRevision, count: usize, class: &str) -> CompletionSet {
                 _ => format!("build-{i}"),
             };
             let annotation = if class == "long" {
-                "long explanation ".repeat(256)
+                "long explanation ".repeat(128)
             } else {
                 "Build the project".into()
             };
