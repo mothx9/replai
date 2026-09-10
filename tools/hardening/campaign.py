@@ -8,6 +8,7 @@ import math
 import os
 from pathlib import Path
 import platform
+import shutil
 import subprocess
 import time
 
@@ -59,8 +60,9 @@ def main():
                 "requested_cpu_seconds_per_target": args.cpu_seconds, "start_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
     (args.work / "environment.json").write_text(json.dumps(metadata, indent=2)+"\n")
     with (args.work / "build.log").open("w") as log:
-        subprocess.run(["cargo", "+nightly", "fuzz", "build", "--fuzz-dir", "tools/hardening", "--features", "fuzzing"],
-                       cwd=ROOT, stdout=log, stderr=subprocess.STDOUT, check=True)
+        for target in args.targets:
+            subprocess.run(["cargo", "+nightly", "fuzz", "build", target, "--fuzz-dir", "tools/hardening", "--features", "fuzzing"],
+                           cwd=ROOT, stdout=log, stderr=subprocess.STDOUT, check=True)
 
     def campaign(target):
         work = args.work / target
@@ -68,7 +70,8 @@ def main():
         corpus.mkdir(parents=True)
         seeds(corpus)
         summary = {"target": target, "initial_corpus": digest(corpus), "chunks": [], "cpu_seconds": 0.0}
-        binary = ROOT / "tools/hardening/target" / host / "release" / target
+        binary = work / "instrumented-target"
+        shutil.copy2(ROOT / "tools/hardening/target" / host / "release" / target, binary)
         summary["binary_sha256"] = hashlib.sha256(binary.read_bytes()).hexdigest()
         while summary["cpu_seconds"] < args.cpu_seconds:
             index = len(summary["chunks"])

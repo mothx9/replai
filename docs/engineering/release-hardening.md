@@ -63,8 +63,15 @@ receipt. No macOS/Windows replay or native stress is implied by this smoke.
 | --- | --- | --- | --- | --- |
 | H001 | results / generated seed 1 | Harness unwrapped a candidate constructor for a deliberately reversed range | Harness defect; respect constructor rejection before attempting installation | Replayed 1,000 sequences; closed |
 | H002 | cabi / empty input | Harness expected a second destroy of the nulled owner to succeed | Harness defect; ABI 1 explicitly rejects the null handle with INVALID_ARGUMENT | Empty input and short fuzz replay passed; closed |
+| H003 | geometry / retained 11-byte regression | Harness unwrapped rendering when a heading did not fit a narrow geometry | Harness defect; compare deterministic render outcomes, inspect safe bytes only on success | Minimized with libFuzzer; [regression](../../tools/hardening/regressions/geometry/heading-too-narrow) retained; geometric budget restarts |
 
-No product defect has been established by these initial observations. Subsequent
+100,000 generated seeds 1–100,000 passed on Linux ARM64, with 128 operations per
+editor/history sequence and 128 per host-result/lifecycle sequence. The five
+long fuzz campaigns started at harness checkpoint
+`b812afac2706ea11321239e15788cee8ae5c4fdf`; geometry stopped on H003 at 27.581449
+CPU seconds, which does not count as its passing 60-minute campaign.
+
+No product defect has been established by these observations. Subsequent
 findings remain in this ledger even after repair; a short clean smoke is not a
 security certification or evidence that a longer campaign will find none.
 

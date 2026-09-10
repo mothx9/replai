@@ -311,8 +311,13 @@ pub fn geometry_case(data: &[u8]) {
             if let Ok(d) = Document::new(vec![block]) {
                 for plain in [true, false] {
                     let theme = Theme::new(!plain, false, None);
-                    let a = d.render(width, theme).unwrap();
-                    assert_eq!(a, d.render(width, theme).unwrap());
+                    let rendered = d.render(width, theme);
+                    assert_eq!(rendered, d.render(width, theme));
+                    // An admitted document may not fit the requested geometry
+                    // (e.g. a heading prefix consumes a two-column row).
+                    let Ok(a) = rendered else {
+                        continue;
+                    };
                     if plain {
                         assert!(!a.contains('\x1b'));
                     }
