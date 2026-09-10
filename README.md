@@ -10,6 +10,10 @@
 </p>
 <p align="center">Terminal interaction infrastructure for Rust and C.</p>
 <p align="center">
+  <a href="docs/interaction.md"><img src="https://img.shields.io/badge/language-Rust-8D5CF5?labelColor=30363d" alt="Rust"></a>
+  <a href="docs/c-api.md"><img src="https://img.shields.io/badge/C_ABI-1-8D5CF5?labelColor=30363d" alt="C ABI 1"></a>
+  <a href="docs/architecture.md"><img src="https://img.shields.io/badge/runtime-Linux_%2F_macOS-8D5CF5?labelColor=30363d" alt="Linux / macOS runtime"></a>
+  <a href="ROADMAP.md"><img src="https://img.shields.io/badge/status-pre--release-8D5CF5?labelColor=30363d" alt="Pre-release"></a>
   <a href="https://github.com/mothx9/replai/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/mothx9/replai/ci.yml?branch=master&amp;label=CI&amp;color=8D5CF5&amp;labelColor=30363d" alt="CI status"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-8D5CF5?labelColor=30363d" alt="MIT license"></a>
 </p>
