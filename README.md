@@ -37,7 +37,7 @@ model clients. Your application defines the language and execution model; REPLAI
 provides the interaction layer.
 
 <p align="center">
-  <img src="assets/terminal-results.png" alt="Query-console example: host-defined completion, an aligned results table, semantic status colors and a composed prompt." width="912">
+  <img src="assets/terminal-results.png" alt="Real session: completion, aligned results, history recall and a multiline draft preserved beneath host output." width="912">
 </p>
 
 ## What you get
@@ -112,9 +112,6 @@ installs no signal handlers and owns no background writer or application schedul
 [External-loop example](examples/driven.rs) ·
 [Embedding contract](docs/interaction.md#embedding-tiers-and-wait-ownership)
 
-<p align="center">
-  <img src="assets/terminal-editing.png" alt="A real multiline draft remains editable at its original cursor position after a host notice is printed above it." width="912">
-</p>
 
 ### Rust
 
@@ -190,6 +187,10 @@ sources. The qualification suite checks both linkage modes and C++ inclusion.
 Give terminal output a consistent hierarchy without writing ANSI sequences or
 padding columns in application code. A `Document` describes generic structure;
 REPLAI resolves cell geometry, wrapping, semantic styling and narrow-width layout.
+
+<p align="center">
+  <img src="assets/terminal-layouts.png" alt="The same query results rendered in three real terminals: styled at 42 columns, NO_COLOR at 42 columns, and stacked records at 20 columns." width="912">
+</p>
 
 | Primitive | Presentation contract |
 | --- | --- |

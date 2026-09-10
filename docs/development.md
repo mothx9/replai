@@ -146,18 +146,25 @@ claiming a Windows terminal backend. Hosted latency is characterization only.
 
 ## README terminal preview
 
-The README uses two real [query-host](../examples/query.rs) screens:
-[structured results](../assets/terminal-results.png) and
-[multiline editing with host output](../assets/terminal-editing.png).
+The README uses real [query-host](../examples/query.rs) sessions:
+[a complete interaction](../assets/terminal-results.png) and
+[styled/plain/narrow layouts](../assets/terminal-layouts.png).
 The example has a fixed query and an in-memory fixture; it connects to no database.
 All terminal contents come from the executable, not authored image text.
 
-The optional [capture script](../tools/docs/capture_terminal.py) drives a 72-column
-Linux PTY with pyte 0.8.2 and Pillow 11.3.0. It exercises completion, submission,
-history return, multiline paste, cursor movement, Ctrl-L and a host notice. It
-checks clean exit, exact termios restoration and paste-mode cleanup. The images
-are rasterized directly at 2× density with DejaVu Sans Mono into 1824-pixel-wide
-PNGs. The dark background and title strip belong to the capture, not REPLAI output.
+The optional [capture script](../tools/docs/capture_terminal.py) drives Linux PTYs
+with pyte 0.8.2 and Pillow 11.3.0. The 100-column session exercises completion,
+submission, history return, multiline paste, a non-end cursor and a host notice.
+The second image places three independently captured screens side by side:
+42 columns styled, 42 columns with NO_COLOR, and 20 columns with NO_COLOR where
+the table becomes stacked records. Ctrl-L clears introductory output in these
+comparison sessions. The capture checks clean exit, exact termios restoration,
+paste cleanup and the absence of styling in plain profiles.
+
+Glyphs are rasterized directly at 2× density with DejaVu Sans Mono. The 28-pixel
+raster font appears at approximately 13–14 px at README width, with 20-pixel
+logical row spacing. The images are 1796 and 1944 pixels wide. The dark background,
+comparison arrangement and title strips belong to the capture, not REPLAI output.
 No existing bitmap is enlarged or altered.
 
 To reproduce with optional capture dependencies in a disposable environment:
