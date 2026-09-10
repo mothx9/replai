@@ -1,0 +1,133 @@
+{
+  "capability_contracts": [
+    {
+      "description": "Explicit session compatibility over the common driver",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/3c0b14162cd322017bb718b71cc4b433c6100476/docs/interaction.md"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34494834221",
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
+      ],
+      "guarantees": [
+        "Existing open/poll/completion/output/close behavior and bounded read-ahead remain available",
+        "Compatibility polling retains bounded periodic resize observation; C ABI 1 unchanged",
+        "Native Event adds opt-in SubmissionRequested; exhaustive Rust matches need an additional arm. Default runtime submission is unchanged."
+      ],
+      "id": "embedding.session",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "changed_inputs": [
+    ".github/workflows/ci.yml",
+    "assets/terminal-session.png",
+    "examples/console.rs",
+    "tools/docs/capture-requirements.txt",
+    "tools/docs/capture_terminal.py",
+    "tools/docs/check_readme.py"
+  ],
+  "changes": [
+    {
+      "capability": "embedding.session",
+      "compatibility": "compatible",
+      "description": "Documentation-only reference-host proof: README code compilation, real blocking PTY and reproducible console capture now run in CI. Runtime source, public API/ABI, dependency graph and all capability definitions are unchanged. No consumer migration is assigned.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34512238354",
+        "https://github.com/mothx9/replai/blob/fbe80ffc10b518186d7edac55fafda9f3bd226dc/docs/development.md#readme-terminal-preview"
+      ],
+      "inputs": [
+        ".github/workflows/ci.yml",
+        "assets/terminal-session.png",
+        "examples/console.rs",
+        "tools/docs/capture-requirements.txt",
+        "tools/docs/capture_terminal.py",
+        "tools/docs/check_readme.py"
+      ],
+      "kind": "QUALIFICATION_CHANGED",
+      "platforms": [
+        "linux"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "current": {
+    "contract_id": "sha256:c1f5365b5f50bbf79ea70dc111b533c9aad36babce86db95328dad2187a307a6",
+    "repository": "https://github.com/mothx9/replai",
+    "revision": "fbe80ffc10b518186d7edac55fafda9f3bd226dc",
+    "tree": "08bb7c903f9ec86436b495d09b7ec29f10212806"
+  },
+  "id": "sha256:ad48ec0ee8a523f8fc00b041435e9f939024bf4c9cf52d7f55e3ee2bb7b7e748",
+  "kind": "delta",
+  "platforms": [
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34502378013",
+        "https://github.com/mothx9/replai/blob/ff5de189aee2f4e5d9b75f35232af6eb719941d4/docs/engineering/analysis-presentation.md"
+      ],
+      "id": "linux",
+      "status": "runtime-qualified",
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34502378013",
+        "https://github.com/mothx9/replai/blob/ff5de189aee2f4e5d9b75f35232af6eb719941d4/docs/engineering/analysis-presentation.md"
+      ],
+      "id": "macos",
+      "status": "runtime-qualified",
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34502378013",
+        "https://github.com/mothx9/replai/blob/ff5de189aee2f4e5d9b75f35232af6eb719941d4/docs/engineering/analysis-presentation.md"
+      ],
+      "id": "windows",
+      "status": "portable-core-qualified",
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "previous": {
+    "contract_id": "sha256:7a353651079624584f8d47cbfceac9a62de68ca56a46b0971d661549a89cf1c5",
+    "repository": "https://github.com/mothx9/replai",
+    "revision": "da16302c33cdce5ef40978e02e9d8dff045c93f9",
+    "tree": "0e487a176b025ed5f7b239788d55eff95670ac6c"
+  },
+  "schema_version": 1,
+  "surfaces": [
+    {
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/interaction.md",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/presentation.md"
+      ],
+      "id": "rust-native",
+      "kind": "rust-native",
+      "version": "pre-release"
+    },
+    {
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/c-api.md"
+      ],
+      "id": "c-abi-v1",
+      "kind": "c-abi",
+      "version": "1"
+    }
+  ]
+}

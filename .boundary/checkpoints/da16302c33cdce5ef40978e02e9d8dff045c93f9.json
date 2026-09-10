@@ -672,32 +672,36 @@
   ],
   "changes": [
     {
-      "capability": "embedding.session",
-      "compatibility": "compatible",
-      "description": "Documentation-only reference-host proof: README code compilation, real blocking PTY and reproducible console capture now run in CI. Runtime source, public API/ABI, dependency graph and all capability definitions are unchanged. No consumer migration is assigned.",
+      "capability": "presentation.multiline_ux",
+      "compatibility": "breaking",
+      "description": "Intentional validated-key behavior change: Tab in continuation-line whitespace inserts spaces instead of emitting CompletionRequested. Completion after text and active-menu navigation are preserved. No Rust type/signature or C ABI change; direct mode and host grammar remain unchanged. No consumer migration is assigned.",
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34512238354",
-        "https://github.com/mothx9/replai/blob/fbe80ffc10b518186d7edac55fafda9f3bd226dc/docs/development.md#readme-terminal-preview"
+        "https://github.com/mothx9/replai/actions/runs/34509792610",
+        "https://github.com/mothx9/replai/blob/da16302c33cdce5ef40978e02e9d8dff045c93f9/docs/engineering/validation-multiline.md#continuation-indentation-follow-up"
       ],
       "inputs": [
-        ".github/workflows/ci.yml",
-        "assets/terminal-session.png",
-        "examples/console.rs",
-        "tools/docs/capture-requirements.txt",
-        "tools/docs/capture_terminal.py",
-        "tools/docs/check_readme.py"
+        "docs/engineering/validation-multiline.md",
+        "docs/interaction.md",
+        "docs/use-cases.md",
+        "src/engine.rs",
+        "src/event.rs",
+        "src/validation.rs",
+        "src/validation_tests.rs",
+        "tools/validation_pty.py"
       ],
-      "kind": "QUALIFICATION_CHANGED",
+      "kind": "BEHAVIOR_CHANGED",
       "platforms": [
-        "linux"
+        "linux",
+        "macos",
+        "windows"
       ],
       "surfaces": [
         "rust-native"
       ]
     }
   ],
-  "generation": 11,
-  "id": "sha256:c1f5365b5f50bbf79ea70dc111b533c9aad36babce86db95328dad2187a307a6",
+  "generation": 10,
+  "id": "sha256:7a353651079624584f8d47cbfceac9a62de68ca56a46b0971d661549a89cf1c5",
   "inputs": [
     {
       "capabilities": [
@@ -1335,7 +1339,7 @@
       ],
       "category": "qualification",
       "path": ".github/workflows/ci.yml",
-      "sha256": "sha256:531fdaaa38ca39b08c180138a97594b4be073780db541754adfb79de04594c3d",
+      "sha256": "sha256:97203f9ec7e1bebf73181e2a5b82de6622781391e6990fc6a7d3867cc2ca6f10",
       "surfaces": [
         "c-abi-v1",
         "rust-native"
@@ -1937,61 +1941,6 @@
       "surfaces": [
         "rust-native"
       ]
-    },
-    {
-      "capabilities": [
-        "embedding.session"
-      ],
-      "category": "qualification",
-      "path": "examples/console.rs",
-      "sha256": "sha256:67d3c8aa283e0699758119d5cf832f178ead5bbc893fd283c4888417b6c5bb1d",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "embedding.session"
-      ],
-      "category": "qualification",
-      "path": "tools/docs/check_readme.py",
-      "sha256": "sha256:c477794d5e6968b1241ce76f65461549f09eef5c91c47a0cda5fa96fcd6f9771",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "embedding.session"
-      ],
-      "category": "qualification",
-      "path": "tools/docs/capture_terminal.py",
-      "sha256": "sha256:c62f74b12d2f38e1510faf3a44579e38f4f15a13cf796c95a255bea7212c7782",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "embedding.session"
-      ],
-      "category": "qualification",
-      "path": "tools/docs/capture-requirements.txt",
-      "sha256": "sha256:270b3789983611df4377543f7128bd2bebd136d8efb7cb1a7cf22e559da8748c",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "embedding.session"
-      ],
-      "category": "qualification",
-      "path": "assets/terminal-session.png",
-      "sha256": "sha256:a92ff568285e138170dd0f44c621bb5622bfc3c504bf22176b3a8e5c504c82d4",
-      "surfaces": [
-        "rust-native"
-      ]
     }
   ],
   "kind": "producer",
@@ -2033,17 +1982,17 @@
     }
   ],
   "predecessor": {
-    "contract_id": "sha256:7a353651079624584f8d47cbfceac9a62de68ca56a46b0971d661549a89cf1c5",
+    "contract_id": "sha256:69e3ec20252bfb63ff0966c852942bcdb4c5239d5d7bb750b759e324340165f5",
     "repository": "https://github.com/mothx9/replai",
-    "revision": "da16302c33cdce5ef40978e02e9d8dff045c93f9",
-    "tree": "0e487a176b025ed5f7b239788d55eff95670ac6c"
+    "revision": "ff5de189aee2f4e5d9b75f35232af6eb719941d4",
+    "tree": "2ac2c730c6c84419fe63aa90862ec88b867de91c"
   },
   "repository": "https://github.com/mothx9/replai",
   "schema_version": 1,
   "source": {
     "dirty": false,
-    "revision": "fbe80ffc10b518186d7edac55fafda9f3bd226dc",
-    "tree": "08bb7c903f9ec86436b495d09b7ec29f10212806"
+    "revision": "da16302c33cdce5ef40978e02e9d8dff045c93f9",
+    "tree": "0e487a176b025ed5f7b239788d55eff95670ac6c"
   },
   "surfaces": [
     {

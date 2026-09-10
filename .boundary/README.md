@@ -4,7 +4,19 @@ REPLAI owns these producer declarations. They describe generic capabilities,
 surfaces, qualification and changes; they assign no consumer paths, commands or
 migration work. Consumer profiles must be authored by their own repositories.
 
-- [Current producer snapshot](producer.json), generation 10: qualified source
+- [Current producer snapshot](producer.json), generation 11: documentation/example
+  source `fbe80ffc10b518186d7edac55fafda9f3bd226dc`, tree
+  `08bb7c903f9ec86436b495d09b7ec29f10212806`.
+  [12/12 CI jobs](https://github.com/mothx9/replai/actions/runs/34512238354) passed,
+  including the new README snippet and real-PTY capture checks. Runtime source,
+  public Rust/C behavior, dependencies and all capability definitions are identical
+  to the predecessor; this snapshot refreshes qualification inputs only.
+- [README-proof delta](deltas/indentation-readme-proof.json) records
+  `QUALIFICATION_CHANGED` for the session reference host. The optional
+  [capture method](../docs/development.md#readme-terminal-preview) verifies
+  multiline submission, completion, host output and exact restoration from real
+  terminal bytes. No feature, compatibility change or consumer migration is added.
+- [Previous indentation snapshot](checkpoints/da16302c33cdce5ef40978e02e9d8dff045c93f9.json), generation 10: qualified source
   `da16302c33cdce5ef40978e02e9d8dff045c93f9`, tree
   `0e487a176b025ed5f7b239788d55eff95670ac6c`. The
   [continuation indentation correction](../docs/engineering/validation-multiline.md#continuation-indentation-follow-up)
@@ -97,7 +109,7 @@ behavior, ABI and documentation inputs. Its external validation command is:
 
 ```sh
 boundary validate .boundary/producer.json --repo . \
-  --previous .boundary/checkpoints/ff5de189aee2f4e5d9b75f35232af6eb719941d4.json
+  --previous .boundary/checkpoints/da16302c33cdce5ef40978e02e9d8dff045c93f9.json
 ```
 
 Run from a clean REPLAI checkout with BOUNDARY installed separately. Validation
