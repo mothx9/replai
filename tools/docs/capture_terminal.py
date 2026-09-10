@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Capture real query-host PTYs: Pillow 11.3.0, pyte 0.8.2, DejaVu Sans Mono.
+"""Capture real query-console and standalone report output: Pillow 11.3.0, pyte 0.8.2, DejaVu Sans Mono.
 Optional documentation tooling; all terminal contents come from the executable.
 """
 import copy
@@ -96,6 +96,35 @@ def screen_capture(columns, *, plain=False, editing=False):
         session.close()
 
 
+def report_capture(columns=100):
+    master, slave = pty.openpty()
+    try:
+        fcntl.ioctl(slave, termios.TIOCSWINSZ, struct.pack("HHHH", 48, columns, 0, 0))
+        before = termios.tcgetattr(slave)
+        env = {**os.environ, "TERM": "xterm-256color"}
+        env.pop("NO_COLOR", None)
+        process = subprocess.Popen([str(ROOT / "target/debug/examples/report")],
+                                   stdout=slave, stderr=slave, env=env, cwd=ROOT)
+        screen = pyte.Screen(columns, 48)
+        stream = pyte.ByteStream(screen)
+        until = time.monotonic() + 5
+        while time.monotonic() < until:
+            if select.select([master], [], [], 0.1)[0]:
+                stream.feed(os.read(master, 65536))
+            elif process.poll() is not None:
+                break
+        assert process.wait(timeout=5) == 0
+        assert termios.tcgetattr(slave) == before
+        output = "\n".join(screen.display)
+        assert all(value in output for value in ["Build console", "Pipeline summary", "Signing key", "Command help", "inspect"])
+        screen.cursor.hidden = True  # Standalone output has no editable input surface.
+        print(output.rstrip())
+        return screen
+    finally:
+        os.close(master)
+        os.close(slave)
+
+
 def render(filename, panels):
     # Direct glyph rasterization at 2x. At README width this is approximately 14px.
     fontpath = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
@@ -124,7 +153,7 @@ def render(filename, panels):
                     draw.text((left + x * cw, top + y * ch), cell.data,
                               font=bold if cell.bold else font, fill=color)
         x, y = screen.cursor.x, screen.cursor.y
-        if y < height:
+        if y < height and not screen.cursor.hidden:
             draw.rectangle((left + x * cw, top + y * ch + 2,
                             left + (x + 1) * cw - 1, top + (y + 1) * ch - 2),
                            outline="#dce2eb", width=2)
@@ -136,6 +165,5 @@ def render(filename, panels):
 if __name__ == "__main__":
     render("terminal-results.png", [("REPLAI / completion, results, history and multiline editing",
                                      screen_capture(100, editing=True))])
-    render("terminal-layouts.png", [("42 columns / styled", screen_capture(42)),
-                                     ("42 columns / NO_COLOR", screen_capture(42, plain=True)),
-                                     ("20 cols / stacked", screen_capture(20, plain=True))])
+    render("terminal-report.png", [("REPLAI / standalone build report, status and command help",
+                                    report_capture())])

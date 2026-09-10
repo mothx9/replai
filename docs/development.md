@@ -146,31 +146,31 @@ claiming a Windows terminal backend. Hosted latency is characterization only.
 
 ## README terminal preview
 
-The README uses real [query-host](../examples/query.rs) sessions:
-[a complete interaction](../assets/terminal-results.png) and
-[styled/plain/narrow layouts](../assets/terminal-layouts.png).
-The example has a fixed query and an in-memory fixture; it connects to no database.
-All terminal contents come from the executable, not authored image text.
+The README shows two different host uses: an interactive
+[query console](../examples/query.rs) and a standalone
+[build report](../examples/report.rs). The [first image](../assets/terminal-results.png)
+shows completion, results, history and multiline draft restoration. The
+[second image](../assets/terminal-report.png) shows facts, pipeline rows, status
+and command help at full terminal width. Both examples use static fixtures;
+neither connects to a database nor executes a build/deployment.
 
 The optional [capture script](../tools/docs/capture_terminal.py) drives Linux PTYs
-with pyte 0.8.2 and Pillow 11.3.0. The 100-column session exercises completion,
-submission, history return, multiline paste, a non-end cursor and a host notice.
-The second image places three independently captured screens side by side:
-42 columns styled, 42 columns with NO_COLOR, and 20 columns with NO_COLOR where
-the table becomes stacked records. Ctrl-L clears introductory output in these
-comparison sessions. The capture checks clean exit, exact termios restoration,
-paste cleanup and the absence of styling in plain profiles.
+with pyte 0.8.2 and Pillow 11.3.0. All content comes from the actual executables.
+The query capture checks completion, history return, multiline paste, a non-end
+cursor, a host notice, clean exit, exact termios restoration and paste cleanup.
+The standalone report verifies expected sections, clean exit and unchanged termios.
+Narrow/NO_COLOR behavior remains covered by the presentation qualification; the
+README does not repeat the same scene in a three-panel comparison.
 
-Glyphs are rasterized directly at 2× density with DejaVu Sans Mono. The 28-pixel
-raster font appears at approximately 13–14 px at README width, with 20-pixel
-logical row spacing. The images are 1796 and 1944 pixels wide. The dark background,
-comparison arrangement and title strips belong to the capture, not REPLAI output.
-No existing bitmap is enlarged or altered.
+Glyphs are rasterized directly at 2× density with DejaVu Sans Mono. Both images
+are 1796 pixels wide; the 28-pixel raster font appears at approximately 14 px at
+README width. Background and title strips belong to the capture. No existing
+bitmap is enlarged or altered.
 
 To reproduce with optional capture dependencies in a disposable environment:
 
 ```sh
-cargo build --locked --example query
+cargo build --locked --example query --example report
 python3 tools/docs/capture_terminal.py
 ```
 

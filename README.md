@@ -86,6 +86,7 @@ For a minimal blocking host or standalone presentation:
 
 ```sh
 cargo run --locked --example simple
+cargo run --locked --example report
 cargo run --locked --example structured -- 68
 NO_COLOR=1 cargo run --locked --example structured -- 24
 ```
@@ -155,6 +156,13 @@ that require completion or coordinated output use the session or driven tier.
 [Native API and lifecycle](docs/interaction.md) ·
 Generate local API documentation with `cargo doc --no-deps --open`.
 
+Retain a draft snapshot for application-owned analysis, then apply its replacement
+with `complete_at(snapshot.revision(), range, text)`. If editing has advanced,
+REPLAI returns `AnalysisOutcome::Stale` without touching the draft or screen.
+Snapshots share immutable text when cloned; REPLAI never owns your parser or
+analysis scheduler. See the [analysis contract](docs/interaction.md#revision-aware-host-analysis)
+and [driven fixture](examples/analysis.rs).
+
 ### C and C++
 
 C ABI 1 provides opaque handles, explicit event/status values and caller-owned
@@ -182,13 +190,6 @@ sources. The qualification suite checks both linkage modes and C++ inclusion.
 [Installation, static linkage and ABI ownership](docs/c-api.md) ·
 [Complete C host](examples/c/demo.c)
 
-Retain a draft snapshot for application-owned analysis, then apply its replacement
-with `complete_at(snapshot.revision(), range, text)`. If editing has advanced,
-REPLAI returns `AnalysisOutcome::Stale` without touching the draft or screen.
-Snapshots share immutable text when cloned; REPLAI never owns your parser or
-analysis scheduler. See the [analysis contract](docs/interaction.md#revision-aware-host-analysis)
-and [driven fixture](examples/analysis.rs).
-
 ## Structured presentation
 
 Give terminal output a consistent hierarchy without writing ANSI sequences or
@@ -196,7 +197,7 @@ padding columns in application code. A `Document` describes generic structure;
 REPLAI resolves cell geometry, wrapping, semantic styling and narrow-width layout.
 
 <p align="center">
-  <img src="assets/terminal-layouts.png" alt="The same query results rendered in three real terminals: styled at 42 columns, NO_COLOR at 42 columns, and stacked records at 20 columns." width="912">
+  <img src="assets/terminal-report.png" alt="A standalone build-console fixture: workspace facts, pipeline results, actionable warnings and styled command help." width="912">
 </p>
 
 | Primitive | Presentation contract |
