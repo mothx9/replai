@@ -4,6 +4,40 @@ This dossier owns the bounded I3/U2 evidence. [Interaction](../interaction.md)
 owns the public contract, [use cases](../use-cases.md) owns runnable integration
 recipes, and [ROADMAP](../../ROADMAP.md) owns maturity. No later wave is included.
 
+## Continuation indentation follow-up
+
+The I3/U2 source below did not indent on Tab: even an empty continuation line
+requested host completion. A bounded correction based on clean master
+`c9b6270114213af705e7a60262a2fc069f56ef69` adds the rule documented in
+[Interaction](../interaction.md#validated-submission-and-multiline-navigation).
+Validated continuation prefixes containing only ASCII space/tab now insert spaces
+to the next logical four-cell stop. Menu navigation precedes indentation; the first
+line and text prefixes still request completion. This changes native validated
+key behavior intentionally, not the public type/ABI layout. Direct mode, C ABI 1,
+paste contents and host grammar remain unchanged. No I5 keymap wave is opened.
+
+The common engine calls the existing atomic Editor insertion exactly once.
+Capacity rejection preserves pending validation and current diagnostics/I2 state;
+success advances revision and invalidates derived state normally. No state fields,
+dependencies or inactive-editor work are added. Prefix inspection runs only for
+Tab outside a menu, and examines the current logical line. There is no automatic
+indent copying, parser-aware indentation or Shift-Tab unindent contract.
+
+Portable tests cover four-cell stops (including existing tabs), Unicode on prior
+lines, non-ASCII whitespace exclusion, insertion before an existing suffix,
+direct-mode compatibility, menu precedence, literal pasted tabs, stale results
+and atomic capacity failure. `tools/validation_pty.py` additionally drives real
+Tab input at 20/40/80/132 columns in styled/plain profiles, verifies completion
+after text, serialized output, exact revision/draft/cursor and restoration. Its
+session fixture submits `{\n    task\n}` (12 bytes) using a real Tab key.
+
+Local Linux qualification: `python3 tools/qualify.py --allow-dirty --work
+/tmp/replai-indent-full` passed all 22 content gates, including the changed
+real-PTY paths under Valgrind, full Rust/I0/I1/I2/I3/F2/embedding and isolated C
+static/shared qualification. This development run does not itself establish a
+clean publication or macOS/Windows results; exact-source CI is recorded separately
+by the producer metadata. Historical I3/U2 evidence below keeps its original scope.
+
 ## Source and design
 
 Baseline: `3fffb40abc7f5d0ac41db3e6cde09413b018cfee`, tree

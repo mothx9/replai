@@ -27,6 +27,123 @@ fn respond(e: &mut Engine, revision: crate::DraftRevision, d: V) -> (A, Effects)
         .unwrap()
 }
 #[test]
+fn tab_indents_only_validated_continuation_prefixes() {
+    for (before, after) in [
+        ("{\n", "{\n    "),
+        ("{\n ", "{\n    "),
+        ("{\n   ", "{\n    "),
+        ("{\n    ", "{\n        "),
+        ("界👩‍💻\n\t ", "界👩‍💻\n\t    "),
+    ] {
+        let mut e = engine(before);
+        let old = e.editor.revision();
+        assert!(
+            e.apply(Input::Request(Request::Completion))
+                .unwrap()
+                .event
+                .is_none()
+        );
+        assert_eq!(e.editor.text(), after);
+        assert_eq!(e.editor.cursor(), after.len());
+        assert_ne!(e.editor.revision(), old);
+    }
+    for text in ["", "  ", "bu", "{\nbu", "{\nbu ", "{\n\u{3000}"] {
+        let mut e = engine(text);
+        let old = e.editor.revision();
+        assert_eq!(
+            e.apply(Input::Request(Request::Completion)).unwrap().event,
+            Some(Event::CompletionRequested)
+        );
+        assert_eq!(e.editor.text(), text);
+        assert_eq!(e.editor.revision(), old);
+    }
+    let mut e = engine("{\n");
+    e.close();
+    e.set_submission_policy(SubmissionPolicy::Direct).unwrap();
+    e.start(Prompt::new("demo").unwrap(), (20, 8)).unwrap();
+    assert_eq!(
+        e.apply(Input::Request(Request::Completion)).unwrap().event,
+        Some(Event::CompletionRequested)
+    );
+    assert_eq!(e.editor.text(), "{\n");
+}
+#[test]
+fn indentation_is_atomic_and_invalidates_derived_state_only_on_success() {
+    for capacity in [4, 100] {
+        let mut e = Engine::new(Editor::new(capacity, 0));
+        e.editor.insert("{\n").unwrap();
+        e.set_submission_policy(SubmissionPolicy::Validated)
+            .unwrap();
+        e.start(Prompt::new("demo").unwrap(), (20, 8)).unwrap();
+        let s = request(&mut e);
+        respond(
+            &mut e,
+            s.revision(),
+            V::Invalid(vec![Diagnostic::new("explanation", None).unwrap()]),
+        );
+        e.present_analysis(
+            crate::AnalysisPresentation::new(
+                s.revision(),
+                vec![],
+                Some(crate::Hint::new("hint", Role::Dim).unwrap()),
+            )
+            .unwrap(),
+        )
+        .unwrap();
+        let pending = request(&mut e);
+        let fx = e.apply(Input::Request(Request::Completion)).unwrap();
+        if capacity == 4 {
+            assert_eq!(fx.event, Some(Event::Rejected(crate::EditError::Capacity)));
+            assert!(fx.mutations.is_empty());
+            assert_eq!(e.editor.text(), "{\n");
+            assert_eq!(e.editor.cursor(), 2);
+            assert_eq!(e.editor.revision(), pending.revision());
+            assert!(e.diagnostics().is_some() && e.analysis_presentation().is_some());
+            assert_eq!(
+                respond(&mut e, pending.revision(), V::Complete).0,
+                A::Applied
+            );
+        } else {
+            assert!(fx.event.is_none());
+            assert_eq!(e.editor.text(), "{\n    ");
+            assert!(e.diagnostics().is_none() && e.analysis_presentation().is_none());
+            assert_eq!(respond(&mut e, pending.revision(), V::Complete).0, A::Stale);
+        }
+    }
+}
+#[test]
+fn indentation_preserves_suffix_and_menu_tab_keeps_precedence() {
+    let mut e = engine("{\n  task");
+    for _ in 0..4 {
+        e.apply(Input::Edit(EditCommand::Left)).unwrap();
+    }
+    e.apply(Input::Request(Request::Completion)).unwrap();
+    assert_eq!(e.editor.text(), "{\n    task");
+    assert_eq!(e.editor.cursor(), 6);
+    let rev = e.editor.revision();
+    e.present_completions(
+        crate::CompletionSet::new(
+            rev,
+            vec![
+                crate::CompletionCandidate::new(6..10, "one", "one").unwrap(),
+                crate::CompletionCandidate::new(6..10, "two", "two").unwrap(),
+            ],
+        )
+        .unwrap(),
+    )
+    .unwrap();
+    let selection = e.completion_selection();
+    e.apply(Input::Request(Request::Completion)).unwrap();
+    assert_ne!(e.completion_selection(), selection);
+    assert_eq!(e.editor.text(), "{\n    task");
+    assert_eq!(e.editor.revision(), rev);
+    e.completion_action(crate::CompletionAction::Dismiss)
+        .unwrap();
+    // Paste is a text action: literal tabs inside it are never indentation commands.
+    e.apply(Input::Text("\t".into())).unwrap();
+    assert_eq!(e.editor.text(), "{\n    \ttask");
+}
+#[test]
 fn dispositions_are_atomic_and_requests_are_consumed() {
     let mut e = engine("begin {");
     let s = request(&mut e);

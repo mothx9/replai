@@ -207,6 +207,11 @@ The host styles `bu` and supplies the hint. **Enter submits only `bu`**; Tab req
 host candidates. `[~...]` remains visibly derived under NO_COLOR, and disappears
 while the completion menu is active. The [small host example](examples/analysis-presentation.rs)
 shares one parse across display, completion and brace validation.
+
+For multiline input, type `{` and press Enter. On the continuation line, Tab
+indents to the next four-space stop; after text, Tab requests completion.
+This is library behavior for hosts using `SubmissionPolicy::Validated`, shared
+by session and driven integration. See the [key guide](docs/use-cases.md#try-validated-multiline-input).
 [Contract and limits](docs/interaction.md#editor-analysis-presentation).
 
 ### Rich completion

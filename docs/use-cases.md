@@ -32,6 +32,8 @@ cargo run --locked --example validation
 
 Type `{`, press Enter, type `task`, press Enter, then type `}` and press Enter.
 The host receives the complete eight-byte draft, including its two newlines.
+For indentation, press Tab before `task`: REPLAI inserts four spaces and the host
+receives twelve bytes instead. Repeated Tab advances to the next four-cell stop.
 Try `}` in an empty draft to see a diagnostic; Backspace removes the character
 and invalidates its diagnostic. Ctrl-C interrupts editing; Ctrl-D on an empty
 draft returns EOF. REPLAI itself never terminates the application on Ctrl-C.
@@ -40,6 +42,8 @@ draft returns EOF. REPLAI itself never terminates the application on Ctrl-C.
 | --- | --- |
 | Enter, no completion menu | Request host validation for an immutable snapshot |
 | Enter, completion menu visible | Accept the candidate only; another Enter requests validation |
+| Tab in leading spaces/tabs on a continuation line | Insert spaces to the next four-cell indentation stop |
+| Tab elsewhere / with a completion menu | Request completion / select next candidate |
 | Up / Down | Previous/next LF-delimited line at the current display column; history at first/last line |
 | Left / Right | Grapheme movement, including through soft-wrapped rows |
 | Ctrl-A / Ctrl-E | Beginning/end of the entire draft, preserving existing bindings |

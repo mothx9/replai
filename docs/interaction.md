@@ -425,8 +425,8 @@ This keeps delayed delivery from unexpectedly inserting text.
 `completion_action(Next/Previous/Accept/Dismiss)` provides the same serialized
 operations to the host. With no menu it returns `Error::State`.
 `completion_selection()` exposes revision, zero-based index and count, with no
-resource ownership. Outside an active menu, Tab still returns
-`CompletionRequested`; lone Escape and Shift-Tab retain sequence-rejection
+resource ownership. Outside an active menu, Tab returns `CompletionRequested`
+except for the validated continuation-indentation rule below; lone Escape and Shift-Tab retain sequence-rejection
 behavior. Paste contents never invoke menu shortcuts.
 
 Navigation and dismissal do not mutate Editor or advance revision. Acceptance
@@ -500,6 +500,20 @@ at first/last line. Columns use the width policy, four-cell tabs and short-line
 clamping; soft wraps use Left/Right. Ctrl-A/Ctrl-E retain whole-draft Home/End.
 No force-submit bypass or new configurable keymap is supplied. Ordinary
 replacement can insert LF explicitly; bracketed multiline paste remains one edit.
+
+With `SubmissionPolicy::Validated`, Tab before the first non-whitespace character
+of a continuation line inserts spaces to the next four-cell indentation stop.
+The prefix must contain only ASCII spaces/tabs; stops are relative to the logical
+line, independent of prompt width and soft wrapping. Existing tabs in the prefix
+use the same four-cell stops. Text after the cursor is retained. The first logical
+line and positions after non-whitespace still request completion. An active menu
+always consumes Tab as next-candidate navigation. Shift-Tab retains its existing
+menu binding; there is no unindent binding or grammar-aware automatic indentation.
+This rule is implemented in the shared engine for all validated session/driven
+hosts. Direct submission (including the simple blocking tier and C ABI 1) retains
+Tab completion requests. Pasted tabs remain literal text. Indentation is one
+atomic edit: success invalidates old analysis/diagnostics through DraftRevision;
+capacity rejection changes neither draft/revision nor current presentation.
 
 Adding SubmissionRequested is a native Rust enum extension: exhaustive matches
 must account for it. Existing default behavior is unchanged. ABI 1 exposes neither

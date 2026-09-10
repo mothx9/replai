@@ -60,7 +60,8 @@ pub enum Event {
     Interrupted,
     /// Read EOF or Ctrl-D on an empty buffer. Terminal restored.
     EndOfInput,
-    /// Tab requests host completion using [`crate::Interaction::editor`].
+    /// Tab requests host completion using [`crate::Interaction::editor`], except
+    /// when it navigates an active menu or indents a validated continuation line.
     CompletionRequested,
     /// Opt-in Enter request. The host returns a revision-bound validation result.
     /// Editing remains active; this immutable view may be retained while it continues.

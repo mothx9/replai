@@ -16,6 +16,9 @@ pub enum SubmissionPolicy {
     #[default]
     Direct,
     /// Enter asks the host; Up/Down move between logical lines, then history at edges.
+    /// On continuation lines, Tab in the leading ASCII space/tab prefix inserts
+    /// spaces to the next four-cell stop relative to the logical line. Elsewhere
+    /// Tab requests completion; an active completion menu always takes precedence.
     Validated,
 }
 /// Safe host explanation of invalid input. No parser, fix-it or highlighting semantics.

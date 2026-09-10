@@ -43,6 +43,22 @@ def run(work, prefix=(), plain=False):
             def enter():
                 mark=len(s.receipts);key(s,b'\r'); assert b'SUBMISSION_REQUEST' in s.receipts[mark:]
             try:
+                # Library Tab binding: real decoded input, host-driven resize/output,
+                # and ordinary completion after text. No example-side indentation.
+                evidence['indentation']=[]
+                for width in [20,40,80,132]:
+                    fcntl.ioctl(s.slave,termios.TIOCSWINSZ,struct.pack('HHHH',12,width,0,0));s.event(b'R')
+                    s.edit(b'{','{',1);enter();s.event(b'I')
+                    r=revision(s)
+                    s.edit(b'\t','{\n    ',6)
+                    assert revision(s)!=r and s.state()['open']
+                    r=revision(s);s.event(b'O');assert revision(s)==r
+                    assert '..     ' in s.screen()['text']
+                    s.edit(b'bu','{\n    bu',8)
+                    mark=len(s.receipts);s.send(b'\t');s.until(lambda:b'COMPLETION\n' in s.receipts[mark:])
+                    assert s.state()['text']=='{\n    bu' and s.state()['cursor']==8
+                    evidence['indentation'].append(dict(columns=width,text=s.state()['text'],completion_after_text=True))
+                    s.event(b'X');s.restored();s.reopen()
                 s.edit(b'begin {','begin {',7);enter();r=revision(s)
                 measure('incomplete',lambda:s.event(b'I'))
                 assert s.state()['text']=='begin {\n' and s.state()['open'] and revision(s)!=r
@@ -122,9 +138,9 @@ def session():
     try:
         s.until(lambda:b'validate> ' in s.output)
         s.send(b'{\r');s.until(lambda:b'.. ' in s.output)
-        s.send(b'task\r}\r');s.until(lambda:b'validate> ' in s.output.partition(b'host received 8 bytes:')[2])
+        s.send(b'\ttask\r}\r');s.until(lambda:b'validate> ' in s.output.partition(b'host received 12 bytes:')[2])
         s.send(b'\x04');s.finish()
-        return dict(synchronous_validation=True,submitted='{\ntask\n}',exact_restoration=True)
+        return dict(synchronous_validation=True,tab_indentation=True,submitted='{\n    task\n}',exact_restoration=True)
     except BaseException:s.abort();raise
 
 

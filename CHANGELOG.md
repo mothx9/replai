@@ -6,6 +6,11 @@ next work. All entries below are unreleased and carry no compatibility promise.
 
 ## Unreleased
 
+- Validated multiline input now handles Tab indentation in continuation-line
+  whitespace prefixes, inserting spaces to the next four-cell stop atomically.
+  Completion after text and menu navigation retain priority in their contexts.
+  Direct submission, the minimal blocking tier and C ABI 1 are unchanged.
+
 - Added native revision-bound editor style spans and non-canonical hints. Hosts
   supply one bounded AnalysisPresentation; stale results have no display effects.
   Completion/validation retain their separate insertion/submission contracts.

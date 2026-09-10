@@ -195,7 +195,13 @@ impl Engine {
             }
             Input::Request(Request::DeleteOrEof) => self.editor.delete(),
             Input::Request(Request::Completion) => {
-                return Ok(self.observable(Event::CompletionRequested));
+                if let Some(spaces) = self.continuation_indent() {
+                    if let Err(error) = self.editor.insert(&"    "[..spaces]) {
+                        return Ok(self.observable(Event::Rejected(error)));
+                    }
+                } else {
+                    return Ok(self.observable(Event::CompletionRequested));
+                }
             }
             Input::Request(Request::CompletionPrevious | Request::DismissCompletion) => {
                 if matches!(input, Input::Request(Request::DismissCompletion))
@@ -409,6 +415,22 @@ impl Engine {
         s.dirty = true;
         s.damage = Damage::Rebuild;
         Ok((crate::AnalysisOutcome::Applied, self.flush()))
+    }
+    // Fixed validated-multiline binding, not language-aware indentation. Inspect
+    // only the current logical prefix; menu navigation is handled before editing.
+    fn continuation_indent(&self) -> Option<usize> {
+        self.validation.as_ref()?;
+        let before = &self.editor.text()[..self.editor.cursor()];
+        let (_, prefix) = before.rsplit_once('\n')?;
+        let mut remainder = 0;
+        for byte in prefix.bytes() {
+            match byte {
+                b' ' => remainder = (remainder + 1) % 4,
+                b'\t' => remainder = 0,
+                _ => return None,
+            }
+        }
+        Some(4 - remainder)
     }
     pub fn submission_policy(&self) -> crate::SubmissionPolicy {
         if self.validation.is_some() {
