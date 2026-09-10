@@ -638,76 +638,46 @@
       "surfaces": [
         "rust-native"
       ]
-    },
-    {
-      "description": "Revision-bound host-derived editor style spans and explicitly non-canonical hints",
-      "documentation": [
-        "https://github.com/mothx9/replai/blob/ff5de189aee2f4e5d9b75f35232af6eb719941d4/docs/interaction.md#editor-analysis-presentation"
-      ],
-      "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34502378013",
-        "https://github.com/mothx9/replai/blob/ff5de189aee2f4e5d9b75f35232af6eb719941d4/docs/engineering/analysis-presentation.md"
-      ],
-      "guarantees": [
-        "Host owns parser, classification, hint generation, scheduling and context/job preference",
-        "Ordered bounded grapheme-aligned spans and safe bounded hints validate before atomic whole-result replacement",
-        "Stale presentation changes no draft, display or terminal output; presentation never changes DraftRevision",
-        "Completion suppresses hints but preserves spans; validation diagnostics may coexist; output/resize preserve valid display",
-        "Plain spans degrade without altering canonical text; hints retain explicit non-canonical delimiters and never submit",
-        "Linux/macOS real PTY and native memory qualification; Windows portable model only"
-      ],
-      "id": "analysis.hints_highlight",
-      "maturity": "experimental",
-      "platforms": [
-        "linux",
-        "macos",
-        "windows"
-      ],
-      "surfaces": [
-        "rust-native"
-      ]
     }
   ],
   "changes": [
     {
-      "capability": "analysis.hints_highlight",
+      "capability": "analysis.validation",
       "compatibility": "compatible",
-      "description": "Optional bounded revision-bound editor analysis presentation over the existing engine. Host semantics and scheduling stay external; C ABI 1 is unchanged. No consumer migration is assigned.",
+      "description": "Optional host-owned revision-bound submission validation. Host semantics and scheduling remain external; no consumer action is assigned.",
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34502378013",
-        "https://github.com/mothx9/replai/blob/ff5de189aee2f4e5d9b75f35232af6eb719941d4/docs/engineering/analysis-presentation.md"
+        "https://github.com/mothx9/replai/actions/runs/34494834221",
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
       ],
       "inputs": [
-        ".github/workflows/ci.yml",
-        "docs/architecture.md",
-        "docs/engineering/analysis-presentation.md",
-        "docs/interaction.md",
-        "docs/presentation.md",
-        "docs/use-cases.md",
-        "examples/analysis-presentation.rs",
-        "examples/support/presented_analysis.rs",
-        "examples/validation-driven.rs",
-        "src/analysis_presentation.rs",
-        "src/analysis_presentation_tests.rs",
-        "src/completion.rs",
-        "src/completion_tests.rs",
-        "src/conformance.rs",
-        "src/engine.rs",
-        "src/interaction.rs",
         "src/lib.rs",
-        "src/presentation.rs",
-        "src/validation.rs",
-        "tests/analysis_presentation.rs",
-        "tests/architecture.rs",
-        "tools/analysis_presentation_pty.py",
-        "tools/completion_pty.py",
-        "tools/embedding_pty.py",
-        "tools/perf/completions.rs",
+        "src/core.rs",
+        "src/engine.rs",
+        "src/event.rs",
+        "src/interaction.rs",
+        "docs/presentation.md",
+        "docs/architecture.md",
+        "docs/interaction.md",
+        "src/conformance.rs",
+        ".github/workflows/ci.yml",
         "tools/perf/components.rs",
-        "tools/perf/linux.py",
-        "tools/perf/presented.rs",
         "tools/qualify.py",
-        "tools/validation_pty.py"
+        "src/analysis.rs",
+        "src/completion.rs",
+        "tests/architecture.rs",
+        "examples/completion.rs",
+        "src/validation.rs",
+        "src/validation_tests.rs",
+        "tests/validation.rs",
+        "examples/validation.rs",
+        "examples/validation-driven.rs",
+        "examples/support/validation.rs",
+        "tools/validation_pty.py",
+        "tools/perf/validations.rs",
+        "tools/perf/pty_host.rs",
+        "docs/use-cases.md",
+        "docs/engineering/validation-multiline.md",
+        "crates/replai-c/src/lib.rs"
       ],
       "kind": "ADDED",
       "platforms": [
@@ -718,14 +688,107 @@
       "surfaces": [
         "rust-native"
       ]
+    },
+    {
+      "capability": "presentation.multiline_ux",
+      "compatibility": "compatible",
+      "description": "Validated multiline navigation and safe diagnostic continuation surface. Host semantics and scheduling remain external; no consumer action is assigned.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34494834221",
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
+      ],
+      "inputs": [
+        "src/lib.rs",
+        "src/core.rs",
+        "src/engine.rs",
+        "src/event.rs",
+        "src/interaction.rs",
+        "docs/presentation.md",
+        "docs/architecture.md",
+        "docs/interaction.md",
+        "src/conformance.rs",
+        ".github/workflows/ci.yml",
+        "tools/perf/components.rs",
+        "tools/qualify.py",
+        "src/analysis.rs",
+        "src/completion.rs",
+        "tests/architecture.rs",
+        "examples/completion.rs",
+        "src/validation.rs",
+        "src/validation_tests.rs",
+        "tests/validation.rs",
+        "examples/validation.rs",
+        "examples/validation-driven.rs",
+        "examples/support/validation.rs",
+        "tools/validation_pty.py",
+        "tools/perf/validations.rs",
+        "tools/perf/pty_host.rs",
+        "docs/use-cases.md",
+        "docs/engineering/validation-multiline.md",
+        "crates/replai-c/src/lib.rs"
+      ],
+      "kind": "ADDED",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "embedding.session",
+      "compatibility": "breaking",
+      "description": "Source compatibility: public native Event gains SubmissionRequested. Exhaustive event matches need another arm. Existing direct-submit runtime behavior and C ABI 1 remain unchanged.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34494834221",
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
+      ],
+      "inputs": [
+        "src/event.rs",
+        "src/interaction.rs",
+        "src/lib.rs"
+      ],
+      "kind": "BREAKING",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "embedding.driven",
+      "compatibility": "breaking",
+      "description": "Source compatibility: public native Event gains SubmissionRequested. Exhaustive event matches need another arm. Existing direct-submit runtime behavior and C ABI 1 remain unchanged.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34494834221",
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
+      ],
+      "inputs": [
+        "src/event.rs",
+        "src/interaction.rs",
+        "src/lib.rs"
+      ],
+      "kind": "BREAKING",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
     }
   ],
-  "generation": 9,
-  "id": "sha256:69e3ec20252bfb63ff0966c852942bcdb4c5239d5d7bb750b759e324340165f5",
+  "generation": 8,
+  "id": "sha256:fa0cadf80c96e43e0a649c18cbc93049950be07f5a8f5020bcfffef57a19aab5",
   "inputs": [
     {
       "capabilities": [
-        "analysis.hints_highlight",
         "analysis.revisions",
         "analysis.validation",
         "completion.candidates",
@@ -754,7 +817,7 @@
       ],
       "category": "api",
       "path": "src/lib.rs",
-      "sha256": "sha256:5acf9cdb565056c7f7d3c17ea54a7c74fcc4bca105fe65a101aaa4df0e89a1b6",
+      "sha256": "sha256:a1bdc49d9d91e933355a600dd465e8c775b089e140a9a4fd454a7d5f6c698137",
       "surfaces": [
         "rust-native"
       ]
@@ -844,7 +907,6 @@
     },
     {
       "capabilities": [
-        "analysis.hints_highlight",
         "analysis.revisions",
         "analysis.validation",
         "completion.candidates",
@@ -866,7 +928,7 @@
       ],
       "category": "behavior",
       "path": "src/engine.rs",
-      "sha256": "sha256:78a28a12b71a2ca101dd363dfc4a8779653b53f1bdce21363004ced11e91a7dc",
+      "sha256": "sha256:7f8b6cfa7b5979658b6f475de204a375389a280c4e912dd89afa705fea6cd48a",
       "surfaces": [
         "rust-native"
       ]
@@ -913,7 +975,6 @@
     },
     {
       "capabilities": [
-        "analysis.hints_highlight",
         "embedding.blocking",
         "embedding.driven",
         "embedding.readiness",
@@ -936,14 +997,13 @@
       ],
       "category": "api",
       "path": "src/presentation.rs",
-      "sha256": "sha256:18d2c0c2d994b67f68f96aed2490b975a174a79a6820f0011eb60611e1003288",
+      "sha256": "sha256:53eea8e8a3208abe91ab426b235951d5572b7c0f677378c65ac1805d151ea851",
       "surfaces": [
         "rust-native"
       ]
     },
     {
       "capabilities": [
-        "analysis.hints_highlight",
         "analysis.revisions",
         "analysis.validation",
         "completion.candidates",
@@ -971,7 +1031,7 @@
       ],
       "category": "api",
       "path": "src/interaction.rs",
-      "sha256": "sha256:13895facc811ec9330c9f0e19cde8296c687df9d9d5be776c8cfdcd08eafd493",
+      "sha256": "sha256:d4546a2c895aac889c246453a27b28738f6c5cb78ddef60c73b4b92bcfc9fbbb",
       "surfaces": [
         "rust-native"
       ]
@@ -1074,7 +1134,6 @@
     },
     {
       "capabilities": [
-        "analysis.hints_highlight",
         "analysis.validation",
         "completion.candidates",
         "interaction.completion_request",
@@ -1096,14 +1155,13 @@
       ],
       "category": "documentation",
       "path": "docs/presentation.md",
-      "sha256": "sha256:7a731996587e4e3dc6cec296b418b839e6dff760c918824cd1e12214b4c34deb",
+      "sha256": "sha256:4aa46b35fffedea5e9d328e137d15cc56443d221501741be6bdf797d6f72fdca",
       "surfaces": [
         "rust-native"
       ]
     },
     {
       "capabilities": [
-        "analysis.hints_highlight",
         "analysis.revisions",
         "analysis.validation",
         "completion.candidates",
@@ -1130,14 +1188,13 @@
       ],
       "category": "documentation",
       "path": "docs/architecture.md",
-      "sha256": "sha256:82e6f4dc23bd13331280b3c9d0e8ce52e3605b02eb9cb5f8642220439bc21741",
+      "sha256": "sha256:32b868c94d70d300b3d93a7ba4381189bb78a7d86f4623359895e1534c295536",
       "surfaces": [
         "rust-native"
       ]
     },
     {
       "capabilities": [
-        "analysis.hints_highlight",
         "analysis.revisions",
         "analysis.validation",
         "completion.candidates",
@@ -1159,7 +1216,7 @@
       ],
       "category": "documentation",
       "path": "docs/interaction.md",
-      "sha256": "sha256:69061836e97635a4cbf68427181f247c79954a96a7532a4ea77359a7d660eaa3",
+      "sha256": "sha256:361a1a4462f000c590e400bea591b2aba8378021909e0878cb48a09e74a3a1c3",
       "surfaces": [
         "rust-native"
       ]
@@ -1239,7 +1296,6 @@
     },
     {
       "capabilities": [
-        "analysis.hints_highlight",
         "analysis.revisions",
         "analysis.validation",
         "completion.candidates",
@@ -1254,7 +1310,7 @@
       ],
       "category": "qualification",
       "path": "src/conformance.rs",
-      "sha256": "sha256:bd89721bdb2f788724e34c5c8592d3684a851c38664c1b45305a59ce4d42137b",
+      "sha256": "sha256:bd51802977a2e2deaa52e40954e4d315cbeda92eaef02c81a64971eed0d85d4a",
       "surfaces": [
         "rust-native"
       ]
@@ -1277,7 +1333,6 @@
     },
     {
       "capabilities": [
-        "analysis.hints_highlight",
         "analysis.revisions",
         "embedding.blocking",
         "embedding.driven",
@@ -1288,7 +1343,7 @@
       ],
       "category": "qualification",
       "path": "tools/embedding_pty.py",
-      "sha256": "sha256:e627275e99434924ae4c1b8a4923c34a99318b39dd862190d336223aee7062dc",
+      "sha256": "sha256:5ac80ff06274d2f8f0065ecf9c48ebd355607ec70ef9366f2af24a83b8c723bb",
       "surfaces": [
         "rust-native"
       ]
@@ -1344,7 +1399,6 @@
     {
       "capabilities": [
         "abi.c.v1",
-        "analysis.hints_highlight",
         "analysis.revisions",
         "analysis.validation",
         "completion.candidates",
@@ -1359,7 +1413,7 @@
       ],
       "category": "qualification",
       "path": ".github/workflows/ci.yml",
-      "sha256": "sha256:97203f9ec7e1bebf73181e2a5b82de6622781391e6990fc6a7d3867cc2ca6f10",
+      "sha256": "sha256:bf686ebca9440139bd286ea066e0a94198557049ecf59b1468608322c8d58a8c",
       "surfaces": [
         "c-abi-v1",
         "rust-native"
@@ -1411,7 +1465,6 @@
     },
     {
       "capabilities": [
-        "analysis.hints_highlight",
         "analysis.revisions",
         "analysis.validation",
         "completion.candidates",
@@ -1421,7 +1474,7 @@
       ],
       "category": "qualification",
       "path": "tools/perf/components.rs",
-      "sha256": "sha256:13c15fc3fed09c5e3c01bb85caf08bc8aa3bb0dbfffeab117d102f2b1e00a29a",
+      "sha256": "sha256:f7a37cbcc5a9a3455cc681f4111bd9437454c236666923a2d3085653b893e1e4",
       "surfaces": [
         "rust-native"
       ]
@@ -1453,7 +1506,6 @@
     {
       "capabilities": [
         "abi.c.v1",
-        "analysis.hints_highlight",
         "analysis.revisions",
         "analysis.validation",
         "completion.candidates",
@@ -1462,7 +1514,7 @@
       ],
       "category": "qualification",
       "path": "tools/qualify.py",
-      "sha256": "sha256:b2ca4697804098cf8ecb40e9655c6a6d6c37f2ee3a01093495c0401ce4c06cd0",
+      "sha256": "sha256:2192738ed5bad70330c53a31b14eb39e630d5953642643f67263b08511127a3a",
       "surfaces": [
         "c-abi-v1",
         "rust-native"
@@ -1562,7 +1614,6 @@
     },
     {
       "capabilities": [
-        "analysis.hints_highlight",
         "analysis.validation",
         "completion.candidates",
         "presentation.completion_ux",
@@ -1570,20 +1621,19 @@
       ],
       "category": "api",
       "path": "src/completion.rs",
-      "sha256": "sha256:e2787018a611a7ae9f97c8605c5170e4776624bc050510e381debbf07c271419",
+      "sha256": "sha256:ed5c3c740a25b43c6a84c8fb9bb3967fc249e54c9a257391ca568b92fe29e54d",
       "surfaces": [
         "rust-native"
       ]
     },
     {
       "capabilities": [
-        "analysis.hints_highlight",
         "completion.candidates",
         "presentation.completion_ux"
       ],
       "category": "qualification",
       "path": "src/completion_tests.rs",
-      "sha256": "sha256:7e3f8478d68d7046f17e1c402f7784122e2b7dc54d59582a4e4bb44d8c76aaa3",
+      "sha256": "sha256:d898d9b91478bad5094b2db403207e90b50fd234747d281e00a010beba210419",
       "surfaces": [
         "rust-native"
       ]
@@ -1602,7 +1652,6 @@
     },
     {
       "capabilities": [
-        "analysis.hints_highlight",
         "analysis.validation",
         "completion.candidates",
         "presentation.completion_ux",
@@ -1610,7 +1659,7 @@
       ],
       "category": "qualification",
       "path": "tests/architecture.rs",
-      "sha256": "sha256:952fbcb77e255bd33b1ddcb5c84c4aaf670db5327b61cd4d9863bdf31267ba80",
+      "sha256": "sha256:b69e401d9d60f371f5cc9686037aa5998cbe2019b9cfa96a13fa3f86e9c7ef8f",
       "surfaces": [
         "rust-native"
       ]
@@ -1643,13 +1692,12 @@
     },
     {
       "capabilities": [
-        "analysis.hints_highlight",
         "completion.candidates",
         "presentation.completion_ux"
       ],
       "category": "qualification",
       "path": "tools/completion_pty.py",
-      "sha256": "sha256:5f54446d431b20d255f592474dd2290f544eca851be46f84b2ce220e3f560b97",
+      "sha256": "sha256:b43da050acdce521c125e3a30cbe55c0e55a048b133f9af6b33f800fcaa3af46",
       "surfaces": [
         "rust-native"
       ]
@@ -1692,13 +1740,12 @@
     },
     {
       "capabilities": [
-        "analysis.hints_highlight",
         "completion.candidates",
         "presentation.completion_ux"
       ],
       "category": "qualification",
       "path": "tools/perf/completions.rs",
-      "sha256": "sha256:26b71f444689761fa49ec5cd775f4ace2f999c2c1da7d91e04cb6dbaed0d2670",
+      "sha256": "sha256:ed23d6e4760322701c1887128b0cd21bf28e59a901ba21bfa2a0aa9b3e850481",
       "surfaces": [
         "rust-native"
       ]
@@ -1717,13 +1764,12 @@
     },
     {
       "capabilities": [
-        "analysis.hints_highlight",
         "analysis.validation",
         "presentation.multiline_ux"
       ],
       "category": "api",
       "path": "src/validation.rs",
-      "sha256": "sha256:ede264561258dfc550bbd6f1396c8b4efbaddd00a0b8aa0db05e21cae8085b25",
+      "sha256": "sha256:10a8014a250cab27f9123b5d60933d7994a9f6fb5aa1487370f5742890fa1090",
       "surfaces": [
         "rust-native"
       ]
@@ -1766,13 +1812,12 @@
     },
     {
       "capabilities": [
-        "analysis.hints_highlight",
         "analysis.validation",
         "presentation.multiline_ux"
       ],
       "category": "qualification",
       "path": "examples/validation-driven.rs",
-      "sha256": "sha256:fe0085864063b95e7279f6b915c4d259804039155909fff7eff34990d94d2a1a",
+      "sha256": "sha256:52615d5a6ab21ef3caf0ad678c690f937b6909712d6f217690cb37ffc2ff9b55",
       "surfaces": [
         "rust-native"
       ]
@@ -1791,13 +1836,12 @@
     },
     {
       "capabilities": [
-        "analysis.hints_highlight",
         "analysis.validation",
         "presentation.multiline_ux"
       ],
       "category": "qualification",
       "path": "tools/validation_pty.py",
-      "sha256": "sha256:84804dd0d0492df5990d351726caf18df29c9d0b991603cac97c40bee2dfa10e",
+      "sha256": "sha256:e795d97d45c81b9574e9c89001a8031ac10a0d20b44a295c53cc062037292201",
       "surfaces": [
         "rust-native"
       ]
@@ -1828,13 +1872,12 @@
     },
     {
       "capabilities": [
-        "analysis.hints_highlight",
         "analysis.validation",
         "presentation.multiline_ux"
       ],
       "category": "documentation",
       "path": "docs/use-cases.md",
-      "sha256": "sha256:8db647ae8f4a685c55ff7c354748b0ebf7ab2b6404b79cc90be6d396a554207a",
+      "sha256": "sha256:2fb6d040ad0c4f5aed950db26a79c37b3b04d2962a6f0bed8e33fb578997f33b",
       "surfaces": [
         "rust-native"
       ]
@@ -1862,113 +1905,14 @@
       "surfaces": [
         "rust-native"
       ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight"
-      ],
-      "category": "api",
-      "path": "src/analysis_presentation.rs",
-      "sha256": "sha256:d77b429508fd2a5bb2acce8704d4c9629837a794f119c7056fe672080f8d3d85",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight"
-      ],
-      "category": "qualification",
-      "path": "src/analysis_presentation_tests.rs",
-      "sha256": "sha256:e87e687a88db8e8f2da13038cf53dbd8c2109a54ff26ec378e30fa676f69162a",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight"
-      ],
-      "category": "qualification",
-      "path": "tests/analysis_presentation.rs",
-      "sha256": "sha256:6f568e219590462daea80fde141ef26b91100c6f1b76137c18a8d316844be43c",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight"
-      ],
-      "category": "qualification",
-      "path": "tools/analysis_presentation_pty.py",
-      "sha256": "sha256:e4349b3b6253b98899e5e1400b76e8e8691b84399051778b69c7911d2f9eba43",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight"
-      ],
-      "category": "qualification",
-      "path": "examples/analysis-presentation.rs",
-      "sha256": "sha256:4f80cbe09daea438387da9517004ac368e0787e9cf208b40a3421d7dff768412",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight"
-      ],
-      "category": "qualification",
-      "path": "examples/support/presented_analysis.rs",
-      "sha256": "sha256:6453445bf63dc7119aa7d47a1df973459012177a7dc70747f498e944d917e115",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight"
-      ],
-      "category": "qualification",
-      "path": "tools/perf/presented.rs",
-      "sha256": "sha256:90e318cd4936aaaa2381262842e78a3b659de949842ecf52b0b13b42140e2d55",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight"
-      ],
-      "category": "qualification",
-      "path": "tools/perf/linux.py",
-      "sha256": "sha256:ce822cca5b1931dca32be763aa04b27dec555867f85ab1808c0fb36fd6c6499f",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight"
-      ],
-      "category": "documentation",
-      "path": "docs/engineering/analysis-presentation.md",
-      "sha256": "sha256:268fa4ccbf038995ca69aa8a0c476791119e744d7210c8c9ca8a70c768fbb982",
-      "surfaces": [
-        "rust-native"
-      ]
     }
   ],
   "kind": "producer",
   "platforms": [
     {
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34502378013",
-        "https://github.com/mothx9/replai/blob/ff5de189aee2f4e5d9b75f35232af6eb719941d4/docs/engineering/analysis-presentation.md"
+        "https://github.com/mothx9/replai/actions/runs/34494834221",
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
       ],
       "id": "linux",
       "status": "runtime-qualified",
@@ -1979,8 +1923,8 @@
     },
     {
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34502378013",
-        "https://github.com/mothx9/replai/blob/ff5de189aee2f4e5d9b75f35232af6eb719941d4/docs/engineering/analysis-presentation.md"
+        "https://github.com/mothx9/replai/actions/runs/34494834221",
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
       ],
       "id": "macos",
       "status": "runtime-qualified",
@@ -1991,8 +1935,8 @@
     },
     {
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34502378013",
-        "https://github.com/mothx9/replai/blob/ff5de189aee2f4e5d9b75f35232af6eb719941d4/docs/engineering/analysis-presentation.md"
+        "https://github.com/mothx9/replai/actions/runs/34494834221",
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
       ],
       "id": "windows",
       "status": "portable-core-qualified",
@@ -2002,17 +1946,17 @@
     }
   ],
   "predecessor": {
-    "contract_id": "sha256:fa0cadf80c96e43e0a649c18cbc93049950be07f5a8f5020bcfffef57a19aab5",
+    "contract_id": "sha256:a318fcec26e83c2fc8f7e7f6b5d41f670b7c098e37f96803fcab8663ef2b735a",
     "repository": "https://github.com/mothx9/replai",
-    "revision": "0abed4fa75a5684005c87df3bb36e2f997025d00",
-    "tree": "254a0c8f254ef79bd45313cba1d4c30709be566b"
+    "revision": "0fef74edd5d4d6d536560036473980a41e1da3f3",
+    "tree": "e86c5b385e993f124c7901677d6f6593b0f3fd71"
   },
   "repository": "https://github.com/mothx9/replai",
   "schema_version": 1,
   "source": {
     "dirty": false,
-    "revision": "ff5de189aee2f4e5d9b75f35232af6eb719941d4",
-    "tree": "2ac2c730c6c84419fe63aa90862ec88b867de91c"
+    "revision": "0abed4fa75a5684005c87df3bb36e2f997025d00",
+    "tree": "254a0c8f254ef79bd45313cba1d4c30709be566b"
   },
   "surfaces": [
     {

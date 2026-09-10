@@ -1,0 +1,187 @@
+{
+  "capability_contracts": [
+    {
+      "description": "Revision-bound host-derived editor style spans and explicitly non-canonical hints",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/ff5de189aee2f4e5d9b75f35232af6eb719941d4/docs/interaction.md#editor-analysis-presentation"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34502378013",
+        "https://github.com/mothx9/replai/blob/ff5de189aee2f4e5d9b75f35232af6eb719941d4/docs/engineering/analysis-presentation.md"
+      ],
+      "guarantees": [
+        "Host owns parser, classification, hint generation, scheduling and context/job preference",
+        "Ordered bounded grapheme-aligned spans and safe bounded hints validate before atomic whole-result replacement",
+        "Stale presentation changes no draft, display or terminal output; presentation never changes DraftRevision",
+        "Completion suppresses hints but preserves spans; validation diagnostics may coexist; output/resize preserve valid display",
+        "Plain spans degrade without altering canonical text; hints retain explicit non-canonical delimiters and never submit",
+        "Linux/macOS real PTY and native memory qualification; Windows portable model only"
+      ],
+      "id": "analysis.hints_highlight",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "changed_inputs": [
+    ".github/workflows/ci.yml",
+    "docs/architecture.md",
+    "docs/engineering/analysis-presentation.md",
+    "docs/interaction.md",
+    "docs/presentation.md",
+    "docs/use-cases.md",
+    "examples/analysis-presentation.rs",
+    "examples/support/presented_analysis.rs",
+    "examples/validation-driven.rs",
+    "src/analysis_presentation.rs",
+    "src/analysis_presentation_tests.rs",
+    "src/completion.rs",
+    "src/completion_tests.rs",
+    "src/conformance.rs",
+    "src/engine.rs",
+    "src/interaction.rs",
+    "src/lib.rs",
+    "src/presentation.rs",
+    "src/validation.rs",
+    "tests/analysis_presentation.rs",
+    "tests/architecture.rs",
+    "tools/analysis_presentation_pty.py",
+    "tools/completion_pty.py",
+    "tools/embedding_pty.py",
+    "tools/perf/completions.rs",
+    "tools/perf/components.rs",
+    "tools/perf/linux.py",
+    "tools/perf/presented.rs",
+    "tools/qualify.py",
+    "tools/validation_pty.py"
+  ],
+  "changes": [
+    {
+      "capability": "analysis.hints_highlight",
+      "compatibility": "compatible",
+      "description": "Optional bounded revision-bound editor analysis presentation over the existing engine. Host semantics and scheduling stay external; C ABI 1 is unchanged. No consumer migration is assigned.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34502378013",
+        "https://github.com/mothx9/replai/blob/ff5de189aee2f4e5d9b75f35232af6eb719941d4/docs/engineering/analysis-presentation.md"
+      ],
+      "inputs": [
+        ".github/workflows/ci.yml",
+        "docs/architecture.md",
+        "docs/engineering/analysis-presentation.md",
+        "docs/interaction.md",
+        "docs/presentation.md",
+        "docs/use-cases.md",
+        "examples/analysis-presentation.rs",
+        "examples/support/presented_analysis.rs",
+        "examples/validation-driven.rs",
+        "src/analysis_presentation.rs",
+        "src/analysis_presentation_tests.rs",
+        "src/completion.rs",
+        "src/completion_tests.rs",
+        "src/conformance.rs",
+        "src/engine.rs",
+        "src/interaction.rs",
+        "src/lib.rs",
+        "src/presentation.rs",
+        "src/validation.rs",
+        "tests/analysis_presentation.rs",
+        "tests/architecture.rs",
+        "tools/analysis_presentation_pty.py",
+        "tools/completion_pty.py",
+        "tools/embedding_pty.py",
+        "tools/perf/completions.rs",
+        "tools/perf/components.rs",
+        "tools/perf/linux.py",
+        "tools/perf/presented.rs",
+        "tools/qualify.py",
+        "tools/validation_pty.py"
+      ],
+      "kind": "ADDED",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "current": {
+    "contract_id": "sha256:69e3ec20252bfb63ff0966c852942bcdb4c5239d5d7bb750b759e324340165f5",
+    "repository": "https://github.com/mothx9/replai",
+    "revision": "ff5de189aee2f4e5d9b75f35232af6eb719941d4",
+    "tree": "2ac2c730c6c84419fe63aa90862ec88b867de91c"
+  },
+  "id": "sha256:9d3456847c7bcf6ed1821ca468ded2c4a226cc401345a3ad92c7857e7a78b6a6",
+  "kind": "delta",
+  "platforms": [
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34502378013",
+        "https://github.com/mothx9/replai/blob/ff5de189aee2f4e5d9b75f35232af6eb719941d4/docs/engineering/analysis-presentation.md"
+      ],
+      "id": "linux",
+      "status": "runtime-qualified",
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34502378013",
+        "https://github.com/mothx9/replai/blob/ff5de189aee2f4e5d9b75f35232af6eb719941d4/docs/engineering/analysis-presentation.md"
+      ],
+      "id": "macos",
+      "status": "runtime-qualified",
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34502378013",
+        "https://github.com/mothx9/replai/blob/ff5de189aee2f4e5d9b75f35232af6eb719941d4/docs/engineering/analysis-presentation.md"
+      ],
+      "id": "windows",
+      "status": "portable-core-qualified",
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "previous": {
+    "contract_id": "sha256:fa0cadf80c96e43e0a649c18cbc93049950be07f5a8f5020bcfffef57a19aab5",
+    "repository": "https://github.com/mothx9/replai",
+    "revision": "0abed4fa75a5684005c87df3bb36e2f997025d00",
+    "tree": "254a0c8f254ef79bd45313cba1d4c30709be566b"
+  },
+  "schema_version": 1,
+  "surfaces": [
+    {
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/interaction.md",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/presentation.md"
+      ],
+      "id": "rust-native",
+      "kind": "rust-native",
+      "version": "pre-release"
+    },
+    {
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/c-api.md"
+      ],
+      "id": "c-abi-v1",
+      "kind": "c-abi",
+      "version": "1"
+    }
+  ]
+}

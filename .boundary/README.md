@@ -4,7 +4,20 @@ REPLAI owns these producer declarations. They describe generic capabilities,
 surfaces, qualification and changes; they assign no consumer paths, commands or
 migration work. Consumer profiles must be authored by their own repositories.
 
-- [Current producer snapshot](producer.json), generation 8: source/document carrier
+- [Current producer snapshot](producer.json), generation 9: source/document carrier
+  `ff5de189aee2f4e5d9b75f35232af6eb719941d4`, tree
+  `2ac2c730c6c84419fe63aa90862ec88b867de91c`. Library source is identical to
+  implementation `e0ab06bc2e9111b41968842b459c51a68855aa13`; fixture carrier
+  `27981f0dbb22305f96a07bb7e4c7fafbbf81e90b` passed
+  [12/12 CI jobs](https://github.com/mothx9/replai/actions/runs/34502378013), including
+  native Linux/macOS PTYs and memory, portable Windows and benchmark integrity.
+  The [I2 dossier](../docs/engineering/analysis-presentation.md) separates source,
+  qualification, performance and deliberately bounded hint behavior.
+- [Analysis-presentation delta](deltas/validation-analysis-presentation.json) adds
+  `analysis.hints_highlight`: host-derived revision-bound spans, safe non-canonical
+  hints, stale silence and plain degradation. It adds no consumer migration,
+  C entry point, parser or scheduling authority. C ABI 1 remains unchanged.
+- [Previous validation snapshot](checkpoints/0abed4fa75a5684005c87df3bb36e2f997025d00.json), generation 8: source/document carrier
   `0abed4fa75a5684005c87df3bb36e2f997025d00`, tree
   `254a0c8f254ef79bd45313cba1d4c30709be566b`. Runtime is identical to qualified
   implementation `1da4dbf9162a2fea4d267e1aa473859ee64ae290`;
@@ -71,7 +84,7 @@ behavior, ABI and documentation inputs. Its external validation command is:
 
 ```sh
 boundary validate .boundary/producer.json --repo . \
-  --previous .boundary/checkpoints/aa137e881065f0a0615fa8ae03c84c89f052bea3.json
+  --previous .boundary/checkpoints/0abed4fa75a5684005c87df3bb36e2f997025d00.json
 ```
 
 Run from a clean REPLAI checkout with BOUNDARY installed separately. Validation
