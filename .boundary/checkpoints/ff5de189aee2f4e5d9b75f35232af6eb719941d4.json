@@ -614,21 +614,19 @@
     {
       "description": "Validated multiline navigation and safe diagnostic continuation surface",
       "documentation": [
-        "https://github.com/mothx9/replai/blob/da16302c33cdce5ef40978e02e9d8dff045c93f9/docs/interaction.md#validated-submission-and-multiline-navigation",
-        "https://github.com/mothx9/replai/blob/da16302c33cdce5ef40978e02e9d8dff045c93f9/docs/use-cases.md"
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/interaction.md#validated-submission-and-multiline-navigation",
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/use-cases.md"
       ],
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34509792610",
-        "https://github.com/mothx9/replai/blob/da16302c33cdce5ef40978e02e9d8dff045c93f9/docs/engineering/validation-multiline.md#continuation-indentation-follow-up"
+        "https://github.com/mothx9/replai/actions/runs/34494834221",
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
       ],
       "guarantees": [
         "Same prompt, width policy, viewport and renderer across Linux/macOS native interaction",
         "Opt-in Up/Down move through logical lines then history at boundaries; direct mode keeps existing history bindings",
         "Completion acceptance precedes validation; bracketed multiline paste remains one edit",
         "Revision changes invalidate diagnostics; resize and serialized output preserve exact draft/cursor and current explanations",
-        "Bounded textual diagnostic markers remain understandable without styling; this is not general highlighting or a full-screen interface",
-        "Validated continuation-line ASCII whitespace prefixes consume Tab as one atomic space insertion to the next four-cell stop; the first line and positions after text still request completion; active menus retain Tab navigation",
-        "Indentation capacity rejection preserves draft, revision and current analysis/diagnostics; direct submission, simple blocking and C ABI 1 retain prior Tab behavior"
+        "Bounded textual diagnostic markers remain understandable without styling; this is not general highlighting or a full-screen interface"
       ],
       "id": "presentation.multiline_ux",
       "maturity": "experimental",
@@ -672,24 +670,46 @@
   ],
   "changes": [
     {
-      "capability": "presentation.multiline_ux",
-      "compatibility": "breaking",
-      "description": "Intentional validated-key behavior change: Tab in continuation-line whitespace inserts spaces instead of emitting CompletionRequested. Completion after text and active-menu navigation are preserved. No Rust type/signature or C ABI change; direct mode and host grammar remain unchanged. No consumer migration is assigned.",
+      "capability": "analysis.hints_highlight",
+      "compatibility": "compatible",
+      "description": "Optional bounded revision-bound editor analysis presentation over the existing engine. Host semantics and scheduling stay external; C ABI 1 is unchanged. No consumer migration is assigned.",
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34509792610",
-        "https://github.com/mothx9/replai/blob/da16302c33cdce5ef40978e02e9d8dff045c93f9/docs/engineering/validation-multiline.md#continuation-indentation-follow-up"
+        "https://github.com/mothx9/replai/actions/runs/34502378013",
+        "https://github.com/mothx9/replai/blob/ff5de189aee2f4e5d9b75f35232af6eb719941d4/docs/engineering/analysis-presentation.md"
       ],
       "inputs": [
-        "docs/engineering/validation-multiline.md",
+        ".github/workflows/ci.yml",
+        "docs/architecture.md",
+        "docs/engineering/analysis-presentation.md",
         "docs/interaction.md",
+        "docs/presentation.md",
         "docs/use-cases.md",
+        "examples/analysis-presentation.rs",
+        "examples/support/presented_analysis.rs",
+        "examples/validation-driven.rs",
+        "src/analysis_presentation.rs",
+        "src/analysis_presentation_tests.rs",
+        "src/completion.rs",
+        "src/completion_tests.rs",
+        "src/conformance.rs",
         "src/engine.rs",
-        "src/event.rs",
+        "src/interaction.rs",
+        "src/lib.rs",
+        "src/presentation.rs",
         "src/validation.rs",
-        "src/validation_tests.rs",
+        "tests/analysis_presentation.rs",
+        "tests/architecture.rs",
+        "tools/analysis_presentation_pty.py",
+        "tools/completion_pty.py",
+        "tools/embedding_pty.py",
+        "tools/perf/completions.rs",
+        "tools/perf/components.rs",
+        "tools/perf/linux.py",
+        "tools/perf/presented.rs",
+        "tools/qualify.py",
         "tools/validation_pty.py"
       ],
-      "kind": "BEHAVIOR_CHANGED",
+      "kind": "ADDED",
       "platforms": [
         "linux",
         "macos",
@@ -700,8 +720,8 @@
       ]
     }
   ],
-  "generation": 10,
-  "id": "sha256:7a353651079624584f8d47cbfceac9a62de68ca56a46b0971d661549a89cf1c5",
+  "generation": 9,
+  "id": "sha256:69e3ec20252bfb63ff0966c852942bcdb4c5239d5d7bb750b759e324340165f5",
   "inputs": [
     {
       "capabilities": [
@@ -846,7 +866,7 @@
       ],
       "category": "behavior",
       "path": "src/engine.rs",
-      "sha256": "sha256:c8e0e34b4ad39427d9edac2efd60d0239874231bd0ecc24989bde0756f54a152",
+      "sha256": "sha256:78a28a12b71a2ca101dd363dfc4a8779653b53f1bdce21363004ced11e91a7dc",
       "surfaces": [
         "rust-native"
       ]
@@ -868,7 +888,7 @@
       ],
       "category": "behavior",
       "path": "src/event.rs",
-      "sha256": "sha256:b2b2ef3dbc9c0bcb5d420127f0c162ef46e5599488bad71c47b2023cb555c650",
+      "sha256": "sha256:48a05d5770bf45c4d5201d8480f61504fa678b7fa5e00b8a951497398587869e",
       "surfaces": [
         "rust-native"
       ]
@@ -1139,7 +1159,7 @@
       ],
       "category": "documentation",
       "path": "docs/interaction.md",
-      "sha256": "sha256:37c8dab9d8168ad5f314f7f941b778471a182692b7a76590efab60d67fb4b2d8",
+      "sha256": "sha256:69061836e97635a4cbf68427181f247c79954a96a7532a4ea77359a7d660eaa3",
       "surfaces": [
         "rust-native"
       ]
@@ -1703,7 +1723,7 @@
       ],
       "category": "api",
       "path": "src/validation.rs",
-      "sha256": "sha256:60315c69d0b422a5ab9259b775bc7c04bb308cc2511a5fd16db96bfecbef9345",
+      "sha256": "sha256:ede264561258dfc550bbd6f1396c8b4efbaddd00a0b8aa0db05e21cae8085b25",
       "surfaces": [
         "rust-native"
       ]
@@ -1715,7 +1735,7 @@
       ],
       "category": "qualification",
       "path": "src/validation_tests.rs",
-      "sha256": "sha256:89b97e1a4db05a81a171abb7c194c88bd92f59d187466f52a967048abeb29e0f",
+      "sha256": "sha256:b159baffcd6430188f584bf223d74c5c5aac40a2946411403885930be28b8c4c",
       "surfaces": [
         "rust-native"
       ]
@@ -1777,7 +1797,7 @@
       ],
       "category": "qualification",
       "path": "tools/validation_pty.py",
-      "sha256": "sha256:b8354eea0bc300a297d82222e0705323d67d353a38ed97e57c30ed5d02159da8",
+      "sha256": "sha256:84804dd0d0492df5990d351726caf18df29c9d0b991603cac97c40bee2dfa10e",
       "surfaces": [
         "rust-native"
       ]
@@ -1814,7 +1834,7 @@
       ],
       "category": "documentation",
       "path": "docs/use-cases.md",
-      "sha256": "sha256:907c64447940c75b0a2b4f8ff29850c17d35678eb006d2eda2e91b5129bba200",
+      "sha256": "sha256:8db647ae8f4a685c55ff7c354748b0ebf7ab2b6404b79cc90be6d396a554207a",
       "surfaces": [
         "rust-native"
       ]
@@ -1826,7 +1846,7 @@
       ],
       "category": "documentation",
       "path": "docs/engineering/validation-multiline.md",
-      "sha256": "sha256:71d478c1f5f710e44430cfe6afba1f69e8e75dcc64942ab6da6ebd9c7e2b5e99",
+      "sha256": "sha256:078ec897c5338900bc8db9753dba08a761022fc9e5cd59136168a47a4f557900",
       "surfaces": [
         "rust-native"
       ]
@@ -1982,17 +2002,17 @@
     }
   ],
   "predecessor": {
-    "contract_id": "sha256:69e3ec20252bfb63ff0966c852942bcdb4c5239d5d7bb750b759e324340165f5",
+    "contract_id": "sha256:fa0cadf80c96e43e0a649c18cbc93049950be07f5a8f5020bcfffef57a19aab5",
     "repository": "https://github.com/mothx9/replai",
-    "revision": "ff5de189aee2f4e5d9b75f35232af6eb719941d4",
-    "tree": "2ac2c730c6c84419fe63aa90862ec88b867de91c"
+    "revision": "0abed4fa75a5684005c87df3bb36e2f997025d00",
+    "tree": "254a0c8f254ef79bd45313cba1d4c30709be566b"
   },
   "repository": "https://github.com/mothx9/replai",
   "schema_version": 1,
   "source": {
     "dirty": false,
-    "revision": "da16302c33cdce5ef40978e02e9d8dff045c93f9",
-    "tree": "0e487a176b025ed5f7b239788d55eff95670ac6c"
+    "revision": "ff5de189aee2f4e5d9b75f35232af6eb719941d4",
+    "tree": "2ac2c730c6c84419fe63aa90862ec88b867de91c"
   },
   "surfaces": [
     {

@@ -1,0 +1,145 @@
+{
+  "capability_contracts": [
+    {
+      "description": "Validated multiline navigation and safe diagnostic continuation surface",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/da16302c33cdce5ef40978e02e9d8dff045c93f9/docs/interaction.md#validated-submission-and-multiline-navigation",
+        "https://github.com/mothx9/replai/blob/da16302c33cdce5ef40978e02e9d8dff045c93f9/docs/use-cases.md"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34509792610",
+        "https://github.com/mothx9/replai/blob/da16302c33cdce5ef40978e02e9d8dff045c93f9/docs/engineering/validation-multiline.md#continuation-indentation-follow-up"
+      ],
+      "guarantees": [
+        "Same prompt, width policy, viewport and renderer across Linux/macOS native interaction",
+        "Opt-in Up/Down move through logical lines then history at boundaries; direct mode keeps existing history bindings",
+        "Completion acceptance precedes validation; bracketed multiline paste remains one edit",
+        "Revision changes invalidate diagnostics; resize and serialized output preserve exact draft/cursor and current explanations",
+        "Bounded textual diagnostic markers remain understandable without styling; this is not general highlighting or a full-screen interface",
+        "Validated continuation-line ASCII whitespace prefixes consume Tab as one atomic space insertion to the next four-cell stop; the first line and positions after text still request completion; active menus retain Tab navigation",
+        "Indentation capacity rejection preserves draft, revision and current analysis/diagnostics; direct submission, simple blocking and C ABI 1 retain prior Tab behavior"
+      ],
+      "id": "presentation.multiline_ux",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "changed_inputs": [
+    "docs/engineering/validation-multiline.md",
+    "docs/interaction.md",
+    "docs/use-cases.md",
+    "src/engine.rs",
+    "src/event.rs",
+    "src/validation.rs",
+    "src/validation_tests.rs",
+    "tools/validation_pty.py"
+  ],
+  "changes": [
+    {
+      "capability": "presentation.multiline_ux",
+      "compatibility": "breaking",
+      "description": "Intentional validated-key behavior change: Tab in continuation-line whitespace inserts spaces instead of emitting CompletionRequested. Completion after text and active-menu navigation are preserved. No Rust type/signature or C ABI change; direct mode and host grammar remain unchanged. No consumer migration is assigned.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34509792610",
+        "https://github.com/mothx9/replai/blob/da16302c33cdce5ef40978e02e9d8dff045c93f9/docs/engineering/validation-multiline.md#continuation-indentation-follow-up"
+      ],
+      "inputs": [
+        "docs/engineering/validation-multiline.md",
+        "docs/interaction.md",
+        "docs/use-cases.md",
+        "src/engine.rs",
+        "src/event.rs",
+        "src/validation.rs",
+        "src/validation_tests.rs",
+        "tools/validation_pty.py"
+      ],
+      "kind": "BEHAVIOR_CHANGED",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "current": {
+    "contract_id": "sha256:7a353651079624584f8d47cbfceac9a62de68ca56a46b0971d661549a89cf1c5",
+    "repository": "https://github.com/mothx9/replai",
+    "revision": "da16302c33cdce5ef40978e02e9d8dff045c93f9",
+    "tree": "0e487a176b025ed5f7b239788d55eff95670ac6c"
+  },
+  "id": "sha256:19370175ab3bc22810ab88fe2beb94477ccd36e8402dd15ea8c687d83a13a013",
+  "kind": "delta",
+  "platforms": [
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34502378013",
+        "https://github.com/mothx9/replai/blob/ff5de189aee2f4e5d9b75f35232af6eb719941d4/docs/engineering/analysis-presentation.md"
+      ],
+      "id": "linux",
+      "status": "runtime-qualified",
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34502378013",
+        "https://github.com/mothx9/replai/blob/ff5de189aee2f4e5d9b75f35232af6eb719941d4/docs/engineering/analysis-presentation.md"
+      ],
+      "id": "macos",
+      "status": "runtime-qualified",
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34502378013",
+        "https://github.com/mothx9/replai/blob/ff5de189aee2f4e5d9b75f35232af6eb719941d4/docs/engineering/analysis-presentation.md"
+      ],
+      "id": "windows",
+      "status": "portable-core-qualified",
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "previous": {
+    "contract_id": "sha256:69e3ec20252bfb63ff0966c852942bcdb4c5239d5d7bb750b759e324340165f5",
+    "repository": "https://github.com/mothx9/replai",
+    "revision": "ff5de189aee2f4e5d9b75f35232af6eb719941d4",
+    "tree": "2ac2c730c6c84419fe63aa90862ec88b867de91c"
+  },
+  "schema_version": 1,
+  "surfaces": [
+    {
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/interaction.md",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/presentation.md"
+      ],
+      "id": "rust-native",
+      "kind": "rust-native",
+      "version": "pre-release"
+    },
+    {
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/c-api.md"
+      ],
+      "id": "c-abi-v1",
+      "kind": "c-abi",
+      "version": "1"
+    }
+  ]
+}

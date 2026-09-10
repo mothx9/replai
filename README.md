@@ -148,7 +148,7 @@ terminal capabilities:
 
 ```toml
 [dependencies]
-replai = { git = "https://github.com/mothx9/replai", rev = "27981f0dbb22305f96a07bb7e4c7fafbbf81e90b" }
+replai = { git = "https://github.com/mothx9/replai", rev = "da16302c33cdce5ef40978e02e9d8dff045c93f9" }
 ```
 
 A retained interaction provides a complete blocking input loop:

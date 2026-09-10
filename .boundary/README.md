@@ -4,7 +4,20 @@ REPLAI owns these producer declarations. They describe generic capabilities,
 surfaces, qualification and changes; they assign no consumer paths, commands or
 migration work. Consumer profiles must be authored by their own repositories.
 
-- [Current producer snapshot](producer.json), generation 9: source/document carrier
+- [Current producer snapshot](producer.json), generation 10: qualified source
+  `da16302c33cdce5ef40978e02e9d8dff045c93f9`, tree
+  `0e487a176b025ed5f7b239788d55eff95670ac6c`. The
+  [continuation indentation correction](../docs/engineering/validation-multiline.md#continuation-indentation-follow-up)
+  belongs to the common engine. [Exact-source CI](https://github.com/mothx9/replai/actions/runs/34509792610)
+  covers real Linux/macOS interaction and memory, Windows portable logic and
+  benchmark integrity. Local qualification passed all 22 content gates and the
+  clean-worktree gate.
+- [Indentation delta](deltas/analysis-presentation-indentation.json) records an
+  intentional `BEHAVIOR_CHANGED` entry for `presentation.multiline_ux`, classified
+  conservatively as `breaking`: validated continuation whitespace consumes Tab
+  instead of emitting a completion request. Native signatures/types, direct mode,
+  simple blocking and C ABI 1 are unchanged. No consumer migration is assigned.
+- [Previous analysis-presentation snapshot](checkpoints/ff5de189aee2f4e5d9b75f35232af6eb719941d4.json), generation 9: source/document carrier
   `ff5de189aee2f4e5d9b75f35232af6eb719941d4`, tree
   `2ac2c730c6c84419fe63aa90862ec88b867de91c`. Library source is identical to
   implementation `e0ab06bc2e9111b41968842b459c51a68855aa13`; fixture carrier
@@ -84,7 +97,7 @@ behavior, ABI and documentation inputs. Its external validation command is:
 
 ```sh
 boundary validate .boundary/producer.json --repo . \
-  --previous .boundary/checkpoints/0abed4fa75a5684005c87df3bb36e2f997025d00.json
+  --previous .boundary/checkpoints/ff5de189aee2f4e5d9b75f35232af6eb719941d4.json
 ```
 
 Run from a clean REPLAI checkout with BOUNDARY installed separately. Validation
