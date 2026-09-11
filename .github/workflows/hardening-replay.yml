@@ -1,0 +1,36 @@
+name: Release hardening final corpus replay
+on:
+  workflow_dispatch:
+    inputs:
+      archive:
+        description: Committed immutable corpus archive
+        default: tools/hardening/evidence/final-corpus.json.gz
+        required: true
+permissions:
+  contents: read
+jobs:
+  replay:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, ubuntu-24.04-arm, macos-15, windows-2025]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87
+        with:
+          toolchain: '1.98.1'
+      - name: Replay exact final corpus (Windows portable targets only)
+        shell: bash
+        env:
+          REPLAI_ARCHIVE: ${{ inputs.archive }}
+        run: python3 tools/hardening/corpus.py replay --archive "$REPLAI_ARCHIVE" --work "$RUNNER_TEMP/replai-corpus-replay"
+      - name: Preserve replay receipts
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: corpus-${{ matrix.os }}
+          path: ${{ runner.temp }}/replai-corpus-replay

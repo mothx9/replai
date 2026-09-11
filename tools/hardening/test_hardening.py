@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """Fast negative tests for the release evidence harness itself."""
 import tempfile
+import gzip
+import hashlib
+import json
+import corpus
 from pathlib import Path
 import unittest
 import campaign
@@ -26,6 +30,24 @@ class HardeningGuard(unittest.TestCase):
         self.assertEqual(t["median_ns"], 110)
         self.assertEqual(t["median_allowance_ns"], 50)
         self.assertEqual(t["p95_allowance_ns"], 32.5)
+
+    def test_corpus_receipts_and_tampering(self):
+        record = {"environment": {}, "inputs": [""], "summary": {
+            "passed": True, "budget_complete": True, "cpu_seconds": 3600,
+            "final_corpus": {"files": 1, "sha256": hashlib.sha256(hashlib.sha256(b"").hexdigest().encode()).hexdigest()}}}
+        archive = {"version": 1, "targets": {}}
+        for name in campaign.TARGETS:
+            entry = json.loads(json.dumps(record))
+            entry["summary"]["target"] = name
+            archive["targets"][name] = entry
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory)/"corpus.json.gz"
+            path.write_bytes(gzip.compress(json.dumps(archive).encode()))
+            self.assertEqual(corpus.read_archive(path), archive)
+            archive["targets"]["editor"]["inputs"] = ["eA=="]
+            path.write_bytes(gzip.compress(json.dumps(archive).encode()))
+            with self.assertRaises(AssertionError):
+                corpus.read_archive(path)
 
     def test_timer_floor(self):
         t = regression.thresholds([1]*155, 10)
