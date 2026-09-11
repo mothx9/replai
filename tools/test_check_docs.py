@@ -50,6 +50,11 @@ class DocumentationGuard(unittest.TestCase):
             "6975c0979a1fd13f619f2d079b7494945ca18c5e", "0" * 40))
         self.reject("evidence identity drift")
 
+    def test_public_status_markers_require_text(self):
+        target = self.root / "README.md"
+        target.write_text(target.read_text().replace("🟡 Replacement only", "🟡", 1))
+        self.reject("color-only public status marker: 🟡")
+
     def test_missing_relative_link(self):
         self.append("README.md", "[missing](docs/missing.md)")
         self.reject("README.md: missing link target: docs/missing.md")

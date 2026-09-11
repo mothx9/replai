@@ -180,13 +180,19 @@ def check_public_surface(root, paths):
                 if identity != record.get("evidence_head"):
                     errors.append(f"assets/readme/manifest.json: evidence identity drift: {name}")
     required = [
-        "🟢 Qualified", "🟡 Limited", "⚪ Portable only", "🔴 Outside",
-        "docs/release-scope.md", "ROADMAP.md", "RELEASE.PACKAGING.0",
+        "docs/release-scope.md", "ROADMAP.md",
         "assets/replai-lockup-dark.svg", "assets/replai-lockup-light.svg",
     ]
     for value in required:
         if value not in readme:
             errors.append(f"README.md: missing public-surface invariant: {value}")
+    for marker in ("🟢", "🟡", "⚪", "🔴"):
+        matches = [line for line in readme.splitlines() if marker in line]
+        if not matches:
+            errors.append(f"README.md: missing public status marker: {marker}")
+        for line in matches:
+            if re.search(re.escape(marker) + r"\s+\*{0,2}[A-Za-z]", line) is None:
+                errors.append(f"README.md: color-only public status marker: {marker}")
     return errors
 
 

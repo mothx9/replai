@@ -20,29 +20,11 @@
 <p align="center">
   <a href="#quick-start">Quick Start</a> · <a href="#choose-your-integration">Choose a mode</a> ·
   <a href="#capabilities">Capabilities</a> · <a href="#how-it-works">Architecture</a> ·
-  <a href="#platform-and-api-support">Support</a> · <a href="#performance">Performance</a> ·
+  <a href="#platform-support">Support</a> · <a href="#performance">Performance</a> ·
   <a href="#documentation">Docs</a>
 </p>
 
 ## At a glance
-
-| | Current public surface |
-| --- | --- |
-| **Core** | Bounded Unicode line editor and interaction engine |
-| **Rust** | Blocking · Session · Driven |
-| **C / C++** | ABI 1 POSIX session consumer |
-| **Your application owns** | Parser · semantics · execution · persistence · scheduler |
-| **REPLAI owns** | Editing · lifecycle · revision provenance · generic presentation |
-| **Runtime** | Linux GNU x86_64/ARM64 · macOS ARM64 |
-| **Portable core** | Windows x86_64; no terminal backend |
-| **Release** | Pre-release · v0.1 packaging is selected, not started |
-| **License** | MIT |
-
-Status vocabulary used below: **🟢 Qualified** at the stated scope · **🟡 Limited**
-with an explicit boundary · **⚪ Portable only / deferred** · **🔴 Outside the
-current contract**. Every status has text; color is never the only signal.
-
-## Overview
 
 REPLAI provides Unicode editing, revision-safe host analysis, rich completion,
 validated multiline interaction, structured presentation and explicit terminal
@@ -50,9 +32,11 @@ lifecycle management. It occupies a useful middle layer: the host can begin with
 a small line read, then adopt session or driven control without moving its
 language or event loop into a terminal framework.
 
-One engine serves the Rust integration tiers and C ABI 1. The library decodes
-terminal input, owns the editable state and safely renders generic host results.
-The host decides what input means and what work happens next.
+- **Rust:** Blocking · Session · Driven. **C/C++:** ABI 1 session.
+- **Runtime:** Linux GNU x86_64/ARM64 · macOS ARM64. **Portable core:** Windows x86_64.
+- **Ownership:** the host keeps parsing, semantics, execution, persistence and scheduling;
+  REPLAI owns editing, terminal lifecycle, revision provenance and generic presentation.
+- **License:** MIT.
 
 ## Real showcase
 
@@ -76,6 +60,26 @@ it is not benchmark evidence. The static image above contains the essential
 information without motion. [Capture and asset provenance](docs/development.md#public-readme-assets).
 
 </details>
+
+## Interface examples
+
+The same public surface can support a data-oriented console or render structured
+output without an active editor. Both captures below come from deterministic
+local fixtures; neither contacts a database or build service.
+
+<p align="center">
+  <img src="assets/terminal-results.png" alt="Real REPLAI query-console PTY showing completion, tabular results, history, multiline editing and a host notice while the draft remains open." width="912">
+</p>
+
+An interactive query console: host-owned commands and records, REPLAI-owned
+editing, results layout and draft restoration.
+
+<p align="center">
+  <img src="assets/terminal-report.png" alt="Real REPLAI structured-output capture showing headings, facts, a responsive pipeline table, statuses and command help." width="912">
+</p>
+
+A standalone `Document`: headings, facts, status, tabular data and help rendered
+without raw ANSI. [Reproduce the focused captures](docs/development.md#readme-terminal-preview).
 
 ## Quick Start
 
@@ -136,21 +140,13 @@ analysis automatically.
 
 ## Where REPLAI fits
 
-| Use case | Fit | Suggested surface |
-| --- | --- | --- |
-| Deterministic CLI | 🟢 Qualified fit | Blocking |
-| Database or admin console | 🟢 Qualified fit | Session |
-| Debugger frontend | 🟢 Qualified fit | Session or Driven |
-| Turn-by-turn model client | 🟢 Qualified fit | Blocking |
-| Model/network client with an existing reactor | 🟢 Qualified fit | Driven; host serializes output |
-| C/C++ command console | 🟢 Qualified fit | C ABI 1 session |
-| Shell frontend | 🟡 Interaction layer only | Host still owns grammar and execution |
-| Full-screen dashboard | 🔴 Outside contract | Use a TUI framework |
-| Password/secret entry | 🔴 Outside v0.1 | Use a separate secret-input mechanism |
-| Independent concurrent terminal writers | 🔴 Outside v0.1 | Marshal writes through one host owner |
+**Good fits:** deterministic CLIs, database and admin consoles, debugger
+frontends, model clients, network clients with an existing reactor, and C/C++
+command consoles.
 
-Host event-loop multiplexing is supported by Driven. Independent writer
-arbitration and sustained active-edit streaming are separate deferred contracts.
+**Outside its job:** full-screen dashboards, parsing or shell semantics, secret
+entry, and arbitration between independent terminal writers. Driven integrates
+with a host event loop; output calls still pass through one serialized owner.
 
 ## How it works
 
@@ -159,23 +155,9 @@ arbitration and sustained active-edit streaming are separate deferred contracts.
   <img src="assets/readme/architecture-light.svg#gh-light-mode-only" alt="REPLAI architecture from host application through public contracts and one interaction engine to Linux or macOS." width="800">
 </p>
 
-Text equivalent:
-
-```text
-YOUR APPLICATION
-parser · semantics · execution · state · scheduler
-                         │
-REPLAI PUBLIC CONTRACT   │ blocking · session · driven · C ABI 1
-                         ▼
-ONE INTERACTION ENGINE
-editor + revision provenance + analysis contracts
-presentation + renderer + safe coordinated output
-                         │
-TERMINAL CONTRACT
-capabilities · decoder · readiness · resources · restoration
-                         ▼
-Linux GNU / macOS
-```
+The application keeps its parser, state, execution and scheduler. REPLAI's
+public blocking, session, driven and C ABI surfaces converge on one interaction
+engine, renderer and terminal contract, realized natively on Linux and macOS.
 
 The input pipeline and analysis pipeline are independent ownership paths:
 
@@ -193,15 +175,18 @@ laid out and restored without asking the host to parse again.
 
 ### Component map
 
-| Component | Owns | Does not own |
-| --- | --- | --- |
-| `Editor` | Bounded UTF-8 draft, grapheme edits, history mechanics, `DraftRevision` | Terminal resources or host semantics |
-| Analysis contracts | Immutable snapshots, stale checks, candidate/validation/span structures | Parser, ranking, grammar or scheduling |
-| `Interaction` | Blocking/session/driven lifecycle over one engine | Host reactor or concurrent mutation |
-| Presentation | Prompts, completion, diagnostics, hints, documents, layout and render damage | Product-specific labels or raw host ANSI |
-| Terminal contract | Admission, decoding, readiness, resize, deadlines and restoration | Application signals or process lifetime |
-| Native realization | Linux/macOS resource mechanics | Windows terminal runtime |
-| C ABI 1 adapter | Opaque session handles over the same engine | A second editor or Rust feature parity |
+- **`Editor`** owns the bounded UTF-8 draft, grapheme edits, history mechanics
+  and `DraftRevision` without requiring a terminal.
+- **Analysis contracts** own immutable snapshots, stale checks and bounded
+  completion, validation and presentation structures.
+- **`Interaction`** gives blocking, session and driven hosts one lifecycle and
+  one serialized mutation boundary.
+- **Presentation** turns safe prompts, completion, diagnostics, hints and
+  documents into shared layout and render damage.
+- **The terminal contract** owns admission, decoding, readiness, geometry and
+  restoration; Linux and macOS provide the native resource realization.
+- **C ABI 1** adapts the same engine through opaque handles at its documented,
+  deliberately smaller surface.
 
 `Editor` is terminal-independent. Frames, decoder state and terminal mutations
 remain private. The [architecture contract](docs/architecture.md) maps these
@@ -219,12 +204,9 @@ Until packaging is completed, pin the latest qualified public producer checkpoin
 replai = { git = "https://github.com/mothx9/replai", rev = "30ef4f4ac6deeb07ffa0b9adb2071b070f4129e3" }
 ```
 
-This checkpoint carries the unchanged qualified runtime plus current Q0/Q1/Q2
-hardening evidence and public documentation. Pinning the runtime-only ancestor
-would reproduce the same implementation but omit its qualification carrier.
-Exact Git pins keep pre-release consumption deliberate. `RELEASE.PACKAGING.0`
-will replace this temporary Git-only route with the selected crates.io/C SDK
-contract; no package has been published yet.
+This exact checkpoint carries the qualified runtime and current hardening
+evidence. Exact Git pins keep pre-release consumption deliberate; no crates.io
+package has been published yet.
 
 A current stable Rust toolchain is used today. The selected v0.1 MSRV is Rust
 1.98.1 but is not declared until packaging qualification. Runtime dependencies
@@ -425,7 +407,7 @@ polling, synchronous replacement, direct submission, prompts and plain coordinat
 output. Rich candidates, revisioned analysis, validation, documents and driven
 embedding remain Rust-native. [C installation and ABI contract](docs/c-api.md).
 
-## Platform and API support
+## Platform support
 
 This is the **candidate v0.1 envelope**, not a published release claim.
 
@@ -445,16 +427,16 @@ bracketed paste, multiline bytes are ordinary edits and lose paste atomicity.
 
 ## Safety and guarantees
 
-| Property | Qualified contract |
-| --- | --- |
-| Stale result | Cannot mutate a newer draft or emit presentation |
-| Invalid host range/payload | Rejected atomically before editor mutation |
-| Terminal injection | Safe host text rejects terminal controls |
-| Capability mismatch | Refused before raw mode where required |
-| External output | Current draft/cursor/presentation restored |
-| Host concurrency | One serialized Interaction owner |
-| Close/failure | Restoration attempted; cleanup failure is reported |
-| Bounded state | Draft, history, candidates, diagnostics, hints and documents have limits |
+- Stale host results cannot mutate a newer draft or emit presentation.
+- Invalid host ranges and payloads are rejected before editor mutation; safe
+  host text rejects terminal controls.
+- Capability mismatches are refused before raw mode where required.
+- Serialized external output restores the current draft, cursor and valid
+  presentation.
+- Drafts, history, candidates, diagnostics, hints and documents have explicit
+  bounds.
+- One host owns and serializes `Interaction`; close attempts restoration and
+  reports cleanup failure through the explicit boundary.
 
 The implementation crate forbids unsafe Rust. FFI unsafety is confined to the
 adapter and its documented pointer preconditions. This is a memory-safety posture
@@ -504,9 +486,8 @@ Representative results from the frozen Q2 registration:
 
 Source `6975c0979a1fd13f619f2d079b7494945ca18c5e`, runtime tree
 `12b9cd0e58ef8d2dfe6c1b91185fd21b05a7aa9e`; Spark ARM64, Linux
-6.17.0-1021-nvidia, Rust 1.98.1/LLVM 22.1.8, CPU 19 in performance mode. Five
-control batches and 31 measured repetitions per batch; preparation and
-verification are outside timing. Allocations are measured in a separate build.
+6.17.0-1021-nvidia, Rust 1.98.1/LLVM 22.1.8. Five control batches and 31
+measured repetitions per batch; allocations use a separate build.
 [All 32 workloads, thresholds and methodology](docs/engineering/release-hardening.md#q2-registered-regression-policy).
 
 **These measurements characterize recorded workloads. They are not a universal
@@ -516,63 +497,29 @@ Those measured limits remain visible rather than being converted into an SLA.
 
 ## Release status and compatibility
 
-ROADMAP owns maturity/selection. The [release scope](docs/release-scope.md) owns
-the candidate envelope. This is a compact public summary only.
-
-| v0.1 gate | Current state |
-| --- | --- |
-| Core interaction and analysis | 🟢 Established at current scope |
-| Linux/macOS runtime | 🟢 Established at named targets |
-| Q0/Q1/Q2 hardening | 🟢 Established |
-| Packaging / MSRV / independent consumer | 🟡 Selected, not started |
-| Rust API freeze candidate | ⚪ Deferred until packaging evidence |
-| Release qualification | ⚪ Not started |
-| Publication | 🔴 Not authorized |
-
-| Contract | Current pre-release posture |
-| --- | --- |
-| Package version | `0.1.0-dev.0`; no public release |
-| Rust API | Not frozen; exact Git revision recommended |
-| C ABI | ABI 1 qualified; no silent reinterpretation; release promise awaits freeze |
-| SemVer | Selected v0.1 policy awaits E3 ratification |
-| MSRV | Rust 1.98.1 selected; declaration/target qualification pending packaging |
-| Distribution | Exact Git revision and staged C artifacts; not on crates.io |
-| Platform promise | Candidate envelope above; tag-time qualification still required |
-
-The first public release deliberately excludes Windows terminal runtime, rich
-C/Rust parity, configurable keymaps, secret input and concurrent terminal writer
-arbitration. These remain visible decisions, not hidden implementation claims.
+REPLAI is pre-release (`0.1.0-dev.0`). The Rust API is not frozen, C ABI 1 is
+qualified at its current bounded scope, and crates.io publication has not
+occurred. Consume Rust through the exact Git pin above; the candidate MSRV is
+Rust 1.98.1 pending packaging qualification. The candidate v0.1 runtime envelope
+is Linux GNU x86_64/ARM64 and macOS ARM64, with Windows portable-core coverage
+only. [Release scope](docs/release-scope.md) · [Roadmap](ROADMAP.md).
 
 ## Verification
 
 [CI on master](https://github.com/mothx9/replai/actions/workflows/ci.yml) checks the
 current source. Exact campaign identities live in engineering dossiers.
 
-| Boundary | Executed evidence |
+| Evidence class | Current coverage |
 | --- | --- |
-| Terminal lifecycle | Real Linux x86_64/ARM64 and macOS ARM64 PTYs; restoration, resize, failures and descriptors |
-| Hardening | Five ≥60 CPU-minute fuzz targets; 100,000 generated sequences; retained corpus replay |
-| Resource/memory | 1,000 cycles per tier/target; 10,000 mixed events; Linux Valgrind and macOS leaks |
-| C ABI 1 | Layout/symbol checks; old-client compatibility; isolated static/shared C11 and C++17 consumers |
-| Portability | Windows portable editor/engine/analysis models; no runtime inference |
-| Public surface | Compiled README Rust/C snippets; runnable examples; real-PTY PNG/GIF reproduction |
-| Performance | Preregistered Q2 thresholds; 32 named workloads; exact allocation/byte integrity gates |
+| Native interaction | Real Linux x86_64/ARM64 and macOS ARM64 PTYs, lifecycle/resource stress, restoration and failure paths |
+| Adversarial models | Five fuzz targets, 100,000 generated semantic sequences and retained corpus replay |
+| Memory and FFI | Linux Valgrind, macOS leaks, ABI layout/symbol checks, static/shared C11 and C++17 consumers |
+| Portable core | Windows editor, engine and analysis models; no terminal-runtime inference |
+| Public surface | Compiled README snippets, runnable examples, deterministic real-PTY PNG/GIF and Q2 regression checks |
 
-Run the fast local public-surface checks with:
-
-```sh
-cargo fmt --check
-cargo check --workspace --all-targets
-python3 tools/check_docs.py
-python3 -B tools/test_check_docs.py
-python3 tools/docs/check_readme.py
-python3 tools/readme/render_vectors.py --check
-python3 tools/readme/build_manifest.py --check
-```
-
-The real-PTY asset check additionally needs the pinned optional Python packages;
-see [public README assets](docs/development.md#public-readme-assets). Full native,
-C and hardening entry points are in the [development guide](docs/development.md).
+See the [release-hardening dossier](docs/engineering/release-hardening.md) for
+campaign identities, budgets and findings, and the [development guide](docs/development.md)
+for exact local, native and asset-check commands.
 
 ## Scope and non-goals
 
