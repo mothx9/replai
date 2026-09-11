@@ -1,9 +1,7 @@
 <p align="center">
-  <img src="assets/replai-logo-dark.svg#gh-dark-mode-only" alt="REPLAI logo" width="240">
-  <img src="assets/replai-logo-light.svg#gh-light-mode-only" alt="REPLAI logo" width="240">
+  <img src="assets/replai-lockup-dark.svg#gh-dark-mode-only" alt="REPLAI" width="280">
+  <img src="assets/replai-lockup-light.svg#gh-light-mode-only" alt="REPLAI" width="280">
 </p>
-
-<h1 align="center">REPLAI</h1>
 
 <p align="center">
   <strong>The application owns the language.<br>REPLAI owns the line.</strong>
