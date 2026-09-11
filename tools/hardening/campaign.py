@@ -31,6 +31,7 @@ def seeds(directory):
     values = [b"", b"\x1b[200~a\r\n\t\x1b[201~", b"\x1b[", b"\x1b]52;host\x07",
               "e\u0301界👩‍💻🇮🇹\n\t".encode(), bytes(range(256)) * 2]
     values.extend(bytes([255, choice, 0, 0]) for choice in range(7))
+    values.extend(p.read_bytes() for p in sorted((ROOT / 'tools/hardening/regressions').glob('*/*')) if p.is_file())
     for seed in range(1, 17):
         state, data = seed, bytearray()
         for _ in range(512):

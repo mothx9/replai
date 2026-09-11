@@ -4,6 +4,14 @@ This dossier records bounded qualification of the [selected v0.1 surface](../rel
 [ROADMAP](../../ROADMAP.md) alone owns maturity and the next selected boundary.
 No release, package upload, new interaction feature or consumer repin is implied.
 
+The first final-corpus replay exposed H011: the C fixture consumed PTY output
+only after synchronous calls returned. A Darwin queue could fill during one
+completion redraw, leaving the fixture blocked in `write`. This is terminal-peer
+backpressure, not a promise that synchronous output is nonblocking. A dedicated
+fixture reader now drains the PTY concurrently; it owns no library state or writer.
+The C budget and applicable replay/native-memory gates are being repeated.
+The previous C budget below qualifies the earlier harness, not this repair.
+
 ## Source and evidence identities
 
 - Wave baseline: `bfe9d1cef9303371e123d44d07c5d295908968c2`, tree
@@ -106,6 +114,7 @@ accounting or evidence retention. They do not expand the selected v0.1 contract.
 | H008 | Q2 / first ARM control receipt | A later Cargo build replaced the unpreserved control executable; its hash no longer matched the registration | Harness defect; freeze executables inside each evidence directory and refuse dirty-source qualification | Final control/candidate executables retained with verified hashes; closed |
 | H009 | Q2 / composed 1000-byte submission | Byte accounting retained only the final close effects, omitting the preceding draft flush on SubmissionRequested | Harness defect; retain and count both mutation batches outside timing | Both effect batches counted: 1,042 burst bytes; fresh preregistration/comparison pass; closed |
 | H010 | native instrumentation timeout | Partial stdout was discarded by subprocess timeout, obscuring the macOS leak-phase stall; descendant instrumentation could survive controller timeout | Harness defect; stream receipts to files, sample timed-out Darwin processes and kill the isolated process group | Partial-output regression and complete native leak replay pass; original instrumentation timeout retained as failed measurement |
+| H011 | C corpus input `cb64c81e4cd085cd552d64d670f422871963fa8b8e89e8dfaa6de0ac19207390` | Darwin stack sample stops in synchronous completion write while the fixture waits to drain output | Harness defect; concurrent bounded terminal-peer reader, joined and released after each case | [Retained reproducer](../../tools/hardening/regressions/cabi/synchronous-output-peer); minimization and full C budget/native replay pending |
 
 The original macOS instrumentation stall lost partial stdout before H010.
 Its runtime root cause cannot be reconstructed from that deficient receipt.

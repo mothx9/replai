@@ -7,9 +7,60 @@ use std::{mem::size_of, os::fd::AsRawFd, ptr};
 #[path = "../../tests/support/posix_pty.rs"]
 mod pty;
 
+// A PTY's terminal-emulator side must consume output while synchronous library
+// writes run. Draining only after a call can deadlock against Darwin's smaller
+// queue. This thread is the test terminal, never a REPLAI scheduler or writer.
+struct TerminalPeer {
+    stop: std::os::unix::net::UnixStream,
+    worker: Option<std::thread::JoinHandle<usize>>,
+}
+
+impl TerminalPeer {
+    fn start(master: &std::os::fd::OwnedFd) -> Self {
+        let master = master.try_clone().unwrap();
+        let (stop, stopped) = std::os::unix::net::UnixStream::pair().unwrap();
+        let worker = std::thread::spawn(move || {
+            let mut bytes = [0; 32768];
+            let mut total: usize = 0;
+            loop {
+                let mut fds = [
+                    rustix::event::PollFd::new(&master, rustix::event::PollFlags::IN),
+                    rustix::event::PollFd::new(&stopped, rustix::event::PollFlags::IN),
+                ];
+                rustix::event::poll(&mut fds, None).unwrap();
+                while let Ok(n) = rustix::io::read(&master, &mut bytes) {
+                    if n == 0 {
+                        break;
+                    }
+                    total = total.saturating_add(n);
+                }
+                if !fds[1].revents().is_empty() {
+                    return total;
+                }
+            }
+        });
+        Self {
+            stop,
+            worker: Some(worker),
+        }
+    }
+}
+
+impl Drop for TerminalPeer {
+    fn drop(&mut self) {
+        use std::io::Write;
+        let _ = self.stop.write_all(b"x");
+        let result = self.worker.take().unwrap().join();
+        if !std::thread::panicking() {
+            assert!(result.unwrap() <= 1024 * 1024, "bounded C case output");
+        }
+    }
+}
+
 pub fn cabi_case(data: &[u8]) {
     let (master, slave) = pty::pair();
     rustix::fs::fcntl_setfl(&master, rustix::fs::OFlags::NONBLOCK).unwrap();
+    let _terminal_peer = TerminalPeer::start(&master);
     rustix::termios::tcsetwinsize(
         &slave,
         rustix::termios::Winsize {
@@ -30,7 +81,6 @@ pub fn cabi_case(data: &[u8]) {
         reserved: [0; 2],
     };
     let mut output = [0xa5_u8; 4098];
-    let mut drain = [0_u8; 32768];
     // SAFETY: each record lives for the call, spans are within their allocations,
     // outputs never alias inputs/handle, and destruction nulls the sole handle.
     unsafe {
@@ -187,7 +237,6 @@ pub fn cabi_case(data: &[u8]) {
             let s = std::str::from_utf8(&output[1..1 + required]).unwrap();
             assert!(s.is_char_boundary(cursor));
             assert!(required <= 4096);
-            while rustix::io::read(&master, &mut drain).is_ok_and(|n| n > 0) {}
         }
         assert_eq!(replai_close(h), REPLAI_OK);
         assert_eq!(replai_close(h), REPLAI_OK);

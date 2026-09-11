@@ -18,6 +18,8 @@ replay = str(ROOT / ("tools/hardening/target/release/replay"+suffix))
 run(replay, "generated", "1000", "1")
 run(replay, "faults", "3")
 run(replay, "geometry", "tools/hardening/regressions/geometry")
+if platform.system() != "Windows":
+    run(replay, "cabi", "tools/hardening/regressions/cabi")
 with tempfile.TemporaryDirectory(prefix="replai-hardening-smoke-") as directory:
     seeds(Path(directory))
     for target in TARGETS:
