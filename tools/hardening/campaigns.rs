@@ -164,6 +164,9 @@ pub fn results_case(data: &[u8]) {
                     }
                 } else {
                     assert!(!stale);
+                    // Malformed current results owe the same atomic preservation
+                    // as stale deliveries, including existing presentation.
+                    refusal = true;
                 }
             }
             9 => {
@@ -185,6 +188,9 @@ pub fn results_case(data: &[u8]) {
                     }
                 } else {
                     assert!(!stale);
+                    // Malformed current results owe the same atomic preservation
+                    // as stale deliveries, including existing presentation.
+                    refusal = true;
                 }
             }
             10 => {
@@ -222,6 +228,9 @@ pub fn results_case(data: &[u8]) {
                     }
                 } else {
                     assert!(!stale);
+                    // Malformed current results owe the same atomic preservation
+                    // as stale deliveries, including existing presentation.
+                    refusal = true;
                 }
             }
             14 => {
