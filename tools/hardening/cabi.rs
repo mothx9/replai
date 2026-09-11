@@ -43,6 +43,48 @@ pub fn cabi_case(data: &[u8]) {
         assert!(h.is_null());
         config.abi_version = 1;
         assert_eq!(replai_create(&config, &mut h), REPLAI_OK);
+        // Exercise the exact admitted boundary using live buffers, then start
+        // arbitrary call sequences from the ordinary empty draft.
+        let capacity_input = [b'x'; 4097];
+        assert_eq!(
+            replai_set_draft(h, capacity_input.as_ptr(), 4096),
+            REPLAI_OK
+        );
+        assert_eq!(
+            replai_set_draft(h, capacity_input.as_ptr(), 4097),
+            REPLAI_CAPACITY
+        );
+        let (mut required, mut cursor) = (0, 0);
+        assert_eq!(
+            replai_draft_copy(
+                h,
+                output.as_mut_ptr().add(1),
+                4095,
+                &mut required,
+                &mut cursor
+            ),
+            REPLAI_BUFFER_TOO_SMALL
+        );
+        assert_eq!(required, 4096);
+        assert!(
+            output.iter().all(|b| *b == 0xa5),
+            "short copy must not write partially"
+        );
+        assert_eq!(
+            replai_draft_copy(
+                h,
+                output.as_mut_ptr().add(1),
+                4096,
+                &mut required,
+                &mut cursor
+            ),
+            REPLAI_OK
+        );
+        assert_eq!((required, cursor), (4096, 4096));
+        assert_eq!(&output[1..4097], &capacity_input[..4096]);
+        assert_eq!(output[0], 0xa5);
+        assert_eq!(output[4097], 0xa5);
+        assert_eq!(replai_clear(h), REPLAI_OK);
         for (i, c) in data.chunks(4).take(64).enumerate() {
             let byte = c[0];
             let payload = &data[i.min(data.len())..data.len().min(i + 256)];
