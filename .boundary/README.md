@@ -4,13 +4,25 @@ REPLAI owns these producer declarations. They describe generic capabilities,
 surfaces, qualification and changes; they assign no consumer paths, commands or
 migration work. Consumer profiles must be authored by their own repositories.
 
-- [Current producer snapshot](producer.json), generation 11: documentation/example
-  source `fbe80ffc10b518186d7edac55fafda9f3bd226dc`, tree
-  `08bb7c903f9ec86436b495d09b7ec29f10212806`.
+- [Current producer snapshot](producer.json), generation 12: qualified hardening
+  source `006e65797e8dc9fa1d6ee0d90949b56e47cb2ee5`, tree
+  `561ef9c36021febba689adb93ced6cefbb4848c3`.
+  [Full CI](https://github.com/mothx9/replai/actions/runs/34607716592), the
+  [three-platform native campaign](https://github.com/mothx9/replai/actions/runs/34606480203)
+  and [cross-platform corpus replay](https://github.com/mothx9/replai/actions/runs/34607290912)
+  pass. Runtime source, public Rust/C behavior, dependencies and all 27 capability
+  definitions are unchanged from the predecessor.
+- [Release-hardening delta](deltas/release-hardening.json) records compatible
+  `QUALIFICATION_CHANGED` entries for the portable core, native Linux/macOS and
+  C ABI 1. It binds five CPU-accounted fuzz campaigns, generated semantic models,
+  native lifecycle/failure/memory stress and preregistered regression evidence.
+  Windows remains portable-only; no feature, compatibility change, migration or
+  consumer repin is added.
+- [Previous README-proof snapshot](checkpoints/fbe80ffc10b518186d7edac55fafda9f3bd226dc.json),
+  generation 11: documentation/example source `fbe80ffc10b518186d7edac55fafda9f3bd226dc`,
+  tree `08bb7c903f9ec86436b495d09b7ec29f10212806`.
   [12/12 CI jobs](https://github.com/mothx9/replai/actions/runs/34512238354) passed,
-  including the new README snippet and real-PTY capture checks. Runtime source,
-  public Rust/C behavior, dependencies and all capability definitions are identical
-  to the predecessor; this snapshot refreshes qualification inputs only.
+  including README snippet and real-PTY capture checks.
 - [README-proof delta](deltas/indentation-readme-proof.json) records
   `QUALIFICATION_CHANGED` for the session reference host. The optional
   [capture method](../docs/development.md#readme-terminal-preview) verifies
@@ -109,7 +121,7 @@ behavior, ABI and documentation inputs. Its external validation command is:
 
 ```sh
 boundary validate .boundary/producer.json --repo . \
-  --previous .boundary/checkpoints/da16302c33cdce5ef40978e02e9d8dff045c93f9.json
+  --previous .boundary/checkpoints/fbe80ffc10b518186d7edac55fafda9f3bd226dc.json
 ```
 
 Run from a clean REPLAI checkout with BOUNDARY installed separately. Validation
