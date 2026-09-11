@@ -70,6 +70,7 @@ receipt. No macOS/Windows replay or native stress is implied by this smoke.
 | H006 | native / macOS read and write hangup | Harness required Linux-style cleanup failure even when Darwin restores termios successfully | Harness defect; compare actual restored termios when available and require explicit failure when the OS refuses | Full native and leak replay pending |
 | H007 | Q2 / append allocation calibration | The initial 1 KiB insertion filled capacity; the next append legitimately grew storage | Harness defect; separate warmed append from append-grow, with preparation outside timing | Initial registration refused before any thresholds were written; fresh controls required |
 | H008 | Q2 / first ARM control receipt | A later Cargo build replaced the unpreserved control executable; its hash no longer matched the registration | Harness defect; freeze executables inside each evidence directory and refuse dirty-source qualification | No candidate comparison occurred; unusable calibration retained, new registration required |
+| H009 | Q2 / composed 1000-byte submission | Byte accounting retained only the final close effects, omitting the preceding draft flush on SubmissionRequested | Harness defect; retain and count both mutation batches outside timing | New controls and registration required; prior passing receipt does not qualify the corrected byte metric |
 | H005 | native / driven under Valgrind | Harness assumed a ready notification consumes the entire write despite the bounded work budget | Harness defect; drain WaitInterest::Ready before evaluating the semantic result | Native memory campaign replay required; no product scheduling change |
 
 100,000 generated seeds 1–100,000 passed on Linux ARM64, with 128 operations per
@@ -163,6 +164,10 @@ chunks never count toward its fresh budgets.
 
 
 ## Q2 registered reference and deterministic CI gates
+
+The first recorded reference below is superseded for the composed burst byte
+metric by H009. Its original passing comparisons remain historical observations;
+the corrected reference must pass a fresh preregistered comparison before promotion.
 
 The corrected Linux ARM64 run on Spark (`spark-7c3d`, kernel
 6.17.0-1021-nvidia, Rust 1.98.1) pinned measurements to CPU 19 under the

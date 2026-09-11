@@ -16,6 +16,7 @@ struct State {
     completion: Option<CompletionSet>,
     validation: Option<ValidationResult>,
     analysis: Option<AnalysisPresentation>,
+    intermediate: Option<Vec<crate::render::Mutation>>,
 }
 fn prepare(operation: &str, bytes: usize, lines: usize) -> State {
     let mut e = Engine::new(Editor::new(2 * 1024 * 1024, 8));
@@ -46,6 +47,7 @@ fn prepare(operation: &str, bytes: usize, lines: usize) -> State {
     let revision = e.editor.revision();
     State {
         e,
+        intermediate: None,
         text: Some(if operation == "burst" {
             "a".repeat(1000)
         } else {
@@ -119,7 +121,9 @@ fn operation(s: &mut State, name: &str) -> Effects {
                 e.apply_deferred(Input::Text(char::from(b).to_string()))
                     .unwrap();
             }
-            e.apply(Input::Request(Request::Submit)).unwrap();
+            let request = e.apply(Input::Request(Request::Submit)).unwrap();
+            s.intermediate = Some(request.mutations);
+            drop(request.event);
             e.apply_validation(
                 ValidationResult::new(e.editor.revision(), ValidationDisposition::Complete)
                     .unwrap(),
@@ -215,7 +219,16 @@ pub fn benchmark(samples: usize, batches: usize) {
                 }
                 let encoded =
                     crate::protocol::encode(&effects.mutations, Theme::new(false, false, None));
-                vt_bytes.push(encoded.len());
+                let intermediate_bytes = s.intermediate.as_ref().map_or(0, |mutations| {
+                    crate::protocol::encode(mutations, Theme::new(false, false, None)).len()
+                });
+                if name == "burst" {
+                    assert!(
+                        intermediate_bytes >= 1000,
+                        "include the draft flush before validated submission"
+                    );
+                }
+                vt_bytes.push(intermediate_bytes + encoded.len());
                 elapsed.push(ns);
                 memory.push(allocated);
             }
