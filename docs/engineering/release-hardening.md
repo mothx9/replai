@@ -9,8 +9,8 @@ only after synchronous calls returned. A Darwin queue could fill during one
 completion redraw, leaving the fixture blocked in `write`. This is terminal-peer
 backpressure, not a promise that synchronous output is nonblocking. A dedicated
 fixture reader now drains the PTY concurrently; it owns no library state or writer.
-The C budget and applicable replay/native-memory gates are being repeated.
-The previous C budget below qualifies the earlier harness, not this repair.
+The retained reproducer, a fresh 3,668-second C campaign, full native-memory
+matrix and cross-platform corpus replay all pass after that harness repair.
 
 ## Source and evidence identities
 
@@ -23,11 +23,13 @@ The previous C budget below qualifies the earlier harness, not this repair.
   `24b121dde64dc4bc9f9e7cbd9ac188ec074cc1a4`. Editor's unchanged independent oracle
   retains its completed campaign at `b812afac2706ea11321239e15788cee8ae5c4fdf`,
   tree `65a06ff46aee02ca16a2d00928c74598fe9e5f4f`.
+- Final C terminal-peer harness: `4e9f8c1378de36a435007d7f46f94f1ecc6157bc`,
+  tree `16f00f092a0d7fc63b411d157bf127692d4d32b0`.
 - Final Q2 measurement harness: `6975c0979a1fd13f619f2d079b7494945ca18c5e`, tree
   `71bb4281b44481aecc90196af6ec3202a975f91e`.
-- Final native campaign: `c68fc3a69763587440b212381c4e27cd8373d443`;
-  [three native jobs](https://github.com/mothx9/replai/actions/runs/34598637866)
-  and [full CI](https://github.com/mothx9/replai/actions/runs/34598638274) pass.
+- Final native campaign: `4e9f8c1378de36a435007d7f46f94f1ecc6157bc`;
+  [three native jobs](https://github.com/mothx9/replai/actions/runs/34606480203)
+  and [full CI](https://github.com/mothx9/replai/actions/runs/34606453021) pass.
   Later evidence/documentation carriers do not denote different runtime implementations.
 
 The isolated [hardening workspace](../../tools/hardening/Cargo.toml) compiles
@@ -54,7 +56,7 @@ identity, not the release MSRV.
 
 | Target | CPU seconds | Executions including corpus initialization | Final inputs | Corpus SHA-256 |
 | --- | --- | --- | --- | --- |
-| cabi | 3615.656491 | 2,836,064 | 5,921 | `63815f3f6ad72b9f8b5212c0fdf270296d1692105c4aa53836df043fdc39c06c` |
+| cabi | 3668.286148 | 2,755,786 | 7,442 | `fb2874dfd96b2cb3684ab61b2aca919ea862cfd6b5c8664fded07ad05c8e65b2` |
 | editor | 3601.242122 | 4,790,559 | 7,296 | `48ce910b67ec5cb82fe22ba8a8383b205133ac6b3442175a7b07883703bc322e` |
 | geometry | 3616.111162 | 1,934,034 | 6,769 | `aa9893f788d7f2eff93c731b7b953d5e54c153dd65ebfde06d9029162491a7b2` |
 | protocol | 3685.213694 | 196,657 | 1,506 | `c090bd35b6df24be850ce09ed74288690b432bab08091ebce4cb5c303a1213b4` |
@@ -67,8 +69,9 @@ Each child is measured with `wait4`; wall time is never substituted for CPU time
 Three workers per expanded target share its corpus; their CPU times are summed.
 The scheduler pause used for Q2 does not count as CPU execution. Chunks use
 30-second wall bounds, 10-second per-input timeout, 2-GiB RSS limits and 4-KiB
-inputs (8 KiB for geometry). The final initial corpus has 29 deterministic seeds;
-the unchanged editor's earlier seed identity is retained independently.
+inputs (8 KiB for geometry). The base initial corpus has 29 deterministic seeds;
+the final C campaign adds both retained minimized regressions. The unchanged
+editor's earlier seed identity is retained independently.
 
 Incomplete development campaigns were superseded after oracle expansion, not
 combined into final budgets. Geometry's original H003 stop at 27.581449 CPU
@@ -79,7 +82,8 @@ This is not security certification or proof against arbitrary future inputs.
 
 Final corpus replay uses the same immutable archive on Linux x86_64/ARM64,
 macOS ARM64 and Windows x86_64. Windows excludes native C and claims portable
-semantics only. Final replay receipts are recorded below when the corresponding workflow completes.
+semantics only. The final replay workflow must pass all four jobs against this
+post-H011 archive before Q0 promotion.
 
 ## Generated semantic sequences
 
@@ -114,7 +118,7 @@ accounting or evidence retention. They do not expand the selected v0.1 contract.
 | H008 | Q2 / first ARM control receipt | A later Cargo build replaced the unpreserved control executable; its hash no longer matched the registration | Harness defect; freeze executables inside each evidence directory and refuse dirty-source qualification | Final control/candidate executables retained with verified hashes; closed |
 | H009 | Q2 / composed 1000-byte submission | Byte accounting retained only the final close effects, omitting the preceding draft flush on SubmissionRequested | Harness defect; retain and count both mutation batches outside timing | Both effect batches counted: 1,042 burst bytes; fresh preregistration/comparison pass; closed |
 | H010 | native instrumentation timeout | Partial stdout was discarded by subprocess timeout, obscuring the macOS leak-phase stall; descendant instrumentation could survive controller timeout | Harness defect; stream receipts to files, sample timed-out Darwin processes and kill the isolated process group | Partial-output regression and complete native leak replay pass; original instrumentation timeout retained as failed measurement |
-| H011 | C corpus input `cb64c81e4cd085cd552d64d670f422871963fa8b8e89e8dfaa6de0ac19207390` | Darwin stack sample stops in synchronous completion write while the fixture waits to drain output | Harness defect; concurrent bounded terminal-peer reader, joined and released after each case | [Retained reproducer](../../tools/hardening/regressions/cabi/synchronous-output-peer); minimization and full C budget/native replay pending |
+| H011 | C corpus input `cb64c81e4cd085cd552d64d670f422871963fa8b8e89e8dfaa6de0ac19207390` | Darwin stack sample stops in synchronous completion write while the fixture waits to drain output | Harness defect; concurrent bounded terminal-peer reader, joined and released after each case | [Retained reproducer](../../tools/hardening/regressions/cabi/synchronous-output-peer), fresh C budget, native memory and macOS replay pass; closed |
 
 The original macOS instrumentation stall lost partial stdout before H010.
 Its runtime root cause cannot be reconstructed from that deficient receipt.
