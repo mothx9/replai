@@ -149,6 +149,7 @@ jobs:
         run: |
           python tools/hardening/test_hardening.py
           python tools/hardening/smoke.py
+          python tools/hardening/deterministic.py
       - name: Native library lint and documentation
         run: |
           cargo clippy --locked -p replai --lib -- -D warnings

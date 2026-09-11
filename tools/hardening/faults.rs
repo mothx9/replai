@@ -122,6 +122,24 @@ pub fn fault_campaign(repeats: usize) {
         assert_eq!(t.interest(), WaitInterest::Input { deadline: None });
     }
     assert_eq!(d.0.borrow().calls, before);
+    // Serialized output is exactly one write transaction. A stale result is none.
+    let revision = e.editor.revision();
+    let writes = d.0.borrow().calls[2];
+    let fx = e.external_output(Role::Success, "host notice").unwrap();
+    t.apply(&mut e, fx).unwrap();
+    assert_eq!(d.0.borrow().calls[2], writes + 1);
+    assert_eq!(e.editor.revision(), revision);
+    e.editor.insert("x").unwrap();
+    let (outcome, fx) = e
+        .present_analysis(
+            AnalysisPresentation::new(revision, vec![], Some(Hint::new("old", Role::Dim).unwrap()))
+                .unwrap(),
+        )
+        .unwrap();
+    assert_eq!(outcome, AnalysisOutcome::Stale);
+    let calls = d.0.borrow().calls;
+    t.apply(&mut e, fx).unwrap();
+    assert_eq!(d.0.borrow().calls, calls);
     let revision = e.editor.revision();
     let fx = e.apply(Input::Resize(20, 4)).unwrap();
     t.apply(&mut e, fx).unwrap();

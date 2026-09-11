@@ -155,3 +155,38 @@ spans. These three targets require new full budgets. Earlier completed campaigns
 remain observations of their recorded narrower harness, not evidence for added
 branches. The editor and C targets retain their original independently recorded
 60-CPU-minute budgets. Production sources remain unchanged.
+
+
+## Q2 registered reference and deterministic CI gates
+
+The corrected Linux ARM64 run on Spark (`spark-7c3d`, kernel
+6.17.0-1021-nvidia, Rust 1.98.1) pinned measurements to CPU 19 under the
+performance governor. Five control batches of 31 repetitions registered all
+32 workloads before two alternating control/candidate comparisons. Both
+comparisons observed zero median/p95 threshold exceedances; allocation and
+encoded-byte checks passed. These compare an unchanged runtime/binary: they
+establish a regression reference and exercise enforcement, not a speedup claim.
+The timer floor, per-workload MADs and allowances are retained verbatim in the
+[registration](../../tools/hardening/evidence/q2-linux-aarch64.json); exact raw
+samples and comparison receipts are in the
+[compressed receipt](../../tools/hardening/evidence/q2-linux-aarch64-samples.json.gz).
+
+```sh
+python3 tools/hardening/deterministic.py
+```
+
+Normal portable CI executes three repetitions of each allocation/encoded-byte
+oracle, with no latency assertion on hosted runners. Warmed append and cursor
+movement require zero allocations; cold append growth is a separate measured
+operation. The virtual fault gate additionally freezes zero-I/O idle interest,
+one serialized output write transaction, and zero transport calls for stale
+analysis delivery. These are internal regression fixtures, not a promise of
+identical ANSI encodings across future versions.
+
+Final corpus transport uses `tools/hardening/corpus.py pack` with ordered campaign
+directories. Only completed budgets are admitted; each input and aggregate corpus
+digest is revalidated before replay. A bounded immutable compressed receipt retains
+source/toolchain/binary identities, CPU accounting, executions and exact inputs.
+The manual final-corpus workflow runs the same archive on Linux x86_64/ARM64,
+macOS ARM64 and Windows x86_64; Windows excludes native C. Neither an implemented
+replay workflow nor a seed smoke is a completed final-corpus replay.
