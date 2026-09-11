@@ -5,6 +5,7 @@ import base64
 import gzip
 import hashlib
 import json
+import os
 import platform
 from pathlib import Path
 import re
@@ -46,6 +47,7 @@ def main():
     replay = sub.add_parser('replay')
     replay.add_argument('--archive', type=Path, required=True)
     replay.add_argument('--work', type=Path, required=True)
+    replay.add_argument('--target-timeout', type=int, default=1800)
     a = p.parse_args()
     if a.mode == 'pack':
         targets = {}
@@ -70,13 +72,16 @@ def main():
         read_archive(a.output)
         print(json.dumps({'archive':str(a.output), 'sha256':hashlib.sha256(a.output.read_bytes()).hexdigest(), 'bytes':a.output.stat().st_size}))
     else:
+        assert 1 <= a.target_timeout <= 1800
         archive = read_archive(a.archive)
         a.work.mkdir(parents=True, exist_ok=False)
         subprocess.run(['cargo','build','--locked','--release','--manifest-path','tools/hardening/Cargo.toml','--bin','replay'],cwd=ROOT,check=True)
         binary = ROOT/'tools/hardening/target/release'/('replay.exe' if platform.system()=='Windows' else 'replay')
         receipt = {'head':campaign.command('git','rev-parse','HEAD'), 'tree':campaign.command('git','rev-parse','HEAD^{tree}'),
                    'environment':platform.uname()._asdict(), 'rustc':campaign.command('rustc','-vV'),
+                   'terminal_environment':{key:os.environ.get(key) for key in ('TERM','NO_COLOR')},
                    'archive_sha256':hashlib.sha256(a.archive.read_bytes()).hexdigest(), 'binary_sha256':hashlib.sha256(binary.read_bytes()).hexdigest(), 'results':[]}
+        (a.work/'summary.json').write_text(json.dumps(receipt,indent=2)+'\n')
         for name, record in archive['targets'].items():
             if name == 'cabi' and platform.system()=='Windows':
                 receipt['results'].append({'target':name,'status':'NOT_APPLICABLE','reason':'no Windows terminal backend'})
@@ -86,12 +91,19 @@ def main():
             for index, value in enumerate(record['inputs']):
                 (directory/str(index)).write_bytes(base64.b64decode(value))
             started = time.time()
-            with (a.work/(name+'.stdout')).open('w') as out, (a.work/(name+'.stderr')).open('w') as err:
-                result = subprocess.run([str(binary),name,str(directory.resolve())],stdout=out,stderr=err,timeout=1800)
-            receipt['results'].append({'target':name,'status':'PASS' if result.returncode==0 else 'FAIL',
+            command = [str(binary),name,str(directory.resolve())]
+            if platform.system() == 'Windows':
+                with (a.work/(name+'.stdout')).open('w') as out, (a.work/(name+'.stderr')).open('w') as err:
+                    result = subprocess.run(command,stdout=out,stderr=err,timeout=a.target_timeout)
+                returncode = result.returncode
+            else:
+                from native import native_phase
+                returncode, _ = native_phase(command, a.work, name, a.target_timeout, os.environ.copy())
+            receipt['results'].append({'target':name,'status':'PASS' if returncode==0 else 'FAIL',
                                        'corpus':record['summary']['final_corpus'],'start_unix':started,'end_unix':time.time()})
             (a.work/'summary.json').write_text(json.dumps(receipt,indent=2)+'\n')
-            result.check_returncode()
+            if returncode:
+                raise subprocess.CalledProcessError(returncode, command)
             print(name, 'PASS', len(record['inputs']), flush=True)
 
 

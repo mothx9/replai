@@ -6,6 +6,10 @@ on:
         description: Committed immutable corpus archive
         default: tools/hardening/evidence/final-corpus.json.gz
         required: true
+      target_timeout:
+        description: Per-target watchdog seconds (1-1800); timeout always fails
+        default: '1800'
+        required: true
 permissions:
   contents: read
 jobs:
@@ -27,7 +31,8 @@ jobs:
         shell: bash
         env:
           REPLAI_ARCHIVE: ${{ inputs.archive }}
-        run: python3 tools/hardening/corpus.py replay --archive "$REPLAI_ARCHIVE" --work "$RUNNER_TEMP/replai-corpus-replay"
+          TARGET_TIMEOUT: ${{ inputs.target_timeout }}
+        run: python3 tools/hardening/corpus.py replay --archive "$REPLAI_ARCHIVE" --target-timeout "$TARGET_TIMEOUT" --work "$RUNNER_TEMP/replai-corpus-replay"
       - name: Preserve replay receipts
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

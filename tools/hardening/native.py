@@ -19,12 +19,12 @@ import time
 ROOT = Path(__file__).resolve().parents[2]
 
 
-def native_phase(command, work, tier, timeout):
+def native_phase(command, work, tier, timeout, environment=None):
     """Retain partial receipts and terminate the whole instrumentation group."""
     with (work / f"{tier}.stdout").open("w") as output, (work / f"{tier}.stderr").open("w") as errors:
         child = subprocess.Popen(command, cwd=ROOT, stdout=output, stderr=errors,
                                  start_new_session=True,
-                                 env={**os.environ, "TERM": "xterm-256color"})
+                                 env=environment if environment is not None else {**os.environ, "TERM": "xterm-256color"})
         try:
             returncode = child.wait(timeout=timeout)
         except subprocess.TimeoutExpired:
