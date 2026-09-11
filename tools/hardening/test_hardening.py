@@ -7,11 +7,24 @@ import json
 import corpus
 from pathlib import Path
 import unittest
+import sys
+import subprocess
 import campaign
 import regression
 
 
 class HardeningGuard(unittest.TestCase):
+    @unittest.skipUnless(sys.platform == "linux", "native Linux watchdog regression")
+    def test_native_timeout_retains_partial_receipt(self):
+        import native
+        with tempfile.TemporaryDirectory() as directory:
+            work = Path(directory)
+            command = [sys.executable, "-u", "-c", "import time; print('partial'); time.sleep(60)"]
+            with self.assertRaises(subprocess.TimeoutExpired):
+                native.native_phase(command, work, "timeout", 1)
+            self.assertEqual((work / "timeout.stdout").read_text(), "partial\n")
+            self.assertTrue((work / "timeout.timeout.txt").exists())
+
     def test_five_distinct_targets(self):
         self.assertEqual(set(campaign.TARGETS), {"protocol", "editor", "results", "geometry", "cabi"})
 

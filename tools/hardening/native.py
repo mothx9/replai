@@ -10,12 +10,43 @@ from pathlib import Path
 import platform
 import pty
 import select
+import signal
 import struct
 import subprocess
 import termios
 import time
 
 ROOT = Path(__file__).resolve().parents[2]
+
+
+def native_phase(command, work, tier, timeout):
+    """Retain partial receipts and terminate the whole instrumentation group."""
+    with (work / f"{tier}.stdout").open("w") as output, (work / f"{tier}.stderr").open("w") as errors:
+        child = subprocess.Popen(command, cwd=ROOT, stdout=output, stderr=errors,
+                                 start_new_session=True,
+                                 env={**os.environ, "TERM": "xterm-256color"})
+        try:
+            returncode = child.wait(timeout=timeout)
+        except subprocess.TimeoutExpired:
+            with (work / f"{tier}.timeout.txt").open("w") as report:
+                subprocess.run(["ps", "-axo", "pid,ppid,pgid,state,etime,command"],
+                               stdout=report, stderr=report, timeout=10)
+                if platform.system() == "Darwin":
+                    # Sampling is diagnostic evidence, never a replacement for
+                    # completing the actual leak-qualified phase.
+                    processes = subprocess.check_output(["ps", "-axo", "pid=,pgid="], text=True)
+                    for line in processes.splitlines():
+                        pid, group = map(int, line.split())
+                        if group == child.pid:
+                            subprocess.run(["/usr/bin/sample", str(pid), "1", "-file",
+                                            str(work / f"{tier}.sample-{pid}.txt")],
+                                           stdout=report, stderr=report, timeout=15)
+            raise
+        finally:
+            if child.poll() is None:
+                os.killpg(child.pid, signal.SIGKILL)
+                child.wait()
+    return returncode, (work / f"{tier}.stdout").read_text()
 
 
 def blocking(binary, cycles, work, prefix):
@@ -83,9 +114,11 @@ def main():
     parser.add_argument("--events", type=int, default=10000)
     parser.add_argument("--failure-repeats", type=int, default=100)
     parser.add_argument("--memory", action="store_true")
+    parser.add_argument("--phase-timeout", type=int, default=1800)
     args = parser.parse_args()
     assert platform.system() in ("Linux", "Darwin")
     assert 1 <= args.cycles <= 10000 and 1 <= args.events <= 100000
+    assert 1 <= args.phase_timeout <= 1800
     args.work.mkdir(parents=True, exist_ok=False)
     subprocess.run(["cargo", "build", "--locked", "--release", "--manifest-path", "tools/hardening/Cargo.toml", "--bin", "native"], cwd=ROOT, check=True)
     binary = ROOT / "tools/hardening/target/release/native"
@@ -103,19 +136,17 @@ def main():
                "results": []}
     (args.work / "summary.json").write_text(json.dumps(summary, indent=2)+"\n")
     summary["results"].append(blocking(binary, args.cycles, args.work, prefix))
+    (args.work / "summary.json").write_text(json.dumps(summary, indent=2)+"\n")
     for tier, count in [("session", args.cycles), ("driven", args.cycles), ("cabi", args.cycles), ("mixed", args.events), ("failures", args.failure_repeats), ("exhaustion", args.failure_repeats)]:
-        with (args.work / f"{tier}.stderr").open("w") as errors:
-            # The bounded NOFILE child has its own gate; a memory tool's private
-            # descriptors must not be mistaken for product descriptors/limits.
-            instrument = [] if tier == "exhaustion" else prefix
-            result = subprocess.run([*instrument, str(binary), tier, str(count)], cwd=ROOT, text=True,
-                                    stdout=subprocess.PIPE, stderr=errors, timeout=1800,
-                                    env={**os.environ, "TERM": "xterm-256color"})
-        (args.work / f"{tier}.stdout").write_text(result.stdout)
-        assert result.returncode == 0, (tier, result.returncode)
+        # The bounded NOFILE child has its own gate; a memory tool's private
+        # descriptors must not be mistaken for product descriptors/limits.
+        instrument = [] if tier == "exhaustion" else prefix
+        returncode, output = native_phase([*instrument, str(binary), tier, str(count)],
+                                         args.work, tier, args.phase_timeout)
+        assert returncode == 0, (tier, returncode)
         if instrument and platform.system() == "Darwin":
-            assert "0 leaks for 0 total leaked bytes" in result.stdout+(args.work / f"{tier}.stderr").read_text()
-        rows = [json.loads(line) for line in result.stdout.splitlines() if line.startswith("{")]
+            assert "0 leaks for 0 total leaked bytes" in output+(args.work / f"{tier}.stderr").read_text()
+        rows = [json.loads(line) for line in output.splitlines() if line.startswith("{")]
         assert len(rows) == 1
         summary["results"].append(rows[0])
         (args.work / "summary.json").write_text(json.dumps(summary, indent=2)+"\n")

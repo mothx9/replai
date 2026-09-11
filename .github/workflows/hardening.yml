@@ -1,6 +1,11 @@
 name: Release hardening native campaign
 on:
   workflow_dispatch:
+    inputs:
+      phase_timeout:
+        description: Per-phase watchdog seconds (1-1800); timeout always fails
+        default: '1800'
+        required: true
 permissions:
   contents: read
 jobs:
@@ -35,7 +40,9 @@ jobs:
       - name: Counted native lifecycle, mixed events and resource failures
         run: python3 tools/hardening/native.py --work "$RUNNER_TEMP/replai-hardening-native"
       - name: Counted native paths under memory instrumentation
-        run: python3 tools/hardening/native.py --memory --work "$RUNNER_TEMP/replai-hardening-memory"
+        env:
+          PHASE_TIMEOUT: ${{ inputs.phase_timeout }}
+        run: python3 tools/hardening/native.py --memory --phase-timeout "$PHASE_TIMEOUT" --work "$RUNNER_TEMP/replai-hardening-memory"
       - name: Preserve campaign receipts
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
