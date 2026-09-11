@@ -14,6 +14,7 @@ struct Device {
     calls: [usize; 4],
     fail: Option<(usize, usize)>,
     restored: bool,
+    chunk: Option<usize>,
 }
 #[derive(Clone, Default)]
 struct Virtual(Rc<RefCell<Device>>);
@@ -36,7 +37,7 @@ impl Transport for Virtual {
         assert_eq!(timeout, Duration::ZERO);
         self.call(1)?;
         let mut d = self.0.borrow_mut();
-        let n = buffer.len().min(d.bytes.len());
+        let n = buffer.len().min(d.bytes.len()).min(d.chunk.unwrap_or(4096));
         for b in &mut buffer[..n] {
             *b = d.bytes.pop_front().unwrap();
         }
@@ -129,4 +130,71 @@ pub fn fault_campaign(repeats: usize) {
     println!(
         "{{\"virtual_failure_hits\":{exercised:?},\"repetitions\":{repeats},\"idle_queries\":100000}}"
     );
+}
+
+/// Real generic driver, arbitrary read fragmentation, no waits, and both paste policies.
+pub fn protocol_transport_case(data: &[u8]) {
+    for chunk in [1, 7, 4096] {
+        for bracketed_paste in [false, true] {
+            let d = Virtual::default();
+            d.0.borrow_mut().chunk = Some(chunk);
+            d.0.borrow_mut().bytes.extend(data);
+            let mut e = Engine::new(Editor::new(4096, 8));
+            let mut t = Terminal::start_config(
+                d.clone(),
+                &mut e,
+                Prompt::new("protocol").unwrap(),
+                Theme::new(false, false, None),
+                InteractionFeatures {
+                    styling: false,
+                    bracketed_paste,
+                },
+            )
+            .unwrap();
+            let mut finished = false;
+            for _ in 0..=data.len() + 1 {
+                if !t.active {
+                    finished = true;
+                    break;
+                }
+                let revision = e.editor.revision();
+                t.advance(&mut e, Wake::Resize).unwrap();
+                assert_eq!(revision, e.editor.revision());
+                if t.advance(&mut e, Wake::InputReady).is_err() {
+                    finished = true;
+                    break;
+                }
+                if d.0.borrow().bytes.is_empty() && !matches!(t.interest(), WaitInterest::Ready) {
+                    // The host can inspect a deadline without I/O. Don't sleep in a fuzzer.
+                    let calls = d.0.borrow().calls;
+                    let interest = t.interest();
+                    assert_eq!(calls, d.0.borrow().calls);
+                    if let WaitInterest::Input {
+                        deadline: Some(token),
+                    } = interest
+                    {
+                        // A token from another session can never be applied here.
+                        let stale = Deadline {
+                            session: 0,
+                            ..token
+                        };
+                        assert_eq!(t.advance(&mut e, Wake::Deadline(stale)).unwrap(), None);
+                        assert_eq!(calls, d.0.borrow().calls);
+                    }
+                    finished = true;
+                    break;
+                }
+            }
+            assert!(
+                finished,
+                "driver must consume bounded input or report a terminal failure"
+            );
+            assert!(e.editor.text().len() <= e.editor.capacity());
+            let fx = e.close();
+            t.apply(&mut e, fx).unwrap();
+            drop(t);
+            assert!(d.0.borrow().restored);
+            assert!(d.0.borrow().output.len() < 8 * 1024 * 1024);
+        }
+    }
 }

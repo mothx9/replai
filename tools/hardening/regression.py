@@ -7,6 +7,7 @@ import math
 import os
 from pathlib import Path
 import platform
+import shutil
 import statistics
 import subprocess
 import time
@@ -80,6 +81,14 @@ def main():
     if a.cpu is not None:
         os.sched_setaffinity(0, {a.cpu})
     a.work.mkdir(parents=True, exist_ok=False)
+    assert not subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT), "qualification requires committed source"
+    # Keep the exact measured executables; Cargo may replace its output paths.
+    for field in ("binary", "allocation_binary", "control_binary"):
+        source = getattr(a, field)
+        if source is not None:
+            destination = a.work / field
+            shutil.copy2(source, destination)
+            setattr(a, field, destination.resolve())
     metadata = identity(a.binary)
     if a.mode == "register":
         assert a.allocation_binary

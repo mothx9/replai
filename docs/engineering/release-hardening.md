@@ -67,6 +67,7 @@ receipt. No macOS/Windows replay or native stress is implied by this smoke.
 | H004 | native / PTY hangup | Harness assumed is_open became false before a failed restoration was explicitly closed | Harness defect; is_open documents outstanding cleanup ownership. Assert explicit cleanup failure, close/release and stable descriptors | Native disconnected read/write smoke passed |
 | H006 | native / macOS read and write hangup | Harness required Linux-style cleanup failure even when Darwin restores termios successfully | Harness defect; compare actual restored termios when available and require explicit failure when the OS refuses | Full native and leak replay pending |
 | H007 | Q2 / append allocation calibration | The initial 1 KiB insertion filled capacity; the next append legitimately grew storage | Harness defect; separate warmed append from append-grow, with preparation outside timing | Initial registration refused before any thresholds were written; fresh controls required |
+| H008 | Q2 / first ARM control receipt | A later Cargo build replaced the unpreserved control executable; its hash no longer matched the registration | Harness defect; freeze executables inside each evidence directory and refuse dirty-source qualification | No candidate comparison occurred; unusable calibration retained, new registration required |
 | H005 | native / driven under Valgrind | Harness assumed a ready notification consumes the entire write despite the bounded work budget | Harness defect; drain WaitInterest::Ready before evaluating the semantic result | Native memory campaign replay required; no product scheduling change |
 
 100,000 generated seeds 1–100,000 passed on Linux ARM64, with 128 operations per
@@ -144,3 +145,13 @@ identities. Threshold exceedances in both alternating runs block investigation;
 contemporaneous controls never raise the registered bound. Byte/allocation
 oracles are internal regression guards, not exact VT public compatibility.
 Hosted CI proves harness integrity, not controlled latency. Real observations, environment and thresholds must be attached before Q2 promotion.
+
+
+The final scope audit expanded three campaigns: protocol now also advances the
+actual generic Terminal with one-byte/seven-byte/4-KiB virtual reads and both
+paste admission policies; geometry includes every current Document block;
+host results include oversized aggregate/count/field payloads and overlapping
+spans. These three targets require new full budgets. Earlier completed campaigns
+remain observations of their recorded narrower harness, not evidence for added
+branches. The editor and C targets retain their original independently recorded
+60-CPU-minute budgets. Production sources remain unchanged.

@@ -38,6 +38,7 @@ fn opened() -> Engine {
 /// Decoder fragmentation equivalence, expiry, atomic paste and normalized action safety.
 pub fn protocol_case(data: &[u8]) {
     let data = &data[..data.len().min(4096)];
+    crate::faults::protocol_transport_case(data);
     for chunk in [1, 7, 4096] {
         let mut d = Decoder::new(LIMIT);
         let mut e = opened();
@@ -106,6 +107,9 @@ pub fn editor_case(data: &[u8]) {
 /// Revision-bound result/lifecycle composition. Snapshots are retained across edits.
 pub fn results_case(data: &[u8]) {
     let mut e = opened();
+    if data.first() == Some(&255) {
+        payload_limits(e.editor.revision(), data.get(1).copied().unwrap_or(0));
+    }
     let mut snapshots = vec![e.editor.analysis_snapshot()];
     for c in data.as_chunks::<4>().0.iter().take(128) {
         if !e.is_open() {
@@ -290,15 +294,85 @@ pub fn results_case(data: &[u8]) {
     }
 }
 
+// Bounded boundary-sized payloads selected separately from semantic operation count.
+fn payload_limits(revision: DraftRevision, choice: u8) {
+    match choice % 7 {
+        0 => {
+            let c = CompletionCandidate::new(0..0, "x", "x").unwrap();
+            assert!(CompletionSet::new(revision, vec![c; MAX_COMPLETION_CANDIDATES + 1]).is_err());
+        }
+        1 => {
+            let field = "x".repeat(MAX_COMPLETION_FIELD_BYTES);
+            let c = CompletionCandidate::new(0..0, &field, &field).unwrap();
+            assert!(
+                CompletionSet::new(
+                    revision,
+                    vec![c; MAX_COMPLETION_BYTES / (2 * field.len()) + 1]
+                )
+                .is_err()
+            );
+            assert!(CompletionCandidate::new(0..0, &(field + "x"), "x").is_err());
+        }
+        2 => {
+            let spans = (0..=MAX_ANALYSIS_SPANS)
+                .map(|i| AnalysisSpan::new(i..i + 1, Role::Accent).unwrap())
+                .collect();
+            assert!(AnalysisPresentation::new(revision, spans, None).is_err());
+        }
+        3 => {
+            let a = AnalysisSpan::new(0..2, Role::Accent).unwrap();
+            let b = AnalysisSpan::new(1..3, Role::Strong).unwrap();
+            assert!(AnalysisPresentation::new(revision, vec![a, b], None).is_err());
+            assert!(Hint::new(&"x".repeat(MAX_HINT_BYTES + 1), Role::Dim).is_err());
+        }
+        4 => {
+            let d = Diagnostic::new("x", None).unwrap();
+            assert!(
+                ValidationResult::new(
+                    revision,
+                    ValidationDisposition::Invalid(vec![d; MAX_DIAGNOSTICS + 1])
+                )
+                .is_err()
+            );
+        }
+        5 => {
+            let d = Diagnostic::new(&"x".repeat(MAX_DIAGNOSTIC_BYTES), None).unwrap();
+            assert!(
+                ValidationResult::new(
+                    revision,
+                    ValidationDisposition::Invalid(vec![
+                        d;
+                        MAX_VALIDATION_BYTES / MAX_DIAGNOSTIC_BYTES
+                            + 1
+                    ])
+                )
+                .is_err()
+            );
+            assert!(Diagnostic::new(&"x".repeat(MAX_DIAGNOSTIC_BYTES + 1), None).is_err());
+        }
+        _ => {
+            for text in ["\x1b[2J", "\x1b]52;x\x07", "\r", "\t", "\n", "\u{202e}"] {
+                assert!(Hint::new(text, Role::Dim).is_err());
+                assert!(Diagnostic::new(text, None).is_err());
+                assert!(CompletionCandidate::new(0..0, "x", text).is_err());
+            }
+        }
+    }
+}
+
 /// Safe host fields, deterministic document/layout, bounded viewport and geometry.
 pub fn geometry_case(data: &[u8]) {
     let text = String::from_utf8_lossy(&data[..data.len().min(8192)]);
     let width = [2, 3, 20, 40, 80, 132][data.first().copied().unwrap_or(0) as usize % 6];
     let height = 2 + data.get(1).copied().unwrap_or(0) as usize % 30;
     // Constructors are independent admission domains; arbitrary bytes exercise each.
-    let _ = Hint::new(&text, Role::Dim);
-    let _ = Diagnostic::new(&text, None);
-    let _ = CompletionCandidate::new(0..0, &text, &text).and_then(|c| c.with_annotation(&text));
+    let hint = Hint::new(&text, Role::Dim);
+    let diagnostic = Diagnostic::new(&text, None);
+    let candidate =
+        CompletionCandidate::new(0..0, &text, &text).and_then(|c| c.with_annotation(&text));
+    if text.chars().any(char::is_control) {
+        assert!(hint.is_err() && diagnostic.is_err() && candidate.is_err());
+    }
     let prompt = Prompt::new(&text).unwrap_or_else(|_| Prompt::new("test").unwrap());
     if let Ok(t) = Text::new(&text) {
         for block in [
@@ -307,6 +381,32 @@ pub fn geometry_case(data: &[u8]) {
                 text: t.clone(),
             },
             Block::Paragraph(t.clone()),
+            Block::KeyValue(vec![(Text::new("key").unwrap(), t.clone())]),
+            Block::List {
+                ordered: data.get(2).is_some_and(|n| n & 1 == 1),
+                items: vec![ListItem {
+                    depth: data.get(3).copied().unwrap_or(0) % 10,
+                    text: t.clone(),
+                }],
+            },
+            Block::Table {
+                columns: vec![Column {
+                    heading: Text::new("value").unwrap(),
+                    alignment: Alignment::Right,
+                }],
+                rows: vec![vec![t.clone()], vec![Text::new("界 e\u{301} 👩‍💻").unwrap()]],
+            },
+            Block::Literal(t.clone()),
+            Block::Status {
+                severity: [
+                    Severity::Info,
+                    Severity::Success,
+                    Severity::Warning,
+                    Severity::Error,
+                ][data.get(4).copied().unwrap_or(0) as usize % 4],
+                text: t.clone(),
+            },
+            Block::Spacer,
         ] {
             if let Ok(d) = Document::new(vec![block]) {
                 for plain in [true, false] {
@@ -321,7 +421,7 @@ pub fn geometry_case(data: &[u8]) {
                     if plain {
                         assert!(!a.contains('\x1b'));
                     }
-                    assert!(a.len() < 2_000_000);
+                    assert!(a.len() <= 8 * 1024 * 1024);
                 }
             }
         }

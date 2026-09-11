@@ -30,6 +30,7 @@ def digest(directory):
 def seeds(directory):
     values = [b"", b"\x1b[200~a\r\n\t\x1b[201~", b"\x1b[", b"\x1b]52;host\x07",
               "e\u0301界👩‍💻🇮🇹\n\t".encode(), bytes(range(256)) * 2]
+    values.extend(bytes([255, choice, 0, 0]) for choice in range(7))
     for seed in range(1, 17):
         state, data = seed, bytearray()
         for _ in range(512):
