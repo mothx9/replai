@@ -203,3 +203,23 @@ source/toolchain/binary identities, CPU accounting, executions and exact inputs.
 The manual final-corpus workflow runs the same archive on Linux x86_64/ARM64,
 macOS ARM64 and Windows x86_64; Windows excludes native C. Neither an implemented
 replay workflow nor a seed smoke is a completed final-corpus replay.
+
+
+## Recorded native campaign
+
+The [final native campaign](https://github.com/mothx9/replai/actions/runs/34598637866)
+passed on native Linux x86_64, Linux ARM64 and macOS ARM64 at harness
+`c68fc3a69763587440b212381c4e27cd8373d443`. Each platform completed 1,000
+blocking, session, driven and C lifecycles, a separate 10,000-event mixture,
+eight failure classes repeated 100 times and 100 isolated descriptor-exhaustion
+children. The full counts also passed under Valgrind/native leaks (exhaustion
+runs separately from the memory tool). Exact source, machine and tool receipts,
+raw reports and terminal-transcript hashes are retained in the
+[compressed native evidence](../../tools/hardening/evidence/native-campaign.json.gz).
+
+The old macOS instrumentation run timed out without preserving partial stdout.
+Its runtime root cause cannot be reconstructed from that deficient receipt.
+H010 fixes the evidence-loss and descendant-cleanup defects; the replacement
+campaign completes every phase within a stricter 120-second watchdog, with
+zero attributable native leaks. The earlier timeout is retained as a failed
+measurement, not relabeled as a product crash or silently counted as a pass.
