@@ -82,8 +82,9 @@ This is not security certification or proof against arbitrary future inputs.
 
 Final corpus replay uses the same immutable archive on Linux x86_64/ARM64,
 macOS ARM64 and Windows x86_64. Windows excludes native C and claims portable
-semantics only. The final replay workflow must pass all four jobs against this
-post-H011 archive before Q0 promotion.
+semantics only. All four jobs in the [post-H011 replay workflow](https://github.com/mothx9/replai/actions/runs/34607290912)
+pass. The [compressed replay receipt](../../tools/hardening/evidence/final-corpus-replay.json.gz)
+retains each platform identity, binary/archive digest, target status and raw output.
 
 ## Generated semantic sequences
 

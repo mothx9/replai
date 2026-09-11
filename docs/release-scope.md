@@ -394,12 +394,12 @@ by FIRST.RELEASE.SCOPE.0.
 ## Remaining work and change control
 
 [The roadmap sequence](../ROADMAP.md#current-execution-sequence) contains exactly
-**three engineering waves followed by one separately authorized publication wave**.
-G1/G2/Q2 precede packaging/consumer/freeze closure; G3/G4 establish independent
-adoption; E3/V0 audit and qualify the final candidate; G6 publishes it.
+**two remaining engineering waves followed by one separately authorized publication wave**.
+G1/G2/Q2 are complete at their bounded scope; G3/G4 establish installability and
+independent adoption; E3/V0 audit and qualify the final candidate; G6 publishes it.
 
-Required new work is qualification harness/campaigns and packaging/install
-metadata, plus the independent fixture and release recipes. There is **no selected
+Required new work is packaging/install metadata, the independent fixture and
+release recipes, followed by candidate freeze/qualification. There is **no selected
 new runtime feature**. Existing candidate APIs still need audit and regression
 qualification. SHOULD refinements cannot delay the mandatory sequence indefinitely;
 record exclusions before freeze. A blocking defect is repaired/requalified within
