@@ -672,33 +672,229 @@
   ],
   "changes": [
     {
-      "capability": "embedding.session",
+      "capability": "platform.portable_engine",
       "compatibility": "compatible",
-      "description": "Documentation/example qualification only: one public-API showcase and deterministic real-PTY PNG/GIF reproduction now exercise host analysis, completion, validated multiline input, coordinated output, structured presentation and history through the existing session contract. Runtime source, public Rust/C behavior, dependencies and every capability definition remain unchanged. No consumer migration is assigned.",
+      "description": "Bounded adversarial release qualification of existing v0.1 surfaces: five CPU-accounted fuzz campaigns, generated semantic sequences, cross-platform corpus replay, native lifecycle/failure/memory stress and preregistered regression gates. Runtime, API, ABI and capability definitions are unchanged; no consumer migration is assigned.",
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34623517808",
-        "https://github.com/mothx9/replai/blob/f916f2fbccb83ac8cbae21fe553ec753c5809898/docs/development.md#public-readme-assets"
+        "https://github.com/mothx9/replai/actions/runs/34607716592",
+        "https://github.com/mothx9/replai/actions/runs/34606480203",
+        "https://github.com/mothx9/replai/actions/runs/34607290912",
+        "https://github.com/mothx9/replai/blob/006e65797e8dc9fa1d6ee0d90949b56e47cb2ee5/docs/engineering/release-hardening.md"
       ],
       "inputs": [
         ".github/workflows/ci.yml",
-        "examples/showcase.rs",
-        "examples/support/showcase_host.rs",
-        "tools/readme/capture_showcase.py",
-        "assets/readme/terminal-showcase.png",
-        "assets/readme/terminal-showcase.gif",
-        "assets/readme/manifest.json"
+        ".github/workflows/hardening-replay.yml",
+        ".github/workflows/hardening.yml",
+        "docs/engineering/release-hardening.md",
+        "tools/hardening/Cargo.lock",
+        "tools/hardening/Cargo.toml",
+        "tools/hardening/bench.rs",
+        "tools/hardening/benchmarks.rs",
+        "tools/hardening/cabi.rs",
+        "tools/hardening/campaign.py",
+        "tools/hardening/campaigns.rs",
+        "tools/hardening/corpus.py",
+        "tools/hardening/deterministic.py",
+        "tools/hardening/evidence/final-corpus-replay.json.gz",
+        "tools/hardening/evidence/final-corpus.json.gz",
+        "tools/hardening/evidence/native-campaign.json.gz",
+        "tools/hardening/evidence/q2-linux-aarch64-samples.json.gz",
+        "tools/hardening/evidence/q2-linux-aarch64.json",
+        "tools/hardening/faults.rs",
+        "tools/hardening/fuzz_targets/cabi.rs",
+        "tools/hardening/fuzz_targets/editor.rs",
+        "tools/hardening/fuzz_targets/geometry.rs",
+        "tools/hardening/fuzz_targets/protocol.rs",
+        "tools/hardening/fuzz_targets/results.rs",
+        "tools/hardening/lib.rs",
+        "tools/hardening/model.rs",
+        "tools/hardening/native.py",
+        "tools/hardening/native.rs",
+        "tools/hardening/regression.py",
+        "tools/hardening/regressions/cabi/synchronous-output-peer",
+        "tools/hardening/regressions/geometry/heading-too-narrow",
+        "tools/hardening/replay.rs",
+        "tools/hardening/smoke.py",
+        "tools/hardening/test_hardening.py"
+      ],
+      "kind": "QUALIFICATION_CHANGED",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "platform.posix_linux",
+      "compatibility": "compatible",
+      "description": "Bounded adversarial release qualification of existing v0.1 surfaces: five CPU-accounted fuzz campaigns, generated semantic sequences, cross-platform corpus replay, native lifecycle/failure/memory stress and preregistered regression gates. Runtime, API, ABI and capability definitions are unchanged; no consumer migration is assigned.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34607716592",
+        "https://github.com/mothx9/replai/actions/runs/34606480203",
+        "https://github.com/mothx9/replai/actions/runs/34607290912",
+        "https://github.com/mothx9/replai/blob/006e65797e8dc9fa1d6ee0d90949b56e47cb2ee5/docs/engineering/release-hardening.md"
+      ],
+      "inputs": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/hardening-replay.yml",
+        ".github/workflows/hardening.yml",
+        "docs/engineering/release-hardening.md",
+        "tools/hardening/Cargo.lock",
+        "tools/hardening/Cargo.toml",
+        "tools/hardening/bench.rs",
+        "tools/hardening/benchmarks.rs",
+        "tools/hardening/cabi.rs",
+        "tools/hardening/campaign.py",
+        "tools/hardening/campaigns.rs",
+        "tools/hardening/corpus.py",
+        "tools/hardening/deterministic.py",
+        "tools/hardening/evidence/final-corpus-replay.json.gz",
+        "tools/hardening/evidence/final-corpus.json.gz",
+        "tools/hardening/evidence/native-campaign.json.gz",
+        "tools/hardening/evidence/q2-linux-aarch64-samples.json.gz",
+        "tools/hardening/evidence/q2-linux-aarch64.json",
+        "tools/hardening/faults.rs",
+        "tools/hardening/fuzz_targets/cabi.rs",
+        "tools/hardening/fuzz_targets/editor.rs",
+        "tools/hardening/fuzz_targets/geometry.rs",
+        "tools/hardening/fuzz_targets/protocol.rs",
+        "tools/hardening/fuzz_targets/results.rs",
+        "tools/hardening/lib.rs",
+        "tools/hardening/model.rs",
+        "tools/hardening/native.py",
+        "tools/hardening/native.rs",
+        "tools/hardening/regression.py",
+        "tools/hardening/regressions/cabi/synchronous-output-peer",
+        "tools/hardening/regressions/geometry/heading-too-narrow",
+        "tools/hardening/replay.rs",
+        "tools/hardening/smoke.py",
+        "tools/hardening/test_hardening.py"
       ],
       "kind": "QUALIFICATION_CHANGED",
       "platforms": [
         "linux"
       ],
       "surfaces": [
-        "rust-native"
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "capability": "platform.posix_macos",
+      "compatibility": "compatible",
+      "description": "Bounded adversarial release qualification of existing v0.1 surfaces: five CPU-accounted fuzz campaigns, generated semantic sequences, cross-platform corpus replay, native lifecycle/failure/memory stress and preregistered regression gates. Runtime, API, ABI and capability definitions are unchanged; no consumer migration is assigned.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34607716592",
+        "https://github.com/mothx9/replai/actions/runs/34606480203",
+        "https://github.com/mothx9/replai/actions/runs/34607290912",
+        "https://github.com/mothx9/replai/blob/006e65797e8dc9fa1d6ee0d90949b56e47cb2ee5/docs/engineering/release-hardening.md"
+      ],
+      "inputs": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/hardening-replay.yml",
+        ".github/workflows/hardening.yml",
+        "docs/engineering/release-hardening.md",
+        "tools/hardening/Cargo.lock",
+        "tools/hardening/Cargo.toml",
+        "tools/hardening/bench.rs",
+        "tools/hardening/benchmarks.rs",
+        "tools/hardening/cabi.rs",
+        "tools/hardening/campaign.py",
+        "tools/hardening/campaigns.rs",
+        "tools/hardening/corpus.py",
+        "tools/hardening/deterministic.py",
+        "tools/hardening/evidence/final-corpus-replay.json.gz",
+        "tools/hardening/evidence/final-corpus.json.gz",
+        "tools/hardening/evidence/native-campaign.json.gz",
+        "tools/hardening/evidence/q2-linux-aarch64-samples.json.gz",
+        "tools/hardening/evidence/q2-linux-aarch64.json",
+        "tools/hardening/faults.rs",
+        "tools/hardening/fuzz_targets/cabi.rs",
+        "tools/hardening/fuzz_targets/editor.rs",
+        "tools/hardening/fuzz_targets/geometry.rs",
+        "tools/hardening/fuzz_targets/protocol.rs",
+        "tools/hardening/fuzz_targets/results.rs",
+        "tools/hardening/lib.rs",
+        "tools/hardening/model.rs",
+        "tools/hardening/native.py",
+        "tools/hardening/native.rs",
+        "tools/hardening/regression.py",
+        "tools/hardening/regressions/cabi/synchronous-output-peer",
+        "tools/hardening/regressions/geometry/heading-too-narrow",
+        "tools/hardening/replay.rs",
+        "tools/hardening/smoke.py",
+        "tools/hardening/test_hardening.py"
+      ],
+      "kind": "QUALIFICATION_CHANGED",
+      "platforms": [
+        "macos"
+      ],
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "capability": "abi.c.v1",
+      "compatibility": "compatible",
+      "description": "Bounded adversarial release qualification of existing v0.1 surfaces: five CPU-accounted fuzz campaigns, generated semantic sequences, cross-platform corpus replay, native lifecycle/failure/memory stress and preregistered regression gates. Runtime, API, ABI and capability definitions are unchanged; no consumer migration is assigned.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34607716592",
+        "https://github.com/mothx9/replai/actions/runs/34606480203",
+        "https://github.com/mothx9/replai/actions/runs/34607290912",
+        "https://github.com/mothx9/replai/blob/006e65797e8dc9fa1d6ee0d90949b56e47cb2ee5/docs/engineering/release-hardening.md"
+      ],
+      "inputs": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/hardening-replay.yml",
+        ".github/workflows/hardening.yml",
+        "docs/engineering/release-hardening.md",
+        "tools/hardening/Cargo.lock",
+        "tools/hardening/Cargo.toml",
+        "tools/hardening/bench.rs",
+        "tools/hardening/benchmarks.rs",
+        "tools/hardening/cabi.rs",
+        "tools/hardening/campaign.py",
+        "tools/hardening/campaigns.rs",
+        "tools/hardening/corpus.py",
+        "tools/hardening/deterministic.py",
+        "tools/hardening/evidence/final-corpus-replay.json.gz",
+        "tools/hardening/evidence/final-corpus.json.gz",
+        "tools/hardening/evidence/native-campaign.json.gz",
+        "tools/hardening/evidence/q2-linux-aarch64-samples.json.gz",
+        "tools/hardening/evidence/q2-linux-aarch64.json",
+        "tools/hardening/faults.rs",
+        "tools/hardening/fuzz_targets/cabi.rs",
+        "tools/hardening/fuzz_targets/editor.rs",
+        "tools/hardening/fuzz_targets/geometry.rs",
+        "tools/hardening/fuzz_targets/protocol.rs",
+        "tools/hardening/fuzz_targets/results.rs",
+        "tools/hardening/lib.rs",
+        "tools/hardening/model.rs",
+        "tools/hardening/native.py",
+        "tools/hardening/native.rs",
+        "tools/hardening/regression.py",
+        "tools/hardening/regressions/cabi/synchronous-output-peer",
+        "tools/hardening/regressions/geometry/heading-too-narrow",
+        "tools/hardening/replay.rs",
+        "tools/hardening/smoke.py",
+        "tools/hardening/test_hardening.py"
+      ],
+      "kind": "QUALIFICATION_CHANGED",
+      "platforms": [
+        "linux",
+        "macos"
+      ],
+      "surfaces": [
+        "c-abi-v1"
       ]
     }
   ],
-  "generation": 13,
-  "id": "sha256:ff37c4091dcb958dd49098b5dad276b570122302a5b8b994154469d042fba330",
+  "generation": 12,
+  "id": "sha256:1d7cf47ad42465dd3387d8541a04046997565630451015783ef817cc72c25f11",
   "inputs": [
     {
       "capabilities": [
@@ -1350,7 +1546,7 @@
       ],
       "category": "qualification",
       "path": ".github/workflows/ci.yml",
-      "sha256": "sha256:04c55614b7e97278a35695875de6cea83570fbbf549b8227a7cc5bf3ab410bc8",
+      "sha256": "sha256:26a2baa91bb6c2d339dc4b5824272fb3d719b0db89a5d82858e3ebde68090336",
       "surfaces": [
         "c-abi-v1",
         "rust-native"
@@ -3211,72 +3407,6 @@
       "surfaces": [
         "rust-native"
       ]
-    },
-    {
-      "capabilities": [
-        "embedding.session"
-      ],
-      "category": "qualification",
-      "path": "examples/showcase.rs",
-      "sha256": "sha256:cef0dcea288968c764262436c2e71c3b1cde84d7c29168f3608fee796ab957dc",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "embedding.session"
-      ],
-      "category": "qualification",
-      "path": "examples/support/showcase_host.rs",
-      "sha256": "sha256:5087c22ff4dfda36795cb9e3d051184a7fe5af81c454979c73a0a118380b8965",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "embedding.session"
-      ],
-      "category": "qualification",
-      "path": "tools/readme/capture_showcase.py",
-      "sha256": "sha256:38b1fed245c39ad5f271be47f9fee7db6544aab71f258d2b48783ecb9ae9cfd6",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "embedding.session"
-      ],
-      "category": "qualification",
-      "path": "assets/readme/terminal-showcase.png",
-      "sha256": "sha256:3eddd047ea901017146e1d6d6f7e4c43766248025f839269c46adbe15e296503",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "embedding.session"
-      ],
-      "category": "qualification",
-      "path": "assets/readme/terminal-showcase.gif",
-      "sha256": "sha256:1b41960723c50719e96458edb6b43f3a0e589edd2b16826a9f888f42ef39be92",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "embedding.session"
-      ],
-      "category": "qualification",
-      "path": "assets/readme/manifest.json",
-      "sha256": "sha256:36bbe9d7393ae7bc1108805d6710c76ceb4d9d9db9afbb6d7b1f5be68cc7af6b",
-      "surfaces": [
-        "rust-native"
-      ]
     }
   ],
   "kind": "producer",
@@ -3323,17 +3453,17 @@
     }
   ],
   "predecessor": {
-    "contract_id": "sha256:1d7cf47ad42465dd3387d8541a04046997565630451015783ef817cc72c25f11",
+    "contract_id": "sha256:c1f5365b5f50bbf79ea70dc111b533c9aad36babce86db95328dad2187a307a6",
     "repository": "https://github.com/mothx9/replai",
-    "revision": "006e65797e8dc9fa1d6ee0d90949b56e47cb2ee5",
-    "tree": "561ef9c36021febba689adb93ced6cefbb4848c3"
+    "revision": "fbe80ffc10b518186d7edac55fafda9f3bd226dc",
+    "tree": "08bb7c903f9ec86436b495d09b7ec29f10212806"
   },
   "repository": "https://github.com/mothx9/replai",
   "schema_version": 1,
   "source": {
     "dirty": false,
-    "revision": "f916f2fbccb83ac8cbae21fe553ec753c5809898",
-    "tree": "8f72e6de19d07256ab9ff1c1d6c959bd3876ae14"
+    "revision": "006e65797e8dc9fa1d6ee0d90949b56e47cb2ee5",
+    "tree": "561ef9c36021febba689adb93ced6cefbb4848c3"
   },
   "surfaces": [
     {

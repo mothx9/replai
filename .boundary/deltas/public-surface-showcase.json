@@ -1,0 +1,140 @@
+{
+  "capability_contracts": [
+    {
+      "description": "Explicit session compatibility over the common driver",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/3c0b14162cd322017bb718b71cc4b433c6100476/docs/interaction.md"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34494834221",
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
+      ],
+      "guarantees": [
+        "Existing open/poll/completion/output/close behavior and bounded read-ahead remain available",
+        "Compatibility polling retains bounded periodic resize observation; C ABI 1 unchanged",
+        "Native Event adds opt-in SubmissionRequested; exhaustive Rust matches need an additional arm. Default runtime submission is unchanged."
+      ],
+      "id": "embedding.session",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "changed_inputs": [
+    ".github/workflows/ci.yml",
+    "assets/readme/manifest.json",
+    "assets/readme/terminal-showcase.gif",
+    "assets/readme/terminal-showcase.png",
+    "examples/showcase.rs",
+    "examples/support/showcase_host.rs",
+    "tools/readme/capture_showcase.py"
+  ],
+  "changes": [
+    {
+      "capability": "embedding.session",
+      "compatibility": "compatible",
+      "description": "Documentation/example qualification only: one public-API showcase and deterministic real-PTY PNG/GIF reproduction now exercise host analysis, completion, validated multiline input, coordinated output, structured presentation and history through the existing session contract. Runtime source, public Rust/C behavior, dependencies and every capability definition remain unchanged. No consumer migration is assigned.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34623517808",
+        "https://github.com/mothx9/replai/blob/f916f2fbccb83ac8cbae21fe553ec753c5809898/docs/development.md#public-readme-assets"
+      ],
+      "inputs": [
+        ".github/workflows/ci.yml",
+        "examples/showcase.rs",
+        "examples/support/showcase_host.rs",
+        "tools/readme/capture_showcase.py",
+        "assets/readme/terminal-showcase.png",
+        "assets/readme/terminal-showcase.gif",
+        "assets/readme/manifest.json"
+      ],
+      "kind": "QUALIFICATION_CHANGED",
+      "platforms": [
+        "linux"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "current": {
+    "contract_id": "sha256:ff37c4091dcb958dd49098b5dad276b570122302a5b8b994154469d042fba330",
+    "repository": "https://github.com/mothx9/replai",
+    "revision": "f916f2fbccb83ac8cbae21fe553ec753c5809898",
+    "tree": "8f72e6de19d07256ab9ff1c1d6c959bd3876ae14"
+  },
+  "id": "sha256:96273f3509b7a41bab58f76a2d078b71ae4582b8f687ee1496bbded63900b81d",
+  "kind": "delta",
+  "platforms": [
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34607716592",
+        "https://github.com/mothx9/replai/actions/runs/34606480203",
+        "https://github.com/mothx9/replai/actions/runs/34607290912",
+        "https://github.com/mothx9/replai/blob/006e65797e8dc9fa1d6ee0d90949b56e47cb2ee5/docs/engineering/release-hardening.md"
+      ],
+      "id": "linux",
+      "status": "runtime-qualified",
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34607716592",
+        "https://github.com/mothx9/replai/actions/runs/34606480203",
+        "https://github.com/mothx9/replai/actions/runs/34607290912",
+        "https://github.com/mothx9/replai/blob/006e65797e8dc9fa1d6ee0d90949b56e47cb2ee5/docs/engineering/release-hardening.md"
+      ],
+      "id": "macos",
+      "status": "runtime-qualified",
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34607716592",
+        "https://github.com/mothx9/replai/actions/runs/34607290912",
+        "https://github.com/mothx9/replai/blob/006e65797e8dc9fa1d6ee0d90949b56e47cb2ee5/docs/engineering/release-hardening.md"
+      ],
+      "id": "windows",
+      "status": "portable-core-qualified",
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "previous": {
+    "contract_id": "sha256:1d7cf47ad42465dd3387d8541a04046997565630451015783ef817cc72c25f11",
+    "repository": "https://github.com/mothx9/replai",
+    "revision": "006e65797e8dc9fa1d6ee0d90949b56e47cb2ee5",
+    "tree": "561ef9c36021febba689adb93ced6cefbb4848c3"
+  },
+  "schema_version": 1,
+  "surfaces": [
+    {
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/interaction.md",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/presentation.md"
+      ],
+      "id": "rust-native",
+      "kind": "rust-native",
+      "version": "pre-release"
+    },
+    {
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/c-api.md"
+      ],
+      "id": "c-abi-v1",
+      "kind": "c-abi",
+      "version": "1"
+    }
+  ]
+}

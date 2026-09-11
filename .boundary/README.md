@@ -4,14 +4,25 @@ REPLAI owns these producer declarations. They describe generic capabilities,
 surfaces, qualification and changes; they assign no consumer paths, commands or
 migration work. Consumer profiles must be authored by their own repositories.
 
-- [Current producer snapshot](producer.json), generation 12: qualified hardening
-  source `006e65797e8dc9fa1d6ee0d90949b56e47cb2ee5`, tree
+- [Current producer snapshot](producer.json), generation 13: public-showcase
+  qualification source `f916f2fbccb83ac8cbae21fe553ec753c5809898`, tree
+  `8f72e6de19d07256ab9ff1c1d6c959bd3876ae14`.
+  [Full CI](https://github.com/mothx9/replai/actions/runs/34623517808) passes all
+  12 jobs, including byte-exact regeneration of the public PNG/GIF from a real
+  PTY. Runtime source, public Rust/C behavior, dependencies and all 27 capability
+  definitions are unchanged from the predecessor.
+- [Public-surface showcase delta](deltas/public-surface-showcase.json) records a
+  compatible `QUALIFICATION_CHANGED` entry for the session reference host. It
+  binds the public-only showcase and reproducible PTY assets without adding a
+  capability, compatibility change, consumer migration or repin.
+- [Previous hardening snapshot](checkpoints/006e65797e8dc9fa1d6ee0d90949b56e47cb2ee5.json),
+  generation 12: qualified hardening source
+  `006e65797e8dc9fa1d6ee0d90949b56e47cb2ee5`, tree
   `561ef9c36021febba689adb93ced6cefbb4848c3`.
   [Full CI](https://github.com/mothx9/replai/actions/runs/34607716592), the
   [three-platform native campaign](https://github.com/mothx9/replai/actions/runs/34606480203)
   and [cross-platform corpus replay](https://github.com/mothx9/replai/actions/runs/34607290912)
-  pass. Runtime source, public Rust/C behavior, dependencies and all 27 capability
-  definitions are unchanged from the predecessor.
+  pass.
 - [Release-hardening delta](deltas/release-hardening.json) records compatible
   `QUALIFICATION_CHANGED` entries for the portable core, native Linux/macOS and
   C ABI 1. It binds five CPU-accounted fuzz campaigns, generated semantic models,
@@ -121,7 +132,7 @@ behavior, ABI and documentation inputs. Its external validation command is:
 
 ```sh
 boundary validate .boundary/producer.json --repo . \
-  --previous .boundary/checkpoints/fbe80ffc10b518186d7edac55fafda9f3bd226dc.json
+  --previous .boundary/checkpoints/006e65797e8dc9fa1d6ee0d90949b56e47cb2ee5.json
 ```
 
 Run from a clean REPLAI checkout with BOUNDARY installed separately. Validation
