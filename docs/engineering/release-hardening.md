@@ -1,225 +1,275 @@
 # Release hardening evidence
 
-[ROADMAP](../../ROADMAP.md) owns maturity and selection. The
-[release scope](../release-scope.md) owns the acceptance budgets. This dossier
-records the campaign against the existing v0.1 surface; an implemented harness
-is not an executed release gate.
+This dossier records bounded qualification of the [selected v0.1 surface](../release-scope.md).
+[ROADMAP](../../ROADMAP.md) alone owns maturity and the next selected boundary.
+No release, package upload, new interaction feature or consumer repin is implied.
 
-## Source and scope
+## Source and evidence identities
 
-Reconciled baseline: `bfe9d1cef9303371e123d44d07c5d295908968c2`, tree
-`9a79c98e79d4b229b0c4f16cc67d7d10182b15f6`. Production source is initially
-unchanged. Qualification tooling compiles the same private source modules in an
-isolated crate, following the existing performance-fixture approach. C calls
-use the actual ABI binding and live caller-owned storage. There is no new
-library feature, exported API or dependency in the production workspace.
+- Wave baseline: `bfe9d1cef9303371e123d44d07c5d295908968c2`, tree
+  `9a79c98e79d4b229b0c4f16cc67d7d10182b15f6`.
+- Production `src` tree throughout: `12b9cd0e58ef8d2dfe6c1b91185fd21b05a7aa9e`.
+  Runtime source, root dependency graph, public Rust API, C headers/schema and
+  binding implementation are unchanged from the wave baseline.
+- Final expanded fuzz harness: `bd338ead57885257a4bbf554d0ec0c5b22e34a57`, tree
+  `24b121dde64dc4bc9f9e7cbd9ac188ec074cc1a4`. Editor's unchanged independent oracle
+  retains its completed campaign at `b812afac2706ea11321239e15788cee8ae5c4fdf`,
+  tree `65a06ff46aee02ca16a2d00928c74598fe9e5f4f`.
+- Final Q2 measurement harness: `6975c0979a1fd13f619f2d079b7494945ca18c5e`, tree
+  `71bb4281b44481aecc90196af6ec3202a975f91e`.
+- Final native campaign: `c68fc3a69763587440b212381c4e27cd8373d443`;
+  [three native jobs](https://github.com/mothx9/replai/actions/runs/34598637866)
+  and [full CI](https://github.com/mothx9/replai/actions/runs/34598638274) pass.
+  Later evidence/documentation carriers do not denote different runtime implementations.
 
-## Reproduction
+The isolated [hardening workspace](../../tools/hardening/Cargo.toml) compiles
+actual engine/protocol/presentation modules and the real ABI binding. It adds no
+production feature flag or API. Independent model state supplies the editor oracle.
 
-From the repository root with Cargo on PATH:
+## Q0 campaigns and corpus identity
+
+Five distinct ownership boundaries received at least 3,600 CPU seconds each:
+
+| Target | Boundary and principal oracles |
+| --- | --- |
+| protocol | Fragmented VT/UTF-8 decoding, incomplete expiry, paste atomicity; real generic Terminal through virtual 1/7/4096-byte reads, paste admission/degradation and resize-adjacent state |
+| editor | Independent Unicode/grapheme, capacity, revision and bounded-history state machine; accepted/rejected edits and restoration |
+| results | Completion, validation, spans/hints, current/stale/malformed results, lifecycle, resize/output; atomic rejection checks canonical and presentation state plus zero effects |
+| geometry | All current Document blocks, safe fields, narrow/large dimensions and Unicode; deterministic success or explicit rejection, canonical text/cursor preservation |
+| cabi | Real ABI 1 records, legal handle/pointer sequences, versions/sizes, exact capacity, caller-buffer canaries, malformed UTF-8, PTYs and restoration |
+
+Recorded Linux ARM64 environment: Spark `spark-7c3d`, kernel
+6.17.0-1021-nvidia, glibc 2.39, cargo-fuzz 0.13.2, libfuzzer-sys 0.4.13,
+Rust nightly 1.100.0 (`a36d05efa`, LLVM 23.1.1). Instrumentation is cargo-fuzz
+AddressSanitizer, inline coverage and comparison tracing. Nightly is a test-tool
+identity, not the release MSRV.
+
+| Target | CPU seconds | Executions including corpus initialization | Final inputs | Corpus SHA-256 |
+| --- | --- | --- | --- | --- |
+| cabi | 3615.656491 | 2,836,064 | 5,921 | `63815f3f6ad72b9f8b5212c0fdf270296d1692105c4aa53836df043fdc39c06c` |
+| editor | 3601.242122 | 4,790,559 | 7,296 | `48ce910b67ec5cb82fe22ba8a8383b205133ac6b3442175a7b07883703bc322e` |
+| geometry | 3616.111162 | 1,934,034 | 6,769 | `aa9893f788d7f2eff93c731b7b953d5e54c153dd65ebfde06d9029162491a7b2` |
+| protocol | 3685.213694 | 196,657 | 1,506 | `c090bd35b6df24be850ce09ed74288690b432bab08091ebce4cb5c303a1213b4` |
+| results | 3604.104277 | 2,827,876 | 7,587 | `89b2692e1f04bad00c7144bd70797664f54aa1f102d439279a609d8b70fcd99e` |
+
+The [immutable final corpus](../../tools/hardening/evidence/final-corpus.json.gz)
+retains exact inputs, seed/corpus digests, source/tree, compiler, binary hashes,
+chunk parameters, start/end times, user/system CPU, exit statuses and peak RSS.
+Each child is measured with `wait4`; wall time is never substituted for CPU time.
+Three workers per expanded target share its corpus; their CPU times are summed.
+The scheduler pause used for Q2 does not count as CPU execution. Chunks use
+30-second wall bounds, 10-second per-input timeout, 2-GiB RSS limits and 4-KiB
+inputs (8 KiB for geometry). The final initial corpus has 29 deterministic seeds;
+the unchanged editor's earlier seed identity is retained independently.
+
+Incomplete development campaigns were superseded after oracle expansion, not
+combined into final budgets. Geometry's original H003 stop at 27.581449 CPU
+seconds is a failed harness observation; its replacement campaign starts afresh.
+No unexplained fuzz panic, crash, hang, stale mutation/output, unsafe terminal
+content or broken grapheme invariant remains in the recorded final campaigns.
+This is not security certification or proof against arbitrary future inputs.
+
+Final corpus replay uses the same immutable archive on Linux x86_64/ARM64,
+macOS ARM64 and Windows x86_64. Windows excludes native C and claims portable
+semantics only. Final replay receipts are recorded below when the corresponding workflow completes.
+
+## Generated semantic sequences
+
+100,000 seeded pairs passed: seeds 1–100,000, at most 128 operations per
+editor/history oracle and 128 per host-results/lifecycle oracle. The final
+results replay includes malformed-current refusal as well as stale refusal.
+The LCG, operation mapping and seed print-before-execution are retained in
+[replay.rs](../../tools/hardening/replay.rs); a failing seed is directly replayable.
+The model checks exact history/draft restoration, accepted/no-op/rejected revision
+rules, cursor-only invalidation, byte-identical later drafts, completion navigation,
+non-canonical hints, validation and lifecycle. No parser runs inside REPLAI.
 
 ```sh
-cargo install cargo-fuzz --locked
-rustup toolchain install nightly --profile minimal
 cargo build --locked --release --manifest-path tools/hardening/Cargo.toml --bin replay
 tools/hardening/target/release/replay generated 100000 1
-tools/hardening/target/release/replay faults 100
-python3 tools/hardening/campaign.py --work /tmp/replai-hardening-campaign --cpu-seconds 3600 --workers 3
 ```
 
-The campaign requires Linux, a C++ compiler and a **fresh** output directory.
-It builds all five address-sanitized coverage-guided targets, runs them in
-parallel, and accumulates `wait4` user + system CPU seconds separately per
-target. `--workers 3` runs three independent processes per target over its shared
-corpus. Each child has its own `wait4` receipt; only summed user/system CPU
-satisfies the budget. Thirty-second wall-limited chunks permit bounded monitoring; wall time
-does not satisfy the CPU budget. Every chunk retains arguments, timestamps,
-CPU time, peak RSS, exit status and libFuzzer statistics. A finding stops that
-target and fails the campaign. It is never counted as a passing budget.
+## Findings and minimized regressions
 
-`environment.json` records source/tree, dirty state, OS/libc and compiler/fuzzer.
-Each target's `summary.json` records binary hash and initial/final corpus digest
-(SHA-256 of sorted content hashes). Initial seeds include fixed protocol/Unicode
-cases and 16 reproducible LCG seeds. The replay binary accepts `TARGET CORPUS`
-or `TARGET FILE`, using exactly the same oracle as fuzzing. Windows runs the four
-portable targets; C requires a native POSIX terminal backend.
+No production defect was established; the repairs below change harness assumptions,
+accounting or evidence retention. They do not expand the selected v0.1 contract.
 
-## Target inventory
-
-| Target | Ownership boundary and oracle | Initial execution |
-| --- | --- | --- |
-| protocol | VT/UTF-8 fragmentation, expiry, paste atomicity, safe semantic actions | Short smoke passed; full budget pending |
-| editor | Independent whole-string/grapheme model, history/draft restoration, cursor/revision and rejection atomicity | Short smoke and 1,000 generated sequences passed; full budget pending |
-| results | Retained snapshots, completion/validation/I2, mutation/lifecycle, stale zero-effects, noncanonical presentation | Short smoke and 1,000 generated sequences passed; full budget pending |
-| geometry | Safe host fields, deterministic documents/frames, width and bounded cursor viewport | Short smoke passed; full budget pending |
-| cabi | Actual ABI records/handles/buffers, native PTYs, invalid state/UTF-8, restoration | Short smoke passed; full budget pending |
-
-Initial Linux ARM64 smoke used cargo-fuzz 0.13.2 and nightly
-1.100.0 (`a36d05efa`, 2026-09-09). This is instrumentation identity, not the
-release MSRV. The full campaign must retain its own exact compiler/source
-receipt. No macOS/Windows replay or native stress is implied by this smoke.
-
-## Findings ledger
-
-| ID | Target / reproducer | Observation and cause | Classification / repair | Status |
+| ID | Target / reproducer | Observation and cause | Classification / repair | Final evidence |
 | --- | --- | --- | --- | --- |
-| H001 | results / generated seed 1 | Harness unwrapped a candidate constructor for a deliberately reversed range | Harness defect; respect constructor rejection before attempting installation | Replayed 1,000 sequences; closed |
-| H002 | cabi / empty input | Harness expected a second destroy of the nulled owner to succeed | Harness defect; ABI 1 explicitly rejects the null handle with INVALID_ARGUMENT | Empty input and short fuzz replay passed; closed |
-| H003 | geometry / retained 11-byte regression | Harness unwrapped rendering when a heading did not fit a narrow geometry | Harness defect; compare deterministic render outcomes, inspect safe bytes only on success | Minimized with libFuzzer; [regression](../../tools/hardening/regressions/geometry/heading-too-narrow) retained; geometric budget restarts |
-| H004 | native / PTY hangup | Harness assumed is_open became false before a failed restoration was explicitly closed | Harness defect; is_open documents outstanding cleanup ownership. Assert explicit cleanup failure, close/release and stable descriptors | Native disconnected read/write smoke passed |
-| H006 | native / macOS read and write hangup | Harness required Linux-style cleanup failure even when Darwin restores termios successfully | Harness defect; compare actual restored termios when available and require explicit failure when the OS refuses | Full native and leak replay pending |
-| H007 | Q2 / append allocation calibration | The initial 1 KiB insertion filled capacity; the next append legitimately grew storage | Harness defect; separate warmed append from append-grow, with preparation outside timing | Initial registration refused before any thresholds were written; fresh controls required |
-| H008 | Q2 / first ARM control receipt | A later Cargo build replaced the unpreserved control executable; its hash no longer matched the registration | Harness defect; freeze executables inside each evidence directory and refuse dirty-source qualification | No candidate comparison occurred; unusable calibration retained, new registration required |
-| H009 | Q2 / composed 1000-byte submission | Byte accounting retained only the final close effects, omitting the preceding draft flush on SubmissionRequested | Harness defect; retain and count both mutation batches outside timing | New controls and registration required; prior passing receipt does not qualify the corrected byte metric |
-| H010 | native instrumentation timeout | Partial stdout was discarded by subprocess timeout, obscuring the macOS leak-phase stall; descendant instrumentation could survive controller timeout | Harness defect; stream receipts to files, sample timed-out Darwin processes and kill the isolated process group | Linux timeout regression passes; macOS diagnosis and replay pending |
-| H005 | native / driven under Valgrind | Harness assumed a ready notification consumes the entire write despite the bounded work budget | Harness defect; drain WaitInterest::Ready before evaluating the semantic result | Native memory campaign replay required; no product scheduling change |
+| H001 | results / generated seed 1 | Harness unwrapped a candidate constructor for a deliberately reversed range | Harness defect; respect constructor rejection before attempting installation | Seeds 1–100,000 and final results corpus pass; closed |
+| H002 | cabi / empty input | Harness expected a second destroy of the nulled owner to succeed | Harness defect; ABI 1 explicitly rejects the null handle with INVALID_ARGUMENT | Empty input, final C corpus and native C stress pass; closed |
+| H003 | geometry / retained 11-byte regression | Harness unwrapped rendering when a heading did not fit a narrow geometry | Harness defect; compare deterministic render outcomes, inspect safe bytes only on success | Minimized regression and restarted full geometry budget pass; closed |
+| H004 | native / PTY hangup | Harness assumed is_open became false before a failed restoration was explicitly closed | Harness defect; is_open documents outstanding cleanup ownership. Assert explicit cleanup failure, close/release and stable descriptors | Native disconnected read/write and repeated cleanup pass; closed |
+| H005 | native / driven under Valgrind | Harness assumed a ready notification consumes the entire write despite the bounded work budget | Harness defect; drain WaitInterest::Ready before evaluating the semantic result | Full native memory campaigns pass with bounded Ready draining; closed |
+| H006 | native / macOS read and write hangup | Harness required Linux-style cleanup failure even when Darwin restores termios successfully | Harness defect; compare actual restored termios when available and require explicit failure when the OS refuses | Native Darwin records 200 restorable hangups; Linux records 200 refused restorations; closed |
+| H007 | Q2 / append allocation calibration | The initial 1 KiB insertion filled capacity; the next append legitimately grew storage | Harness defect; separate warmed append from append-grow, with preparation outside timing | Warmed/growing append are separate; corrected registration and comparisons pass; closed |
+| H008 | Q2 / first ARM control receipt | A later Cargo build replaced the unpreserved control executable; its hash no longer matched the registration | Harness defect; freeze executables inside each evidence directory and refuse dirty-source qualification | Final control/candidate executables retained with verified hashes; closed |
+| H009 | Q2 / composed 1000-byte submission | Byte accounting retained only the final close effects, omitting the preceding draft flush on SubmissionRequested | Harness defect; retain and count both mutation batches outside timing | Both effect batches counted: 1,042 burst bytes; fresh preregistration/comparison pass; closed |
+| H010 | native instrumentation timeout | Partial stdout was discarded by subprocess timeout, obscuring the macOS leak-phase stall; descendant instrumentation could survive controller timeout | Harness defect; stream receipts to files, sample timed-out Darwin processes and kill the isolated process group | Partial-output regression and complete native leak replay pass; original instrumentation timeout retained as failed measurement |
 
-100,000 generated seeds 1–100,000 passed on Linux ARM64, with 128 operations per
-editor/history sequence and 128 per host-result/lifecycle sequence. The five
-long fuzz campaigns started at harness checkpoint
-`b812afac2706ea11321239e15788cee8ae5c4fdf`; geometry stopped on H003 at 27.581449
-CPU seconds, which does not count as its passing 60-minute campaign.
+The original macOS instrumentation stall lost partial stdout before H010.
+Its runtime root cause cannot be reconstructed from that deficient receipt.
+It remains a failed measurement, not a retroactively successful run or an
+attributed product crash. The corrected controller writes receipts continuously,
+retains timeout diagnostics, samples Darwin processes and kills the isolated
+instrumentation group. Every phase of the replacement full native campaign
+completed inside a stricter 120-second watchdog, with zero attributable leaks.
 
-No product defect has been established by these observations. Subsequent
-findings remain in this ledger even after repair; a short clean smoke is not a
-security certification or evidence that a longer campaign will find none.
+## Q1 native lifecycle and failure stress
 
-## Resource, usability and regression gates
+The [compressed native receipts](../../tools/hardening/evidence/native-campaign.json.gz)
+retain machine/kernel/compiler identities, exact binaries, raw memory reports,
+per-phase JSON and hashes of terminal transcripts from the final workflow.
+Each table cell is independently executed on its stated native architecture.
 
-Initial deterministic virtual fault sweep: 100 repetitions at each selected call
-position; observed fault hits: geometry 500, read 400, write 800, restoration 100.
-The one-shot restoration failure exercises retry, not an impossible OS recovery
-claim. All paths ended closed with restored virtual resources. 100,000 idle
-interest queries performed zero transport calls. These are **virtual** observations,
-not real PTY resource-stress evidence.
+| Native target | Blocking / session / driven / C cycles | Separate mixed events | Failure classes × repetitions | Exhaustion children | Memory result |
+| --- | --- | --- | --- | --- | --- |
+| Linux x86_64 GNU | 1000 / 1000 / 1000 / 1000 | 10000 | 8 × 100 | 100 | Valgrind clean |
+| Linux aarch64 GNU | 1000 / 1000 / 1000 / 1000 | 10000 | 8 × 100 | 100 | Valgrind clean |
+| macOS aarch64 | 1000 / 1000 / 1000 / 1000 | 10000 | 8 × 100 | 100 | native leaks: zero |
 
-Still required: 1,000 lifecycle cycles per native Rust tier and C target;
-10,000 mixed events per native target; native failure/descriptor exhaustion;
-Valgrind and macOS leaks; keyboard/plain/narrow review; final corpus replay;
-100,000 generated sequences; pre-registered Q2 control batches and candidate
-comparisons; full existing CI. Linux x86_64 and ARM64 and macOS ARM64 each need
-their own receipts. Missing native evidence blocks closure.
+These full counts also passed with memory instrumentation. Session/driven each
+execute 20,000 serialized actions, separately from the 10,000-event mixed gate.
+Memory-tool descriptor bookkeeping is excluded from the separate NOFILE=64
+exhaustion child; the qualification controller's limits never change.
 
-Q2 thresholds are not registered by this initial dossier. The adopted formula
-and workload list remain in [G5](../release-scope.md#g5--q2-policy-e3-freeze-and-v0-release-qualification).
-Prefix-layout traversal on large multiline drafts and synchronous host-output
-blocking remain explicit limits. General U3 and deferred features are unchanged.
+Eight native failure classes cover unsuitable admission, geometry/write failure
+at acquisition, geometry failure while active, read/write hangup, configured
+capacity and malformed host data. Acquisition under descriptor exhaustion refuses,
+existing ownership cleans up, caller descriptors remain owned by the caller, and
+acquisition can retry after pressure is removed. Descriptor counts and connected
+termios match exactly after each lifecycle. Linux observed 200 non-restorable
+hangups with explicit errors; Darwin restored all 200 exactly. Cleanup never
+fabricates success when the OS refuses restoration.
 
-## Native and controlled measurement entry points
+The separate virtual fault-position sweep repeats each selected position 100
+times: geometry 500 actual hits, read 400, write 800, restoration 100. It exercises
+retry and resource release without pretending synthetic faults are OS discovery.
+100,000 idle interest queries issue zero transport calls; stale analysis issues
+zero transport calls; serialized output uses one write transaction.
+
+Linux Valgrind 3.22.0 reports zero invalid accesses, definite/indirect/possible
+leaks or suppressions. Reachable allocations belong to Rust's process-lifetime
+stack-overflow registry (544 bytes), plus its stdin buffer in blocking hosts
+(8192 bytes); retained stack traces identify those runtime owners. Darwin
+`leaks` report format 4.0 records zero leaked bytes on Darwin 24.6.0 ARM64.
+Arbitrary allocator abort, SIGKILL and process-wide OOM recovery remain unclaimed.
+
+## Minimum usability review
+
+Existing real-PTY cell/cursor oracles were replayed with the hardening source:
+[completion](completion-contract.md), [validation/multiline](validation-multiline.md),
+[analysis presentation](analysis-presentation.md) and [embedding](embedding.md).
+Keyboard-only edit/history, completion request/next/previous/accept/dismiss,
+validated continuation and indentation, multiline arrows, submission, interrupt
+and EOF remain available. Completion Enter accepts once before validation.
+
+20/40/80/132-column styled and plain/NO_COLOR profiles retain visible selection,
+textual diagnostics, continuation prompts and cursor/draft identity. Plain hints
+retain their non-canonical marker; hint bytes never enter submitted text.
+Resize and serialized output preserve current menus/diagnostics/analysis.
+10/100/1000-line scenes retain usable bounded viewport output. This is the
+mandatory current-surface review, not general U3 closure or screen-reader certification.
+
+## Q2 registered regression policy
+
+The [registration](../../tools/hardening/evidence/q2-linux-aarch64.json) and
+[raw control/comparison samples](../../tools/hardening/evidence/q2-linux-aarch64-samples.json.gz)
+freeze 32 workloads. Spark CPU 19, performance governor, Rust 1.98.1/LLVM 22.1.8,
+16-ns observed timer floor; preparation/snapshots/verification/byte encoding stay
+outside the timed operation. Each control uses five batches of 31 measurements,
+three warmups per batch; allocation instrumentation is a separate build.
+Executable copies and hashes prevent Cargo rebuilds from changing the control.
+
+Thresholds were recorded before candidate evaluation:
+median allowance = max(15% baseline, 5 × control-batch median MAD, 2 × timer floor);
+p95 allowance = max(25% baseline, control-batch p95 MAD, 2 × timer floor).
+A repeated exceedance in two independent alternating control/candidate runs blocks
+promotion. The first final comparison exceeded on the 1-MiB cursor workload;
+the second did not reproduce it. No blocking intersection remained; allocation
+and byte gates passed without changing thresholds or replacing the baseline.
+
+This compares the unchanged runtime/binary to establish enforcement and a reference,
+not a speedup. Hosted CI executes deterministic gates, never precision latency claims.
+All values below are nanoseconds; allowances are absolute additions to the baseline.
+
+| Workload / bytes / lines | Median ns | p95 ns | Median / p95 allowance ns | Allocation calls | Encoded bytes |
+| --- | --- | --- | --- | --- | --- |
+| append/1024/0 | 32 | 48 | 32.0 / 32.0 | 0 | 0 |
+| append-grow/1024/0 | 64 | 80 | 32.0 / 32.0 | 1 | 0 |
+| cursor/1024/0 | 32 | 48 | 32.0 / 32.0 | 0 | 0 |
+| burst/0/0 | 44656 | 45344 | 6698.4 / 11336.0 | 1118 | 1042 |
+| paste/1024/0 | 57760 | 59552 | 8664.0 / 14888.0 | 195 | 1956 |
+| history/1024/0 | 48 | 64 | 32.0 / 32.0 | 1 | 0 |
+| replace/1024/0 | 928 | 1040 | 139.2 / 260.0 | 16 | 139 |
+| menu-show/1024/0 | 24752 | 25168 | 3712.8 / 6292.0 | 161 | 1312 |
+| menu-next/1024/0 | 24368 | 24736 | 3655.2 / 6184.0 | 132 | 105 |
+| menu-accept/1024/0 | 1360 | 1440 | 204.0 / 360.0 | 17 | 211 |
+| validation/1024/0 | 23872 | 24304 | 3580.8 / 6076.0 | 123 | 1235 |
+| incomplete/1024/0 | 23616 | 23936 | 3542.4 / 5984.0 | 115 | 1182 |
+| analysis/1024/0 | 23488 | 24016 | 3523.2 / 6004.0 | 102 | 182 |
+| output/1024/0 | 23728 | 23936 | 3559.2 / 5984.0 | 120 | 1228 |
+| resize/1024/0 | 23040 | 23520 | 3456.0 / 5880.0 | 86 | 572 |
+| edit/640/10 | 15600 | 15840 | 2340.0 / 3960.0 | 73 | 1 |
+| vertical/640/10 | 15600 | 15888 | 2340.0 / 3972.0 | 70 | 9 |
+| resize/640/10 | 16112 | 16384 | 2416.8 / 4096.0 | 85 | 465 |
+| edit/6400/100 | 140240 | 142432 | 21036.0 / 35608.0 | 151 | 1 |
+| vertical/6400/100 | 140320 | 141904 | 21048.0 / 35476.0 | 149 | 68 |
+| resize/6400/100 | 140128 | 141664 | 21019.2 / 35416.0 | 86 | 573 |
+| edit/64000/1000 | 1381825 | 1393153 | 207273.8 / 348288.2 | 151 | 1 |
+| vertical/64000/1000 | 1366913 | 1373088 | 205036.9 / 343272.0 | 149 | 68 |
+| resize/64000/1000 | 1375905 | 1382625 | 206385.8 / 345656.2 | 86 | 573 |
+| edit/65536/0 | 13328 | 23968 | 1999.2 / 5992.0 | 5 | 1 |
+| cursor/65536/0 | 48 | 48 | 32.0 / 32.0 | 0 | 0 |
+| analysis/65536/0 | 1323600 | 1329185 | 198540.0 / 332296.2 | 159 | 37 |
+| resize/65536/0 | 1312177 | 1316721 | 196826.5 / 329180.2 | 86 | 654 |
+| edit/1048576/0 | 221552 | 251872 | 33232.8 / 62968.0 | 5 | 1 |
+| cursor/1048576/0 | 80 | 112 | 32.0 / 32.0 | 0 | 0 |
+| analysis/1048576/0 | 21149211 | 21183499 | 3172381.6 / 5295874.8 | 159 | 37 |
+| resize/1048576/0 | 20986987 | 21031067 | 3148048.0 / 5257766.8 | 86 | 654 |
+
+The exact internal allocation and terminal-byte oracles are regression controls,
+not public ANSI compatibility. Warmed append/cursor allocate zero; cold growth
+is measured separately. The 1000-byte workload includes the intermediate redraw
+and final submission effects (H009). Prefix-layout traversal on large multiline
+drafts and synchronous host-output blocking remain named debt. This policy is
+bounded to recorded workloads, not a universal latency SLA.
+
+## Reproduction and CI ownership
+
+Normal CI runs harness guards, minimized regressions, bounded seed/model smoke
+and deterministic allocation/byte checks. Manual campaigns own full CPU budgets,
+native counted stress, final corpus replay and controlled latency qualification.
+Use fresh evidence directories; commands fail nonzero on violated invariants.
 
 ```sh
-python3 tools/hardening/native.py --work /tmp/replai-native-hardening
-python3 tools/hardening/native.py --memory --work /tmp/replai-native-memory
 python3 tools/hardening/test_hardening.py
 python3 tools/hardening/smoke.py
+python3 tools/hardening/deterministic.py
+python3 tools/hardening/campaign.py --work /tmp/replai-fuzz --cpu-seconds 3600 --workers 3
+python3 tools/hardening/corpus.py pack --campaign /tmp/replai-fuzz --output /tmp/replai-corpus.json.gz
+python3 tools/hardening/corpus.py replay --archive tools/hardening/evidence/final-corpus.json.gz --work /tmp/replai-corpus-replay
+python3 tools/hardening/native.py --work /tmp/replai-native
+python3 tools/hardening/native.py --memory --work /tmp/replai-native-memory
 ```
 
-The native command runs 1,000 cycles for each Rust tier and ABI 1, a separately
-counted 10,000-event mixture, eight native failure classes repeated 100 times,
-and 100 descriptor-exhaustion repetitions in a child with NOFILE=64. The parent
-limit never changes. Valgrind/native leaks instrumentation applies to lifecycle,
-mixed and failure paths; descriptor exhaustion separately avoids confusing the
-memory tool's private descriptors with product resources. Native architecture is
-asserted by the manually dispatched
-[campaign workflow](../../.github/workflows/hardening.yml). Normal CI executes
-only deterministic smoke, regressions and harness guards.
-
-The first Linux ARM64 lifecycle run on harness `0aef173` passed 1,000 blocking,
-1,000 session, 1,000 driven and 1,000 ABI cycles; session/driven each exercised
-20,000 serialized actions. The separate mixed run passed 10,000 actions.
-Caller termios and descriptor counts matched after every connected cycle.
-These counts do not establish the still-required native memory/tool receipts.
-
-Q2 uses 32 named workloads in the isolated `bench` binary, five batches of 31
-repetitions with three warmups per batch. Setup, snapshot capture, verification
-and byte counting stay outside the timed operation. The allocation build uses
-the existing counting allocator independently of the latency build. Register
-before comparing, using fresh output directories:
+Linux campaigns need nightly with cargo-fuzz; native memory runs require Valgrind
+on Linux or `/usr/bin/leaks` on macOS. The [native workflow](../../.github/workflows/hardening.yml)
+asserts native architecture. The [corpus workflow](../../.github/workflows/hardening-replay.yml)
+replays the immutable archive on all applicable targets. Windows runs portable
+oracles only. No adjacent repository or private consumer is needed.
 
 ```sh
 cargo build --locked --release --manifest-path tools/hardening/Cargo.toml --bin bench
 cargo build --locked --release --manifest-path tools/hardening/Cargo.toml --bin bench --features allocations --target-dir tools/hardening/target/allocations
-python3 tools/hardening/regression.py register --work /tmp/replai-q2-control --binary tools/hardening/target/release/bench --allocation-binary tools/hardening/target/allocations/release/bench
-python3 tools/hardening/regression.py compare --work /tmp/replai-q2-candidate --registration /tmp/replai-q2-control/registered.json --control-binary tools/hardening/target/release/bench --binary tools/hardening/target/release/bench --allocation-binary tools/hardening/target/allocations/release/bench
+python3 tools/hardening/regression.py register --work /tmp/replai-control --binary tools/hardening/target/release/bench --allocation-binary tools/hardening/target/allocations/release/bench
+python3 tools/hardening/regression.py compare --work /tmp/replai-candidate --registration /tmp/replai-control/registered.json --control-binary /tmp/replai-control/binary --binary /tmp/replai-control/binary --allocation-binary /tmp/replai-control/allocation_binary
+python3 tools/qualify.py --work /tmp/replai-full-qualification
 ```
 
-The example compares one unchanged binary to exercise the policy. A changed
-candidate must use separate preserved control/candidate binaries and source
-identities. Threshold exceedances in both alternating runs block investigation;
-contemporaneous controls never raise the registered bound. Byte/allocation
-oracles are internal regression guards, not exact VT public compatibility.
-Hosted CI proves harness integrity, not controlled latency. Real observations, environment and thresholds must be attached before Q2 promotion.
-
-
-The final scope audit expanded three campaigns: protocol now also advances the
-actual generic Terminal with one-byte/seven-byte/4-KiB virtual reads and both
-paste admission policies; geometry includes every current Document block;
-host results include oversized aggregate/count/field payloads and overlapping
-spans. These three targets require new full budgets. Earlier completed campaigns
-remain observations of their recorded narrower harness, not evidence for added
-branches. The editor target retains its original independently recorded 60-CPU-minute
-budget. C was also expanded to exercise exact configured capacity and canaries
-at each declared output-buffer boundary. Production sources remain unchanged.
-The final parallel campaign supersedes incomplete development runs; interrupted
-chunks never count toward its fresh budgets.
-
-
-## Q2 registered reference and deterministic CI gates
-
-The final reference at `6975c0979a1fd13f619f2d079b7494945ca18c5e` includes
-the H009 composed-burst accounting repair: 1,042 encoded bytes, including the
-intermediate redraw. The earlier reference remains superseded for that metric.
-
-The corrected Linux ARM64 run on Spark (`spark-7c3d`, kernel
-6.17.0-1021-nvidia, Rust 1.98.1) pinned measurements to CPU 19 under the
-performance governor. Five control batches of 31 repetitions registered all
-32 workloads before two alternating control/candidate comparisons. The first
-comparison exceeded the registered bound for the 1-MiB cursor workload; the
-second did not reproduce it. No workload exceeded in both independent runs, so
-the adopted policy passed without changing thresholds. Allocation and
-encoded-byte checks passed. These compare an unchanged runtime/binary: they
-establish a regression reference and exercise enforcement, not a speedup claim.
-The timer floor, per-workload MADs and allowances are retained verbatim in the
-[registration](../../tools/hardening/evidence/q2-linux-aarch64.json); exact raw
-samples and comparison receipts are in the
-[compressed receipt](../../tools/hardening/evidence/q2-linux-aarch64-samples.json.gz).
-
-```sh
-python3 tools/hardening/deterministic.py
-```
-
-Normal portable CI executes three repetitions of each allocation/encoded-byte
-oracle, with no latency assertion on hosted runners. Warmed append and cursor
-movement require zero allocations; cold append growth is a separate measured
-operation. The virtual fault gate additionally freezes zero-I/O idle interest,
-one serialized output write transaction, and zero transport calls for stale
-analysis delivery. These are internal regression fixtures, not a promise of
-identical ANSI encodings across future versions.
-
-Final corpus transport uses `tools/hardening/corpus.py pack` with ordered campaign
-directories. Only completed budgets are admitted; each input and aggregate corpus
-digest is revalidated before replay. A bounded immutable compressed receipt retains
-source/toolchain/binary identities, CPU accounting, executions and exact inputs.
-The manual final-corpus workflow runs the same archive on Linux x86_64/ARM64,
-macOS ARM64 and Windows x86_64; Windows excludes native C. Neither an implemented
-replay workflow nor a seed smoke is a completed final-corpus replay.
-
-
-## Recorded native campaign
-
-The [final native campaign](https://github.com/mothx9/replai/actions/runs/34598637866)
-passed on native Linux x86_64, Linux ARM64 and macOS ARM64 at harness
-`c68fc3a69763587440b212381c4e27cd8373d443`. Each platform completed 1,000
-blocking, session, driven and C lifecycles, a separate 10,000-event mixture,
-eight failure classes repeated 100 times and 100 isolated descriptor-exhaustion
-children. The full counts also passed under Valgrind/native leaks (exhaustion
-runs separately from the memory tool). Exact source, machine and tool receipts,
-raw reports and terminal-transcript hashes are retained in the
-[compressed native evidence](../../tools/hardening/evidence/native-campaign.json.gz).
-
-The old macOS instrumentation run timed out without preserving partial stdout.
-Its runtime root cause cannot be reconstructed from that deficient receipt.
-H010 fixes the evidence-loss and descendant-cleanup defects; the replacement
-campaign completes every phase within a stricter 120-second watchdog, with
-zero attributable native leaks. The earlier timeout is retained as a failed
-measurement, not relabeled as a product crash or silently counted as a pass.
+The example compares a frozen unchanged binary. For a runtime repair, preserve
+separate qualified control/candidate identities and investigate reproduced
+exceedances before accepting a new baseline. Full qualification retains C ABI 1
+symbols/layouts, static/shared/C++ consumers, native PTYs and memory checks.
+Release packaging, API freeze, public distribution and consumer migrations remain
+separate authorizations; no deferred runtime feature is added here.
