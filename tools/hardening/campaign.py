@@ -46,10 +46,12 @@ def main():
     parser.add_argument("--work", type=Path, required=True)
     parser.add_argument("--cpu-seconds", type=int, default=3600)
     parser.add_argument("--targets", nargs="+", choices=TARGETS, default=TARGETS)
+    parser.add_argument("--workers", type=int, default=1, help="independent fuzz processes per target; CPU accounting is summed")
     parser.add_argument("--allow-dirty", action="store_true", help="smoke only; never release evidence")
     args = parser.parse_args()
     assert platform.system() == "Linux", "campaign accounting currently requires Linux wait4"
     assert 1 <= args.cpu_seconds <= 86400
+    assert 1 <= args.workers <= 8
     status = command("git", "status", "--porcelain")
     assert not status or args.allow_dirty, "commit the instrumented source before qualification"
     args.work.mkdir(parents=True, exist_ok=False)
@@ -58,7 +60,7 @@ def main():
                 "dirty": bool(status), "uname": platform.uname()._asdict(), "libc": platform.libc_ver(),
                 "rustc": command("rustc", "+nightly", "-vV"), "cargo_fuzz": command("cargo", "fuzz", "--version"),
                 "instrumentation": "cargo-fuzz default address sanitizer + inline coverage + trace comparisons",
-                "requested_cpu_seconds_per_target": args.cpu_seconds, "start_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
+                "requested_cpu_seconds_per_target": args.cpu_seconds, "workers_per_target": args.workers, "start_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
     (args.work / "environment.json").write_text(json.dumps(metadata, indent=2)+"\n")
     with (args.work / "build.log").open("w") as log:
         for target in args.targets:
@@ -74,30 +76,34 @@ def main():
         binary = work / "instrumented-target"
         shutil.copy2(ROOT / "tools/hardening/target" / host / "release" / target, binary)
         summary["binary_sha256"] = hashlib.sha256(binary.read_bytes()).hexdigest()
-        while summary["cpu_seconds"] < args.cpu_seconds:
-            index = len(summary["chunks"])
+        def chunk(index, seconds):
             argv = [str(binary), str(corpus), "-max_len=8192" if target == "geometry" else "-max_len=4096",
-                    "-timeout=10", "-rss_limit_mb=2048", "-print_final_stats=1", "-seed=17011",
-                    "-max_total_time="+str(min(30, max(1, math.ceil(args.cpu_seconds-summary["cpu_seconds"])))),
-                    "-artifact_prefix="+str(work)+"/"]
+                    "-timeout=10", "-rss_limit_mb=2048", "-print_final_stats=1", "-seed="+str(17011+index%args.workers),
+                    "-max_total_time="+str(seconds), "-artifact_prefix="+str(work)+"/"]
             started = time.time()
             with (work / f"chunk-{index:04}.log").open("w") as log:
                 child = subprocess.Popen(argv, cwd=ROOT, stdout=log, stderr=subprocess.STDOUT,
                                          env={**os.environ, "TERM": "xterm-256color"})
                 _, result, usage = os.wait4(child.pid, 0)
                 child.returncode = os.waitstatus_to_exitcode(result)
-            cpu = usage.ru_utime + usage.ru_stime
-            summary["cpu_seconds"] += cpu
-            summary["chunks"].append({"argv": argv, "start_unix": started, "end_unix": time.time(),
-                                      "user_seconds": usage.ru_utime, "system_seconds": usage.ru_stime,
-                                      "peak_rss_kib": usage.ru_maxrss, "exit_code": child.returncode})
-            summary["final_corpus"] = digest(corpus)
-            summary["budget_complete"] = summary["cpu_seconds"] >= args.cpu_seconds
-            summary["passed"] = child.returncode == 0
-            (work / "summary.json").write_text(json.dumps(summary, indent=2)+"\n")
-            print(f"{target}: {summary['cpu_seconds']:.2f}/{args.cpu_seconds} CPU s; exit {child.returncode}", flush=True)
-            if child.returncode != 0:
-                return False
+            return {"argv": argv, "start_unix": started, "end_unix": time.time(),
+                    "user_seconds": usage.ru_utime, "system_seconds": usage.ru_stime,
+                    "peak_rss_kib": usage.ru_maxrss, "exit_code": child.returncode}
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=args.workers) as workers:
+            while summary["cpu_seconds"] < args.cpu_seconds:
+                first = len(summary["chunks"])
+                seconds = min(30, max(1, math.ceil((args.cpu_seconds-summary["cpu_seconds"])/args.workers)))
+                results = list(workers.map(lambda index: chunk(index, seconds), range(first, first+args.workers)))
+                summary["chunks"].extend(results)
+                summary["cpu_seconds"] += sum(r["user_seconds"]+r["system_seconds"] for r in results)
+                summary["final_corpus"] = digest(corpus)
+                summary["budget_complete"] = summary["cpu_seconds"] >= args.cpu_seconds
+                summary["passed"] = all(r["exit_code"] == 0 for r in results)
+                (work / "summary.json").write_text(json.dumps(summary, indent=2)+"\n")
+                print(f"{target}: {summary['cpu_seconds']:.2f}/{args.cpu_seconds} CPU s; pass {summary['passed']}", flush=True)
+                if not summary["passed"]:
+                    return False
         return True
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=len(args.targets)) as pool:

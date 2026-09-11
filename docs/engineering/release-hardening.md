@@ -24,13 +24,15 @@ rustup toolchain install nightly --profile minimal
 cargo build --locked --release --manifest-path tools/hardening/Cargo.toml --bin replay
 tools/hardening/target/release/replay generated 100000 1
 tools/hardening/target/release/replay faults 100
-python3 tools/hardening/campaign.py --work /tmp/replai-hardening-campaign --cpu-seconds 3600
+python3 tools/hardening/campaign.py --work /tmp/replai-hardening-campaign --cpu-seconds 3600 --workers 3
 ```
 
 The campaign requires Linux, a C++ compiler and a **fresh** output directory.
 It builds all five address-sanitized coverage-guided targets, runs them in
 parallel, and accumulates `wait4` user + system CPU seconds separately per
-target. Thirty-second wall-limited chunks permit bounded monitoring; wall time
+target. `--workers 3` runs three independent processes per target over its shared
+corpus. Each child has its own `wait4` receipt; only summed user/system CPU
+satisfies the budget. Thirty-second wall-limited chunks permit bounded monitoring; wall time
 does not satisfy the CPU budget. Every chunk retains arguments, timestamps,
 CPU time, peak RSS, exit status and libFuzzer statistics. A finding stops that
 target and fails the campaign. It is never counted as a passing budget.
@@ -153,8 +155,11 @@ paste admission policies; geometry includes every current Document block;
 host results include oversized aggregate/count/field payloads and overlapping
 spans. These three targets require new full budgets. Earlier completed campaigns
 remain observations of their recorded narrower harness, not evidence for added
-branches. The editor and C targets retain their original independently recorded
-60-CPU-minute budgets. Production sources remain unchanged.
+branches. The editor target retains its original independently recorded 60-CPU-minute
+budget. C was also expanded to exercise exact configured capacity and canaries
+at each declared output-buffer boundary. Production sources remain unchanged.
+The final parallel campaign supersedes incomplete development runs; interrupted
+chunks never count toward its fresh budgets.
 
 
 ## Q2 registered reference and deterministic CI gates
