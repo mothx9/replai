@@ -1,9 +1,9 @@
 {
   "identity": {
-    "head": "d04ad539aa3cfd9007cba40e6a35e59586a9664a",
-    "tree": "1424ede190cb570a61a8ea4fe09836cfa858f1f0",
+    "head": "6975c0979a1fd13f619f2d079b7494945ca18c5e",
+    "tree": "71bb4281b44481aecc90196af6ec3202a975f91e",
     "runtime_tree": "12b9cd0e58ef8d2dfe6c1b91185fd21b05a7aa9e",
-    "binary_sha256": "0624d6552ef90a020d758af708574a94c179bd461e0c49a4b2ed713de05eae94",
+    "binary_sha256": "8e27231c41390f43a49523f845d297fb50abdcb837c88209d61537cfad1a183a",
     "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-unknown-linux-gnu\nrelease: 1.98.1\nLLVM version: 22.1.8",
     "host": {
       "system": "Linux",
@@ -39,14 +39,14 @@
       "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor": "performance"
     },
     "load": [
-      1.86669921875,
-      1.677734375,
-      1.06298828125
+      6.9833984375,
+      8.51318359375,
+      5.5068359375
     ],
-    "utc": "2026-09-11T11:47:57Z"
+    "utc": "2026-09-11T12:14:16Z"
   },
-  "allocation_binary_sha256": "72e9ac129f2244f740ba939a74973347873e57075a7542817ab9bf1bbe9f07d2",
-  "controls_sha256": "ac9bd0bdf901667ff10851c64537c05abeb46864ba0554fbce6c9dd79469d236",
+  "allocation_binary_sha256": "ddcba68c07f037c1cf760950047066d94bc9df1b139366fabceb4d39e94f5f88",
+  "controls_sha256": "cb8836a6403a5da0d11346b97e31d731996d0b6b156e974c9abac8d1077736d1",
   "timer_resolution_ns": 16,
   "formula": "median max(15%,5*MAD,2*timer); p95 max(25%,p95-MAD,2*timer)",
   "gates": {
@@ -81,7 +81,7 @@
       }
     },
     "cursor/1024/0": {
-      "median_ns": 48,
+      "median_ns": 32,
       "p95_ns": 48,
       "control_median_mad_ns": 0,
       "control_p95_mad_ns": 0,
@@ -96,27 +96,27 @@
       }
     },
     "burst/0/0": {
-      "median_ns": 44608,
-      "p95_ns": 45696,
-      "control_median_mad_ns": 17,
-      "control_p95_mad_ns": 240,
-      "median_allowance_ns": 6691.2,
-      "p95_allowance_ns": 11424.0,
-      "encoded_bytes": 8,
+      "median_ns": 44656,
+      "p95_ns": 45344,
+      "control_median_mad_ns": 32,
+      "control_p95_mad_ns": 368,
+      "median_allowance_ns": 6698.4,
+      "p95_allowance_ns": 11336.0,
+      "encoded_bytes": 1042,
       "allocations": {
         "allocation_calls": 1118,
         "peak_live_delta_bytes": 7740,
         "requested_bytes": 16772,
-        "retained_delta_bytes": 970
+        "retained_delta_bytes": 3006
       }
     },
     "paste/1024/0": {
-      "median_ns": 57520,
-      "p95_ns": 59968,
-      "control_median_mad_ns": 208,
-      "control_p95_mad_ns": 656,
-      "median_allowance_ns": 8628.0,
-      "p95_allowance_ns": 14992.0,
+      "median_ns": 57760,
+      "p95_ns": 59552,
+      "control_median_mad_ns": 160,
+      "control_p95_mad_ns": 272,
+      "median_allowance_ns": 8664.0,
+      "p95_allowance_ns": 14888.0,
       "encoded_bytes": 1956,
       "allocations": {
         "allocation_calls": 195,
@@ -141,11 +141,11 @@
       }
     },
     "replace/1024/0": {
-      "median_ns": 944,
+      "median_ns": 928,
       "p95_ns": 1040,
-      "control_median_mad_ns": 0,
-      "control_p95_mad_ns": 16,
-      "median_allowance_ns": 141.6,
+      "control_median_mad_ns": 16,
+      "control_p95_mad_ns": 48,
+      "median_allowance_ns": 139.2,
       "p95_allowance_ns": 260.0,
       "encoded_bytes": 139,
       "allocations": {
@@ -156,12 +156,12 @@
       }
     },
     "menu-show/1024/0": {
-      "median_ns": 24528,
-      "p95_ns": 25456,
-      "control_median_mad_ns": 32,
-      "control_p95_mad_ns": 496,
-      "median_allowance_ns": 3679.2,
-      "p95_allowance_ns": 6364.0,
+      "median_ns": 24752,
+      "p95_ns": 25168,
+      "control_median_mad_ns": 16,
+      "control_p95_mad_ns": 176,
+      "median_allowance_ns": 3712.7999999999997,
+      "p95_allowance_ns": 6292.0,
       "encoded_bytes": 1312,
       "allocations": {
         "allocation_calls": 161,
@@ -171,12 +171,12 @@
       }
     },
     "menu-next/1024/0": {
-      "median_ns": 24416,
-      "p95_ns": 24800,
-      "control_median_mad_ns": 48,
-      "control_p95_mad_ns": 48,
-      "median_allowance_ns": 3662.4,
-      "p95_allowance_ns": 6200.0,
+      "median_ns": 24368,
+      "p95_ns": 24736,
+      "control_median_mad_ns": 16,
+      "control_p95_mad_ns": 64,
+      "median_allowance_ns": 3655.2,
+      "p95_allowance_ns": 6184.0,
       "encoded_bytes": 105,
       "allocations": {
         "allocation_calls": 132,
@@ -186,11 +186,11 @@
       }
     },
     "menu-accept/1024/0": {
-      "median_ns": 1328,
+      "median_ns": 1360,
       "p95_ns": 1440,
-      "control_median_mad_ns": 32,
+      "control_median_mad_ns": 16,
       "control_p95_mad_ns": 16,
-      "median_allowance_ns": 199.2,
+      "median_allowance_ns": 204.0,
       "p95_allowance_ns": 360.0,
       "encoded_bytes": 211,
       "allocations": {
@@ -201,12 +201,12 @@
       }
     },
     "validation/1024/0": {
-      "median_ns": 23664,
-      "p95_ns": 24064,
-      "control_median_mad_ns": 64,
-      "control_p95_mad_ns": 80,
-      "median_allowance_ns": 3549.6,
-      "p95_allowance_ns": 6016.0,
+      "median_ns": 23872,
+      "p95_ns": 24304,
+      "control_median_mad_ns": 32,
+      "control_p95_mad_ns": 64,
+      "median_allowance_ns": 3580.7999999999997,
+      "p95_allowance_ns": 6076.0,
       "encoded_bytes": 1235,
       "allocations": {
         "allocation_calls": 123,
@@ -216,12 +216,12 @@
       }
     },
     "incomplete/1024/0": {
-      "median_ns": 23472,
-      "p95_ns": 23808,
-      "control_median_mad_ns": 15,
-      "control_p95_mad_ns": 112,
-      "median_allowance_ns": 3520.7999999999997,
-      "p95_allowance_ns": 5952.0,
+      "median_ns": 23616,
+      "p95_ns": 23936,
+      "control_median_mad_ns": 32,
+      "control_p95_mad_ns": 80,
+      "median_allowance_ns": 3542.4,
+      "p95_allowance_ns": 5984.0,
       "encoded_bytes": 1182,
       "allocations": {
         "allocation_calls": 115,
@@ -231,12 +231,12 @@
       }
     },
     "analysis/1024/0": {
-      "median_ns": 23632,
-      "p95_ns": 24752,
-      "control_median_mad_ns": 32,
-      "control_p95_mad_ns": 416,
-      "median_allowance_ns": 3544.7999999999997,
-      "p95_allowance_ns": 6188.0,
+      "median_ns": 23488,
+      "p95_ns": 24016,
+      "control_median_mad_ns": 16,
+      "control_p95_mad_ns": 192,
+      "median_allowance_ns": 3523.2,
+      "p95_allowance_ns": 6004.0,
       "encoded_bytes": 182,
       "allocations": {
         "allocation_calls": 102,
@@ -246,12 +246,12 @@
       }
     },
     "output/1024/0": {
-      "median_ns": 23568,
-      "p95_ns": 23872,
-      "control_median_mad_ns": 31,
-      "control_p95_mad_ns": 64,
-      "median_allowance_ns": 3535.2,
-      "p95_allowance_ns": 5968.0,
+      "median_ns": 23728,
+      "p95_ns": 23936,
+      "control_median_mad_ns": 32,
+      "control_p95_mad_ns": 80,
+      "median_allowance_ns": 3559.2,
+      "p95_allowance_ns": 5984.0,
       "encoded_bytes": 1228,
       "allocations": {
         "allocation_calls": 120,
@@ -261,12 +261,12 @@
       }
     },
     "resize/1024/0": {
-      "median_ns": 22864,
-      "p95_ns": 23040,
-      "control_median_mad_ns": 32,
-      "control_p95_mad_ns": 48,
-      "median_allowance_ns": 3429.6,
-      "p95_allowance_ns": 5760.0,
+      "median_ns": 23040,
+      "p95_ns": 23520,
+      "control_median_mad_ns": 16,
+      "control_p95_mad_ns": 80,
+      "median_allowance_ns": 3456.0,
+      "p95_allowance_ns": 5880.0,
       "encoded_bytes": 572,
       "allocations": {
         "allocation_calls": 86,
@@ -276,12 +276,12 @@
       }
     },
     "edit/640/10": {
-      "median_ns": 15536,
-      "p95_ns": 15744,
+      "median_ns": 15600,
+      "p95_ns": 15840,
       "control_median_mad_ns": 16,
-      "control_p95_mad_ns": 32,
-      "median_allowance_ns": 2330.4,
-      "p95_allowance_ns": 3936.0,
+      "control_p95_mad_ns": 64,
+      "median_allowance_ns": 2340.0,
+      "p95_allowance_ns": 3960.0,
       "encoded_bytes": 1,
       "allocations": {
         "allocation_calls": 73,
@@ -291,12 +291,12 @@
       }
     },
     "vertical/640/10": {
-      "median_ns": 15536,
-      "p95_ns": 15744,
-      "control_median_mad_ns": 16,
-      "control_p95_mad_ns": 64,
-      "median_allowance_ns": 2330.4,
-      "p95_allowance_ns": 3936.0,
+      "median_ns": 15600,
+      "p95_ns": 15888,
+      "control_median_mad_ns": 32,
+      "control_p95_mad_ns": 176,
+      "median_allowance_ns": 2340.0,
+      "p95_allowance_ns": 3972.0,
       "encoded_bytes": 9,
       "allocations": {
         "allocation_calls": 70,
@@ -306,12 +306,12 @@
       }
     },
     "resize/640/10": {
-      "median_ns": 15936,
-      "p95_ns": 16272,
-      "control_median_mad_ns": 16,
-      "control_p95_mad_ns": 272,
-      "median_allowance_ns": 2390.4,
-      "p95_allowance_ns": 4068.0,
+      "median_ns": 16112,
+      "p95_ns": 16384,
+      "control_median_mad_ns": 0,
+      "control_p95_mad_ns": 80,
+      "median_allowance_ns": 2416.7999999999997,
+      "p95_allowance_ns": 4096.0,
       "encoded_bytes": 465,
       "allocations": {
         "allocation_calls": 85,
@@ -321,12 +321,12 @@
       }
     },
     "edit/6400/100": {
-      "median_ns": 139279,
-      "p95_ns": 140768,
-      "control_median_mad_ns": 47,
-      "control_p95_mad_ns": 593,
-      "median_allowance_ns": 20891.85,
-      "p95_allowance_ns": 35192.0,
+      "median_ns": 140240,
+      "p95_ns": 142432,
+      "control_median_mad_ns": 32,
+      "control_p95_mad_ns": 448,
+      "median_allowance_ns": 21036.0,
+      "p95_allowance_ns": 35608.0,
       "encoded_bytes": 1,
       "allocations": {
         "allocation_calls": 151,
@@ -336,12 +336,12 @@
       }
     },
     "vertical/6400/100": {
-      "median_ns": 139120,
-      "p95_ns": 141024,
-      "control_median_mad_ns": 48,
-      "control_p95_mad_ns": 656,
-      "median_allowance_ns": 20868.0,
-      "p95_allowance_ns": 35256.0,
+      "median_ns": 140320,
+      "p95_ns": 141904,
+      "control_median_mad_ns": 32,
+      "control_p95_mad_ns": 288,
+      "median_allowance_ns": 21048.0,
+      "p95_allowance_ns": 35476.0,
       "encoded_bytes": 68,
       "allocations": {
         "allocation_calls": 149,
@@ -351,12 +351,12 @@
       }
     },
     "resize/6400/100": {
-      "median_ns": 138944,
-      "p95_ns": 140512,
-      "control_median_mad_ns": 47,
-      "control_p95_mad_ns": 224,
-      "median_allowance_ns": 20841.6,
-      "p95_allowance_ns": 35128.0,
+      "median_ns": 140128,
+      "p95_ns": 141664,
+      "control_median_mad_ns": 0,
+      "control_p95_mad_ns": 288,
+      "median_allowance_ns": 21019.2,
+      "p95_allowance_ns": 35416.0,
       "encoded_bytes": 573,
       "allocations": {
         "allocation_calls": 86,
@@ -366,12 +366,12 @@
       }
     },
     "edit/64000/1000": {
-      "median_ns": 1371132,
-      "p95_ns": 1386364,
-      "control_median_mad_ns": 336,
-      "control_p95_mad_ns": 3168,
-      "median_allowance_ns": 205669.8,
-      "p95_allowance_ns": 346591.0,
+      "median_ns": 1381825,
+      "p95_ns": 1393153,
+      "control_median_mad_ns": 527,
+      "control_p95_mad_ns": 1488,
+      "median_allowance_ns": 207273.75,
+      "p95_allowance_ns": 348288.25,
       "encoded_bytes": 1,
       "allocations": {
         "allocation_calls": 151,
@@ -381,12 +381,12 @@
       }
     },
     "vertical/64000/1000": {
-      "median_ns": 1355517,
-      "p95_ns": 1362316,
-      "control_median_mad_ns": 464,
-      "control_p95_mad_ns": 1504,
-      "median_allowance_ns": 203327.55,
-      "p95_allowance_ns": 340579.0,
+      "median_ns": 1366913,
+      "p95_ns": 1373088,
+      "control_median_mad_ns": 113,
+      "control_p95_mad_ns": 1152,
+      "median_allowance_ns": 205036.94999999998,
+      "p95_allowance_ns": 343272.0,
       "encoded_bytes": 68,
       "allocations": {
         "allocation_calls": 149,
@@ -396,12 +396,12 @@
       }
     },
     "resize/64000/1000": {
-      "median_ns": 1364764,
-      "p95_ns": 1373820,
-      "control_median_mad_ns": 672,
-      "control_p95_mad_ns": 1055,
-      "median_allowance_ns": 204714.6,
-      "p95_allowance_ns": 343455.0,
+      "median_ns": 1375905,
+      "p95_ns": 1382625,
+      "control_median_mad_ns": 96,
+      "control_p95_mad_ns": 1584,
+      "median_allowance_ns": 206385.75,
+      "p95_allowance_ns": 345656.25,
       "encoded_bytes": 573,
       "allocations": {
         "allocation_calls": 86,
@@ -411,12 +411,12 @@
       }
     },
     "edit/65536/0": {
-      "median_ns": 14704,
-      "p95_ns": 17808,
-      "control_median_mad_ns": 96,
-      "control_p95_mad_ns": 224,
-      "median_allowance_ns": 2205.6,
-      "p95_allowance_ns": 4452.0,
+      "median_ns": 13328,
+      "p95_ns": 23968,
+      "control_median_mad_ns": 368,
+      "control_p95_mad_ns": 272,
+      "median_allowance_ns": 1999.1999999999998,
+      "p95_allowance_ns": 5992.0,
       "encoded_bytes": 1,
       "allocations": {
         "allocation_calls": 5,
@@ -441,12 +441,12 @@
       }
     },
     "analysis/65536/0": {
-      "median_ns": 1321804,
-      "p95_ns": 1327084,
-      "control_median_mad_ns": 144,
-      "control_p95_mad_ns": 656,
-      "median_allowance_ns": 198270.6,
-      "p95_allowance_ns": 331771.0,
+      "median_ns": 1323600,
+      "p95_ns": 1329185,
+      "control_median_mad_ns": 143,
+      "control_p95_mad_ns": 1343,
+      "median_allowance_ns": 198540.0,
+      "p95_allowance_ns": 332296.25,
       "encoded_bytes": 37,
       "allocations": {
         "allocation_calls": 159,
@@ -456,12 +456,12 @@
       }
     },
     "resize/65536/0": {
-      "median_ns": 1305677,
-      "p95_ns": 1312541,
-      "control_median_mad_ns": 80,
-      "control_p95_mad_ns": 464,
-      "median_allowance_ns": 195851.55,
-      "p95_allowance_ns": 328135.25,
+      "median_ns": 1312177,
+      "p95_ns": 1316721,
+      "control_median_mad_ns": 272,
+      "control_p95_mad_ns": 1265,
+      "median_allowance_ns": 196826.55,
+      "p95_allowance_ns": 329180.25,
       "encoded_bytes": 654,
       "allocations": {
         "allocation_calls": 86,
@@ -471,12 +471,12 @@
       }
     },
     "edit/1048576/0": {
-      "median_ns": 251600,
-      "p95_ns": 261711,
-      "control_median_mad_ns": 656,
-      "control_p95_mad_ns": 3296,
-      "median_allowance_ns": 37740.0,
-      "p95_allowance_ns": 65427.75,
+      "median_ns": 221552,
+      "p95_ns": 251872,
+      "control_median_mad_ns": 560,
+      "control_p95_mad_ns": 3456,
+      "median_allowance_ns": 33232.799999999996,
+      "p95_allowance_ns": 62968.0,
       "encoded_bytes": 1,
       "allocations": {
         "allocation_calls": 5,
@@ -486,12 +486,12 @@
       }
     },
     "cursor/1048576/0": {
-      "median_ns": 64,
-      "p95_ns": 144,
+      "median_ns": 80,
+      "p95_ns": 112,
       "control_median_mad_ns": 0,
-      "control_p95_mad_ns": 16,
+      "control_p95_mad_ns": 0,
       "median_allowance_ns": 32,
-      "p95_allowance_ns": 36.0,
+      "p95_allowance_ns": 32,
       "encoded_bytes": 0,
       "allocations": {
         "allocation_calls": 0,
@@ -501,12 +501,12 @@
       }
     },
     "analysis/1048576/0": {
-      "median_ns": 21094454,
-      "p95_ns": 21136934,
-      "control_median_mad_ns": 3776,
-      "control_p95_mad_ns": 4048,
-      "median_allowance_ns": 3164168.1,
-      "p95_allowance_ns": 5284233.5,
+      "median_ns": 21149211,
+      "p95_ns": 21183499,
+      "control_median_mad_ns": 1937,
+      "control_p95_mad_ns": 1440,
+      "median_allowance_ns": 3172381.65,
+      "p95_allowance_ns": 5295874.75,
       "encoded_bytes": 37,
       "allocations": {
         "allocation_calls": 159,
@@ -516,12 +516,12 @@
       }
     },
     "resize/1048576/0": {
-      "median_ns": 20863303,
-      "p95_ns": 20901111,
-      "control_median_mad_ns": 2336,
-      "control_p95_mad_ns": 5712,
-      "median_allowance_ns": 3129495.4499999997,
-      "p95_allowance_ns": 5225277.75,
+      "median_ns": 20986987,
+      "p95_ns": 21031067,
+      "control_median_mad_ns": 1825,
+      "control_p95_mad_ns": 2688,
+      "median_allowance_ns": 3148048.05,
+      "p95_allowance_ns": 5257766.75,
       "encoded_bytes": 654,
       "allocations": {
         "allocation_calls": 86,

@@ -165,15 +165,17 @@ chunks never count toward its fresh budgets.
 
 ## Q2 registered reference and deterministic CI gates
 
-The first recorded reference below is superseded for the composed burst byte
-metric by H009. Its original passing comparisons remain historical observations;
-the corrected reference must pass a fresh preregistered comparison before promotion.
+The final reference at `6975c0979a1fd13f619f2d079b7494945ca18c5e` includes
+the H009 composed-burst accounting repair: 1,042 encoded bytes, including the
+intermediate redraw. The earlier reference remains superseded for that metric.
 
 The corrected Linux ARM64 run on Spark (`spark-7c3d`, kernel
 6.17.0-1021-nvidia, Rust 1.98.1) pinned measurements to CPU 19 under the
 performance governor. Five control batches of 31 repetitions registered all
-32 workloads before two alternating control/candidate comparisons. Both
-comparisons observed zero median/p95 threshold exceedances; allocation and
+32 workloads before two alternating control/candidate comparisons. The first
+comparison exceeded the registered bound for the 1-MiB cursor workload; the
+second did not reproduce it. No workload exceeded in both independent runs, so
+the adopted policy passed without changing thresholds. Allocation and
 encoded-byte checks passed. These compare an unchanged runtime/binary: they
 establish a regression reference and exercise enforcement, not a speedup claim.
 The timer floor, per-workload MADs and allowances are retained verbatim in the
