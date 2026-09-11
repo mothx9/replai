@@ -133,15 +133,38 @@ pub fn cabi_case(data: &[u8]) {
                     s
                 }
                 11 => replai_interrupt(h, &mut event),
-                12 => replai_submitted_copy(
-                    h,
-                    output.as_mut_ptr().add(1),
-                    c.get(1).copied().unwrap_or(0) as usize,
-                    &mut required,
-                ),
+                12 => {
+                    let capacity = c.get(1).copied().unwrap_or(0) as usize;
+                    let mut small = vec![0xa5; capacity + 2];
+                    let result = replai_submitted_copy(
+                        h,
+                        small.as_mut_ptr().add(1),
+                        capacity,
+                        &mut required,
+                    );
+                    assert_eq!(small[0], 0xa5);
+                    assert_eq!(small[capacity + 1], 0xa5);
+                    if result == REPLAI_BUFFER_TOO_SMALL {
+                        assert!(small.iter().all(|b| *b == 0xa5));
+                    }
+                    result
+                }
                 13 => replai_draft_copy(h, ptr::null_mut(), 0, &mut required, &mut cursor),
                 _ => {
-                    replai_status_text(byte as i32, output.as_mut_ptr().add(1), 256, &mut required)
+                    let capacity = c.get(1).copied().unwrap_or(0) as usize;
+                    let mut small = vec![0xa5; capacity + 2];
+                    let result = replai_status_text(
+                        byte as i32,
+                        small.as_mut_ptr().add(1),
+                        capacity,
+                        &mut required,
+                    );
+                    assert_eq!(small[0], 0xa5);
+                    assert_eq!(small[capacity + 1], 0xa5);
+                    if result == REPLAI_BUFFER_TOO_SMALL {
+                        assert!(small.iter().all(|b| *b == 0xa5));
+                    }
+                    result
                 }
             };
             assert_ne!(
