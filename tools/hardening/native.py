@@ -3,6 +3,7 @@
 import argparse
 import errno
 import fcntl
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -95,7 +96,12 @@ def main():
                   if platform.system() == "Linux" else ["/usr/bin/leaks", "--atExit", "--"])
     summary = {"head": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
                "tree": subprocess.check_output(["git", "rev-parse", "HEAD^{tree}"], cwd=ROOT, text=True).strip(),
-               "environment": platform.uname()._asdict(), "memory": args.memory, "results": []}
+               "environment": platform.uname()._asdict(), "memory": args.memory,
+               "binary_sha256": hashlib.sha256(binary.read_bytes()).hexdigest(),
+               "rustc": subprocess.check_output(["rustc", "-vV"], text=True).strip(),
+               "started_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+               "results": []}
+    (args.work / "summary.json").write_text(json.dumps(summary, indent=2)+"\n")
     summary["results"].append(blocking(binary, args.cycles, args.work, prefix))
     for tier, count in [("session", args.cycles), ("driven", args.cycles), ("cabi", args.cycles), ("mixed", args.events), ("failures", args.failure_repeats), ("exhaustion", args.failure_repeats)]:
         with (args.work / f"{tier}.stderr").open("w") as errors:

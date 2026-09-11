@@ -1,6 +1,9 @@
 //! C calls use live, disjoint, correctly sized allocations. Never fuzz addresses.
+#[cfg(test)]
+use crate::terminal::pty_support as pty;
 use replai_c::*;
 use std::{mem::size_of, os::fd::AsRawFd, ptr};
+#[cfg(not(test))]
 #[path = "../../tests/support/posix_pty.rs"]
 mod pty;
 

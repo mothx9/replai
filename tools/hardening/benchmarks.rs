@@ -25,6 +25,11 @@ fn prepare(operation: &str, bytes: usize, lines: usize) -> State {
         "x".repeat(bytes)
     };
     e.editor.insert(&text).unwrap();
+    if operation == "append" {
+        // Steady append has spare capacity. Cold growth is measured separately.
+        e.editor.insert("a").unwrap();
+        e.editor.backspace();
+    }
     e.editor.admit_history("history\nentry").unwrap();
     e.set_submission_policy(SubmissionPolicy::Validated)
         .unwrap();
@@ -77,7 +82,7 @@ fn prepare(operation: &str, bytes: usize, lines: usize) -> State {
 fn operation(s: &mut State, name: &str) -> Effects {
     let e = &mut s.e;
     match name {
-        "append" => {
+        "append" | "append-grow" => {
             e.editor.insert("a").unwrap();
             Effects::default()
         }
@@ -140,6 +145,7 @@ pub fn benchmark(samples: usize, batches: usize) {
     let mut workloads = vec![];
     for name in [
         "append",
+        "append-grow",
         "cursor",
         "burst",
         "paste",

@@ -44,7 +44,7 @@ def thresholds(samples, resolution):
 def read(path):
     data = [json.loads(s) for s in path.read_text().splitlines()]
     header, rows = data[0], data[1:]
-    assert len({r["id"] for r in rows}) == len(rows) == 31
+    assert len({r["id"] for r in rows}) == len(rows) == 32
     assert header["samples"] == 31 and header["batches"] == 5
     return header, {r["id"]: r for r in rows}
 

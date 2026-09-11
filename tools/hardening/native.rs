@@ -99,6 +99,8 @@ mod posix {
     }
     fn failures(repeats: usize, exhaustion: bool) {
         let before_fds = count_fds();
+        let mut restorable_hangups = 0;
+        let mut unrestorable_hangups = 0;
         if exhaustion {
             // This binary is an isolated child. Never change its controller's limit.
             rustix::process::setrlimit(
@@ -215,18 +217,23 @@ mod posix {
                         if class.ends_with("hangup") {
                             drop(master);
                             let result = if *class == "read-hangup" {
-                                t.advance(Wake::InputReady).map(|_| ())
+                                t.advance(Wake::InputReady)
+                                    .map(|event| assert_eq!(event, Some(Event::EndOfInput)))
                             } else {
                                 t.external_output(Role::Default, "after disconnect")
                             };
-                            assert!(
-                                result.is_err(),
-                                "unrestorable PTY must not fabricate success"
-                            );
-                            // Failed restoration retains a retryable resource.
-                            // Explicit close reports failure and releases ownership.
-                            assert!(t.close().is_err());
+                            // Darwin may still permit termios restoration after
+                            // hangup. Linux can refuse it. Qualify the OS fact,
+                            // never prescribe Linux cleanup outcomes to macOS.
+                            let _ = t.close();
                             assert!(!t.is_open());
+                            if let Ok(after) = tcgetattr(&slave) {
+                                assert_eq!(format!("{after:?}"), original);
+                                restorable_hangups += 1;
+                            } else {
+                                assert!(result.is_err(), "unrestorable PTY must report failure");
+                                unrestorable_hangups += 1;
+                            }
                             drop(t);
                             drop(slave);
                             assert_eq!(count_fds(), before_fds);
@@ -262,7 +269,7 @@ mod posix {
         }
         println!(
             "{}",
-            serde_json::json!({"native_failure_classes":classes,"repetitions":repeats,"fd_stable":true,"restoration":"exact when connected; explicit failure after hangup"})
+            serde_json::json!({"native_failure_classes":classes,"repetitions":repeats,"fd_stable":true,"restorable_hangups":restorable_hangups,"unrestorable_hangups":unrestorable_hangups,"restoration":"exact when possible; explicit failure when OS refuses"})
         );
     }
     pub fn main() {
