@@ -22,6 +22,10 @@ These rules apply to the entire REPLAI repository. Follow the
 - Update the owning document when a contract changes. ROADMAP alone owns
   current project status; completed work belongs in Git history. Do not add
   archive directories, shadow status documents or speculative release claims.
+- Classify every completed milestone against the public-surface closeout matrix
+  in [development](docs/development.md#milestone-closeout). Update README or its
+  generated assets only when their documented trigger applies; never refresh a
+  benchmark graphic from unqualified measurements.
 - Preserve published history and use ordinary pushes. Inspect the final diff
   and remote identity before claiming delivery. Do not publish a release or
   begin a consumer migration as an incidental consequence of another task.

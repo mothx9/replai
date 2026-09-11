@@ -24,6 +24,10 @@ jobs:
         run: npm ci --prefix tools/docs --ignore-scripts
       - name: Links, ownership, ABI prose and Mermaid syntax
         run: python3 tools/check_docs.py
+      - name: Generated public vectors and asset provenance
+        run: |
+          python3 tools/readme/render_vectors.py --check
+          python3 tools/readme/build_manifest.py --check
       - name: Adversarial documentation fixtures
         run: python3 -B tools/test_check_docs.py
       - name: PTY observer exit ordering
@@ -74,14 +78,14 @@ jobs:
       - run: cargo test --doc
       - name: README snippets and real blocking host
         run: python3 tools/docs/check_readme.py
-      - name: Reproduce the signature terminal capture
+      - name: Reproduce the public showcase PNG and GIF from a real PTY
         env:
           CARGO_NET_OFFLINE: "true"
         run: |
           python3 -m venv "$RUNNER_TEMP/replai-capture-env"
           "$RUNNER_TEMP/replai-capture-env/bin/pip" install -r tools/docs/capture-requirements.txt
-          cargo build --locked --example console
-          "$RUNNER_TEMP/replai-capture-env/bin/python" tools/docs/capture_terminal.py --check
+          cargo build --locked --example showcase
+          "$RUNNER_TEMP/replai-capture-env/bin/python" tools/readme/capture_showcase.py --check
       - name: Check tracked files stayed unchanged
         run: |
           git diff --check

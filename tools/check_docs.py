@@ -6,6 +6,7 @@ from html.parser import HTMLParser
 import json
 from pathlib import Path
 import re
+import struct
 import subprocess
 from urllib.parse import unquote, urlsplit
 
@@ -117,6 +118,76 @@ def parse_markdown(text):
 
 
 MATURITY = {"ESTABLISHED": "🟢", "PARTIAL": "🟡", "OPEN": "🔴", "LATER": "⚪"}
+
+
+def asset_dimensions(path, format_name):
+    data = path.read_bytes()
+    if format_name == "PNG" and data.startswith(b"\x89PNG\r\n\x1a\n"):
+        return list(struct.unpack(">II", data[16:24]))
+    if format_name == "GIF" and data.startswith((b"GIF87a", b"GIF89a")):
+        return list(struct.unpack("<HH", data[6:10]))
+    if format_name == "SVG":
+        text = data.decode()
+        match = re.search(r'<svg[^>]*\bwidth="(\d+)"[^>]*\bheight="(\d+)"', text)
+        if match:
+            return [int(match[1]), int(match[2])]
+    return None
+
+
+def check_public_surface(root, paths):
+    """Validate narrow README asset provenance without becoming status authority."""
+    errors = []
+    manifest_path = root / "assets/readme/manifest.json"
+    if not manifest_path.is_file():
+        return errors
+    try:
+        manifest = json.loads(manifest_path.read_text())
+    except (ValueError, OSError) as error:
+        return [f"assets/readme/manifest.json: invalid manifest: {error}"]
+    if manifest.get("schema") != 1 or "not project or release status" not in manifest.get("scope", ""):
+        errors.append("assets/readme/manifest.json: invalid narrow scope/schema")
+    readme = (root / "README.md").read_text()
+    import hashlib
+    for record in manifest.get("assets", []):
+        name = record.get("file", "")
+        if name not in paths or name not in readme:
+            errors.append(f"assets/readme/manifest.json: unreferenced or missing asset: {name}")
+            continue
+        path = root / name
+        actual = hashlib.sha256(path.read_bytes()).hexdigest()
+        if actual != record.get("sha256") or path.stat().st_size != record.get("bytes"):
+            errors.append(f"assets/readme/manifest.json: asset digest/size drift: {name}")
+        if asset_dimensions(path, record.get("format")) != record.get("dimensions"):
+            errors.append(f"assets/readme/manifest.json: asset dimensions drift: {name}")
+        if record.get("format") == "GIF" and path.stat().st_size > 5 * 1024 * 1024:
+            errors.append(f"assets/readme/manifest.json: GIF exceeds 5 MiB: {name}")
+        generator = record.get("generator", "")
+        if generator not in paths:
+            errors.append(f"assets/readme/manifest.json: missing generator: {generator}")
+        for source in record.get("inputs", []):
+            source_name = source.get("file", "")
+            source_path = root / source_name
+            if source_name not in paths or not source_path.is_file():
+                errors.append(f"assets/readme/manifest.json: missing input: {source_name}")
+            elif hashlib.sha256(source_path.read_bytes()).hexdigest() != source.get("sha256"):
+                errors.append(f"assets/readme/manifest.json: input digest drift: {source_name}")
+        if evidence := record.get("evidence"):
+            evidence_path = root / evidence
+            if not evidence_path.is_file():
+                errors.append(f"assets/readme/manifest.json: missing evidence: {evidence}")
+            else:
+                identity = json.loads(evidence_path.read_text()).get("identity", {}).get("head")
+                if identity != record.get("evidence_head"):
+                    errors.append(f"assets/readme/manifest.json: evidence identity drift: {name}")
+    required = [
+        "🟢 Qualified", "🟡 Limited", "⚪ Portable only", "🔴 Outside",
+        "docs/release-scope.md", "ROADMAP.md", "RELEASE.PACKAGING.0",
+        "assets/replai-lockup-dark.svg", "assets/replai-lockup-light.svg",
+    ]
+    for value in required:
+        if value not in readme:
+            errors.append(f"README.md: missing public-surface invariant: {value}")
+    return errors
 
 
 def check_roadmap(text):
@@ -251,6 +322,7 @@ def check_local(root, paths):
         errors.append("ROADMAP.md: missing Project status heading")
     if "ROADMAP.md" in parsed:
         errors.extend(check_roadmap((root / "ROADMAP.md").read_text()))
+    errors.extend(check_public_surface(root, paths))
     graph = {path: set() for path in parsed}
     for path, (_, links, _, _, _) in parsed.items():
         for link in links:

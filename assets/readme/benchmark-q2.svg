@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="680" viewBox="0 0 1200 680" role="img" aria-labelledby="title desc">
+<title id="title">Selected REPLAI Q2 median latencies</title>
+<desc id="desc">Six selected median latency workloads from the qualified Q2 Linux ARM64 evidence, displayed on a logarithmic scale.</desc>
+<rect width="1200" height="680" fill="#181b21" rx="20"/>
+<text x="55" y="55" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="25" font-weight="700" fill="#b69af8">Q2 / RECORDED MEDIAN LATENCY</text>
+<text x="55" y="89" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="16" fill="#a8b0bd">logarithmic scale · preparation and verification excluded</text>
+<text x="55" y="150" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="18" fill="#dce2eb">Warmed append</text>
+<rect x="390" y="126" width="80.0" height="28" rx="5" fill="#8d5cf5"/>
+<text x="485.0" y="148" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="17" fill="#dce2eb">32 ns</text>
+<text x="55" y="223" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="18" fill="#dce2eb">1,000-byte edit + submit</text>
+<rect x="390" y="199" width="409.6" height="28" rx="5" fill="#8d5cf5"/>
+<text x="814.6" y="221" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="17" fill="#dce2eb">44.7 µs</text>
+<text x="55" y="296" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="18" fill="#dce2eb">Completion menu show</text>
+<rect x="390" y="272" width="382.7" height="28" rx="5" fill="#8d5cf5"/>
+<text x="787.7" y="294" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="17" fill="#dce2eb">24.8 µs</text>
+<text x="55" y="369" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="18" fill="#dce2eb">Validation result</text>
+<rect x="390" y="345" width="381.1" height="28" rx="5" fill="#8d5cf5"/>
+<text x="786.1" y="367" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="17" fill="#dce2eb">23.9 µs</text>
+<text x="55" y="442" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="18" fill="#dce2eb">Analysis · 64 KiB draft</text>
+<rect x="390" y="418" width="563.9" height="28" rx="5" fill="#8d5cf5"/>
+<text x="968.9" y="440" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="17" fill="#dce2eb">1.32 ms</text>
+<text x="55" y="515" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="18" fill="#dce2eb">Analysis · 1 MiB draft</text>
+<rect x="390" y="491" width="690.0" height="28" rx="5" fill="#8d5cf5"/>
+<text x="1095.0" y="513" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="17" fill="#dce2eb">21.15 ms</text>
+<line x1="55" y1="597" x2="1145" y2="597" stroke="#393f4b"/>
+<text x="55" y="625" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="14" fill="#a8b0bd">source 6975c0979a1f · spark-7c3d · aarch64 · Rust 1.98.1 · CPU 19</text>
+<text x="55" y="650" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="14" fill="#a8b0bd">Recorded workload, not a universal library ranking. Full methodology and 32 gates are linked below.</text>
+</svg>

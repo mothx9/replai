@@ -17,7 +17,10 @@ class DocumentationGuard(unittest.TestCase):
         for path in self.paths:
             target = self.root / path
             target.parent.mkdir(parents=True, exist_ok=True)
-            if path.endswith((".md", ".json")):
+            if path.endswith((".md", ".json")) or path.startswith((
+                "assets/readme/", "tools/readme/", "examples/showcase.rs",
+                "examples/support/showcase_host.rs", "tools/docs/capture-requirements.txt",
+            )):
                 target.write_bytes((checks.ROOT / path).read_bytes())
             else:
                 target.touch()
@@ -35,6 +38,17 @@ class DocumentationGuard(unittest.TestCase):
         errors, diagrams = checks.check_local(self.root, self.paths)
         self.assertEqual(errors, [])
         self.assertTrue(diagrams)
+
+    def test_public_asset_manifest_rejects_drift(self):
+        target = self.root / "assets/readme/terminal-showcase.png"
+        target.write_bytes(target.read_bytes() + b"drift")
+        self.reject("asset digest/size drift")
+
+    def test_public_asset_manifest_rejects_evidence_identity_drift(self):
+        target = self.root / "assets/readme/manifest.json"
+        target.write_text(target.read_text().replace(
+            "6975c0979a1fd13f619f2d079b7494945ca18c5e", "0" * 40))
+        self.reject("evidence identity drift")
 
     def test_missing_relative_link(self):
         self.append("README.md", "[missing](docs/missing.md)")

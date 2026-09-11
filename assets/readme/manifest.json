@@ -1,0 +1,130 @@
+{
+  "assets": [
+    {
+      "bytes": 62276,
+      "command": "cargo build --locked --example showcase && python3 tools/readme/capture_showcase.py",
+      "dimensions": [
+        1072,
+        891
+      ],
+      "file": "assets/readme/terminal-showcase.png",
+      "format": "PNG",
+      "generator": "tools/readme/capture_showcase.py",
+      "inputs": [
+        {
+          "file": "examples/showcase.rs",
+          "sha256": "cef0dcea288968c764262436c2e71c3b1cde84d7c29168f3608fee796ab957dc"
+        },
+        {
+          "file": "examples/support/showcase_host.rs",
+          "sha256": "5087c22ff4dfda36795cb9e3d051184a7fe5af81c454979c73a0a118380b8965"
+        },
+        {
+          "file": "tools/readme/capture_showcase.py",
+          "sha256": "38b1fed245c39ad5f271be47f9fee7db6544aab71f258d2b48783ecb9ae9cfd6"
+        },
+        {
+          "file": "tools/docs/capture-requirements.txt",
+          "sha256": "270b3789983611df4377543f7128bd2bebd136d8efb7cb1a7cf22e559da8748c"
+        }
+      ],
+      "real_pty": true,
+      "sha256": "3eddd047ea901017146e1d6d6f7e4c43766248025f839269c46adbe15e296503"
+    },
+    {
+      "bytes": 669312,
+      "command": "cargo build --locked --example showcase && python3 tools/readme/capture_showcase.py",
+      "dimensions": [
+        1072,
+        891
+      ],
+      "duration_ms": 11630,
+      "file": "assets/readme/terminal-showcase.gif",
+      "format": "GIF",
+      "frames": 35,
+      "generator": "tools/readme/capture_showcase.py",
+      "inputs": [
+        {
+          "file": "examples/showcase.rs",
+          "sha256": "cef0dcea288968c764262436c2e71c3b1cde84d7c29168f3608fee796ab957dc"
+        },
+        {
+          "file": "examples/support/showcase_host.rs",
+          "sha256": "5087c22ff4dfda36795cb9e3d051184a7fe5af81c454979c73a0a118380b8965"
+        },
+        {
+          "file": "tools/readme/capture_showcase.py",
+          "sha256": "38b1fed245c39ad5f271be47f9fee7db6544aab71f258d2b48783ecb9ae9cfd6"
+        },
+        {
+          "file": "tools/docs/capture-requirements.txt",
+          "sha256": "270b3789983611df4377543f7128bd2bebd136d8efb7cb1a7cf22e559da8748c"
+        }
+      ],
+      "real_pty": true,
+      "sha256": "1b41960723c50719e96458edb6b43f3a0e589edd2b16826a9f888f42ef39be92"
+    },
+    {
+      "bytes": 3539,
+      "command": "python3 tools/readme/render_vectors.py",
+      "dimensions": [
+        1200,
+        920
+      ],
+      "file": "assets/readme/architecture-dark.svg",
+      "format": "SVG",
+      "generator": "tools/readme/render_vectors.py",
+      "inputs": [
+        {
+          "file": "tools/readme/render_vectors.py",
+          "sha256": "0d4bf85ee93890b4e1a63be02a8aa0a452aa94f6e8afec88b86e21f1eb0830f8"
+        }
+      ],
+      "sha256": "ad13a0fc0a99d3d9086e8ccad5a85ad6e21f57ab502324223d9f7b331b02db8b"
+    },
+    {
+      "bytes": 3539,
+      "command": "python3 tools/readme/render_vectors.py",
+      "dimensions": [
+        1200,
+        920
+      ],
+      "file": "assets/readme/architecture-light.svg",
+      "format": "SVG",
+      "generator": "tools/readme/render_vectors.py",
+      "inputs": [
+        {
+          "file": "tools/readme/render_vectors.py",
+          "sha256": "0d4bf85ee93890b4e1a63be02a8aa0a452aa94f6e8afec88b86e21f1eb0830f8"
+        }
+      ],
+      "sha256": "e0bdf3dfc7e0743e6686c79f353cdd9fc3a7693e41379a62d9751ac9d2a99799"
+    },
+    {
+      "bytes": 3261,
+      "command": "python3 tools/readme/render_vectors.py",
+      "dimensions": [
+        1200,
+        680
+      ],
+      "evidence": "tools/hardening/evidence/q2-linux-aarch64.json",
+      "evidence_head": "6975c0979a1fd13f619f2d079b7494945ca18c5e",
+      "file": "assets/readme/benchmark-q2.svg",
+      "format": "SVG",
+      "generator": "tools/readme/render_vectors.py",
+      "inputs": [
+        {
+          "file": "tools/readme/render_vectors.py",
+          "sha256": "0d4bf85ee93890b4e1a63be02a8aa0a452aa94f6e8afec88b86e21f1eb0830f8"
+        },
+        {
+          "file": "tools/hardening/evidence/q2-linux-aarch64.json",
+          "sha256": "04fb8cb212ba2065d46bab19e19ec442d39cb3bdcb8e88eab2ec53b253c82e5c"
+        }
+      ],
+      "sha256": "43507a4eefd8f92d87c5f67cf88efe8e7fafe5033b179956a06963e9248efa1b"
+    }
+  ],
+  "schema": 1,
+  "scope": "README generated assets only; not project or release status"
+}

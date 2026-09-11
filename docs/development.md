@@ -18,8 +18,9 @@ evaluation, command catalogs and application storage remain outside this library
 
 ## Tools
 
-Use current stable Rust with rustfmt and Clippy. No MSRV is established; record
-`rustc --version --verbose` and `cargo --version` with qualification evidence.
+Use current stable Rust with rustfmt and Clippy. The v0.1 scope selects Rust
+1.98.1 as its future floor, but no `rust-version` is declared until packaging
+qualifies it; record `rustc --version --verbose` and `cargo --version` with evidence.
 Fetch the locked graph with `cargo fetch --locked`; Rust checks may then use
 `CARGO_NET_OFFLINE=true`. Commit Cargo.lock for reproducible repository checks.
 
@@ -136,6 +137,56 @@ only the intended paths and use an ordinary push. Verify the remote revision
 and actual CI outcomes. Report any remaining failures with causal scope rather
 than either hiding them or promoting unrelated failures into library defects.
 
+## Milestone closeout
+
+Every completed milestone ends with an impact classification. This matrix points
+to existing authorities; it does not create another project-state ledger.
+
+| Change class | Required closeout review |
+| --- | --- |
+| Runtime behavior | CHANGELOG; owning interaction/presentation/architecture contract; tests and evidence dossier; ROADMAP maturity; README if first-use or visible behavior changed; producer metadata/delta |
+| Public Rust API | Rustdoc; README snippets and examples; CHANGELOG; contract and compatibility notes; consumer impact; producer metadata |
+| C ABI change or requalification | `api/c-abi.json`; `include/replai.h`; C API docs/examples; symbol/layout/static/shared/C++ evidence; README surface matrix; producer metadata. A break requires a new explicit ABI identity; ABI 1 is never reinterpreted. |
+| Platform support | ROADMAP; release scope; README platform matrix; architecture/capability docs; CI and native evidence; producer metadata |
+| Performance change or requalification | Performance dossier; Q2 workload/source identity; benchmark visual only when the represented workload was rerun with comparable qualified evidence; README figures only when their exact source changes |
+| Capability added or removed | README capability/API matrices; runnable example; owning contract; ROADMAP; CHANGELOG; producer delta; consumer-impact classification |
+| Qualification only | Evidence dossier; producer evidence identity; ROADMAP only when promotion criteria pass; README Verification only when a public support claim changes |
+| Documentation or branding only | Affected public surface and its checks. No runtime claim, capability delta or performance qualification. |
+| Release-scope change | Explicit authorization; `docs/release-scope.md`; ROADMAP; README release/support matrices; compatibility and support claims |
+
+README changes are required when a milestone changes first-use instructions,
+installation, public capabilities or surfaces, integration tiers, platform
+support, current release/support status, a major qualified performance claim,
+visible terminal behavior, or scope/non-goals. Internal refactors, invisible
+optimizations within an established claim, harness-only repairs, documentation
+carrier commits and evidence reruns with the same public support normally leave
+README unchanged.
+
+A screenshot or GIF is regenerated when the illustrated terminal behavior,
+prompt/theme, example API or canonical showcase changes. A new HEAD alone is not
+a trigger. A benchmark visual changes only after its exact workload is rerun and
+qualified, source identity is recorded and methodology remains comparable.
+Historical evidence stays labeled instead of being silently refreshed.
+
+Use this checklist at closeout:
+
+```text
+[ ] Runtime and public behavior reconciled
+[ ] Owning contract docs updated where applicable
+[ ] Tests and qualification executed
+[ ] Engineering evidence recorded
+[ ] ROADMAP state and unique selection reconciled
+[ ] CHANGELOG reviewed
+[ ] README impact classified
+[ ] Screenshot/GIF impact classified
+[ ] Performance visual impact classified
+[ ] Producer metadata/delta reconciled
+[ ] Consumer impact classified
+[ ] CI green
+[ ] Worktree clean
+[ ] Local/remote HEAD and tree recorded
+```
+
 ## Embedding qualification
 
 `python3 tools/embedding_pty.py --work /tmp/replai-embedding` builds the real
@@ -148,58 +199,58 @@ CI runs both native embedding jobs and preserves their observation artifacts.
 Portable engine tests exercise idle/no-I/O and stale-deadline contracts without
 claiming a Windows terminal backend. Hosted latency is characterization only.
 
-## README terminal preview
+<a id="readme-terminal-preview"></a>
 
-The signature [terminal capture](../assets/terminal-session.png) runs the
-[console example](../examples/console.rs) in an actual PTY. One local host
-submits an indented, validated block, opens a completion menu, then delivers a
-fixture result from its own timer. No commands are executed and no network service
-is contacted. Host code verifies unchanged draft/cursor/revision/selection across
-output. The capture additionally verifies real screen selection/cursor, separate
-acceptance and submission, invalid-input diagnostics, styled/plain equivalence,
-exact termios restoration and bracketed-paste cleanup.
+## Public README assets
 
-The [capture script](../tools/docs/capture_terminal.py) decodes actual PTY bytes
-with pyte and rasterizes those cells with Pillow and DejaVu Sans Mono. There is
-no reconstructed terminal transcript or edited bitmap. The image is 1524 × 720
-pixels at 84 terminal columns, with a 28-pixel raster font (about 17 pixels at
-README width). The dark background and separate title strip belong to the
-capture tooling; terminal text, colors, selection and cursor come from the
-executable. The opaque terminal crop remains readable on GitHub light and dark
-backgrounds. The README uses the supplied version 3 stacked REPLAI lockups for
-light/dark mode, preserving their paths, proportions and violet palette.
-Logo assets are independent of the terminal capture and its byte comparison.
+The signature [PNG](../assets/readme/terminal-showcase.png) and illustrative
+[GIF](../assets/readme/terminal-showcase.gif) run the
+[showcase](../examples/showcase.rs) through an actual PTY. The host fixture uses
+only public REPLAI APIs and verifies output-time preservation of the logical
+draft, cursor, revision and completion selection. The script separately observes
+the rendered cells, Unicode edit, hint, menu selection, validation, continuation,
+structured result, history recall, termios restoration and paste-mode cleanup.
 
-Reproduce on Linux with a current stable Rust toolchain, Python 3 and
-`fonts-dejavu-core` installed:
+[capture_showcase.py](../tools/readme/capture_showcase.py) decodes actual bytes
+with pyte 0.8.2 and rasterizes cells with Pillow 11.3.0 and DejaVu Sans Mono. The
+PNG and GIF are 1072 × 891. The committed GIF has 35 encoded frames, 11.63 seconds
+of frame timing and is not measurement evidence. The opaque terminal background
+works in light and dark GitHub themes; the PNG is the motion-free fallback.
+
+The architecture light/dark SVG pair and Q2 benchmark SVG come from
+[render_vectors.py](../tools/readme/render_vectors.py). The benchmark reads the
+immutable [Q2 registration](../tools/hardening/evidence/q2-linux-aarch64.json)
+and labels its evidence source, machine and recorded-workload limitation. The
+narrow [asset manifest](../assets/readme/manifest.json) records file/input hashes,
+dimensions and exact commands. It is asset provenance, not project or release status.
+
+Reproduce all public assets on Linux with a current Rust toolchain, Python 3 and
+`fonts-dejavu-core`:
 
 ```sh
 python3 -m venv /tmp/replai-capture-env
 /tmp/replai-capture-env/bin/pip install -r tools/docs/capture-requirements.txt
-cargo build --locked --example console
-/tmp/replai-capture-env/bin/python tools/docs/capture_terminal.py
-/tmp/replai-capture-env/bin/python tools/docs/capture_terminal.py --check
+cargo build --locked --example showcase
+/tmp/replai-capture-env/bin/python tools/readme/capture_showcase.py
+python3 tools/readme/render_vectors.py
+python3 tools/readme/build_manifest.py
 ```
 
-`--check` captures a fresh styled and NO_COLOR session, checks the interaction
-properties and compares the generated PNG byte-for-byte without modifying the
-repository. Raster identity is qualified for the pinned Python dependencies and
-DejaVu font; another font/version can change pixels without changing terminal
-semantics. The native terminal suites remain the platform qualification authority.
-The optional Python packages are documentation dependencies, not Cargo/library
-requirements. `python3 tools/docs/check_readme.py` compiles every Rust/C snippet,
-executes the blocking host in a PTY and checks the Document transcript.
-CI runs both checks on Linux; normal native/portable lanes remain unchanged.
+Use the corresponding `--check` form for each script to compare generated bytes
+or manifest metadata without modifying tracked files. Raster identity is scoped
+to the pinned dependencies/font; native terminal suites remain runtime authority.
+The Python packages are documentation dependencies and never enter Cargo or an
+installed consumer. `python3 tools/docs/check_readme.py` compiles every README
+Rust/C snippet, executes the blocking host in a PTY and checks the exact Document
+transcript.
 
-Earlier focused captures remain available here, outside the main README:
-[query/results](../assets/terminal-results.png), [standalone report](../assets/terminal-report.png),
-[completion](../assets/terminal-completion.png) and [validation](../assets/terminal-validation.png).
-Their original executables remain runnable. To regenerate those images explicitly:
-
-```sh
-cargo build --locked --example query --example report --example completion --example validation
-/tmp/replai-capture-env/bin/python tools/docs/capture_terminal.py --legacy
-```
+The prior [console capture](../assets/terminal-session.png) remains reproducible
+for historical documentation continuity with `cargo build --locked --example
+console` followed by `tools/docs/capture_terminal.py --check`. Earlier focused
+captures remain available for [query/results](../assets/terminal-results.png),
+[standalone report](../assets/terminal-report.png),
+[completion](../assets/terminal-completion.png) and
+[validation](../assets/terminal-validation.png).
 
 ## Analysis protocol qualification
 

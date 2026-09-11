@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="920" viewBox="0 0 1200 920" role="img" aria-labelledby="title desc">
+<title id="title">REPLAI architecture</title>
+<desc id="desc">The application calls blocking, session, driven, or C ABI contracts over one interaction engine, terminal contract, and Linux or macOS runtime.</desc>
+<rect width="1200" height="920" fill="#181b21" rx="20"/>
+<rect x="70" y="84" width="1060" height="116" rx="14" fill="#22262e" stroke="#535b69" stroke-width="2"/>
+<text x="600" y="123" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="20" font-weight="700" fill="#9b76f7">YOUR APPLICATION</text>
+<text x="600" y="159" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="17" fill="#a8b0bd">parser · semantics · execution · state · scheduler</text>
+<path d="M600 200 V230" stroke="#9b76f7" stroke-width="3"/>
+<path d="M592 220 L600 230 L608 220" fill="none" stroke="#9b76f7" stroke-width="3"/>
+<rect x="70" y="250" width="1060" height="118" rx="14" fill="#22262e" stroke="#535b69" stroke-width="2"/>
+<text x="600" y="289" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="20" font-weight="700" fill="#9b76f7">PUBLIC CONTRACT</text>
+<text x="600" y="325" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="17" fill="#a8b0bd">blocking  ·  session  ·  driven  ·  C ABI 1</text>
+<path d="M600 368 V398" stroke="#9b76f7" stroke-width="3"/>
+<path d="M592 388 L600 398 L608 388" fill="none" stroke="#9b76f7" stroke-width="3"/>
+<rect x="70" y="418" width="1060" height="142" rx="14" fill="#22262e" stroke="#9b76f7" stroke-width="3"/>
+<text x="600" y="457" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="20" font-weight="700" fill="#9b76f7">ONE INTERACTION ENGINE</text>
+<text x="600" y="493" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="17" fill="#e9edf4">editor + revision provenance  ·  analysis contracts</text>
+<text x="600" y="521" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="17" fill="#e9edf4">presentation + renderer  ·  safe coordinated output</text>
+<path d="M600 560 V590" stroke="#9b76f7" stroke-width="3"/>
+<path d="M592 580 L600 590 L608 580" fill="none" stroke="#9b76f7" stroke-width="3"/>
+<rect x="70" y="610" width="1060" height="116" rx="14" fill="#22262e" stroke="#535b69" stroke-width="2"/>
+<text x="600" y="649" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="20" font-weight="700" fill="#9b76f7">TERMINAL CONTRACT</text>
+<text x="600" y="685" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="17" fill="#a8b0bd">capabilities · decoder · readiness · resources · restoration</text>
+<path d="M600 726 V756" stroke="#9b76f7" stroke-width="3"/>
+<path d="M592 746 L600 756 L608 746" fill="none" stroke="#9b76f7" stroke-width="3"/>
+<rect x="250" y="776" width="700" height="92" rx="14" fill="#22262e" stroke="#535b69" stroke-width="2"/>
+<text x="600" y="815" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="20" font-weight="700" fill="#9b76f7">NATIVE RUNTIME</text>
+<text x="600" y="851" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="17" fill="#a8b0bd">Linux GNU  ·  macOS</text>
+</svg>
