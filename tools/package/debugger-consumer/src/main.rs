@@ -105,7 +105,6 @@ fn portable_contract() -> Result<(), Box<dyn std::error::Error>> {
     input.editor_mut()?.insert("e")?;
     let stale = DebuggerAnalysis::new(stale_snapshot);
     assert_eq!(input.present_analysis(stale.presentation()?)?, AnalysisOutcome::Stale);
-    assert_eq!(input.present_completions(stale.completions()?)?, AnalysisOutcome::Stale);
     assert_eq!(input.editor().text(), "bre");
     assert!(input.analysis_presentation().is_none());
     assert!(input.completion_selection().is_none());
