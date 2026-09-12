@@ -27,7 +27,7 @@ def main():
         stdout=slave,
         stderr=subprocess.PIPE,
         close_fds=True,
-        env={**os.environ, "NO_COLOR": "1"},
+        env={**os.environ, "NO_COLOR": "1", "TERM": "xterm-256color"},
     )
     os.close(slave)
     terminal = bytearray()
