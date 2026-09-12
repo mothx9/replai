@@ -255,8 +255,19 @@ def main():
     args = parser.parse_args()
     root = args.work or Path(tempfile.mkdtemp(prefix='replai-c-qualification-'))
     root.mkdir(parents=True, exist_ok=True)
+    if args.phase == 'all':
+        # Keep native tooling phases process-isolated. In particular, macOS
+        # sandbox/leaks setup must not run in a Python process that previously
+        # drove PTY children.
+        for phase in ['prepare', 'static', 'shared', 'memory', 'audit']:
+            subprocess.run(
+                [sys.executable, __file__, '--work', str(root), '--phase', phase],
+                check=True,
+            )
+        print('Evidence: ' + str(root.resolve()), flush=True)
+        return
     q = Qualification(root)
-    for phase in (['prepare', 'static', 'shared', 'memory', 'audit'] if args.phase == 'all' else [args.phase]):
+    for phase in [args.phase]:
         print('GATE ' + phase, flush=True)
         if phase in ('static', 'shared'):
             q.exercise(phase)
