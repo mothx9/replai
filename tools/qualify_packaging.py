@@ -108,10 +108,13 @@ class Qualification:
     def cargo_package(self):
         self.run("cargo-package", ["cargo", "package", "-p", "replai", "--locked"])
         crate = ROOT / "target/package/replai-0.1.0.crate"
-        inventory = self.run(
-            "cargo-package-list",
-            ["cargo", "package", "-p", "replai", "--locked", "--list"],
-        ).splitlines()
+        inventory = [
+            entry.replace("\\", "/")
+            for entry in self.run(
+                "cargo-package-list",
+                ["cargo", "package", "-p", "replai", "--locked", "--list"],
+            ).splitlines()
+        ]
         forbidden = [p for p in inventory if p.startswith((".boundary/", ".github/", "tools/", "target/"))]
         assert not forbidden, forbidden
         for required in ["Cargo.toml", "LICENSE", "README.md", "src/lib.rs", "examples/simple.rs", "docs/interaction.md"]:
