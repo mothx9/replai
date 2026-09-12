@@ -223,12 +223,12 @@ def check_roadmap(text):
             reject("program rows require seven nonempty fields")
             continue
         program = cells[0]
-        if not re.fullmatch(r"[FPIOUXQEV]", program) or program in programs:
+        if not re.fullmatch(r"[FPIOUXQEVDA]", program) or program in programs:
             reject(f"invalid or duplicate program: {program}")
         programs.add(program)
         if cells[2] not in {f"{icon} {state}" for state, icon in MATURITY.items()}:
             reject(f"invalid program maturity: {program}")
-    if programs != set("FPIOUXQEV"):
+    if programs != set("FPIOUXQEVDA"):
         reject("missing strategic program")
 
     counts, ids, maturity = dict.fromkeys(MATURITY, 0), set(), {}
@@ -258,7 +258,7 @@ def check_roadmap(text):
         reject(f"maturity counts differ; expected {expected}")
 
     # Release inclusion is independent of maturity, but cannot omit an open gap.
-    classes = dict.fromkeys(("MUST_V0_1", "SHOULD_V0_1", "V0_2", "LATER", "OUT_OF_SCOPE"), 0)
+    classes = dict.fromkeys(("MUST_V0_1", "SHOULD_V0_1", "LATER", "OUT_OF_SCOPE"), 0)
     remaining = {key for key, state in maturity.items() if state != "🟢 ESTABLISHED"}
     classified = set()
     for cells in rows(section("release-scope")):
@@ -285,6 +285,26 @@ def check_roadmap(text):
     if section("release-counts").strip() != expected:
         reject(f"release counts differ; expected {expected}")
 
+    # Deliberate horizon and ownership exclusions are explicit without becoming
+    # adopted maturity rows or a second release-status authority.
+    scope_topics, scope_classes = set(), set()
+    for cells in rows(section("scope-boundaries")):
+        if cells[0] == "Topic":
+            continue
+        if len(cells) != 3 or not all(cells):
+            reject("scope boundary requires three nonempty fields")
+            continue
+        topic, category, _ = cells
+        if topic in scope_topics:
+            reject(f"duplicate scope boundary: {topic}")
+        scope_topics.add(topic)
+        if category not in {"LATER", "OUT_OF_SCOPE"}:
+            reject(f"invalid scope boundary class: {topic}")
+        else:
+            scope_classes.add(category)
+    if scope_classes != {"LATER", "OUT_OF_SCOPE"}:
+        reject("scope boundaries must cover LATER and OUT_OF_SCOPE")
+
     selected = re.findall(
         r"^\| Current selected engineering boundary \| \*\*([A-Z0-9.]+)(?: — (SELECTED_NOT_STARTED|ACTIVE))?\*\*",
         text, re.M,
@@ -301,6 +321,39 @@ def check_roadmap(text):
         or selected[0][0] not in text.split("## Current Execution Sequence", 1)[1].split("\n## ", 1)[0]
     ):
         reject("selected boundary missing from dependency sequence")
+
+    sequence = (
+        text.split("## Current Execution Sequence", 1)[1].split("\n## ", 1)[0]
+        if "## Current Execution Sequence" in text else ""
+    )
+    boundaries = []
+    for line in sequence.splitlines():
+        if re.match(r"^\| \d+ \|", line):
+            boundaries.append(line.strip().strip("|").split("|")[1].strip())
+    expected_boundaries = [
+        "INTERACTION.ERGONOMICS.0", "COMPLETION.KEYMAP.SUGGESTION.0",
+        "OUTPUT.LONG_LIVED.0", "WINDOWS.RUNTIME.0", "SENSITIVE.INPUT.0",
+        "PRESENTATION.UX.0", "LARGE.DRAFT.PERFORMANCE.0",
+        "DEVELOPER.EXPERIENCE.0", "AGENTIC.INTEGRATION.0",
+        "DOCUMENTATION.CLOSURE.0", "RELEASE.HARDENING.1",
+        "RELEASE.CANDIDATE.0", "RELEASE.PUBLICATION.0",
+    ]
+    if boundaries != expected_boundaries:
+        reject("expanded v0.1 dependency sequence differs")
+    return errors
+
+
+def check_release_scope(text):
+    """Keep the active release authority explicit without inferring its truth."""
+    errors = []
+    if text.count("This is the active REPLAI v0.1 product contract.") != 1:
+        errors.append("docs/release-scope.md: active v0.1 authority is ambiguous")
+    if "supersedes the earlier “minimum\nqualified kernel” definition" not in text:
+        errors.append("docs/release-scope.md: missing explicit scope supersession")
+    if "../ROADMAP.md#first-release-scope" not in text:
+        errors.append("docs/release-scope.md: missing canonical ROADMAP authority link")
+    if re.search(r"\bV0_2\b", text):
+        errors.append("docs/release-scope.md: stale V0_2 classification")
     return errors
 
 
@@ -328,6 +381,8 @@ def check_local(root, paths):
         errors.append("ROADMAP.md: missing Project status heading")
     if "ROADMAP.md" in parsed:
         errors.extend(check_roadmap((root / "ROADMAP.md").read_text()))
+    if "docs/release-scope.md" in parsed:
+        errors.extend(check_release_scope((root / "docs/release-scope.md").read_text()))
     errors.extend(check_public_surface(root, paths))
     graph = {path: set() for path in parsed}
     for path, (_, links, _, _, _) in parsed.items():

@@ -5,9 +5,9 @@
 | Axis | Current truth |
 | --- | --- |
 | Project target | Embeddable command-line interaction infrastructure: a simple entry that can grow into rich, long-lived host-driven interfaces over one engine. |
-| Current selected engineering boundary | **RELEASE.CANDIDATE.0 — SELECTED_NOT_STARTED**: E3 public API/ABI freeze candidate and V0 frozen-source release qualification; requires separate authorization. |
+| Current selected engineering boundary | **INTERACTION.ERGONOMICS.0 — SELECTED_NOT_STARTED**: history/search, Unicode-aware word operations, undo/redo, bounded kill/yank and the common editing-action vocabulary; requires separate authorization. |
 | Latest major completed boundary | RELEASE.PACKAGING.0: crates.io-ready Rust package, versioned C source SDK/CMake, MSRV, independent debugger consumer and executed cookbook qualification. |
-| Most important structural gap | The E3 public-surface freeze and V0 integrated release-candidate audit remain. I4/I5 and broader output/platform work stay deferred from v0.1. |
+| Most important structural gap | The expanded v0.1 product still needs daily-driver editing, long-lived output, Windows runtime, sensitive input, coherent UX, large-draft scaling, developer experience and agentic integration before final hardening/freeze. |
 | Executable foundation | Platform-neutral engine; bounded Unicode/grapheme editor; history navigation; completion requests; paste, interrupts/EOF, resize, safe output and exact restoration. |
 | Qualified platforms | Linux/macOS: real Rust/C terminal runtime. Windows: portable engine/document tests only, no terminal backend. |
 | Current Rust surface | Editor/Interaction, blocking results, session events, portable wake/deadline/admission types, borrowed POSIX readiness, revision/snapshot/stale outcomes, bounded completion candidates/selection, submission requests/dispositions, diagnostics, editor analysis spans/hints, prompts/themes and structured documents. Pre-release, without API freeze. |
@@ -15,8 +15,8 @@
 | Performance posture | P0/P1/P2 preserved at matched workloads; Q2 freezes 32 bounded latency/allocation/byte workloads with preregistered noise rules. This is not a universal latency SLA or ranking. |
 | Presentation posture | Safe spans, headings, facts, lists, responsive tables/status, composed prompts/themes and deterministic plain output. Bounded completion and validated multiline interaction are qualified; bounded host editor spans/hints are qualified; broader visual refinement remains separate. |
 | Consumer posture | Packaged Rust and moved-prefix C/C++ consumers are qualified independently. Product consumers remain external owners; producer metadata assigns no migrations or repins. |
-| Public-release posture | Pre-release. The v0.1 candidate envelope and compatibility requirements are selected in [release scope](docs/release-scope.md); no freeze, package publication or current stability promotion. |
-| Next decision point | Authorize RELEASE.CANDIDATE.0 separately. One engineering wave plus one separately authorized publication wave remains; no new runtime feature is required by the selected scope. |
+| Public-release posture | Pre-release. The expanded v0.1 product envelope and compatibility requirements are selected in [release scope](docs/release-scope.md); adopted targets are not implementation claims. |
+| Next decision point | Authorize INTERACTION.ERGONOMICS.0 separately. Twelve engineering boundaries plus a separately authorized publication boundary remain in the current dependency plan. |
 
 This is the sole authority for **public macro state, maturity, strategic programs,
 dependency ordering and release progression**. [README](README.md) owns first use;
@@ -43,7 +43,7 @@ whole program. Counts describe rows, never percentage completion. IDs are stable
 control identifiers, not new public API or producer-capability declarations.
 
 <!-- maturity-counts:start -->
-ESTABLISHED=35 PARTIAL=3 OPEN=4 LATER=4 TOTAL=46
+ESTABLISHED=35 PARTIAL=15 OPEN=9 LATER=4 TOTAL=63
 <!-- maturity-counts:end -->
 
 <!-- maturity:start -->
@@ -77,7 +77,7 @@ ESTABLISHED=35 PARTIAL=3 OPEN=4 LATER=4 TOTAL=46
 | presentation.theme | Theme foundation | 🟢 ESTABLISHED | Explicit role styles and emphasis, with terminal-default background and safe spans. | Preserve style inheritance and explicit default emphasis without ANSI injection. | U | [Presentation][presentation]; [document tests][documents] |
 | presentation.completion_ux | U1 completion presentation | 🟢 ESTABLISHED | Bounded temporary rows; Tab/Shift-Tab selection, explicit accept/dismiss, responsive plain/styled output and shared-frame restoration. Native Linux/macOS; portable model on Windows. | Preserve exact draft/revision/selection across resize and serialized output; retain safe narrow/plain behavior. | U / I | [I1/U1 dossier][completion-contract]; [presentation][presentation] |
 | presentation.multiline_ux | U2 substantial multiline UX | 🟢 ESTABLISHED | Validated logical-line navigation, continuation, bounded diagnostic viewport, resize/output preservation; 10/100/1000-line real PTYs on Linux/macOS. | Preserve exact draft/cursor/revision, history edges and measured bounded screen damage; prefix layout traversal remains measured debt. | U / I | [I3/U2 dossier][validation-multiline]; [interaction][interaction] |
-| presentation.visual_system | U3 visual refinement | 🟡 PARTIAL | Roles/themes, spacing and plain hierarchy exist; no complete accessibility/UX qualification across future surfaces. | Review coherent prompt, candidate, diagnostic and output hierarchy across capabilities. | U | [Presentation][presentation]; [document tests][documents] |
+| presentation.visual_system | U3 visual refinement | 🟡 PARTIAL | Roles/themes, spacing and plain hierarchy exist; no complete accessibility/UX qualification across future surfaces. | Qualify coherent prompt, continuation, large-menu, diagnostic, hint, transient, theme and plain/accessibility behavior across selected platforms and widths. | U | [Presentation][presentation]; [document tests][documents] |
 
 ### Output coordination
 
@@ -85,7 +85,7 @@ ESTABLISHED=35 PARTIAL=3 OPEN=4 LATER=4 TOTAL=46
 | --- | --- | --- | --- | --- | --- | --- |
 | output.coordinated | Synchronous and exclusive output | 🟢 ESTABLISHED | Safe text/documents preserve active draft/cursor; submit releases editing before host execution and later reopen. | Retain failure cleanup, exact draft return and Rust/C plain compatibility. | O | [Interaction][interaction]; [PTY][pty]; [C PTY][c-pty] |
 | output.streaming | O1 sustained output | 🔴 OPEN | Bounded output measurements exist; no sustained-stream contract or stream-specific optimization qualification. | Measure long-running chunk workloads, bytes/writes/backpressure and restoration with host-owned meaning. | O / P | [P0 output evidence][p0]; [presentation owner][presentation] |
-| output.multiplexed | O2 editing with background output | 🔴 OPEN | Serialized transactions do not establish independent concurrent writers or output arbitration. | Qualify interleaved input/output, bounded scheduling and exact draft/cursor preservation. | O / P | [Interaction owner][interaction]; [F0][f0] |
+| output.multiplexed | O2 editing with background output | 🔴 OPEN | Serialized transactions do not establish independent concurrent writers or output arbitration. | Qualify bounded producer arbitration, ordering/backpressure and exact draft/cursor preservation while the host retains scheduling. | O / P | [Interaction owner][interaction]; [F0][f0] |
 | output.transient | O3 transient feedback | 🔴 OPEN | Persistent status blocks are not transient notices, expiry or replacement surfaces. | Define lifetime/removal and redraw evidence without product rendering semantics. | O / U | [Presentation owner][presentation] |
 
 ### Command interaction
@@ -97,7 +97,18 @@ ESTABLISHED=35 PARTIAL=3 OPEN=4 LATER=4 TOTAL=46
 | analysis.validation | I3 validation and submission policy | 🟢 ESTABLISHED | Optional host Complete/Incomplete/Invalid over immutable Enter snapshots; atomic stale refusal, exact submission and bounded diagnostics. Native Rust only. | Preserve host grammar/scheduling authority, rejected-result atomicity and completion precedence across platforms. | I | [I3/U2 dossier][validation-multiline]; [interaction][interaction] |
 | history.storage_search | I4 history provider/search | 🟡 PARTIAL | Memory navigation exists; no storage-provider or search boundary. | Separate navigation from storage with bounded search, draft return and host retention/privacy policy. | I | [Core][core]; [interaction][interaction] |
 | editing.keymap | I5 configurable editing | 🟡 PARTIAL | Normalized actions and a fixed compatibility keymap exist; no configurable modes, general undo or search. | Feed common edit operations from different mappings without changing decoder/storage authority. | I | [Keymap][keymap]; [F0][f0] |
-| input.sensitive | I6 sensitive input | ⚪ LATER | No masked/hidden mode or secret-specific history posture. Deferred behind embedding and editing-policy contracts. | Explicit authorization plus display/history/lifecycle leakage tests before admitting secrets. | I | [Interaction owner][interaction] |
+| editing.word_operations | Unicode-aware word operations | 🔴 OPEN | Grapheme movement/deletion exists; there is no public deterministic word-boundary action contract. | Qualify word-wise movement/deletion over an explicit Unicode model, including revision and multiline edges. | I | [Editor owner][core]; [interaction][interaction] |
+| editing.undo_redo | Undo and redo | 🔴 OPEN | Canonical edits advance DraftRevision, but no reversible edit state or public undo/redo actions exist. | Define bounded edit transactions and qualify text/cursor/revision, derived-analysis invalidation and history-navigation interaction. | I | [Editor owner][core]; [analysis contract](docs/interaction.md#revision-aware-host-analysis) |
+| editing.kill_yank | Bounded kill and yank | 🔴 OPEN | Deletion and replacement primitives exist; no kill/yank register or lifecycle contract exists. | Qualify a bounded useful kill/yank contract without claiming GNU Readline kill-ring compatibility. | I | [Editor owner][core]; [keymap owner][keymap] |
+| input.sensitive | I6 sensitive input | ⚪ LATER | No masked/hidden mode or secret-specific history posture exists in the current implementation. | Define and qualify echo/masking, history/snapshot/analysis exclusion, paste/output leakage, interruption and restoration without promising memory erasure. | I / Q | [Interaction owner][interaction]; [development method][development] |
+
+### Completion and suggestion ergonomics
+
+| ID | Property | Maturity | Current truth / exact boundary | Promotion condition | Program | Evidence / owner |
+| --- | --- | --- | --- | --- | --- | --- |
+| completion.helpers | Generic completion helpers | 🟡 PARTIAL | Revision-bound candidates and small host-owned examples exist; no reusable static/path/common-prefix/fuzzy helper surface exists. | Qualify optional bounded helpers while leaving grammar, semantic discovery and host-specific ranking with the host. | I / D | [Completion contract][completion-contract]; [completion example](examples/completion.rs) |
+| completion.large_sets | Large candidate navigation | 🟡 PARTIAL | Bounded candidate menus and selection exist; no independently qualified paging/scrolling contract for large sets exists. | Qualify deterministic paging, scrolling, stable selection and narrow/plain visibility under bounded large candidate sets. | I / U | [I1/U1 dossier][completion-contract]; [presentation][presentation] |
+| suggestion.autosuggest | Non-canonical autosuggestion | 🟡 PARTIAL | Revision-bound non-canonical hints can present host text, but no generic suggestion source, acceptance or history-suggestion mechanics exist. | Compose history/static/host suggestions with I1 insertion, stale refusal and explicit acceptance without canonicalizing visible hints. | I / D | [I2 dossier][analysis-presentation]; [interaction][interaction] |
 
 ### Terminal and platform
 
@@ -118,8 +129,24 @@ ESTABLISHED=35 PARTIAL=3 OPEN=4 LATER=4 TOTAL=46
 | performance.editor | P1 editor redesign | 🟢 ESTABLISHED | Measured local grapheme-boundary work retains String storage and Unicode oracle parity. | Preserve semantics and repeat matched scaling measurements for changes. | P | [Combined dossier][macos-perf]; [Unicode oracle][unicode-tests] |
 | performance.render | P2 common layout/render redesign | 🟢 ESTABLISHED | Viewport storage, geometry reuse and changed-row rendering; bounded fallbacks remain. | Recheck exact workloads, allocations, bytes and isolated-key latency; no universal speed-ranking claim. | P | [Combined dossier][macos-perf]; [layout oracle][layout-tests] |
 | performance.regression | Q2 performance regression policy | 🟢 ESTABLISHED | Thirty-two named workloads have preregistered median/p95 noise rules plus exact allocation/encoded-byte CI oracles; large multiline traversal and synchronous output remain explicit debt. | Preserve workload/source/machine identity, investigate two-run repeated exceedances, and never tune thresholds after candidate observation. | Q / P | [Hardening dossier][hardening]; [Q2 registration](tools/hardening/evidence/q2-linux-aarch64.json) |
+| performance.large_draft | Large-draft scalability | 🟡 PARTIAL | Large multiline and 64 KiB/1 MiB workloads are measured; distant cursor/layout work still traverses prefixes. | Qualify scalable distant movement, line lookup, viewport-local geometry, resize, redraw and analysis presentation without prescribing a storage structure. | P / Q | [Hardening dossier][hardening]; [performance tools][perf-tools] |
 | robustness.fuzz_property | Q0 general state-machine robustness | 🟢 ESTABLISHED | Five distinct Linux campaigns exceed 60 CPU-minutes each; 100,000 seeded paired semantic sequences and final-corpus replay pass on Linux x86_64/ARM64, macOS ARM64 and Windows portable core. | Retain minimized findings, immutable corpus identity and exact platform limits; new surfaces require new targets/evidence. | Q | [Hardening dossier][hardening]; [final corpus](tools/hardening/evidence/final-corpus.json.gz) |
 | robustness.resource_stress | Q1 resource/failure stress | 🟢 ESTABLISHED | Each native release target passed 1,000 cycles per Rust tier and C ABI, 10,000 mixed events, eight failure classes ×100, 100 exhaustion children and native memory tools. | Preserve exact connected restoration, explicit impossible-restoration failure, caller ownership and platform-native resource evidence. | Q | [Hardening dossier][hardening]; [native evidence](tools/hardening/evidence/native-campaign.json.gz) |
+
+### Developer and agent integration
+
+| ID | Property | Maturity | Current truth / exact boundary | Promotion condition | Program | Evidence / owner |
+| --- | --- | --- | --- | --- | --- | --- |
+| dx.high_level_facade | Common-case high-level facade | 🟡 PARTIAL | Blocking `read_line` is small, while richer hosts assemble lower-level session/analysis configuration directly. | Qualify a common-case facade over the same editor/engine without hidden scheduling, parsing or a second runtime. | D / F | [Interaction][interaction]; [simple example](examples/simple.rs) |
+| dx.generic_helpers | Reusable host helpers | 🟡 PARTIAL | Executed examples demonstrate host logic, but reusable completion/suggestion/history helpers are not a public library surface. | Provide bounded opt-in helpers that preserve host semantics, storage and privacy ownership. | D / I | [Use cases](docs/use-cases.md); [packaging dossier][packaging] |
+| dx.runtime_adapters | Optional reactor adapters | 🟡 PARTIAL | Driven readiness/deadline primitives are established and runtime-neutral; no optional adapter for a common reactor ecosystem exists. | Qualify selected opt-in adapters without a mandatory Tokio, mio or other scheduler dependency in core. | D / F | [Embedding qualification][embedding]; [driven example](examples/driven.rs) |
+| dx.reference_integrations | Production-shaped references | 🟡 PARTIAL | Simple, showcase, C and packaged debugger fixtures prove several surfaces; the expanded long-lived/platform/security product patterns remain uncovered. | Execute a bounded reference set spanning simple CLI, debugger/admin, model/network and native C/C++ use through public packages. | D / E | [Packaging dossier][packaging]; [use cases](docs/use-cases.md) |
+| dx.documentation | Adoption documentation | 🟡 PARTIAL | README, contracts, rustdoc, C docs and an executed cookbook exist for the current surface; expanded v0.1 capabilities have no final user/agent documentation yet. | Complete task-oriented human documentation for every selected surface, platform, limit, package and migration path without duplicating authorities. | D / E | [Documentation map](docs/README.md); [use cases](docs/use-cases.md) |
+| agent.skill | Official integration skill | 🔴 OPEN | No official versioned REPLAI integration skill exists. | Publish and qualify a skill whose guidance is fully available in public documentation and covers every selected integration boundary. | A / D | [Documentation owner](docs/README.md); [development method][development] |
+| agent.machine_contract | Machine-readable integration contract | 🟡 PARTIAL | ABI schema and producer metadata are machine-readable at bounded scopes, but no public consumer-oriented integration contract covers platforms, tiers, examples and unsupported combinations. | Derive a versioned public contract from canonical docs/metadata without requiring private BOUNDARY infrastructure or creating a second roadmap. | A / E | [C ABI schema](api/c-abi.json); [producer metadata][producer] |
+| agent.recipes | Agent integration recipes | 🟡 PARTIAL | Nineteen human-executed recipes provide a base, but expanded editing/output/security/Windows tasks and agent-oriented validation are absent. | Execute public-API recipes for the selected agent tasks and keep each equally usable by human integrators. | A / D | [Use cases](docs/use-cases.md); [packaging dossier][packaging] |
+| agent.conformance | Deterministic integration conformance | 🔴 OPEN | External consumers are qualified, but no task suite checks generated integrations against ownership and unsupported-behavior rules. | Compile and test deterministic reference tasks using public materials only, without scoring or depending on a particular model. | A / Q | [Development method][development]; [packaging dossier][packaging] |
+| agent.migration | Version-aware migration guidance | 🟡 PARTIAL | Changelog and exact producer deltas preserve chronology, but no ratified public migration contract exists before the first freeze. | Make compatibility boundaries and migrations discoverable to humans, agents and tooling, tied to released identities. | A / E | [Changelog](CHANGELOG.md); [producer metadata][producer] |
 
 ### Packaging, ecosystem and release
 
@@ -129,30 +156,33 @@ ESTABLISHED=35 PARTIAL=3 OPEN=4 LATER=4 TOTAL=46
 | ecosystem.consumers | E1 consumer diversity | 🟢 ESTABLISHED | Independent packaged debugger host exercises I0/I1/I2/I3, finite serialized notices and structured output on real Linux/macOS PTYs; portable state runs on Windows. | Requalify genuinely distinct external hosts when their consumed surface or package contract changes. | E | [Packaging dossier][packaging]; [debugger fixture](tools/package/debugger-consumer/src/main.rs) |
 | ecosystem.cookbook | E2 integration patterns | 🟢 ESTABLISHED | Nineteen executed or explicit-deferred recipes cover three Rust tiers, analysis, history ownership, output limits, Rust/C/CMake and plain mode. | Keep recipes tied to executable examples/artifacts and preserve explicit host ownership and unsupported postures. | E / F | [Use cases](docs/use-cases.md); [Packaging dossier][packaging] |
 | ecosystem.contract_handoff | Producer contract publication | 🟢 ESTABLISHED | Repository-owned snapshots/fingerprints and consumer-neutral delta; no runtime dependency or assigned migrations. | Keep metadata aligned with exact qualified source; consumers author their own profiles/receipts. | E | [Producer metadata][producer]; [exact publication][carrier] |
-| release.api_freeze | E3 API freeze candidate | ⚪ LATER | Pre-release shapes; first-release audit is mandatory but not started. ABI identity is not yet a long-term compatibility promise. | Audit all selected public ownership, lifecycle, errors, language and portability contracts after E1 evidence. | E / V | [Architecture owner][architecture]; [C contract][c-api] |
-| release.qualification | V0 release qualification | ⚪ LATER | Candidate support envelope selected; no integrated frozen-source/package release qualification yet. | Close the release progression below with exact platform/API/ABI/package claims and reproducible gates. | V | [Development method][development]; [CI][ci] |
+| release.api_freeze | E3 API freeze candidate | ⚪ LATER | Pre-release shapes; first-release audit is mandatory but cannot begin until the expanded product and hardening close. ABI identity is not yet a long-term compatibility promise. | Audit all selected public ownership, lifecycle, errors, language and portability contracts after RELEASE.HARDENING.1. | E / V | [Architecture owner][architecture]; [C contract][c-api] |
+| release.qualification | V0 release qualification | ⚪ LATER | Expanded candidate support envelope selected; no integrated frozen-source/package release qualification yet. | Qualify one exact final source and regenerated artifact set across the complete expanded envelope. | V / Q | [Development method][development]; [CI][ci] |
 | release.public | V1 first public commitment | ⚪ LATER | No package publication or effective stable compatibility promise; V1 requires separate authorization after V0. | Explicit release decision after V0; publish only the qualified support/compatibility scope. | V | [Release progression](#release-progression); [development][development] |
 <!-- maturity:end -->
 
 ## Strategic Programs
 
-Programs own gaps, not serial time slots. Maturity here describes each program's
-whole adopted target; it is not counted again in the row summary. F/P/I work can
-co-evolve, Q accompanies every affected boundary, and platform/packaging evidence
-can run independently when their prerequisites are explicit.
+Programs own durable architectural gaps rather than serial work slots. Program
+maturity is not counted again in the row summary. The new D and A programs
+organize adoption and agent integration around the same engine and public
+contracts; neither creates another runtime, parser, scheduler or project-state
+authority.
 
 <!-- programs:start -->
-| Program | Target property | Maturity | Completed foundations | Remaining gaps | Dependencies | Explicit non-goals |
+| Program | Target property | Maturity | Completed foundations | Remaining v0.1 gaps | Dependencies | Explicit exclusions |
 | --- | --- | --- | --- | --- | --- | --- |
-| F | One engine, simple/session/driven embedding | 🟢 ESTABLISHED | F0 engine; F1 embedding; F2 scoped capability/admission contract | Preserve the same contracts as future platforms and analyses are introduced | Qualified P3 delivery; X resource constraints; P0 evidence | Scheduler, async runtime, cosmetic API churn |
-| P | Measurable, efficient interaction under host driving | 🟡 PARTIAL | P0 baseline; P1/P2 convergence; P3 external driving | Broaden measured envelopes and noise policy without generalizing wins | F1/F2 contracts; Q2 variance policy | Intuitive buffer rewrites; fastest-library claims |
-| I | Rich command interaction from host analysis | 🟡 PARTIAL | Revision-aware shared snapshots, rich candidates, host validation/diagnostics, safe editor spans/hints, history mechanics, fixed normalized actions | I4 storage/search; I5 keymaps; I6 later sensitive input | F1/P3 delivery/revision rules; U presentation; Q bounds | Parser, command language, history database |
-| O | Safe output that scales beyond exclusive phases | 🟡 PARTIAL | O0 documents and synchronous surface coordination | O1 sustained output; O2 arbitration; O3 transient lifecycle | P3/F2 delivery and capabilities; U geometry; Q stress | Product streams, token semantics, uncontrolled writers |
-| U | Coherent line-oriented interaction presentation | 🟡 PARTIAL | U0 prompts; U1 candidates; U2 validated multiline/diagnostics; documents, tables, status and themes | U3 accessibility/visual system | I1/I3 semantics; F2 degradation; O coordination | Alternate-screen panels, dashboard, product ontology |
-| X | System realizations below one generic engine | 🟡 PARTIAL | X0 separation; Linux and X1 macOS runtime; Windows portable core | X2 runtime and its C acquisition design space; other systems later | F1/F2 resource contract; shared Q conformance | Fake support from compilation; speculative OS stubs |
-| Q | Reproducible correctness/resource/performance promotion | 🟡 PARTIAL | Q0 five-boundary fuzz/property campaigns; Q1 native resource/failure stress; Q2 bounded preregistered regression policy | Replay/grow evidence for future surfaces and final frozen package/candidate identities | Runs alongside each changed boundary; P0 noise evidence | Test-count maturity; unexecuted platform claims |
-| E | Reproducible, understandable independent embedding | 🟡 PARTIAL | Versioned crate/C SDK, relocatable pkg-config/CMake, executed cookbook, independent packaged debugger and producer handoff metadata | E3 public-surface freeze candidate | F1/P3 and real platform claims; Q evidence | Consumer migrations by default; mandatory BOUNDARY dependency |
-| V | First defensible public compatibility commitment | ⚪ LATER | Exact pre-release source/ABI qualification and CI; selected v0.1 envelope | V0 integrated candidate/artifact qualification; V1 publication decision | E3 candidate plus Q/X/package qualification | Date-driven release; incidental SemVer/API promises |
+| F | One engine, simple/session/driven embedding | 🟢 ESTABLISHED | F0 engine; F1 embedding; F2 capability/admission | Preserve one engine while editing, output, Windows, facade and adapters expand | P3 delivery; X resources; Q evidence | Host scheduler, parser, second editor/runtime |
+| P | Measurable interaction under host driving | 🟡 PARTIAL | P0 baseline; P1/P2 convergence; P3 driving; Q2 policy | Large-draft scaling and new-surface regression workloads | F contracts; Q methodology | Universal ranking, unmeasured redesign |
+| I | Daily-driver command interaction from host semantics | 🟡 PARTIAL | Revisions, candidates, validation, spans/hints, history navigation, normalized actions | I4 search/provider; word operations; undo/redo; kill/yank; I5; I6; helpers/suggestions | F delivery/revisions; U presentation; Q bounds | Parser, command language, history database |
+| O | Long-lived coordinated output | 🟡 PARTIAL | O0 documents and finite serialized output with restoration | O1 sustained flow/backpressure; O2 producer arbitration; O3 transient lifetime | P3/F2; U geometry; Q stress | Token meaning, uncontrolled terminal writers |
+| U | Coherent accessible line-oriented presentation | 🟡 PARTIAL | Prompts, candidates, multiline diagnostics, hints, documents and themes | U3 hierarchy, paging, transient integration, plain/accessibility and cross-platform consistency | I/O semantics; F2 degradation; X parity | Alternate-screen dashboard or widget framework |
+| X | Native system realizations below one engine | 🟡 PARTIAL | X0 separation; Linux/macOS runtime; Windows portable core | X2 native Windows Rust runtime and resource/capability parity | F1/F2 resource contract; Q native evidence | Support inferred from compilation; automatic Windows C parity |
+| Q | Reproducible correctness/resource/performance promotion | 🟡 PARTIAL | Q0/Q1/Q2 established for the current surface | Extend/replay evidence for every new surface and final artifacts in HARDENING.1 | Accompanies each changed boundary; P0/Q2 baselines | Test-count maturity; inherited evidence claims |
+| E | Reproducible independent packaging and compatibility | 🟡 PARTIAL | E0 crate/C SDK; E1 consumers; E2 cookbook; producer metadata | Replay final expanded artifacts and complete E3 freeze audit | Final product/docs; Q/X evidence | Mandatory BOUNDARY, automatic consumer migrations |
+| D | Human developer adoption over the same engine | 🟡 PARTIAL | Small blocking API, driven primitives, public examples, package tooling and cookbook | D0 facade; D1 helpers; D2 adapters; D3 references; D4 complete adoption docs | F/I/O/X public contracts; E packages; Q evidence | Hidden scheduler/parser, second engine, every runtime ecosystem |
+| A | Agentic integration through public versioned material | 🟡 PARTIAL | Machine-readable ABI/producer fragments, public docs and executed recipes | A0 skill; A1 public machine contract; A2 recipes; A3 conformance; A4 migration guidance | D docs/helpers; E identities; Q conformance | Agent runtime, model benchmark, private knowledge requirement |
+| V | First bounded public compatibility commitment | ⚪ LATER | Qualified current implementation, hardening and packaging foundations | Expanded HARDENING.1; E3/V0 frozen candidate; separately authorized V1 | All MUST_V0_1 rows; D/A docs; E/Q/X replay | Date-driven release, claims beyond exact evidence |
 <!-- programs:end -->
 
 ## Completed Boundaries
@@ -180,63 +210,111 @@ to their recorded source, workload and environment.
 
 ## First Release Scope
 
-The adopted v0.1 candidate is the current Rust interaction/analysis/presentation
-surface on Linux/macOS, portable Windows core, and bounded C ABI 1 sessions.
-Output is synchronous and host-serialized. No sustained active-edit stream or
-independent writer service is promised. [Release scope](docs/release-scope.md)
-owns the detailed support, compatibility, packaging and G1–G6 acceptance contract.
-It is a release design, not another maturity/status authority.
+The earlier “minimum qualified kernel” v0.1 plan is superseded. The active first
+release is a coherent daily-driver product for long-lived applications, selected
+native platforms, human developers and coding agents. This classification changes
+the release gate, not current implementation truth or earlier evidence.
+[Release scope](docs/release-scope.md) owns the detailed envelope and acceptance
+rules.
 
-Every non-established property is classified below.
+Every non-established maturity row is classified below. Existing ESTABLISHED rows
+remain part of the release foundation at their exact qualified scope.
 
 <!-- release-counts:start -->
-MUST_V0_1=3 SHOULD_V0_1=1 V0_2=6 LATER=1 OUT_OF_SCOPE=0 TOTAL=11
+MUST_V0_1=28 SHOULD_V0_1=0 LATER=0 OUT_OF_SCOPE=0 TOTAL=28
 <!-- release-counts:end -->
-
-No adopted remaining row is discarded as OUT_OF_SCOPE; host history databases, parser/command semantics and application
-scheduling remain architectural exclusions. V0_2 means the first post-release
-planning pool, not a delivery promise. Maturity is unchanged by classification.
 
 <!-- release-scope:start -->
 | Capability | Current maturity | v0.1 class | Rationale | Required evidence |
 | --- | --- | --- | --- | --- |
-| history.storage_search | 🟡 PARTIAL | V0_2 | I4: bounded navigation suffices; provider/reverse search is not advertised by v0.1. Persistence policy stays host-owned. | [History decision](docs/release-scope.md#history); later search/provider contract qualification |
-| editing.keymap | 🟡 PARTIAL | V0_2 | I5: fixed documented bindings suffice; word editing/configuration/undo can follow. Vi remains later within this broader row. | [Editing decision](docs/release-scope.md#editing-policy-and-visual-refinement); G2 preserves current bindings |
-| input.sensitive | ⚪ LATER | LATER | I6: ordinary editing is not secret entry; leakage-safe masked input is separately scoped. | [Sensitive-input exclusion](docs/release-scope.md#editing-policy-and-visual-refinement); separate future leakage/history campaign |
-| presentation.visual_system | 🟡 PARTIAL | SHOULD_V0_1 | U3 broad refinement is optional; existing-surface keyboard/plain usability is mandatory G2. | [Usability floor](docs/release-scope.md#g2--q1-resource-stress-and-baseline-usability); record omitted refinements without claiming U3 closure |
-| output.streaming | 🔴 OPEN | V0_2 | O1: host streams after close or serializes bounded notices; no sustained active-edit throughput contract. | [Output envelope](docs/release-scope.md#output-model-clients-and-long-lived-hosts); G2/G4 finite serialized-output proof |
-| output.multiplexed | 🔴 OPEN | V0_2 | O2: host event multiplexing already exists; independent writers/arbitration are excluded. | [Output envelope](docs/release-scope.md#output-model-clients-and-long-lived-hosts); later arbitration/scheduling contract |
-| output.transient | 🔴 OPEN | V0_2 | O3: persistent status output is sufficient; in-place expiry/replacement is not advertised. | [Output envelope](docs/release-scope.md#output-model-clients-and-long-lived-hosts); later lifetime/removal qualification |
-| platform.windows_runtime | 🔴 OPEN | V0_2 | X2: deliberate Linux/macOS release; portable Windows tests do not imply runtime support. | [Platform envelope](docs/release-scope.md#candidate-support-envelope); future real Windows acquisition/restoration |
-| release.api_freeze | ⚪ LATER | MUST_V0_1 | E3: audit every selected public contract after hardening and independent package consumers; not 1.0. | [G5](docs/release-scope.md#g5--q2-policy-e3-freeze-and-v0-release-qualification): API/ABI/MSRV and migration review |
-| release.qualification | ⚪ LATER | MUST_V0_1 | V0: one exact candidate source and artifact set must satisfy the complete envelope. | [G5](docs/release-scope.md#g5--q2-policy-e3-freeze-and-v0-release-qualification): frozen candidate and installed-artifact qualification |
-| release.public | ⚪ LATER | MUST_V0_1 | V1: a first public release includes actual publication/verification, not merely a tag proposal. | [G6](docs/release-scope.md#g6--v1-publication): separate authorization, packages/tag and download verification |
+| history.storage_search | 🟡 PARTIAL | MUST_V0_1 | Daily-driver history needs bounded provider/search mechanics while persistence, retention and privacy remain host-owned. | [Interaction scope](docs/release-scope.md#interaction-and-daily-driver-editing); provider, reverse-search and restoration qualification |
+| editing.keymap | 🟡 PARTIAL | MUST_V0_1 | Common actions need configurable mappings without moving decoder or editor ownership. | [Interaction scope](docs/release-scope.md#interaction-and-daily-driver-editing); action/mapping and portable usability evidence |
+| editing.word_operations | 🔴 OPEN | MUST_V0_1 | Word-wise movement/deletion is required daily-driver ergonomics and needs an explicit Unicode model. | [Interaction scope](docs/release-scope.md#interaction-and-daily-driver-editing); Unicode/property and revision evidence |
+| editing.undo_redo | 🔴 OPEN | MUST_V0_1 | Reversible editing owns distinct text/cursor/revision and derived-state invariants. | [Interaction scope](docs/release-scope.md#interaction-and-daily-driver-editing); bounded state-machine qualification |
+| editing.kill_yank | 🔴 OPEN | MUST_V0_1 | A bounded basic kill/yank facility completes the adopted editing fundamentals without promising Readline ring parity. | [Interaction scope](docs/release-scope.md#interaction-and-daily-driver-editing); lifecycle, bounds and keymap composition |
+| input.sensitive | ⚪ LATER | MUST_V0_1 | The first product needs a defensible leakage-aware input path; masking alone is insufficient. | [Sensitive-input scope](docs/release-scope.md#sensitive-input); negative leakage, lifecycle and restoration campaign |
+| presentation.visual_system | 🟡 PARTIAL | MUST_V0_1 | Current primitives need one coherent keyboard/plain/narrow/wide/accessibility system across the expanded surface. | [Visual scope](docs/release-scope.md#visual-and-large-draft-quality); cross-platform U3 qualification |
+| output.streaming | 🔴 OPEN | MUST_V0_1 | Long-lived tools need sustained active-edit output with explicit backpressure and bounds. | [Output scope](docs/release-scope.md#long-lived-output); chunk, backpressure, latency and restoration stress |
+| output.multiplexed | 🔴 OPEN | MUST_V0_1 | Legitimate producers need bounded arbitration while Interaction mutation remains serialized. | [Output scope](docs/release-scope.md#long-lived-output); producer ordering/fairness/resource evidence |
+| output.transient | 🔴 OPEN | MUST_V0_1 | Progress and replaceable/expiring notices need a bounded lifecycle that composes with editing. | [Output scope](docs/release-scope.md#long-lived-output); replacement/removal/redraw qualification |
+| completion.helpers | 🟡 PARTIAL | MUST_V0_1 | Common static, path, prefix and fuzzy integrations should not require repeated host boilerplate. | [Completion scope](docs/release-scope.md#completion-and-suggestion-ergonomics); optional helper API and bounds |
+| completion.large_sets | 🟡 PARTIAL | MUST_V0_1 | Large candidate sets need usable deterministic paging/scrolling without losing selection or editor context. | [Completion scope](docs/release-scope.md#completion-and-suggestion-ergonomics); large-set narrow/plain/resize qualification |
+| suggestion.autosuggest | 🟡 PARTIAL | MUST_V0_1 | History/static/host suggestions need generic non-canonical presentation and explicit acceptance. | [Completion scope](docs/release-scope.md#completion-and-suggestion-ergonomics); stale/plain/acceptance qualification |
+| platform.windows_runtime | 🔴 OPEN | MUST_V0_1 | Native Windows Rust terminal use is part of the selected major-desktop product envelope. | [Windows scope](docs/release-scope.md#windows-runtime); real Console/ConPTY resource and PTY-equivalent evidence |
+| performance.large_draft | 🟡 PARTIAL | MUST_V0_1 | Measured prefix traversal must be resolved enough for practical large multiline editing. | [Large-draft scope](docs/release-scope.md#visual-and-large-draft-quality); scaling thresholds and workload replay |
+| dx.high_level_facade | 🟡 PARTIAL | MUST_V0_1 | Common applications need a smaller rich-integration path over the same engine. | [Developer experience](docs/release-scope.md#developer-experience); public facade consumers and ownership audit |
+| dx.generic_helpers | 🟡 PARTIAL | MUST_V0_1 | Reusable helpers must convert proven example logic into bounded opt-in library support. | [Developer experience](docs/release-scope.md#developer-experience); package consumers and no-semantic-ownership tests |
+| dx.runtime_adapters | 🟡 PARTIAL | MUST_V0_1 | Runtime-neutral driven core needs selected optional reactor adapters for practical adoption. | [Developer experience](docs/release-scope.md#developer-experience); real host-reactor consumers without core runtime dependency |
+| dx.reference_integrations | 🟡 PARTIAL | MUST_V0_1 | Product-shaped reference hosts must cover the expanded use cases through public packages. | [Developer experience](docs/release-scope.md#developer-experience); executed independent reference matrix |
+| dx.documentation | 🟡 PARTIAL | MUST_V0_1 | Humans must integrate every selected surface without source archaeology. | [Documentation closure](docs/release-scope.md#documentation-closure); task-oriented docs/API/link validation |
+| agent.skill | 🔴 OPEN | MUST_V0_1 | An official public integration skill is a defining first-release adoption surface. | [Agentic integration](docs/release-scope.md#agentic-integration); versioned skill and public-doc parity audit |
+| agent.machine_contract | 🟡 PARTIAL | MUST_V0_1 | Agents/tools need a public versioned map of capabilities, platforms, tiers and unsupported combinations. | [Agentic integration](docs/release-scope.md#agentic-integration); schema/derivation consistency checks |
+| agent.recipes | 🟡 PARTIAL | MUST_V0_1 | Expanded integration tasks need executable instructions usable by agents and humans. | [Agentic integration](docs/release-scope.md#agentic-integration); packaged recipe execution |
+| agent.conformance | 🔴 OPEN | MUST_V0_1 | Deterministic tasks must prove public material is sufficient without scoring a specific model. | [Agentic integration](docs/release-scope.md#agentic-integration); compile/test ownership conformance |
+| agent.migration | 🟡 PARTIAL | MUST_V0_1 | Compatibility and upgrade boundaries must be discoverable before the first commitment. | [Agentic integration](docs/release-scope.md#agentic-integration); version-aware human/tool guidance |
+| release.api_freeze | ⚪ LATER | MUST_V0_1 | E3 audits the complete expanded public surface only after final hardening. | [Final qualification](docs/release-scope.md#final-qualification-and-release); API/ABI/MSRV/migration review |
+| release.qualification | ⚪ LATER | MUST_V0_1 | V0 must qualify one exact expanded source and regenerated artifact set. | [Final qualification](docs/release-scope.md#final-qualification-and-release); frozen-source native/package receipt |
+| release.public | ⚪ LATER | MUST_V0_1 | V1 is the separately authorized publication of the qualified candidate. | [Final qualification](docs/release-scope.md#final-qualification-and-release); registry/tag/download/docs verification |
 <!-- release-scope:end -->
 
-Existing 35 ESTABLISHED rows retain their scoped contracts and release regression
-gates. Packaging promotes only E0/E1/E2; the broader E program remains partial
-until E3 and no adjacent runtime capability is promoted.
-LATER maturity for E3/V0/V1 records unstarted downstream work; its MUST release
-classification makes the dependency explicit without claiming implementation.
+No active property retains the superseded post-v0.1 classification. SHOULD_V0_1
+remains available for independently omissible refinement, but none of the
+current incomplete rows meets that test: each now belongs to the explicit
+product definition.
+
+The release remains bounded by the following horizon and ownership decisions.
+These entries are scope decisions, not maturity rows or hidden implementation
+work.
+
+<!-- scope-boundaries:start -->
+| Topic | Class | Boundary |
+| --- | --- | --- |
+| Full Vi modal compatibility | LATER | A distinct modal editing contract; configurable actions do not imply it. |
+| Helix/Kakoune-style modes | LATER | Selection-first/modal systems require independent design and evidence. |
+| Advanced mouse interaction | LATER | Keyboard-complete line editing is the v0.1 requirement. |
+| System clipboard integration | LATER | Platform clipboard ownership is separate from bounded kill/yank. |
+| Rich C parity / ABI 2 | LATER | C ABI 1 remains POSIX and bounded unless separately redesigned. |
+| Exotic terminal protocol enhancements | LATER | Only mechanisms required by the selected native runtimes are release gates. |
+| Command language, parser and shell grammar | OUT_OF_SCOPE | The host owns language and semantic interpretation. |
+| Application router, scheduler and persistence | OUT_OF_SCOPE | The host owns execution, scheduling and durable policy. |
+| History database | OUT_OF_SCOPE | REPLAI owns bounded navigation/search mechanics, never durable history authority. |
+| Model runtime and agent runtime | OUT_OF_SCOPE | Agentic integration is documentation/tooling for consumers, not agent execution. |
+| Full-screen TUI and product rendering ontology | OUT_OF_SCOPE | REPLAI remains a line-oriented interaction library. |
+| Plugin framework | OUT_OF_SCOPE | Extension systems belong to the embedding application. |
+<!-- scope-boundaries:end -->
+
+E0/E1/E2 and Q0/Q1/Q2 remain ESTABLISHED at the source and environments recorded
+by their dossiers. They are foundations, not evidence for future surfaces.
+RELEASE.HARDENING.1 must extend and replay their relevant campaigns before E3/V0.
 
 ## Current Execution Sequence
 
-The selected boundary is `RELEASE.CANDIDATE.0`, selected but not started.
-Packaging evidence now supports freezing and qualifying the selected interaction
-surface before any publication. The exact remaining plan is **one engineering
-wave plus one separately authorized publication wave**, in this dependency order:
+The previous RELEASE.CANDIDATE.0 selection is removed because it targeted the
+superseded smaller release. The sole selected boundary is
+INTERACTION.ERGONOMICS.0, selected but not started. The plan contains twelve
+engineering/design/qualification boundaries before one separately authorized
+publication boundary:
 
-| Boundary | Bounded closure | Prerequisite / exit |
-| --- | --- | --- |
-| RELEASE.CANDIDATE.0 | E3 full API/ABI review and V0 frozen candidate qualification | G1–G4 plus Q2 passed; [G5](docs/release-scope.md#g5--q2-policy-e3-freeze-and-v0-release-qualification) on final source/artifact identities, no publication |
-| RELEASE.PUBLICATION.0 | V1 public compatibility commitment and package/tag delivery | Separate explicit release authorization after V0; [G6](docs/release-scope.md#g6--v1-publication), verified downloads/docs |
+| Order | Boundary | Bounded closure | Dependency / exit |
+| ---: | --- | --- | --- |
+| 1 | INTERACTION.ERGONOMICS.0 | I4 history/search; word operations; undo/redo; bounded kill/yank; common action vocabulary | Current editor/revision/history foundation; no feature work starts through this roadmap |
+| 2 | COMPLETION.KEYMAP.SUGGESTION.0 | I5 keymaps; completion helpers; autosuggestion; large candidate paging/navigation | Stable action/revision semantics from 1 |
+| 3 | OUTPUT.LONG_LIVED.0 | O1 sustained output; O2 bounded producer arbitration; coupled O3 transient foundation | Existing serialized output, driven delivery and resource ownership |
+| 4 | WINDOWS.RUNTIME.0 | X2 native Windows Rust terminal realization and capability/resource parity | Stable interaction/output contracts; real Windows execution |
+| 5 | SENSITIVE.INPUT.0 | I6 leakage-aware sensitive interaction | Editing/history/output/platform contracts established |
+| 6 | PRESENTATION.UX.0 | Remaining O3/U3 hierarchy, menus, diagnostics, hints/status, themes and accessibility | All visible interaction surfaces and selected native platforms |
+| 7 | LARGE.DRAFT.PERFORMANCE.0 | performance.large_draft scaling redesign and measured qualification | Stable final editing/presentation behaviors |
+| 8 | DEVELOPER.EXPERIENCE.0 | D0 facade; D1 helpers; D2 selected adapters; D3 references; D4 adoption docs | Runtime/product surfaces stable enough for ergonomic wrappers |
+| 9 | AGENTIC.INTEGRATION.0 | A0 skill; A1 machine contract; A2 recipes; A3 conformance; A4 migration guidance | Public facade/helpers/docs and compatibility vocabulary |
+| 10 | DOCUMENTATION.CLOSURE.0 | Complete human/machine integration docs and reconcile examples/reference applications | Feature, DX and agent surfaces complete |
+| 11 | RELEASE.HARDENING.1 | Expanded fuzz/state, resource/platform/security/output/large-draft/Q2/package-consumer qualification | All selected product surfaces complete |
+| 12 | RELEASE.CANDIDATE.0 | E3 public API/C ABI review, compatibility ratification, artifact replay and V0 exact freeze | HARDENING.1 green; no publication |
+| 13 | RELEASE.PUBLICATION.0 | V1 crates.io/tag/SDK/checksums/hosted-doc and downloaded-artifact verification | Separate explicit authorization after V0 |
 
-Preparation may overlap only under a later authorized wave's scope; exits are
-ordered. A correctness finding requires repair/requalification, not automatic
-feature expansion. If it exposes a new architectural dependency, revise this
-sequence explicitly rather than pretending the wave count is immutable.
-I4/I5/O1–O3/X2 stay visible in the post-release pool; I6 stays later. No next
-engineering implementation or consumer repin is authorized by this selection.
+Adjacent boundaries may later combine only when architecture and qualification
+naturally close together and reviewability remains intact. Independently risky
+problems may split. Such a control change requires an explicit roadmap update;
+it is never inferred from implementation convenience.
 
 ## Ownership and Consumer Posture
 
@@ -265,34 +343,41 @@ implemented source contract. Neither substitutes for the other.
 
 ## Release Progression
 
-The [selected first-release scope](#first-release-scope) fixes what v0.1 means;
-[release acceptance](docs/release-scope.md#required-evidence-before-freeze-and-tagging)
-defines its gates. Current implementation evidence is not a release receipt.
+The expanded [first-release scope](#first-release-scope) defines what must exist;
+[release acceptance](docs/release-scope.md#release-sequence-and-gates) defines
+when the final candidate can freeze. Current implementation and package evidence
+is neither erased nor generalized.
 
-| Gate | Required promotion evidence |
+| Phase | Required result |
 | --- | --- |
-| G1/G2 and Q2 | Bounded fuzz/state campaigns, native stress/cleanup and minimum plain/keyboard usability; meaningful regression thresholds before API freeze |
-| G3/G4 | crates.io-ready Rust package and versioned C source SDK; MSRV/current stable, relocated CMake/pkg-config, external Rust/C/C++ hosts and executable recipes |
-| E3 / G5 | Ratified 0.1.x Rust/ABI/MSRV compatibility, full public-surface audit, exact frozen candidate and artifact-qualified native/portable evidence |
-| V1 / G6 | Separate publication authorization; release only the qualified crate/SDK/tag and verify downloaded artifacts and hosted docs |
+| Product completion | Orders 1–7 establish daily-driver editing, long-lived output, Windows runtime, sensitive input, U3 and large-draft behavior. |
+| Adoption completion | Orders 8–10 establish human DX, agentic integration and complete public documentation. |
+| Expanded hardening | Order 11 extends Q0/Q1/Q2 and package-consumer evidence to every new surface and selected native target. |
+| E3 / V0 | Order 12 audits the whole Rust/C public contract and qualifies one exact regenerated crate/SDK candidate. |
+| V1 | Order 13 requires separate publication authorization and verifies registry, tag, downloads, checksums and hosted docs. |
 
-No date is selected. Linux/macOS runtime plus Windows portable core is deliberate;
-C ABI 1 does not need full Rust parity. History search, configurable keymaps,
-streaming arbitration and a Windows terminal backend do not block this envelope.
-Deferred features are not complete, and a release claim cannot exceed its gates.
+No date is selected. The active target adds native Windows Rust runtime but does
+not promise Windows C ABI 1, Intel macOS, musl or universal binaries. Packaging
+machinery is established and will be replayed rather than reinvented. A new
+surface receives new evidence; an older green dossier is never relabeled.
 
 ## Explicit Nonclaims
 
-REPLAI is not a shell framework, full-screen TUI, async runtime, application
-command language, parser, agent framework, history database or product rendering
-ontology. Hosts own those meanings and systems.
+REPLAI is not a command language, parser, shell framework, full-screen TUI,
+application router, scheduler, persistence system, history database, model/agent
+runtime, product rendering ontology or plugin framework. Hosts own those systems.
 
-There is **no Windows terminal runtime**, stable Rust API/long-term ABI promise,
-universal terminal fallback or support for concurrent independent writers.
-Structured Rust documents are not exposed through C ABI 1. Theme/span support
-is not syntax analysis, and basic multiline editing is not host validation.
-Internal batching is not public event-loop embedding. Existing performance
-comparisons establish exact workload results, not general superiority.
+At the current source there is no native Windows terminal runtime, sustained
+output/backpressure service, producer arbitration, transient lifecycle,
+sensitive-input mode, configurable public keymap, word editing, undo/redo,
+generic completion helper layer, official integration skill or frozen Rust API.
+Those are adopted targets, not present-tense capability claims. Windows C ABI 1,
+full Vi/Helix/Kakoune modes, advanced mouse/clipboard support and rich C parity
+are not implied by the expanded plan.
+
+Performance comparisons establish exact recorded workloads, not general
+superiority. Existing Q0/Q1/Q2, package, C SDK and consumer evidence applies only
+to its recorded source and surface.
 
 ## Promotion and Living-update Discipline
 

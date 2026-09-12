@@ -158,7 +158,7 @@ class DocumentationGuard(unittest.TestCase):
         mutations = [
             (row, "", "release scope coverage differs"),
             (row, row + "\n" + row, "duplicate release capability"),
-            (row, row.replace("V0_2", "OPTIONAL"), "invalid release class"),
+            (row, row.replace("MUST_V0_1", "OPTIONAL", 1), "invalid release class"),
             (row, row.replace("🟡 PARTIAL", "🟢 ESTABLISHED"), "release maturity differs"),
             (row, row.replace("history.storage_search", "unknown.capability"), "release scope coverage differs"),
             (row, row.rsplit("|", 2)[0] + "| Unlinked claim |", "missing release evidence link"),
@@ -170,6 +170,53 @@ class DocumentationGuard(unittest.TestCase):
                 target.write_text(original.replace(before, after, 1))
                 self.reject(expected)
         target.write_text(original)
+
+    def test_scope_boundaries_are_bounded_and_explicit(self):
+        target = self.root / "ROADMAP.md"
+        original = target.read_text()
+        scope = original.split("<!-- scope-boundaries:start -->")[1].split(
+            "<!-- scope-boundaries:end -->")[0]
+        later = next(line for line in scope.splitlines() if "| LATER |" in line)
+        outside = "\n".join(
+            line for line in scope.splitlines() if "| OUT_OF_SCOPE |" in line)
+        mutations = [
+            (later, later + "\n" + later, "duplicate scope boundary"),
+            (later, later.replace("LATER", "V0_2"), "invalid scope boundary class"),
+            (outside, "", "scope boundaries must cover LATER and OUT_OF_SCOPE"),
+            ("<!-- scope-boundaries:end -->", "", "ordered scope-boundaries section"),
+        ]
+        for before, after, expected in mutations:
+            with self.subTest(expected=expected):
+                target.write_text(original.replace(before, after, 1))
+                self.reject(expected)
+        target.write_text(original)
+
+    def test_active_release_scope_authority_and_sequence_are_guarded(self):
+        scope = self.root / "docs/release-scope.md"
+        original_scope = scope.read_text()
+        mutations = [
+            ("active REPLAI v0.1 product contract", "candidate notes",
+             "active v0.1 authority is ambiguous"),
+            ("supersedes the earlier “minimum\nqualified kernel” definition",
+             "revisits an earlier definition", "missing explicit scope supersession"),
+            ("../ROADMAP.md#first-release-scope", "../ROADMAP.md",
+             "missing canonical ROADMAP authority link"),
+        ]
+        for before, after, expected in mutations:
+            with self.subTest(expected=expected):
+                scope.write_text(original_scope.replace(before, after, 1))
+                self.reject(expected)
+        scope.write_text(original_scope + "\nV0_2\n")
+        self.reject("stale V0_2 classification")
+        scope.write_text(original_scope)
+
+        roadmap = self.root / "ROADMAP.md"
+        original_roadmap = roadmap.read_text()
+        roadmap.write_text(original_roadmap.replace(
+            "| 2 | COMPLETION.KEYMAP.SUGGESTION.0 |",
+            "| 2 | WINDOWS.RUNTIME.0 |", 1))
+        self.reject("expanded v0.1 dependency sequence differs")
+        roadmap.write_text(original_roadmap)
 
     def test_table_delimiters_are_required_even_when_control_rows_are_valid(self):
         target = self.root / "ROADMAP.md"

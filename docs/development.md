@@ -69,7 +69,7 @@ accuracy, verify live external URLs or prove capability by counting tests.
 Release-scope checks require one valid classification for every non-established
 maturity row, exact maturity agreement, evidence links and consistent class counts.
 These are documentation controls, not execution of the future
-[release qualification gates](release-scope.md#required-evidence-before-freeze-and-tagging).
+[release qualification gates](release-scope.md#release-sequence-and-gates).
 
 For Rust behavior:
 

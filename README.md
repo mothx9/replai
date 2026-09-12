@@ -144,9 +144,10 @@ analysis automatically.
 frontends, model clients, network clients with an existing reactor, and C/C++
 command consoles.
 
-**Outside its job:** full-screen dashboards, parsing or shell semantics, secret
-entry, and arbitration between independent terminal writers. Driven integrates
-with a host event loop; output calls still pass through one serialized owner.
+**Outside its job:** full-screen dashboards, parsing, shell semantics, durable
+history storage and application scheduling. Sensitive input and bounded producer
+arbitration are planned for the first public release but are not present today;
+current output calls still pass through one serialized owner.
 
 ## How it works
 
@@ -411,7 +412,7 @@ embedding remain Rust-native. [C installation and ABI contract](docs/c-api.md).
 
 ## Platform support
 
-This is the **candidate v0.1 envelope**, not a published release claim.
+This is the **currently qualified platform surface**, not a published release claim.
 
 | Target | Rust terminal | C ABI 1 | Qualification status |
 | --- | --- | --- | --- |
@@ -426,6 +427,8 @@ Interactive admission requires matching TTYs, restorable modes, usable dimension
 and required cursor/erase mechanics. Conservative entry points refuse absent or
 `TERM=dumb` evidence. `NO_COLOR` is presentation policy. Without admitted
 bracketed paste, multiline bytes are ordinary edits and lose paste atomicity.
+The expanded v0.1 plan requires a native Windows x86_64 Rust terminal runtime
+before candidate freeze; the table records what exists now.
 
 ## Safety and guarantees
 
@@ -502,9 +505,12 @@ Those measured limits remain visible rather than being converted into an SLA.
 REPLAI is an unpublished `0.1.0` candidate. The Rust API is not frozen, C ABI 1 is
 qualified at its current bounded scope, and crates.io publication has not
 occurred. Consume Rust through the exact Git pin above; the declared and
-qualified candidate MSRV is Rust 1.98.1. The candidate v0.1 runtime envelope
-is Linux GNU x86_64/ARM64 and macOS ARM64, with Windows portable-core coverage
-only. [Release scope](docs/release-scope.md) · [Roadmap](ROADMAP.md).
+qualified candidate MSRV is Rust 1.98.1. Today Linux GNU x86_64/ARM64 and macOS
+ARM64 have native runtime evidence, while Windows has portable-core coverage
+only. The expanded first-release plan adds daily-driver editing, long-lived
+output, sensitive input, native Windows Rust runtime, complete UX/DX and agentic
+integration before final hardening and freeze. Planned work is not current API.
+[Release scope](docs/release-scope.md) · [Roadmap](ROADMAP.md).
 
 ## Verification
 
@@ -527,8 +533,9 @@ for exact local, native and asset-check commands.
 
 REPLAI is a line-oriented interaction library. It is not a shell, parser, command
 language, full-screen TUI framework, async runtime, application scheduler, history
-database, agent framework, secret-entry surface or concurrent terminal-writer
-arbiter. These boundaries keep host policy outside the editor.
+database, agent runtime or plugin framework. Current source has no sensitive-input
+mode, sustained-output service, producer arbitration or Windows terminal backend;
+those are explicit pre-release gaps rather than permanent ownership exclusions.
 
 ## Documentation
 
