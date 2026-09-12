@@ -66,10 +66,11 @@ def main():
         send(b"b", b"delayed-analysis-captured")
         send(b"r", b"delayed-stale-refused")
         assert b"fresh-analysis-applied" in receipts
+        send(b"\x7f")  # return to a prefix with two ordered candidates
         send(b"\t", b"completion-presented")
         pump(b"module batch 2/2", timeout=3)
         assert receipts.count(b"serialized-notice-preserved") == 2
-        send(b"\x1b[B")
+        send(b"\t")  # navigate to the second host-ordered candidate
         send(b"\r")  # completion acceptance only
         send(b"\x7f" * 9)
         send(b"watch }")

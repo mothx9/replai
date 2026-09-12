@@ -181,8 +181,11 @@ fn native() -> Result<(), Box<dyn std::error::Error>> {
         match event {
             Some(Event::Submitted(text)) => {
                 eprintln!("ASSERT submitted {}", text.escape_default());
-                input.output_document(&result_document(&text)?)?;
-                input.close()?;
+                result_document(&text)?.write_to(
+                    &mut std::io::stdout().lock(),
+                    80,
+                    Theme::new(false, false, None),
+                )?;
                 return Ok(());
             }
             Some(Event::Interrupted | Event::EndOfInput) => {
