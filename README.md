@@ -201,12 +201,13 @@ Until crates.io publication, pin the latest qualified public producer checkpoint
 
 ```toml
 [dependencies]
-replai = { git = "https://github.com/mothx9/replai", rev = "30ef4f4ac6deeb07ffa0b9adb2071b070f4129e3" }
+replai = { git = "https://github.com/mothx9/replai", rev = "893fc163d379fe8bbbb78d93cbf3a6970d13d9a4" }
 ```
 
-This exact checkpoint carries the qualified runtime and current hardening
-evidence. Exact Git pins keep pre-release consumption deliberate; no crates.io
-package has been published yet.
+This immutable checkpoint carries the unchanged qualified runtime plus the
+packaging and external-consumer machinery used by this candidate. Exact Git
+pins keep pre-release consumption deliberate; no crates.io package has been
+published yet.
 
 A current stable Rust toolchain is used today. The unpublished 0.1.0 candidate
 declares Rust 1.98.1 as its MSRV. Runtime dependencies
