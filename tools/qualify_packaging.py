@@ -208,6 +208,15 @@ class Qualification:
         if self.full and platform.system() in ("Linux", "Darwin"):
             cwork = self.work / "c-qualification"
             self.run("c-installed-matrix", [sys.executable, "tools/qualify_c.py", "--work", cwork, "--phase", "all"], cwd=sdk)
+            installed = cwork / "prefix-b"
+            installed_files = {
+                path.relative_to(installed).as_posix(): {
+                    "bytes": path.stat().st_size,
+                    "sha256": sha256(path),
+                }
+                for path in sorted(installed.rglob("*"))
+                if path.is_file()
+            }
             self.summary["c_install"] = {
                 "prefix": "prefix-b",
                 "moved_prefix": True,
@@ -215,6 +224,7 @@ class Qualification:
                 "cmake": "C11/C++17 replai::static/replai::shared PASS",
                 "loader_identity": "PASS",
                 "abi": 1,
+                "files": installed_files,
             }
 
     def publish_dry_run(self):
