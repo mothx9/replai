@@ -197,7 +197,7 @@ documentation.
 
 ### Rust from the qualified checkpoint
 
-Until packaging is completed, pin the latest qualified public producer checkpoint:
+Until crates.io publication, pin the latest qualified public producer checkpoint:
 
 ```toml
 [dependencies]
@@ -208,8 +208,8 @@ This exact checkpoint carries the qualified runtime and current hardening
 evidence. Exact Git pins keep pre-release consumption deliberate; no crates.io
 package has been published yet.
 
-A current stable Rust toolchain is used today. The selected v0.1 MSRV is Rust
-1.98.1 but is not declared until packaging qualification. Runtime dependencies
+A current stable Rust toolchain is used today. The unpublished 0.1.0 candidate
+declares Rust 1.98.1 as its MSRV. Runtime dependencies
 are `unicode-segmentation`, `unicode-width`, `rustix` on Linux/macOS and `nix` for
 macOS waiting. There is no daemon, background process or required async runtime.
 
@@ -497,10 +497,10 @@ Those measured limits remain visible rather than being converted into an SLA.
 
 ## Release status and compatibility
 
-REPLAI is pre-release (`0.1.0-dev.0`). The Rust API is not frozen, C ABI 1 is
+REPLAI is an unpublished `0.1.0` candidate. The Rust API is not frozen, C ABI 1 is
 qualified at its current bounded scope, and crates.io publication has not
-occurred. Consume Rust through the exact Git pin above; the candidate MSRV is
-Rust 1.98.1 pending packaging qualification. The candidate v0.1 runtime envelope
+occurred. Consume Rust through the exact Git pin above; the declared and
+qualified candidate MSRV is Rust 1.98.1. The candidate v0.1 runtime envelope
 is Linux GNU x86_64/ARM64 and macOS ARM64, with Windows portable-core coverage
 only. [Release scope](docs/release-scope.md) · [Roadmap](ROADMAP.md).
 

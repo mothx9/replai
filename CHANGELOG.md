@@ -6,6 +6,11 @@ next work. All entries below are unreleased and carry no compatibility promise.
 
 ## Unreleased
 
+- Prepared the unpublished `replai 0.1.0` Cargo package and versioned
+  `replai-c-sdk-0.1.0` source bundle. The candidate declares Rust 1.98.1,
+  adds relocatable pkg-config/CMake consumption and qualifies fresh external
+  Rust, C11 and C++17 consumers without changing runtime semantics or C ABI 1.
+
 - Validated multiline input now handles Tab indentation in continuation-line
   whitespace prefixes, inserting spaces to the next four-cell stop atomically.
   Completion after text and menu navigation retain priority in their contexts.

@@ -24,6 +24,35 @@ does not call a model; `validation` is a deliberately small host grammar, not a
 shell parser. Windows currently executes portable model tests and standalone
 presentation; it has no interactive terminal backend.
 
+## Executed recipe index
+
+Every supported recipe below names its execution carrier. `Portable` means the
+editor/model contract is exercised without claiming a terminal backend. Native
+interactive recipes require Linux or macOS. The two unsupported rows are scope
+statements and deliberately have no executable workaround inside REPLAI.
+
+| Recipe | Surface | Execution carrier |
+| --- | --- | --- |
+| <!-- recipe:simple-loop --> Simple read/evaluate loop | Linux/macOS · Rust | `cargo run --locked --example simple` |
+| <!-- recipe:history-admission --> Host-controlled history admission | Portable model + Linux/macOS | `examples/simple.rs`, `tests/core.rs` |
+| <!-- recipe:history-persistence --> Persistence/reload owned by the application | Host responsibility | admission round-trip in `tests/core.rs` |
+| <!-- recipe:rich-completion --> Rich completion | Linux/macOS · Rust | `cargo run --locked --example completion` |
+| <!-- recipe:validated-multiline --> Validated multiline | Linux/macOS · Rust | `cargo run --locked --example validation` |
+| <!-- recipe:delayed-analysis --> Delayed revision-bound analysis | Linux/macOS · Rust | `cargo run --locked --example analysis-presentation -- --delayed-analysis` |
+| <!-- recipe:spans-hints --> Host spans and hints | Linux/macOS · Rust | `cargo run --locked --example analysis-presentation` |
+| <!-- recipe:reactor --> Existing reactor | Linux/macOS · Rust | `cargo run --locked --example driven` |
+| <!-- recipe:finite-notices --> Finite notices while editing | Linux/macOS · Rust | `cargo run --locked --example query -- --notice` |
+| <!-- recipe:coalesced-output --> Host-coalesced output | Linux/macOS · Rust | `examples/driven.rs` |
+| <!-- recipe:closed-chat-stream --> Turn-by-turn model/chat output after close | Host I/O + Rust input | [chat recipe](#a-chat-or-model-client) |
+| <!-- recipe:structured-report --> Structured standalone report | Portable · Rust | `cargo run --locked --example report` |
+| <!-- recipe:c-pkg-config --> C pkg-config installation | Linux/macOS · C ABI 1 | `python3 tools/qualify_c.py --phase all` |
+| <!-- recipe:cmake-static --> CMake static consumer | Linux/macOS · C ABI 1 | `find_package(replai CONFIG REQUIRED)` + `replai::static` |
+| <!-- recipe:cmake-shared --> CMake shared consumer | Linux/macOS · C ABI 1 | `find_package(replai CONFIG REQUIRED)` + `replai::shared` |
+| <!-- recipe:cpp --> C++ consumer | Linux/macOS · C ABI 1 | C++17 static/shared matrix in `tools/qualify_c.py` |
+| <!-- recipe:no-color --> Plain interaction | Linux/macOS · Rust/C ABI 1 | `NO_COLOR=1 cargo run --locked --example validation` |
+| <!-- recipe:secret-input --> Secret input | Unsupported in v0.1 candidate | Use an independently audited secret-entry mechanism |
+| <!-- recipe:concurrent-writers --> Concurrent independent writers | Unsupported in v0.1 candidate | Serialize output in the host |
+
 ## Try validated multiline input
 
 ```sh
@@ -64,6 +93,11 @@ in host code, optionally admit it to history, clear the retained editor and repe
 There is no polling loop to write. History admission and persistence are separate:
 REPLAI provides in-memory navigation; the application decides which commands to
 remember. Use session mode when completion or validation is needed.
+
+Persist only values your application admits. On startup, load records under the
+application's privacy and retention policy and call `admit_history` for each
+accepted entry. REPLAI supplies bounded navigation; it supplies neither a history
+database nor reverse/provider search.
 
 A synchronous validated session opts into `SubmissionPolicy::Validated` while
 closed. After `Event::SubmissionRequested(snapshot)`, parse that snapshot in host
@@ -168,3 +202,48 @@ The example caches one host parse per draft revision and derives I1/I2/I3 result
 from it. `[~...]` is display only, including under NO_COLOR. Use session/driven
 integration to receive delayed host analysis; the simplest blocking API stays
 unchanged. See the [I2 contract](interaction.md#editor-analysis-presentation).
+
+## Installed C and C++ recipes
+
+Build and stage the C ABI producer from the versioned source SDK, then consume
+only the installed prefix. Building the SDK requires Rust; consuming an already
+staged installation does not.
+
+```sh
+cargo build --locked --release -p replai-c
+python3 tools/stage_c.py --prefix /tmp/replai-prefix
+export PKG_CONFIG_PATH=/tmp/replai-prefix/lib/pkgconfig
+cc -std=c11 consumer.c $(pkg-config --cflags --libs replai) -o consumer
+```
+
+For CMake, select the artifact explicitly:
+
+```cmake
+find_package(replai 0.1 CONFIG REQUIRED)
+target_link_libraries(consumer PRIVATE replai::static) # or replai::shared
+```
+
+Configure with
+`cmake -S . -B build -DCMAKE_PREFIX_PATH=/tmp/replai-prefix`. The same imported
+targets accept a C++17 consumer because the ABI header has C++ guards. The full
+qualification moves the prefix before building fresh C11 and C++17 consumers,
+so these recipes do not depend on checkout paths or a global installation. See
+the [source SDK and installed-prefix contract](c-sdk.md).
+
+## Output boundary recipes
+
+Finite application notices can be rendered while editing through serialized
+`external_output` or `output_document` calls. Coalesce a bounded batch into one
+document when several facts arrive together. The host remains the only caller
+mutating `Interaction`.
+
+For turn-by-turn model or network output, let `read_line` return and restore the
+terminal, stream through the host's own I/O while the editor is closed, then open
+the next interaction. The v0.1 candidate does not promise sustained token output
+through an active editor, independent concurrent writers, or fairness/latency
+for such writers.
+
+Sensitive input is outside the selected contract: REPLAI does not suppress echo
+as a password-entry API or guarantee secret erasure. Use a separate mechanism
+whose memory and terminal policy matches the application. Do not emulate this by
+changing REPLAI themes.

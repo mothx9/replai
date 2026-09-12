@@ -74,7 +74,7 @@ dependencies = [
 
 [[package]]
 name = "replai"
-version = "0.1.0-dev.0"
+version = "0.1.0"
 dependencies = [
  "nix",
  "rustix",
@@ -85,7 +85,7 @@ dependencies = [
 
 [[package]]
 name = "replai-c"
-version = "0.1.0-dev.0"
+version = "0.1.0"
 dependencies = [
  "libc",
  "replai",

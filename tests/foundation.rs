@@ -48,7 +48,7 @@ fn dependency_graph_has_one_local_root_and_registry_only_dependencies() {
 }
 
 #[test]
-fn distributable_contains_source_license_and_development_contract() {
+fn distributable_contains_public_source_and_consumer_contract() {
     // Listing is read-only and does not publish or build a release.
     let inventory = cargo_output(&[
         "package",
@@ -79,9 +79,6 @@ fn distributable_contains_source_license_and_development_contract() {
         "examples/demo.rs",
         "LICENSE",
         "README.md",
-        "CONTRIBUTING.md",
-        "AGENTS.md",
-        "ROADMAP.md",
         "CHANGELOG.md",
         "docs/README.md",
         "docs/repl.md",
@@ -89,7 +86,9 @@ fn distributable_contains_source_license_and_development_contract() {
         "docs/interaction.md",
         "docs/presentation.md",
         "docs/c-api.md",
+        "docs/c-sdk.md",
         "docs/development.md",
+        "docs/use-cases.md",
         "tests/fixtures/presentation.tsv",
         "tests/pty.rs",
         "tests/foundation.rs",
@@ -100,4 +99,17 @@ fn distributable_contains_source_license_and_development_contract() {
         );
     }
     assert!(!inventory.lines().any(|path| path.starts_with("target/")));
+    for repository_only in [
+        ".boundary/producer.json",
+        ".github/workflows/ci.yml",
+        "AGENTS.md",
+        "ROADMAP.md",
+        "tools/hardening/campaign.py",
+        "tools/package_sdk.py",
+    ] {
+        assert!(
+            !inventory.lines().any(|path| path == repository_only),
+            "repository-only file leaked into package: {repository_only}"
+        );
+    }
 }

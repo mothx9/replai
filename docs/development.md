@@ -18,9 +18,9 @@ evaluation, command catalogs and application storage remain outside this library
 
 ## Tools
 
-Use current stable Rust with rustfmt and Clippy. The v0.1 scope selects Rust
-1.98.1 as its future floor, but no `rust-version` is declared until packaging
-qualifies it; record `rustc --version --verbose` and `cargo --version` with evidence.
+Use current stable Rust with rustfmt and Clippy. The unpublished 0.1.0 candidate
+declares Rust 1.98.1 as its floor after packaging qualification; record
+`rustc --version --verbose` and `cargo --version` with evidence.
 Fetch the locked graph with `cargo fetch --locked`; Rust checks may then use
 `CARGO_NET_OFFLINE=true`. Commit Cargo.lock for reproducible repository checks.
 
@@ -286,3 +286,28 @@ including `--memory` for native Valgrind/leaks. These gates are in the complete
 qualifier and native CI. The shared PTY launcher defaults to plain performance
 fixtures; correctness oracles explicitly opt into styled output and verify actual
 cell styling. Windows executes portable I2 payload/engine/layout tests only.
+
+## Release packaging
+
+`tools/qualify_packaging.py` is the canonical G3/G4 entry point. It requires an
+empty evidence directory and a committed source revision because artifact
+identity comes from Git, not from an untracked working copy:
+
+```sh
+python3 tools/qualify_packaging.py \
+  --source <packaging-source-sha> \
+  --work /tmp/replai-packaging-$(uname -m) \
+  --full
+```
+
+The command audits Cargo metadata, creates and unpacks the `.crate`, resolves a
+fresh external Rust consumer, builds docs for the selected target set, produces
+the reproducible C source SDK, moves the installed prefix, and exercises C11 and
+C++17 through pkg-config and CMake. On Linux/macOS `--full` also runs the native
+C ABI/PTY/memory matrix. It writes `packaging-summary.json`, command logs and
+artifact hashes beneath the evidence directory. Use Rust 1.98.1 exactly for the
+MSRV run; current-stable and native target lanes are distinct release evidence.
+
+Fast CI may run package and recipe integrity without retaining release
+artifacts. Full native packaging qualification remains a release gate and must
+not be inferred from a cross-build.

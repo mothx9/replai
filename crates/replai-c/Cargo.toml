@@ -1,7 +1,8 @@
 [package]
 name = "replai-c"
-version = "0.1.0-dev.0"
+version = "0.1.0"
 edition = "2024"
+rust-version = "1.98.1"
 license = "MIT"
 description = "Versioned C binding for the REPLAI terminal interaction library"
 repository = "https://github.com/mothx9/replai"
@@ -12,7 +13,7 @@ build = false
 crate-type = ["rlib", "staticlib", "cdylib"]
 
 [dependencies]
-replai = { path = "../.." }
+replai = { version = "=0.1.0", path = "../.." }
 libc = "0.2.189"
 
 [lints.rust]

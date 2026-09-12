@@ -1,13 +1,50 @@
 [package]
 name = "replai"
-version = "0.1.0-dev.0"
+version = "0.1.0"
 edition = "2024"
-description = "Embeddable terminal interaction library for line-oriented and REPL-style interfaces"
+rust-version = "1.98.1"
+description = "Terminal interaction engine with Unicode editing and revision-safe host analysis"
 license = "MIT"
 repository = "https://github.com/mothx9/replai"
+documentation = "https://docs.rs/replai"
 readme = "README.md"
-publish = false
+keywords = ["terminal", "repl", "line-editor", "unicode", "cli"]
+categories = ["command-line-interface", "development-tools"]
+publish = ["crates-io"]
 build = false
+include = [
+    "/Cargo.toml",
+    "/Cargo.lock",
+    "/LICENSE",
+    "/README.md",
+    "/CHANGELOG.md",
+    "/src/**/*.rs",
+    "/examples/**/*.rs",
+    "/examples/c/demo.c",
+    "/tests/**/*.rs",
+    "/tests/fixtures/presentation.tsv",
+    "/include/replai.h",
+    "/api/c-abi.json",
+    "/docs/*.md",
+    "/docs/engineering/release-hardening.md",
+    "/assets/replai-lockup-dark.svg",
+    "/assets/replai-lockup-light.svg",
+    "/assets/terminal-report.png",
+    "/assets/terminal-results.png",
+    "/assets/readme/architecture-dark.svg",
+    "/assets/readme/architecture-light.svg",
+    "/assets/readme/benchmark-q2.svg",
+    "/assets/readme/terminal-showcase.gif",
+    "/assets/readme/terminal-showcase.png",
+]
+
+[package.metadata.docs.rs]
+default-target = "x86_64-unknown-linux-gnu"
+targets = [
+    "aarch64-unknown-linux-gnu",
+    "aarch64-apple-darwin",
+    "x86_64-pc-windows-msvc",
+]
 
 [lints.rust]
 unsafe_code = "forbid"

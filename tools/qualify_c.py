@@ -72,7 +72,8 @@ def restrict_reads(root, extra=()):
 class Qualification:
     def __init__(self, root):
         self.root = root.resolve()
-        self.prefix = self.root / 'prefix'
+        self.prefix_a = self.root / 'prefix-a'
+        self.prefix = self.root / 'prefix-b'
         self.consumer = self.root / 'consumer'
         self.env = os.environ.copy()
         for key in list(self.env):
@@ -95,7 +96,7 @@ class Qualification:
         return result.stdout
 
     def prepare(self):
-        assert not self.prefix.exists(), 'use a fresh qualification directory'
+        assert not self.prefix.exists() and not self.prefix_a.exists(), 'use a fresh qualification directory'
         self.consumer.mkdir(parents=True)
         (self.root / 'tmp').mkdir()
         self.run(['python3', 'tools/generate_abi.py', '--check'], 'header-drift', isolated=False)
@@ -104,14 +105,18 @@ class Qualification:
         self.run(['cargo', 'build', '--locked', '--release', '-p', 'replai-c'], 'release-binding', isolated=False)
         self.run(['cargo', 'build', '--locked', '--release', '-p', 'replai', '--example', 'terminal-state'], 'vt-oracle', isolated=False)
         self.run(['cargo', 'build', '--locked', '--release', '-p', 'replai-c', '--example', 'layout'], 'rust-layout-build', isolated=False)
-        self.run(['python3', 'tools/stage_c.py', '--prefix', self.prefix], 'stage', isolated=False)
+        self.run(['python3', 'tools/stage_c.py', '--prefix', self.prefix_a], 'stage', isolated=False)
+        self.prefix_a.rename(self.prefix)
+        assert not self.prefix_a.exists(), 'original staging prefix still exists'
         for source in ['examples/c/demo.c', 'tests/c/contracts.c', 'tests/c/layout.c', 'tests/fixtures/presentation.tsv']:
             shutil.copy2(ROOT / source, self.consumer / Path(source).name)
         for name in ['layout', 'terminal-state']:
             shutil.copy2(ROOT / 'target/release/examples' / name, self.consumer / ('rust-' + name))
         for suffix in ['c', 'cpp']:
             (self.consumer / ('header.' + suffix)).write_text('#include <replai.h>\n')
-        (self.consumer / 'smoke.cpp').write_text('#include <replai.h>\nint main() { uint32_t v = 0; return replai_abi_version(&v) != REPLAI_OK || v != REPLAI_C_ABI_VERSION; }\n')
+        smoke = '#include <replai.h>\nint main() { uint32_t v = 0; return replai_abi_version(&v) != REPLAI_OK || v != REPLAI_C_ABI_VERSION; }\n'
+        (self.consumer / 'smoke.cpp').write_text(smoke)
+        (self.consumer / 'smoke.c').write_text(smoke)
         self.run(['cc', '--version'], 'compiler')
         self.run(['c++', '--version'], 'cpp-compiler')
         cflags = shlex.split(self.run(['pkg-config', '--cflags', 'replai'], 'pkg-cflags'))
@@ -136,10 +141,38 @@ class Qualification:
             for source in ['demo.c', 'contracts.c']:
                 output = self.run(['cc', '-std=c11', *flags, source, *link, '-o', Path(source).stem + '-' + mode], 'build-' + Path(source).stem + '-' + mode)
                 assert output == '', 'consumer compiler emitted diagnostics'
-        link = shlex.split(self.run(['pkg-config', '--cflags', '--libs', 'replai'], 'pkg-cpp'))
-        self.run(['c++', '-std=c++17', *flags, 'smoke.cpp', *link, '-Wl,-rpath,' + str(self.prefix / 'lib'), '-o', 'cpp-smoke'], 'cpp-link')
-        self.run(['./cpp-smoke'], 'cpp-run')
+        for mode in ['shared', 'static']:
+            link = shlex.split(self.run(['pkg-config', '--cflags', *(['--static'] if mode == 'static' else []), '--libs', 'replai'], 'pkg-cpp-' + mode))
+            if mode == 'static':
+                link = [str(self.prefix / 'lib/libreplai_c.a') if arg == '-lreplai_c' else arg for arg in link]
+            else:
+                link.append('-Wl,-rpath,' + str(self.prefix / 'lib'))
+            self.run(['c++', '-std=c++17', *flags, 'smoke.cpp', *link, '-o', 'cpp-' + mode], 'cpp-link-' + mode)
+            self.run(['./cpp-' + mode], 'cpp-run-' + mode)
+        self.cmake_consumers()
         print(f'Installed consumer compiled with repository reads denied; PREFIX={self.prefix}', flush=True)
+
+    def cmake_consumers(self):
+        for language, source, standard in [('C', 'smoke.c', '11'), ('CXX', 'smoke.cpp', '17')]:
+            for mode in ['shared', 'static']:
+                name = f'cmake-{language.lower()}-{mode}'
+                source_dir = self.consumer / name
+                source_dir.mkdir()
+                shutil.copy2(self.consumer / source, source_dir / source)
+                prop = 'C_STANDARD' if language == 'C' else 'CXX_STANDARD'
+                (source_dir / 'CMakeLists.txt').write_text(
+                    'cmake_minimum_required(VERSION 3.20)\n'
+                    f'project(replai_external LANGUAGES {language})\n'
+                    'find_package(replai 0.1 CONFIG REQUIRED)\n'
+                    f'add_executable(consumer {source})\n'
+                    f'set_property(TARGET consumer PROPERTY {prop} {standard})\n'
+                    f'target_link_libraries(consumer PRIVATE replai::{mode})\n'
+                    + (f'set_property(TARGET consumer PROPERTY BUILD_RPATH "{self.prefix / "lib"}")\n' if mode == 'shared' else '')
+                )
+                build = self.consumer / (name + '-build')
+                self.run(['cmake', '-S', source_dir, '-B', build, '-DCMAKE_PREFIX_PATH=' + str(self.prefix), '-DCMAKE_BUILD_TYPE=Release'], name + '-configure')
+                self.run(['cmake', '--build', build, '--verbose'], name + '-build')
+                self.run([build / 'consumer'], name + '-run')
 
     def exercise(self, mode):
         output = self.run(['./contracts-' + mode], 'contracts-' + mode)
@@ -196,7 +229,7 @@ class Qualification:
             assert '@rpath/libreplai_c.dylib' in loader, loader
             # The actual loaded image must come from this staged prefix.
             trace_env = {**self.env, 'DYLD_PRINT_LIBRARIES':'1'}
-            loaded = self.run(['./cpp-smoke'], 'loader-resolved', env=trace_env)
+            loaded = self.run(['./cpp-shared'], 'loader-resolved', env=trace_env)
             assert str(self.prefix/'lib/libreplai_c.dylib') in loaded, loaded
             static = self.run(['otool', '-L', './demo-static'], 'loader-static')
         else:
@@ -208,6 +241,10 @@ class Qualification:
         assert 'libreplai_c' not in static, static
         pc = (self.prefix / 'lib/pkgconfig/replai.pc').read_text()
         assert '/home/' not in pc and str(ROOT) not in pc and str(self.root) not in pc
+        for metadata in (self.prefix / 'lib/cmake/replai').glob('*.cmake'):
+            value = metadata.read_text()
+            assert str(ROOT) not in value and str(self.root) not in value and str(self.prefix_a) not in value
+        assert not self.prefix_a.exists()
         print(loader + 'Namespace, staged loader resolution, metadata isolation: PASS', flush=True)
 
 

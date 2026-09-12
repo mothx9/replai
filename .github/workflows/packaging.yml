@@ -1,0 +1,81 @@
+name: Release packaging qualification
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  native:
+    name: Packaging ${{ matrix.architecture }} ${{ matrix.toolchain }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            architecture: x86_64
+            toolchain: 1.98.1
+          - os: ubuntu-24.04-arm
+            architecture: aarch64
+            toolchain: 1.98.1
+          - os: macos-15
+            architecture: arm64
+            toolchain: 1.98.1
+          - os: ubuntu-24.04
+            architecture: x86_64
+            toolchain: stable
+          - os: ubuntu-24.04-arm
+            architecture: aarch64
+            toolchain: stable
+          - os: macos-15
+            architecture: arm64
+            toolchain: stable
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87
+        with:
+          toolchain: ${{ matrix.toolchain }}
+      - name: Require native architecture
+        shell: bash
+        run: |
+          test "$(uname -m)" = '${{ matrix.architecture }}'
+          rustc -vV
+          cargo -Vv
+      - name: Install Linux package tools
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y cmake g++ pkg-config valgrind
+      - name: Install macOS package tools
+        if: runner.os == 'macOS'
+        run: command -v pkg-config >/dev/null || brew install pkg-config
+      - name: Build package candidates and external consumers
+        run: python3 tools/qualify_packaging.py --source HEAD --work "$RUNNER_TEMP/replai-packaging" --full
+      - name: Retain exact packaging receipts
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: packaging-${{ matrix.os }}-${{ matrix.architecture }}-${{ matrix.toolchain }}
+          path: ${{ runner.temp }}/replai-packaging
+
+  windows-portable:
+    name: Packaging Windows portable core (Rust 1.98.1)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87
+        with:
+          toolchain: 1.98.1
+      - name: Package, unpack, resolve consumer and compile portable core
+        run: python tools/qualify_packaging.py --source HEAD --work "$env:RUNNER_TEMP/replai-packaging"
+      - name: Retain exact portable receipts
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: packaging-windows-x86_64-1.98.1
+          path: ${{ runner.temp }}/replai-packaging

@@ -262,3 +262,9 @@ ABI 1 descriptor acquisition remains a POSIX-style Linux/macOS compatibility
 contract. The underlying Rust interaction engine is platform-neutral; this does
 not make integer file descriptors a Windows terminal endpoint contract. No new
 C acquisition API or ABI identity is introduced by the architecture refoundation.
+
+The staged prefix also provides relocatable CMake package files. Consumers use
+`find_package(replai 0.1 CONFIG REQUIRED)` and link exactly one of
+`replai::static` or `replai::shared`; CMake consumes staged artifacts and does
+not rebuild Rust. The versioned source-SDK build and moved-prefix contract is
+documented in [C SDK source bundle](c-sdk.md).

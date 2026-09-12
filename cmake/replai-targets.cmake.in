@@ -1,0 +1,32 @@
+if(TARGET replai::static OR TARGET replai::shared)
+  return()
+endif()
+
+get_filename_component(_REPLAI_PREFIX "${CMAKE_CURRENT_LIST_DIR}/../../.." ABSOLUTE)
+set(_REPLAI_INCLUDE "${_REPLAI_PREFIX}/include")
+set(_REPLAI_STATIC "${_REPLAI_PREFIX}/lib/libreplai_c.a")
+set(_REPLAI_SHARED "${_REPLAI_PREFIX}/lib/@REPLAI_SHARED_LIBRARY@")
+
+foreach(_path IN ITEMS "${_REPLAI_INCLUDE}" "${_REPLAI_STATIC}" "${_REPLAI_SHARED}")
+  if(NOT EXISTS "${_path}")
+    message(FATAL_ERROR "REPLAI installation is incomplete: ${_path}")
+  endif()
+endforeach()
+
+add_library(replai::static STATIC IMPORTED)
+set_target_properties(replai::static PROPERTIES
+  IMPORTED_LOCATION "${_REPLAI_STATIC}"
+  INTERFACE_INCLUDE_DIRECTORIES "${_REPLAI_INCLUDE}"
+  INTERFACE_LINK_LIBRARIES "@REPLAI_STATIC_SYSTEM_LIBS@"
+)
+
+add_library(replai::shared SHARED IMPORTED)
+set_target_properties(replai::shared PROPERTIES
+  IMPORTED_LOCATION "${_REPLAI_SHARED}"
+  INTERFACE_INCLUDE_DIRECTORIES "${_REPLAI_INCLUDE}"
+)
+
+unset(_REPLAI_PREFIX)
+unset(_REPLAI_INCLUDE)
+unset(_REPLAI_STATIC)
+unset(_REPLAI_SHARED)

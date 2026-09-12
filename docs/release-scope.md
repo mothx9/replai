@@ -151,11 +151,11 @@ unchanged until the freeze review and actual publication.
 | Support | Reproducible bug reports and public release notes; no response-time, LTS duration or service SLA is implied. |
 
 The selected MSRV is a conservative support floor, not a claim that older Rust
-cannot compile the code. Current manifests declare no MSRV. G3 must prove this
-floor with packaged sources and clean consumers on the exact toolchain; inability
-to obtain/qualify it blocks the gate and requires an explicit scope revision,
-not a silently raised requirement. Test both the release lock graph and a fresh
-consumer resolution. Dependency MSRV changes must not silently break 0.1.x.
+cannot compile the code. The unpublished candidate manifests declare Rust
+1.98.1 only after G3 proves the packaged sources and fresh consumer resolution
+on that exact toolchain. Inability to qualify it blocks the gate and requires an
+explicit scope revision, not a silently raised requirement. Dependency MSRV
+changes must not silently break 0.1.x.
 
 Cargo treats compatible 0.1.x dependencies differently from a blanket “anything
 before 1.0 may break” posture; the selected policy follows the

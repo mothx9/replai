@@ -76,6 +76,11 @@ jobs:
         run: cargo test --workspace --release
       - run: cargo clippy --workspace --all-targets --all-features -- -D warnings
       - run: cargo test --doc
+      - name: Packaging and cookbook integrity smoke
+        run: |
+          cargo package -p replai --locked
+          python3 tools/package/check_recipes.py
+          python3 tools/package_sdk.py --revision HEAD --output "$RUNNER_TEMP/replai-c-sdk-0.1.0.tar.gz" --check-reproducible
       - name: README snippets and real blocking host
         run: python3 tools/docs/check_readme.py
       - name: Reproduce the public showcase PNG and GIF from a real PTY
