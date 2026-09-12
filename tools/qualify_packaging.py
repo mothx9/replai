@@ -34,11 +34,20 @@ class Qualification:
         self.work = work.resolve()
         self.source = source
         self.full = full
+        source_revision = self.git("rev-parse", source).strip()
+        checkout_revision = self.git("rev-parse", "HEAD").strip()
+        if source_revision != checkout_revision:
+            raise SystemExit(
+                "--source must resolve to the checked-out HEAD; check out the exact "
+                "candidate before packaging"
+            )
+        if self.git("status", "--porcelain=v1", "--untracked-files=all").strip():
+            raise SystemExit("packaging qualification requires a clean checkout")
         self.logs = self.work / "logs"
         self.artifacts = self.work / "artifacts"
         self.summary = {
             "schema": 1,
-            "source_revision": self.git("rev-parse", source).strip(),
+            "source_revision": source_revision,
             "source_tree": self.git("rev-parse", f"{source}^{{tree}}").strip(),
             "runtime_src_tree": self.git("rev-parse", f"{source}:src").strip(),
             "host": {

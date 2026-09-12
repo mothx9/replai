@@ -197,17 +197,18 @@ documentation.
 
 ### Rust from the qualified checkpoint
 
-Until crates.io publication, pin the latest qualified public producer checkpoint:
+Until crates.io publication, pin the qualified runtime implementation checkpoint:
 
 ```toml
 [dependencies]
 replai = { git = "https://github.com/mothx9/replai", rev = "893fc163d379fe8bbbb78d93cbf3a6970d13d9a4" }
 ```
 
-This immutable checkpoint carries the unchanged qualified runtime plus the
-packaging and external-consumer machinery used by this candidate. Exact Git
-pins keep pre-release consumption deliberate; no crates.io package has been
-published yet.
+This immutable checkpoint carries the runtime implementation qualified by the
+release-hardening campaign. The separately identified package candidate and its
+external-consumer evidence are recorded in the [packaging dossier](docs/engineering/release-packaging.md).
+Exact Git pins keep pre-release consumption deliberate; no crates.io package
+has been published yet.
 
 A current stable Rust toolchain is used today. The unpublished 0.1.0 candidate
 declares Rust 1.98.1 as its MSRV. Runtime dependencies
