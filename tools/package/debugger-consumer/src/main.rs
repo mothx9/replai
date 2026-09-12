@@ -99,15 +99,19 @@ fn result_document(text: &str) -> Result<Document, EditError> {
 }
 
 fn portable_contract() -> Result<(), Box<dyn std::error::Error>> {
-    let mut input = Interaction::new(Editor::new(65_536, 32));
-    input.editor_mut()?.insert("br")?;
-    let stale_snapshot = input.analysis_snapshot();
-    input.editor_mut()?.insert("e")?;
+    let mut editor = Editor::new(65_536, 32);
+    editor.insert("br")?;
+    let stale_snapshot = editor.analysis_snapshot();
+    editor.insert("e")?;
     let stale = DebuggerAnalysis::new(stale_snapshot);
-    assert_eq!(input.present_analysis(stale.presentation()?)?, AnalysisOutcome::Stale);
-    assert_eq!(input.editor().text(), "bre");
-    assert!(input.analysis_presentation().is_none());
-    assert!(input.completion_selection().is_none());
+    assert_eq!(
+        editor.replace_at(stale.snapshot.revision(), 0..2, "break"),
+        Ok(AnalysisOutcome::Stale),
+    );
+    assert_eq!(editor.text(), "bre");
+    assert_eq!(stale.presentation()?.revision(), stale.snapshot.revision());
+    assert_eq!(stale.completions()?.revision(), stale.snapshot.revision());
+    assert_eq!(stale.validation()?.revision(), stale.snapshot.revision());
     eprintln!("ASSERT stale-analysis-refused");
     Ok(())
 }
