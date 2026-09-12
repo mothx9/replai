@@ -121,12 +121,14 @@ class Qualification:
             assert required in inventory, required
         destination = self.artifacts / crate.name
         shutil.copy2(crate, destination)
+        with tarfile.open(destination, "r:gz") as package_archive:
+            package_members = [member for member in package_archive.getmembers() if member.isfile()]
         self.summary["rust_package"] = {
             "filename": destination.name,
             "bytes": destination.stat().st_size,
             "sha256": sha256(destination),
-            "file_count": len(inventory),
-            "uncompressed_bytes": sum((ROOT / p).stat().st_size for p in inventory if (ROOT / p).is_file()),
+            "file_count": len(package_members),
+            "uncompressed_bytes": sum(member.size for member in package_members),
         }
         return destination
 
