@@ -4,13 +4,26 @@ REPLAI owns these producer declarations. They describe generic capabilities,
 surfaces, qualification and changes; they assign no consumer paths, commands or
 migration work. Consumer profiles must be authored by their own repositories.
 
-- [Current producer snapshot](producer.json), generation 13: public-showcase
-  qualification source `f916f2fbccb83ac8cbae21fe553ec753c5809898`, tree
+- [Current producer snapshot](producer.json), generation 14: release-packaging
+  evidence carrier `7f8f696f98b33d8e4ea6f08e243fe0d5e5351724`, tree
+  `15f1cc0e685b8523b33e97c145615bc82ac6b7be`.
+  The exact package source is `14cacba16f3cf2a00448d720502e1cfe975f2e83`.
+  Its [seven-lane package matrix](https://github.com/mothx9/replai/actions/runs/34703095088)
+  and [exact-source CI](https://github.com/mothx9/replai/actions/runs/34703089136)
+  qualify external crate/C SDK consumers, MSRV, relocation and native memory
+  gates. Runtime semantics, public Rust behavior, C ABI 1 and all 27 capability
+  definitions are unchanged.
+- [Release-packaging delta](deltas/release-packaging.json) records compatible
+  `QUALIFICATION_CHANGED` evidence for session/revision analysis, validation,
+  ABI 1 and the portable/Linux/macOS surfaces. It adds no capability, semantic
+  change, assigned migration or consumer repin.
+- [Previous public-showcase snapshot](checkpoints/f916f2fbccb83ac8cbae21fe553ec753c5809898.json),
+  generation 13: public-showcase qualification source
+  `f916f2fbccb83ac8cbae21fe553ec753c5809898`, tree
   `8f72e6de19d07256ab9ff1c1d6c959bd3876ae14`.
-  [Full CI](https://github.com/mothx9/replai/actions/runs/34623517808) passes all
+  [Full CI](https://github.com/mothx9/replai/actions/runs/34623517808) passed all
   12 jobs, including byte-exact regeneration of the public PNG/GIF from a real
-  PTY. Runtime source, public Rust/C behavior, dependencies and all 27 capability
-  definitions are unchanged from the predecessor.
+  PTY.
 - [Public-surface showcase delta](deltas/public-surface-showcase.json) records a
   compatible `QUALIFICATION_CHANGED` entry for the session reference host. It
   binds the public-only showcase and reproducible PTY assets without adding a
@@ -132,7 +145,7 @@ behavior, ABI and documentation inputs. Its external validation command is:
 
 ```sh
 boundary validate .boundary/producer.json --repo . \
-  --previous .boundary/checkpoints/006e65797e8dc9fa1d6ee0d90949b56e47cb2ee5.json
+  --previous .boundary/checkpoints/f916f2fbccb83ac8cbae21fe553ec753c5809898.json
 ```
 
 Run from a clean REPLAI checkout with BOUNDARY installed separately. Validation

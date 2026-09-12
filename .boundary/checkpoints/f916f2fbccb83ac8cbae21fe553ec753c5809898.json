@@ -124,10 +124,7 @@
         "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/c-api.md"
       ],
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34238242934",
-        "https://github.com/mothx9/replai/actions/runs/34703095088",
-        "https://github.com/mothx9/replai/actions/runs/34703089136",
-        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
+        "https://github.com/mothx9/replai/actions/runs/34238242934"
       ],
       "guarantees": [
         "Numeric ABI identity 1; layout and symbol contract qualified",
@@ -151,10 +148,7 @@
       ],
       "evidence": [
         "https://github.com/mothx9/replai/actions/runs/34370575960",
-        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md",
-        "https://github.com/mothx9/replai/actions/runs/34703095088",
-        "https://github.com/mothx9/replai/actions/runs/34703089136",
-        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
       ],
       "guarantees": [
         "Exact termios restoration, paste lifecycle, resource exclusion and descriptor ownership",
@@ -177,10 +171,7 @@
       ],
       "evidence": [
         "https://github.com/mothx9/replai/actions/runs/34370575960",
-        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md",
-        "https://github.com/mothx9/replai/actions/runs/34703095088",
-        "https://github.com/mothx9/replai/actions/runs/34703089136",
-        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
       ],
       "guarantees": [
         "Real Rust/C PTYs and native leak qualification; captured console modes restored"
@@ -202,10 +193,7 @@
       ],
       "evidence": [
         "https://github.com/mothx9/replai/actions/runs/34370575960",
-        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md",
-        "https://github.com/mothx9/replai/actions/runs/34703095088",
-        "https://github.com/mothx9/replai/actions/runs/34703089136",
-        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
       ],
       "guarantees": [
         "Native Linux/macOS/Windows portable tests; Windows has no runtime terminal backend",
@@ -368,10 +356,7 @@
       ],
       "evidence": [
         "https://github.com/mothx9/replai/actions/runs/34494834221",
-        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md",
-        "https://github.com/mothx9/replai/actions/runs/34703095088",
-        "https://github.com/mothx9/replai/actions/runs/34703089136",
-        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
       ],
       "guarantees": [
         "Existing open/poll/completion/output/close behavior and bounded read-ahead remain available",
@@ -519,10 +504,7 @@
       ],
       "evidence": [
         "https://github.com/mothx9/replai/actions/runs/34475749705",
-        "https://github.com/mothx9/replai/blob/aa137e881065f0a0615fa8ae03c84c89f052bea3/docs/engineering/analysis-protocol.md",
-        "https://github.com/mothx9/replai/actions/runs/34703095088",
-        "https://github.com/mothx9/replai/actions/runs/34703089136",
-        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
+        "https://github.com/mothx9/replai/blob/aa137e881065f0a0615fa8ae03c84c89f052bea3/docs/engineering/analysis-protocol.md"
       ],
       "guarantees": [
         "One opaque identity scoped to the originating retained Editor; successful text/cursor changes advance, no-ops and rejected edits do not",
@@ -609,10 +591,7 @@
       ],
       "evidence": [
         "https://github.com/mothx9/replai/actions/runs/34494834221",
-        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md",
-        "https://github.com/mothx9/replai/actions/runs/34703095088",
-        "https://github.com/mothx9/replai/actions/runs/34703089136",
-        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
       ],
       "guarantees": [
         "Host grammar and scheduling remain external; Enter emits an immutable snapshot when validation is enabled",
@@ -695,197 +674,650 @@
     {
       "capability": "embedding.session",
       "compatibility": "compatible",
-      "description": "Packaging qualification only: an independent debugger-style Rust host builds from the extracted crate outside the producer checkout and exercises session analysis, completion, validation, finite serialized notices and structured output. Runtime semantics and the public Rust contract are unchanged; no consumer migration or repin is assigned.",
+      "description": "Documentation/example qualification only: one public-API showcase and deterministic real-PTY PNG/GIF reproduction now exercise host analysis, completion, validated multiline input, coordinated output, structured presentation and history through the existing session contract. Runtime source, public Rust/C behavior, dependencies and every capability definition remain unchanged. No consumer migration is assigned.",
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34703095088",
-        "https://github.com/mothx9/replai/actions/runs/34703089136",
-        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
+        "https://github.com/mothx9/replai/actions/runs/34623517808",
+        "https://github.com/mothx9/replai/blob/f916f2fbccb83ac8cbae21fe553ec753c5809898/docs/development.md#public-readme-assets"
       ],
       "inputs": [
         ".github/workflows/ci.yml",
-        ".github/workflows/packaging.yml",
-        "docs/engineering/release-packaging.md",
-        "tools/qualify_packaging.py",
-        "docs/use-cases.md",
-        "tools/package/debugger-consumer/src/main.rs",
-        "tools/package/debugger_pty.py"
-      ],
-      "kind": "QUALIFICATION_CHANGED",
-      "platforms": [
-        "linux",
-        "macos",
-        "windows"
-      ],
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capability": "abi.c.v1",
-      "compatibility": "compatible",
-      "description": "Packaging qualification only: the deterministic C source SDK installs ABI 1 as relocatable static/shared pkg-config and CMake targets, consumed by external C11/C++17 builds after prefix movement. Symbols, layouts, numeric identity and ABI semantics are unchanged.",
-      "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34703095088",
-        "https://github.com/mothx9/replai/actions/runs/34703089136",
-        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
-      ],
-      "inputs": [
-        ".github/workflows/ci.yml",
-        ".github/workflows/packaging.yml",
-        "docs/engineering/release-packaging.md",
-        "tools/qualify_packaging.py",
-        "docs/c-sdk.md",
-        "tools/package_sdk.py",
-        "tools/qualify_c.py",
-        "tools/stage_c.py",
-        "docs/c-api.md"
-      ],
-      "kind": "QUALIFICATION_CHANGED",
-      "platforms": [
-        "linux",
-        "macos"
-      ],
-      "surfaces": [
-        "c-abi-v1"
-      ]
-    },
-    {
-      "capability": "platform.portable_engine",
-      "compatibility": "compatible",
-      "description": "The extracted Rust package and independent portable debugger oracle compile and execute under Windows MSVC at Rust 1.98.1. Windows remains portable core only with no terminal runtime claim.",
-      "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34703095088",
-        "https://github.com/mothx9/replai/actions/runs/34703089136",
-        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
-      ],
-      "inputs": [
-        ".github/workflows/ci.yml",
-        ".github/workflows/packaging.yml",
-        "docs/engineering/release-packaging.md",
-        "tools/qualify_packaging.py",
-        "tools/package/debugger-consumer/src/main.rs",
-        "tools/hardening/Cargo.lock"
-      ],
-      "kind": "QUALIFICATION_CHANGED",
-      "platforms": [
-        "windows"
-      ],
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capability": "platform.posix_linux",
-      "compatibility": "compatible",
-      "description": "Packaging qualification adds native GNU Linux x86_64/ARM64 MSRV and stable package, external Rust PTY, moved-prefix C/C++ installation, loader and Valgrind evidence without changing the POSIX runtime contract.",
-      "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34703095088",
-        "https://github.com/mothx9/replai/actions/runs/34703089136",
-        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
-      ],
-      "inputs": [
-        ".github/workflows/ci.yml",
-        ".github/workflows/packaging.yml",
-        "docs/engineering/release-packaging.md",
-        "tools/qualify_packaging.py",
-        "tools/package_sdk.py",
-        "tools/qualify_c.py",
-        "tools/stage_c.py",
-        "tools/package/debugger-consumer/src/main.rs",
-        "tools/package/debugger_pty.py"
+        "examples/showcase.rs",
+        "examples/support/showcase_host.rs",
+        "tools/readme/capture_showcase.py",
+        "assets/readme/terminal-showcase.png",
+        "assets/readme/terminal-showcase.gif",
+        "assets/readme/manifest.json"
       ],
       "kind": "QUALIFICATION_CHANGED",
       "platforms": [
         "linux"
       ],
       "surfaces": [
-        "rust-native",
-        "c-abi-v1"
-      ]
-    },
-    {
-      "capability": "platform.posix_macos",
-      "compatibility": "compatible",
-      "description": "Packaging qualification adds native macOS ARM64 MSRV and stable package, external Rust PTY, moved-prefix C/C++ installation, loader and leak evidence without changing the POSIX runtime contract.",
-      "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34703095088",
-        "https://github.com/mothx9/replai/actions/runs/34703089136",
-        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
-      ],
-      "inputs": [
-        ".github/workflows/ci.yml",
-        ".github/workflows/packaging.yml",
-        "docs/engineering/release-packaging.md",
-        "tools/qualify_packaging.py",
-        "tools/package_sdk.py",
-        "tools/qualify_c.py",
-        "tools/stage_c.py",
-        "tools/package/debugger-consumer/src/main.rs",
-        "tools/package/debugger_pty.py"
-      ],
-      "kind": "QUALIFICATION_CHANGED",
-      "platforms": [
-        "macos"
-      ],
-      "surfaces": [
-        "rust-native",
-        "c-abi-v1"
-      ]
-    },
-    {
-      "capability": "analysis.validation",
-      "compatibility": "compatible",
-      "description": "Cookbook qualification ties revision-bound validation and related host-analysis recipes to executed public examples and the packaged debugger fixture. Analysis semantics and host ownership are unchanged.",
-      "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34703095088",
-        "https://github.com/mothx9/replai/actions/runs/34703089136",
-        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
-      ],
-      "inputs": [
-        "docs/use-cases.md",
-        "docs/engineering/release-packaging.md",
-        "tests/architecture.rs"
-      ],
-      "kind": "QUALIFICATION_CHANGED",
-      "platforms": [
-        "linux",
-        "macos",
-        "windows"
-      ],
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capability": "analysis.revisions",
-      "compatibility": "compatible",
-      "description": "Packaging qualification only: the extracted-crate debugger oracle proves delayed stale refusal and fresh revision-bound application outside the producer checkout on Linux/macOS native PTYs and the Windows portable model. Revision identity and result semantics are unchanged.",
-      "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34703095088",
-        "https://github.com/mothx9/replai/actions/runs/34703089136",
-        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
-      ],
-      "inputs": [
-        "tests/foundation.rs",
-        "tools/package/debugger-consumer/src/main.rs",
-        "tools/package/debugger_pty.py",
-        "tools/qualify_packaging.py",
-        "docs/engineering/release-packaging.md"
-      ],
-      "kind": "QUALIFICATION_CHANGED",
-      "platforms": [
-        "linux",
-        "macos",
-        "windows"
-      ],
-      "surfaces": [
         "rust-native"
       ]
     }
   ],
-  "generation": 14,
-  "id": "sha256:f690c80022f44a53d99dbe62ff4cc8ab7d75b602209386f0f6d963cd309be9f6",
+  "generation": 13,
+  "id": "sha256:ff37c4091dcb958dd49098b5dad276b570122302a5b8b994154469d042fba330",
   "inputs": [
+    {
+      "capabilities": [
+        "analysis.hints_highlight",
+        "analysis.revisions",
+        "analysis.validation",
+        "completion.candidates",
+        "embedding.blocking",
+        "embedding.driven",
+        "embedding.readiness",
+        "embedding.session",
+        "interaction.completion_request",
+        "interaction.editing",
+        "interaction.external_output",
+        "interaction.history_navigation",
+        "platform.portable_engine",
+        "platform.posix_linux",
+        "platform.posix_macos",
+        "presentation.completion_ux",
+        "presentation.composed_prompt",
+        "presentation.multiline_ux",
+        "presentation.prompt",
+        "presentation.status",
+        "presentation.structured_output",
+        "presentation.table",
+        "presentation.theme",
+        "terminal.admission",
+        "terminal.capability_snapshot",
+        "terminal.width_policy"
+      ],
+      "category": "api",
+      "path": "src/lib.rs",
+      "sha256": "sha256:5acf9cdb565056c7f7d3c17ea54a7c74fcc4bca105fe65a101aaa4df0e89a1b6",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.revisions",
+        "analysis.validation",
+        "completion.candidates",
+        "interaction.completion_request",
+        "interaction.editing",
+        "interaction.external_output",
+        "interaction.history_navigation",
+        "platform.portable_engine",
+        "platform.posix_linux",
+        "platform.posix_macos",
+        "presentation.completion_ux",
+        "presentation.multiline_ux",
+        "presentation.prompt"
+      ],
+      "category": "behavior",
+      "path": "src/core.rs",
+      "sha256": "sha256:89b1c711b8fe9f833318e1a0f4aa86917aa40a7fa61e3b3d1701cd7139cf2e7d",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "completion.candidates",
+        "interaction.completion_request",
+        "interaction.editing",
+        "interaction.external_output",
+        "interaction.history_navigation",
+        "platform.portable_engine",
+        "platform.posix_linux",
+        "platform.posix_macos",
+        "presentation.completion_ux",
+        "presentation.prompt"
+      ],
+      "category": "behavior",
+      "path": "src/actions.rs",
+      "sha256": "sha256:72f5c10f87df2699d385e56f12e9094494c9eeb06d0e4ad297e490ce330c6605",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "completion.candidates",
+        "interaction.completion_request",
+        "interaction.editing",
+        "interaction.external_output",
+        "interaction.history_navigation",
+        "platform.portable_engine",
+        "platform.posix_linux",
+        "platform.posix_macos",
+        "presentation.completion_ux",
+        "presentation.prompt"
+      ],
+      "category": "behavior",
+      "path": "src/keymap.rs",
+      "sha256": "sha256:af7145660766c51c1167805842b0b002f9de73f38f239be03034a6dac2f52b95",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "completion.candidates",
+        "interaction.completion_request",
+        "interaction.editing",
+        "interaction.external_output",
+        "interaction.history_navigation",
+        "platform.portable_engine",
+        "platform.posix_linux",
+        "platform.posix_macos",
+        "presentation.completion_ux",
+        "presentation.prompt"
+      ],
+      "category": "behavior",
+      "path": "src/input.rs",
+      "sha256": "sha256:39723e00add7a5fd5a2e44a1b9c6cb26b27a1cff1de0698707b2af718ff06c61",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.hints_highlight",
+        "analysis.revisions",
+        "analysis.validation",
+        "completion.candidates",
+        "interaction.completion_request",
+        "interaction.editing",
+        "interaction.external_output",
+        "interaction.history_navigation",
+        "platform.portable_engine",
+        "platform.posix_linux",
+        "platform.posix_macos",
+        "presentation.completion_ux",
+        "presentation.composed_prompt",
+        "presentation.multiline_ux",
+        "presentation.prompt",
+        "presentation.status",
+        "presentation.structured_output",
+        "presentation.table",
+        "presentation.theme"
+      ],
+      "category": "behavior",
+      "path": "src/engine.rs",
+      "sha256": "sha256:c8e0e34b4ad39427d9edac2efd60d0239874231bd0ecc24989bde0756f54a152",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.validation",
+        "embedding.driven",
+        "embedding.session",
+        "interaction.completion_request",
+        "interaction.editing",
+        "interaction.external_output",
+        "interaction.history_navigation",
+        "platform.portable_engine",
+        "platform.posix_linux",
+        "platform.posix_macos",
+        "presentation.multiline_ux",
+        "presentation.prompt"
+      ],
+      "category": "behavior",
+      "path": "src/event.rs",
+      "sha256": "sha256:b2b2ef3dbc9c0bcb5d420127f0c162ef46e5599488bad71c47b2023cb555c650",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "interaction.editing",
+        "interaction.history_navigation",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
+        "platform.posix_linux",
+        "platform.posix_macos",
+        "platform.portable_engine"
+      ],
+      "category": "behavior",
+      "path": "src/render.rs",
+      "sha256": "sha256:9b50bc67bd1b4c0d865c92fb8923b49cfdd1f20cd8be4c17fb8d4f2be2e58788",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.hints_highlight",
+        "embedding.blocking",
+        "embedding.driven",
+        "embedding.readiness",
+        "embedding.session",
+        "interaction.completion_request",
+        "interaction.editing",
+        "interaction.external_output",
+        "interaction.history_navigation",
+        "platform.portable_engine",
+        "platform.posix_linux",
+        "platform.posix_macos",
+        "presentation.composed_prompt",
+        "presentation.prompt",
+        "presentation.status",
+        "presentation.structured_output",
+        "presentation.table",
+        "presentation.theme",
+        "terminal.admission",
+        "terminal.width_policy"
+      ],
+      "category": "api",
+      "path": "src/presentation.rs",
+      "sha256": "sha256:18d2c0c2d994b67f68f96aed2490b975a174a79a6820f0011eb60611e1003288",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.hints_highlight",
+        "analysis.revisions",
+        "analysis.validation",
+        "completion.candidates",
+        "embedding.blocking",
+        "embedding.driven",
+        "embedding.readiness",
+        "embedding.session",
+        "interaction.completion_request",
+        "interaction.editing",
+        "interaction.external_output",
+        "interaction.history_navigation",
+        "platform.portable_engine",
+        "platform.posix_linux",
+        "platform.posix_macos",
+        "presentation.completion_ux",
+        "presentation.composed_prompt",
+        "presentation.multiline_ux",
+        "presentation.prompt",
+        "presentation.status",
+        "presentation.structured_output",
+        "presentation.table",
+        "presentation.theme",
+        "terminal.admission",
+        "terminal.capability_snapshot"
+      ],
+      "category": "api",
+      "path": "src/interaction.rs",
+      "sha256": "sha256:13895facc811ec9330c9f0e19cde8296c687df9d9d5be776c8cfdcd08eafd493",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "interaction.editing",
+        "interaction.history_navigation",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
+        "platform.posix_linux",
+        "platform.posix_macos",
+        "platform.portable_engine",
+        "presentation.structured_output",
+        "presentation.table",
+        "presentation.status",
+        "presentation.composed_prompt",
+        "presentation.theme"
+      ],
+      "category": "behavior",
+      "path": "src/protocol.rs",
+      "sha256": "sha256:1feec7c69562900e04d0e6a14f44cea6c49254c2e332d4b6be40cb8a21758ada",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "embedding.blocking",
+        "embedding.driven",
+        "embedding.readiness",
+        "embedding.session",
+        "interaction.completion_request",
+        "interaction.editing",
+        "interaction.external_output",
+        "interaction.history_navigation",
+        "platform.portable_engine",
+        "platform.posix_linux",
+        "platform.posix_macos",
+        "presentation.composed_prompt",
+        "presentation.prompt",
+        "presentation.status",
+        "presentation.structured_output",
+        "presentation.table",
+        "presentation.theme",
+        "terminal.admission"
+      ],
+      "category": "behavior",
+      "path": "src/terminal.rs",
+      "sha256": "sha256:0cea572b85be0a6ba3726b900cb3d0cbee3610a432d623389911fa60a02e30c4",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "embedding.blocking",
+        "embedding.driven",
+        "embedding.readiness",
+        "embedding.session",
+        "interaction.completion_request",
+        "interaction.editing",
+        "interaction.external_output",
+        "interaction.history_navigation",
+        "platform.portable_engine",
+        "platform.posix_linux",
+        "platform.posix_macos",
+        "presentation.prompt",
+        "terminal.admission"
+      ],
+      "category": "behavior",
+      "path": "src/system.rs",
+      "sha256": "sha256:c62f90d1f7f4636b93fe7cee796642b7d7c1d0ba47a4512b0a6f107a7f5c1416",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "abi.c.v1"
+      ],
+      "category": "abi",
+      "path": "api/c-abi.json",
+      "sha256": "sha256:946189594ef5a57235c2d70580b1a95c6cb3fadecccf7b95f66b00c3f6cfab6b",
+      "surfaces": [
+        "c-abi-v1"
+      ]
+    },
+    {
+      "capabilities": [
+        "abi.c.v1"
+      ],
+      "category": "abi",
+      "path": "include/replai.h",
+      "sha256": "sha256:c0644f2d541e7537bc5c96f3d70679b2f2f18f7b89af513de96bda2e7cb49bf5",
+      "surfaces": [
+        "c-abi-v1"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.hints_highlight",
+        "analysis.validation",
+        "completion.candidates",
+        "interaction.completion_request",
+        "interaction.editing",
+        "interaction.external_output",
+        "interaction.history_navigation",
+        "platform.portable_engine",
+        "platform.posix_linux",
+        "platform.posix_macos",
+        "presentation.completion_ux",
+        "presentation.composed_prompt",
+        "presentation.multiline_ux",
+        "presentation.prompt",
+        "presentation.status",
+        "presentation.structured_output",
+        "presentation.table",
+        "presentation.theme",
+        "terminal.width_policy"
+      ],
+      "category": "documentation",
+      "path": "docs/presentation.md",
+      "sha256": "sha256:7a731996587e4e3dc6cec296b418b839e6dff760c918824cd1e12214b4c34deb",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.hints_highlight",
+        "analysis.revisions",
+        "analysis.validation",
+        "completion.candidates",
+        "embedding.blocking",
+        "embedding.driven",
+        "embedding.readiness",
+        "embedding.session",
+        "interaction.completion_request",
+        "interaction.editing",
+        "interaction.external_output",
+        "interaction.history_navigation",
+        "platform.portable_engine",
+        "platform.posix_linux",
+        "platform.posix_macos",
+        "presentation.completion_ux",
+        "presentation.composed_prompt",
+        "presentation.multiline_ux",
+        "presentation.prompt",
+        "presentation.status",
+        "presentation.structured_output",
+        "presentation.table",
+        "presentation.theme",
+        "terminal.admission"
+      ],
+      "category": "documentation",
+      "path": "docs/architecture.md",
+      "sha256": "sha256:82e6f4dc23bd13331280b3c9d0e8ce52e3605b02eb9cb5f8642220439bc21741",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.hints_highlight",
+        "analysis.revisions",
+        "analysis.validation",
+        "completion.candidates",
+        "embedding.blocking",
+        "embedding.driven",
+        "embedding.readiness",
+        "embedding.session",
+        "interaction.completion_request",
+        "interaction.editing",
+        "interaction.external_output",
+        "interaction.history_navigation",
+        "platform.portable_engine",
+        "platform.posix_linux",
+        "platform.posix_macos",
+        "presentation.completion_ux",
+        "presentation.multiline_ux",
+        "presentation.prompt",
+        "terminal.admission"
+      ],
+      "category": "documentation",
+      "path": "docs/interaction.md",
+      "sha256": "sha256:37c8dab9d8168ad5f314f7f941b778471a182692b7a76590efab60d67fb4b2d8",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "abi.c.v1"
+      ],
+      "category": "documentation",
+      "path": "docs/c-api.md",
+      "sha256": "sha256:c56610d8f211521dd06d6b80e112a6980ee7ef8d0fcb9ddc9f87ec74d634afbe",
+      "surfaces": [
+        "c-abi-v1"
+      ]
+    },
+    {
+      "capabilities": [
+        "interaction.editing",
+        "platform.posix_macos"
+      ],
+      "category": "qualification",
+      "path": "docs/engineering/macos-perf.md",
+      "sha256": "sha256:e8a051f612ffae0d532cdfdfa8ef7cb87f1c0d0bee27dec9b894c29ab7c0bb2c",
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "capabilities": [
+        "presentation.composed_prompt",
+        "presentation.status",
+        "presentation.structured_output",
+        "presentation.table",
+        "presentation.theme",
+        "terminal.width_policy"
+      ],
+      "category": "api",
+      "path": "src/document.rs",
+      "sha256": "sha256:1245196c1c94872cdf1d416065689abef129dc2335854005994e879bc960251f",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "embedding.blocking",
+        "embedding.driven",
+        "embedding.readiness",
+        "embedding.session",
+        "interaction.editing",
+        "terminal.admission",
+        "terminal.capability_snapshot"
+      ],
+      "category": "api",
+      "path": "src/capabilities.rs",
+      "sha256": "sha256:2699d395437ed4b3989722a777e0ed55aeba57d20c6503eb930a12128ea8eeba",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "interaction.editing",
+        "embedding.blocking",
+        "embedding.session",
+        "embedding.driven",
+        "embedding.readiness",
+        "terminal.admission"
+      ],
+      "category": "api",
+      "path": "src/driving.rs",
+      "sha256": "sha256:613acc98dca71d151f95adb3a245c7004b1dcc143f89f7b44c325da38b00d03c",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.hints_highlight",
+        "analysis.revisions",
+        "analysis.validation",
+        "completion.candidates",
+        "embedding.blocking",
+        "embedding.driven",
+        "embedding.readiness",
+        "embedding.session",
+        "interaction.editing",
+        "presentation.completion_ux",
+        "presentation.multiline_ux",
+        "terminal.admission"
+      ],
+      "category": "qualification",
+      "path": "src/conformance.rs",
+      "sha256": "sha256:bd89721bdb2f788724e34c5c8592d3684a851c38664c1b45305a59ce4d42137b",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "interaction.editing",
+        "embedding.blocking",
+        "embedding.session",
+        "embedding.driven",
+        "embedding.readiness",
+        "terminal.admission"
+      ],
+      "category": "qualification",
+      "path": "tests/embedding.rs",
+      "sha256": "sha256:69447daadf0062e2b891e8b995fbb8cdeee264bbe02feab86ee60b21c16c9412",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.hints_highlight",
+        "analysis.revisions",
+        "embedding.blocking",
+        "embedding.driven",
+        "embedding.readiness",
+        "embedding.session",
+        "interaction.editing",
+        "terminal.admission"
+      ],
+      "category": "qualification",
+      "path": "tools/embedding_pty.py",
+      "sha256": "sha256:e627275e99434924ae4c1b8a4923c34a99318b39dd862190d336223aee7062dc",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "interaction.editing",
+        "embedding.blocking",
+        "embedding.session",
+        "embedding.driven",
+        "embedding.readiness",
+        "terminal.admission"
+      ],
+      "category": "qualification",
+      "path": "examples/driven.rs",
+      "sha256": "sha256:7aea03ee9f2d24036de3053138c45c435da9d36af4d273d9a9d77f1ea0eeb727",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "interaction.editing",
+        "embedding.blocking",
+        "embedding.session",
+        "embedding.driven",
+        "embedding.readiness",
+        "terminal.admission"
+      ],
+      "category": "qualification",
+      "path": "examples/simple.rs",
+      "sha256": "sha256:992702189dba287aa1ae6ce7e927c839b50621c33675c35727050dd85d9bfc09",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "interaction.editing",
+        "embedding.blocking",
+        "embedding.session",
+        "embedding.driven",
+        "embedding.readiness",
+        "terminal.admission"
+      ],
+      "category": "qualification",
+      "path": "examples/support/wait.rs",
+      "sha256": "sha256:cf2693841b7b51f1f5f2e4bb3ce8c87d04f1f2e3105c34685a5f8d876609df28",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
     {
       "capabilities": [
         "interaction.editing",
@@ -918,9 +1350,661 @@
       ],
       "category": "qualification",
       "path": ".github/workflows/ci.yml",
-      "sha256": "sha256:7f0d40d315929aaa0b10f64741912439f99cc804293500eb25678b591d17c226",
+      "sha256": "sha256:04c55614b7e97278a35695875de6cea83570fbbf549b8227a7cc5bf3ab410bc8",
       "surfaces": [
         "c-abi-v1",
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "terminal.width_policy"
+      ],
+      "category": "api",
+      "path": "src/width.rs",
+      "sha256": "sha256:ea8859ec7bbfeacf641b798f70ae8723154ec0b31f3247b92046d3fa3e2c47d3",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "terminal.capability_snapshot"
+      ],
+      "category": "qualification",
+      "path": "tests/capabilities.rs",
+      "sha256": "sha256:191660c55d0f964ef60f14b3ae55f1f88de0409b135d07635531f92a0d7c0a31",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "terminal.capability_snapshot"
+      ],
+      "category": "qualification",
+      "path": "tests/capabilities_pty.rs",
+      "sha256": "sha256:54f2e60f462f399f1115ca9510a60f9940c4df368c886fe7c7c48bf4d53e64dd",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "terminal.capability_snapshot"
+      ],
+      "category": "qualification",
+      "path": "docs/engineering/terminal-capabilities.md",
+      "sha256": "sha256:ff2663ee21b09f492ba1483b1fdfaa8035d6d98567ccbe86e82cf53997ff2c8e",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.hints_highlight",
+        "analysis.revisions",
+        "analysis.validation",
+        "completion.candidates",
+        "presentation.completion_ux",
+        "presentation.multiline_ux",
+        "terminal.capability_snapshot"
+      ],
+      "category": "qualification",
+      "path": "tools/perf/components.rs",
+      "sha256": "sha256:13c15fc3fed09c5e3c01bb85caf08bc8aa3bb0dbfffeab117d102f2b1e00a29a",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "abi.c.v1"
+      ],
+      "category": "qualification",
+      "path": "tools/c_pty.py",
+      "sha256": "sha256:39c169e2a4f024d88ed55adbcab596220fd984f8d0800d9e9af09e706282c8a9",
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "capabilities": [
+        "abi.c.v1"
+      ],
+      "category": "qualification",
+      "path": "tools/test_c_pty.py",
+      "sha256": "sha256:ad54fb8d69f482d52402e817f493aa3e114cf7150656ddf7588a9d9f98b460c6",
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "capabilities": [
+        "abi.c.v1",
+        "analysis.hints_highlight",
+        "analysis.revisions",
+        "analysis.validation",
+        "completion.candidates",
+        "presentation.completion_ux",
+        "presentation.multiline_ux"
+      ],
+      "category": "qualification",
+      "path": "tools/qualify.py",
+      "sha256": "sha256:b2ca4697804098cf8ecb40e9655c6a6d6c37f2ee3a01093495c0401ce4c06cd0",
+      "surfaces": [
+        "c-abi-v1",
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.revisions",
+        "analysis.validation",
+        "presentation.multiline_ux"
+      ],
+      "category": "api",
+      "path": "src/analysis.rs",
+      "sha256": "sha256:c426e997177d032230baab2dfe9a8c34aaea4c193c51e5a184b71d85666aff48",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.revisions"
+      ],
+      "category": "qualification",
+      "path": "tests/analysis.rs",
+      "sha256": "sha256:a4d7c6efe268324bcbefdeb3591d7b81fefba5731ddeddd5f0bc7cc653e3e6c5",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.revisions"
+      ],
+      "category": "qualification",
+      "path": "tests/foundation.rs",
+      "sha256": "sha256:ef15f5c3a9bf0eaf45495e25e21c05051a010923e1a63d763bf5b55a58db46bc",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.revisions"
+      ],
+      "category": "qualification",
+      "path": "examples/analysis.rs",
+      "sha256": "sha256:773fcd048f5b14f0a11dd47f4a551eab9b8667ee4bfab01b0dacdf138dad1c67",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.revisions"
+      ],
+      "category": "qualification",
+      "path": "tools/analysis_pty.py",
+      "sha256": "sha256:93e7c9569757334ef4a8a6529585c055d8d0c408a20116a35668df4206d2a502",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.revisions"
+      ],
+      "category": "qualification",
+      "path": "tools/test_analysis_pty.py",
+      "sha256": "sha256:44193e9177d713d695b11c1cb4fd381d221e05b3b33c4235285b3abe4f8e3fab",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.revisions"
+      ],
+      "category": "qualification",
+      "path": "docs/engineering/analysis-protocol.md",
+      "sha256": "sha256:0e3453c58f98ce172f33ecdd9d7ce239bee007762ea8f1b9134b0bde38b3adbd",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "completion.candidates",
+        "platform.posix_linux",
+        "presentation.completion_ux"
+      ],
+      "category": "qualification",
+      "path": "tests/pty.rs",
+      "sha256": "sha256:668eacf780b66bcd8a8ec300be27e7a9261e87c03d0669c2b4cf97419a38d75f",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.hints_highlight",
+        "analysis.validation",
+        "completion.candidates",
+        "presentation.completion_ux",
+        "presentation.multiline_ux"
+      ],
+      "category": "api",
+      "path": "src/completion.rs",
+      "sha256": "sha256:e2787018a611a7ae9f97c8605c5170e4776624bc050510e381debbf07c271419",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.hints_highlight",
+        "completion.candidates",
+        "presentation.completion_ux"
+      ],
+      "category": "qualification",
+      "path": "src/completion_tests.rs",
+      "sha256": "sha256:7e3f8478d68d7046f17e1c402f7784122e2b7dc54d59582a4e4bb44d8c76aaa3",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "completion.candidates",
+        "presentation.completion_ux"
+      ],
+      "category": "qualification",
+      "path": "tests/completion.rs",
+      "sha256": "sha256:c6f92cf01bdaeb39194b1774c0b4689be96417bca9d7b8f0b17002224da053ea",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.hints_highlight",
+        "analysis.validation",
+        "completion.candidates",
+        "presentation.completion_ux",
+        "presentation.multiline_ux"
+      ],
+      "category": "qualification",
+      "path": "tests/architecture.rs",
+      "sha256": "sha256:952fbcb77e255bd33b1ddcb5c84c4aaf670db5327b61cd4d9863bdf31267ba80",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.validation",
+        "completion.candidates",
+        "presentation.completion_ux",
+        "presentation.multiline_ux"
+      ],
+      "category": "qualification",
+      "path": "examples/completion.rs",
+      "sha256": "sha256:04c08c720b7c4a366d5cea60ae68d06acab8c80de6bdccef425506d144a1adc8",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "completion.candidates",
+        "presentation.completion_ux"
+      ],
+      "category": "qualification",
+      "path": "examples/completion-driven.rs",
+      "sha256": "sha256:97231e7235117e0cf60fde3f1e87dc6f202429a44a686c7253a94edd442edc3e",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.hints_highlight",
+        "completion.candidates",
+        "presentation.completion_ux"
+      ],
+      "category": "qualification",
+      "path": "tools/completion_pty.py",
+      "sha256": "sha256:5f54446d431b20d255f592474dd2290f544eca851be46f84b2ce220e3f560b97",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "completion.candidates",
+        "presentation.completion_ux"
+      ],
+      "category": "qualification",
+      "path": "tools/test_completion_pty.py",
+      "sha256": "sha256:b61b60787bcf46ff692eeaded9e4c32835aec49bef24225549da63f9f0be3f4b",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "completion.candidates",
+        "presentation.completion_ux"
+      ],
+      "category": "qualification",
+      "path": "tools/direct_completion_benchmark.py",
+      "sha256": "sha256:2746c223ea537e9615b8edf8f67bb34ac8ca6e17020ae151e8f4ded5e4416bfe",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "completion.candidates",
+        "presentation.completion_ux"
+      ],
+      "category": "qualification",
+      "path": "tools/perf/direct_completion.rs",
+      "sha256": "sha256:6ad18816eff9dcec4c750da0d512b907246b080b6bc74d374ef423976cbc1c24",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.hints_highlight",
+        "completion.candidates",
+        "presentation.completion_ux"
+      ],
+      "category": "qualification",
+      "path": "tools/perf/completions.rs",
+      "sha256": "sha256:26b71f444689761fa49ec5cd775f4ace2f999c2c1da7d91e04cb6dbaed0d2670",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "completion.candidates",
+        "presentation.completion_ux"
+      ],
+      "category": "qualification",
+      "path": "docs/engineering/completion-contract.md",
+      "sha256": "sha256:38fd2483820da2eb55053e5f310b25d4a87ffed5d49db654c2a490f70ce8f582",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.hints_highlight",
+        "analysis.validation",
+        "presentation.multiline_ux"
+      ],
+      "category": "api",
+      "path": "src/validation.rs",
+      "sha256": "sha256:60315c69d0b422a5ab9259b775bc7c04bb308cc2511a5fd16db96bfecbef9345",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.validation",
+        "presentation.multiline_ux"
+      ],
+      "category": "qualification",
+      "path": "src/validation_tests.rs",
+      "sha256": "sha256:89b97e1a4db05a81a171abb7c194c88bd92f59d187466f52a967048abeb29e0f",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.validation",
+        "presentation.multiline_ux"
+      ],
+      "category": "qualification",
+      "path": "tests/validation.rs",
+      "sha256": "sha256:28b69f7a3554ae06e3d14a4ca85fa109c34540c3a4fa3546c07a4747998d4a22",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.validation",
+        "presentation.multiline_ux"
+      ],
+      "category": "qualification",
+      "path": "examples/validation.rs",
+      "sha256": "sha256:f061c72f01b2a24d57a11b515f42eb2eb60bfd97aed22c66d17899ddf4abeb56",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.hints_highlight",
+        "analysis.validation",
+        "presentation.multiline_ux"
+      ],
+      "category": "qualification",
+      "path": "examples/validation-driven.rs",
+      "sha256": "sha256:fe0085864063b95e7279f6b915c4d259804039155909fff7eff34990d94d2a1a",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.validation",
+        "presentation.multiline_ux"
+      ],
+      "category": "qualification",
+      "path": "examples/support/validation.rs",
+      "sha256": "sha256:d2d0113dc208ec6a253bcf4a422480eabdd8c9727358d5dece4243d754b2cc12",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.hints_highlight",
+        "analysis.validation",
+        "presentation.multiline_ux"
+      ],
+      "category": "qualification",
+      "path": "tools/validation_pty.py",
+      "sha256": "sha256:b8354eea0bc300a297d82222e0705323d67d353a38ed97e57c30ed5d02159da8",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.validation",
+        "presentation.multiline_ux"
+      ],
+      "category": "qualification",
+      "path": "tools/perf/validations.rs",
+      "sha256": "sha256:02751ec787cc35f0b444f201cc470bc431b6947a4ac484cc70b11980cfc63359",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.validation",
+        "presentation.multiline_ux"
+      ],
+      "category": "qualification",
+      "path": "tools/perf/pty_host.rs",
+      "sha256": "sha256:d752e97ca09baae0309e16297e58e69b0b73c17529c4379c02ee815d5c69dc15",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.hints_highlight",
+        "analysis.validation",
+        "presentation.multiline_ux"
+      ],
+      "category": "documentation",
+      "path": "docs/use-cases.md",
+      "sha256": "sha256:907c64447940c75b0a2b4f8ff29850c17d35678eb006d2eda2e91b5129bba200",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.validation",
+        "presentation.multiline_ux"
+      ],
+      "category": "documentation",
+      "path": "docs/engineering/validation-multiline.md",
+      "sha256": "sha256:71d478c1f5f710e44430cfe6afba1f69e8e75dcc64942ab6da6ebd9c7e2b5e99",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.validation",
+        "presentation.multiline_ux"
+      ],
+      "category": "qualification",
+      "path": "crates/replai-c/src/lib.rs",
+      "sha256": "sha256:42f4d4f359e1a1bdba51a0f13d860da6b00c7232730c5554a1456c6baf4ebfc0",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.hints_highlight"
+      ],
+      "category": "api",
+      "path": "src/analysis_presentation.rs",
+      "sha256": "sha256:d77b429508fd2a5bb2acce8704d4c9629837a794f119c7056fe672080f8d3d85",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.hints_highlight"
+      ],
+      "category": "qualification",
+      "path": "src/analysis_presentation_tests.rs",
+      "sha256": "sha256:e87e687a88db8e8f2da13038cf53dbd8c2109a54ff26ec378e30fa676f69162a",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.hints_highlight"
+      ],
+      "category": "qualification",
+      "path": "tests/analysis_presentation.rs",
+      "sha256": "sha256:6f568e219590462daea80fde141ef26b91100c6f1b76137c18a8d316844be43c",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.hints_highlight"
+      ],
+      "category": "qualification",
+      "path": "tools/analysis_presentation_pty.py",
+      "sha256": "sha256:e4349b3b6253b98899e5e1400b76e8e8691b84399051778b69c7911d2f9eba43",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.hints_highlight"
+      ],
+      "category": "qualification",
+      "path": "examples/analysis-presentation.rs",
+      "sha256": "sha256:4f80cbe09daea438387da9517004ac368e0787e9cf208b40a3421d7dff768412",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.hints_highlight"
+      ],
+      "category": "qualification",
+      "path": "examples/support/presented_analysis.rs",
+      "sha256": "sha256:6453445bf63dc7119aa7d47a1df973459012177a7dc70747f498e944d917e115",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.hints_highlight"
+      ],
+      "category": "qualification",
+      "path": "tools/perf/presented.rs",
+      "sha256": "sha256:90e318cd4936aaaa2381262842e78a3b659de949842ecf52b0b13b42140e2d55",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.hints_highlight"
+      ],
+      "category": "qualification",
+      "path": "tools/perf/linux.py",
+      "sha256": "sha256:ce822cca5b1931dca32be763aa04b27dec555867f85ab1808c0fb36fd6c6499f",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "analysis.hints_highlight"
+      ],
+      "category": "documentation",
+      "path": "docs/engineering/analysis-presentation.md",
+      "sha256": "sha256:268fa4ccbf038995ca69aa8a0c476791119e744d7210c8c9ca8a70c768fbb982",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "embedding.session"
+      ],
+      "category": "qualification",
+      "path": "examples/console.rs",
+      "sha256": "sha256:67d3c8aa283e0699758119d5cf832f178ead5bbc893fd283c4888417b6c5bb1d",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "embedding.session"
+      ],
+      "category": "qualification",
+      "path": "tools/docs/check_readme.py",
+      "sha256": "sha256:c477794d5e6968b1241ce76f65461549f09eef5c91c47a0cda5fa96fcd6f9771",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "embedding.session"
+      ],
+      "category": "qualification",
+      "path": "tools/docs/capture_terminal.py",
+      "sha256": "sha256:c62f74b12d2f38e1510faf3a44579e38f4f15a13cf796c95a255bea7212c7782",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "embedding.session"
+      ],
+      "category": "qualification",
+      "path": "tools/docs/capture-requirements.txt",
+      "sha256": "sha256:270b3789983611df4377543f7128bd2bebd136d8efb7cb1a7cf22e559da8748c",
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "embedding.session"
+      ],
+      "category": "qualification",
+      "path": "assets/terminal-session.png",
+      "sha256": "sha256:a92ff568285e138170dd0f44c621bb5622bfc3c504bf22176b3a8e5c504c82d4",
+      "surfaces": [
         "rust-native"
       ]
     },
@@ -1000,192 +2084,6 @@
     },
     {
       "capabilities": [
-        "embedding.session",
-        "abi.c.v1",
-        "platform.portable_engine",
-        "platform.posix_linux",
-        "platform.posix_macos"
-      ],
-      "category": "qualification",
-      "path": ".github/workflows/packaging.yml",
-      "sha256": "sha256:b651483276a05c26f05933ca84e5a793b1583a50932aa0a59882c30eac622b69",
-      "surfaces": [
-        "rust-native",
-        "c-abi-v1"
-      ]
-    },
-    {
-      "capabilities": [
-        "abi.c.v1"
-      ],
-      "category": "abi",
-      "path": "api/c-abi.json",
-      "sha256": "sha256:946189594ef5a57235c2d70580b1a95c6cb3fadecccf7b95f66b00c3f6cfab6b",
-      "surfaces": [
-        "c-abi-v1"
-      ]
-    },
-    {
-      "capabilities": [
-        "embedding.session"
-      ],
-      "category": "qualification",
-      "path": "assets/readme/manifest.json",
-      "sha256": "sha256:36bbe9d7393ae7bc1108805d6710c76ceb4d9d9db9afbb6d7b1f5be68cc7af6b",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "embedding.session"
-      ],
-      "category": "qualification",
-      "path": "assets/readme/terminal-showcase.gif",
-      "sha256": "sha256:1b41960723c50719e96458edb6b43f3a0e589edd2b16826a9f888f42ef39be92",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "embedding.session"
-      ],
-      "category": "qualification",
-      "path": "assets/readme/terminal-showcase.png",
-      "sha256": "sha256:3eddd047ea901017146e1d6d6f7e4c43766248025f839269c46adbe15e296503",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "embedding.session"
-      ],
-      "category": "qualification",
-      "path": "assets/terminal-session.png",
-      "sha256": "sha256:a92ff568285e138170dd0f44c621bb5622bfc3c504bf22176b3a8e5c504c82d4",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.validation",
-        "presentation.multiline_ux"
-      ],
-      "category": "qualification",
-      "path": "crates/replai-c/src/lib.rs",
-      "sha256": "sha256:42f4d4f359e1a1bdba51a0f13d860da6b00c7232730c5554a1456c6baf4ebfc0",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight",
-        "analysis.revisions",
-        "analysis.validation",
-        "completion.candidates",
-        "embedding.blocking",
-        "embedding.driven",
-        "embedding.readiness",
-        "embedding.session",
-        "interaction.completion_request",
-        "interaction.editing",
-        "interaction.external_output",
-        "interaction.history_navigation",
-        "platform.portable_engine",
-        "platform.posix_linux",
-        "platform.posix_macos",
-        "presentation.completion_ux",
-        "presentation.composed_prompt",
-        "presentation.multiline_ux",
-        "presentation.prompt",
-        "presentation.status",
-        "presentation.structured_output",
-        "presentation.table",
-        "presentation.theme",
-        "terminal.admission"
-      ],
-      "category": "documentation",
-      "path": "docs/architecture.md",
-      "sha256": "sha256:82e6f4dc23bd13331280b3c9d0e8ce52e3605b02eb9cb5f8642220439bc21741",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "abi.c.v1"
-      ],
-      "category": "documentation",
-      "path": "docs/c-api.md",
-      "sha256": "sha256:968603ce477a42bbbd0b8ccd91232bbffb8202e06de8f98e23e23767bfa2a674",
-      "surfaces": [
-        "c-abi-v1"
-      ]
-    },
-    {
-      "capabilities": [
-        "abi.c.v1"
-      ],
-      "category": "documentation",
-      "path": "docs/c-sdk.md",
-      "sha256": "sha256:4e5213d0db7c945259cb840f6832cf7bb2d671f7695a8e8fe1c78a8de64995cc",
-      "surfaces": [
-        "c-abi-v1"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight"
-      ],
-      "category": "documentation",
-      "path": "docs/engineering/analysis-presentation.md",
-      "sha256": "sha256:268fa4ccbf038995ca69aa8a0c476791119e744d7210c8c9ca8a70c768fbb982",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.revisions"
-      ],
-      "category": "qualification",
-      "path": "docs/engineering/analysis-protocol.md",
-      "sha256": "sha256:0e3453c58f98ce172f33ecdd9d7ce239bee007762ea8f1b9134b0bde38b3adbd",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.candidates",
-        "presentation.completion_ux"
-      ],
-      "category": "qualification",
-      "path": "docs/engineering/completion-contract.md",
-      "sha256": "sha256:38fd2483820da2eb55053e5f310b25d4a87ffed5d49db654c2a490f70ce8f582",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "interaction.editing",
-        "platform.posix_macos"
-      ],
-      "category": "qualification",
-      "path": "docs/engineering/macos-perf.md",
-      "sha256": "sha256:e8a051f612ffae0d532cdfdfa8ef7cb87f1c0d0bee27dec9b894c29ab7c0bb2c",
-      "surfaces": [
-        "rust-native",
-        "c-abi-v1"
-      ]
-    },
-    {
-      "capabilities": [
         "interaction.editing",
         "interaction.history_navigation",
         "interaction.completion_request",
@@ -1224,1035 +2122,6 @@
     },
     {
       "capabilities": [
-        "embedding.session",
-        "abi.c.v1",
-        "platform.portable_engine",
-        "platform.posix_linux",
-        "platform.posix_macos",
-        "analysis.validation"
-      ],
-      "category": "qualification",
-      "path": "docs/engineering/release-packaging.md",
-      "sha256": "sha256:2d953ab8d49e99f021fc432e0f61f0a3f89ff8cc050e5d0a2ead5deca2d839ad",
-      "surfaces": [
-        "rust-native",
-        "c-abi-v1"
-      ]
-    },
-    {
-      "capabilities": [
-        "terminal.capability_snapshot"
-      ],
-      "category": "qualification",
-      "path": "docs/engineering/terminal-capabilities.md",
-      "sha256": "sha256:ff2663ee21b09f492ba1483b1fdfaa8035d6d98567ccbe86e82cf53997ff2c8e",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.validation",
-        "presentation.multiline_ux"
-      ],
-      "category": "documentation",
-      "path": "docs/engineering/validation-multiline.md",
-      "sha256": "sha256:71d478c1f5f710e44430cfe6afba1f69e8e75dcc64942ab6da6ebd9c7e2b5e99",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight",
-        "analysis.revisions",
-        "analysis.validation",
-        "completion.candidates",
-        "embedding.blocking",
-        "embedding.driven",
-        "embedding.readiness",
-        "embedding.session",
-        "interaction.completion_request",
-        "interaction.editing",
-        "interaction.external_output",
-        "interaction.history_navigation",
-        "platform.portable_engine",
-        "platform.posix_linux",
-        "platform.posix_macos",
-        "presentation.completion_ux",
-        "presentation.multiline_ux",
-        "presentation.prompt",
-        "terminal.admission"
-      ],
-      "category": "documentation",
-      "path": "docs/interaction.md",
-      "sha256": "sha256:37c8dab9d8168ad5f314f7f941b778471a182692b7a76590efab60d67fb4b2d8",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight",
-        "analysis.validation",
-        "completion.candidates",
-        "interaction.completion_request",
-        "interaction.editing",
-        "interaction.external_output",
-        "interaction.history_navigation",
-        "platform.portable_engine",
-        "platform.posix_linux",
-        "platform.posix_macos",
-        "presentation.completion_ux",
-        "presentation.composed_prompt",
-        "presentation.multiline_ux",
-        "presentation.prompt",
-        "presentation.status",
-        "presentation.structured_output",
-        "presentation.table",
-        "presentation.theme",
-        "terminal.width_policy"
-      ],
-      "category": "documentation",
-      "path": "docs/presentation.md",
-      "sha256": "sha256:7a731996587e4e3dc6cec296b418b839e6dff760c918824cd1e12214b4c34deb",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight",
-        "analysis.validation",
-        "presentation.multiline_ux"
-      ],
-      "category": "documentation",
-      "path": "docs/use-cases.md",
-      "sha256": "sha256:d467e9b1bfd4b04fbd3aab4a9208247b5fd84d7f74bd57cfd05503f782dbd4cd",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight"
-      ],
-      "category": "qualification",
-      "path": "examples/analysis-presentation.rs",
-      "sha256": "sha256:4f80cbe09daea438387da9517004ac368e0787e9cf208b40a3421d7dff768412",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.revisions"
-      ],
-      "category": "qualification",
-      "path": "examples/analysis.rs",
-      "sha256": "sha256:773fcd048f5b14f0a11dd47f4a551eab9b8667ee4bfab01b0dacdf138dad1c67",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.candidates",
-        "presentation.completion_ux"
-      ],
-      "category": "qualification",
-      "path": "examples/completion-driven.rs",
-      "sha256": "sha256:97231e7235117e0cf60fde3f1e87dc6f202429a44a686c7253a94edd442edc3e",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.validation",
-        "completion.candidates",
-        "presentation.completion_ux",
-        "presentation.multiline_ux"
-      ],
-      "category": "qualification",
-      "path": "examples/completion.rs",
-      "sha256": "sha256:04c08c720b7c4a366d5cea60ae68d06acab8c80de6bdccef425506d144a1adc8",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "embedding.session"
-      ],
-      "category": "qualification",
-      "path": "examples/console.rs",
-      "sha256": "sha256:67d3c8aa283e0699758119d5cf832f178ead5bbc893fd283c4888417b6c5bb1d",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "interaction.editing",
-        "embedding.blocking",
-        "embedding.session",
-        "embedding.driven",
-        "embedding.readiness",
-        "terminal.admission"
-      ],
-      "category": "qualification",
-      "path": "examples/driven.rs",
-      "sha256": "sha256:7aea03ee9f2d24036de3053138c45c435da9d36af4d273d9a9d77f1ea0eeb727",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "embedding.session"
-      ],
-      "category": "qualification",
-      "path": "examples/showcase.rs",
-      "sha256": "sha256:cef0dcea288968c764262436c2e71c3b1cde84d7c29168f3608fee796ab957dc",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "interaction.editing",
-        "embedding.blocking",
-        "embedding.session",
-        "embedding.driven",
-        "embedding.readiness",
-        "terminal.admission"
-      ],
-      "category": "qualification",
-      "path": "examples/simple.rs",
-      "sha256": "sha256:992702189dba287aa1ae6ce7e927c839b50621c33675c35727050dd85d9bfc09",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight"
-      ],
-      "category": "qualification",
-      "path": "examples/support/presented_analysis.rs",
-      "sha256": "sha256:6453445bf63dc7119aa7d47a1df973459012177a7dc70747f498e944d917e115",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "embedding.session"
-      ],
-      "category": "qualification",
-      "path": "examples/support/showcase_host.rs",
-      "sha256": "sha256:5087c22ff4dfda36795cb9e3d051184a7fe5af81c454979c73a0a118380b8965",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.validation",
-        "presentation.multiline_ux"
-      ],
-      "category": "qualification",
-      "path": "examples/support/validation.rs",
-      "sha256": "sha256:d2d0113dc208ec6a253bcf4a422480eabdd8c9727358d5dece4243d754b2cc12",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "interaction.editing",
-        "embedding.blocking",
-        "embedding.session",
-        "embedding.driven",
-        "embedding.readiness",
-        "terminal.admission"
-      ],
-      "category": "qualification",
-      "path": "examples/support/wait.rs",
-      "sha256": "sha256:cf2693841b7b51f1f5f2e4bb3ce8c87d04f1f2e3105c34685a5f8d876609df28",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight",
-        "analysis.validation",
-        "presentation.multiline_ux"
-      ],
-      "category": "qualification",
-      "path": "examples/validation-driven.rs",
-      "sha256": "sha256:fe0085864063b95e7279f6b915c4d259804039155909fff7eff34990d94d2a1a",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.validation",
-        "presentation.multiline_ux"
-      ],
-      "category": "qualification",
-      "path": "examples/validation.rs",
-      "sha256": "sha256:f061c72f01b2a24d57a11b515f42eb2eb60bfd97aed22c66d17899ddf4abeb56",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "abi.c.v1"
-      ],
-      "category": "abi",
-      "path": "include/replai.h",
-      "sha256": "sha256:c0644f2d541e7537bc5c96f3d70679b2f2f18f7b89af513de96bda2e7cb49bf5",
-      "surfaces": [
-        "c-abi-v1"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.candidates",
-        "interaction.completion_request",
-        "interaction.editing",
-        "interaction.external_output",
-        "interaction.history_navigation",
-        "platform.portable_engine",
-        "platform.posix_linux",
-        "platform.posix_macos",
-        "presentation.completion_ux",
-        "presentation.prompt"
-      ],
-      "category": "behavior",
-      "path": "src/actions.rs",
-      "sha256": "sha256:72f5c10f87df2699d385e56f12e9094494c9eeb06d0e4ad297e490ce330c6605",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.revisions",
-        "analysis.validation",
-        "presentation.multiline_ux"
-      ],
-      "category": "api",
-      "path": "src/analysis.rs",
-      "sha256": "sha256:c426e997177d032230baab2dfe9a8c34aaea4c193c51e5a184b71d85666aff48",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight"
-      ],
-      "category": "api",
-      "path": "src/analysis_presentation.rs",
-      "sha256": "sha256:d77b429508fd2a5bb2acce8704d4c9629837a794f119c7056fe672080f8d3d85",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight"
-      ],
-      "category": "qualification",
-      "path": "src/analysis_presentation_tests.rs",
-      "sha256": "sha256:e87e687a88db8e8f2da13038cf53dbd8c2109a54ff26ec378e30fa676f69162a",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "embedding.blocking",
-        "embedding.driven",
-        "embedding.readiness",
-        "embedding.session",
-        "interaction.editing",
-        "terminal.admission",
-        "terminal.capability_snapshot"
-      ],
-      "category": "api",
-      "path": "src/capabilities.rs",
-      "sha256": "sha256:2699d395437ed4b3989722a777e0ed55aeba57d20c6503eb930a12128ea8eeba",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight",
-        "analysis.validation",
-        "completion.candidates",
-        "presentation.completion_ux",
-        "presentation.multiline_ux"
-      ],
-      "category": "api",
-      "path": "src/completion.rs",
-      "sha256": "sha256:e2787018a611a7ae9f97c8605c5170e4776624bc050510e381debbf07c271419",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight",
-        "completion.candidates",
-        "presentation.completion_ux"
-      ],
-      "category": "qualification",
-      "path": "src/completion_tests.rs",
-      "sha256": "sha256:7e3f8478d68d7046f17e1c402f7784122e2b7dc54d59582a4e4bb44d8c76aaa3",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight",
-        "analysis.revisions",
-        "analysis.validation",
-        "completion.candidates",
-        "embedding.blocking",
-        "embedding.driven",
-        "embedding.readiness",
-        "embedding.session",
-        "interaction.editing",
-        "presentation.completion_ux",
-        "presentation.multiline_ux",
-        "terminal.admission"
-      ],
-      "category": "qualification",
-      "path": "src/conformance.rs",
-      "sha256": "sha256:bd89721bdb2f788724e34c5c8592d3684a851c38664c1b45305a59ce4d42137b",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.revisions",
-        "analysis.validation",
-        "completion.candidates",
-        "interaction.completion_request",
-        "interaction.editing",
-        "interaction.external_output",
-        "interaction.history_navigation",
-        "platform.portable_engine",
-        "platform.posix_linux",
-        "platform.posix_macos",
-        "presentation.completion_ux",
-        "presentation.multiline_ux",
-        "presentation.prompt"
-      ],
-      "category": "behavior",
-      "path": "src/core.rs",
-      "sha256": "sha256:89b1c711b8fe9f833318e1a0f4aa86917aa40a7fa61e3b3d1701cd7139cf2e7d",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "presentation.composed_prompt",
-        "presentation.status",
-        "presentation.structured_output",
-        "presentation.table",
-        "presentation.theme",
-        "terminal.width_policy"
-      ],
-      "category": "api",
-      "path": "src/document.rs",
-      "sha256": "sha256:1245196c1c94872cdf1d416065689abef129dc2335854005994e879bc960251f",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "interaction.editing",
-        "embedding.blocking",
-        "embedding.session",
-        "embedding.driven",
-        "embedding.readiness",
-        "terminal.admission"
-      ],
-      "category": "api",
-      "path": "src/driving.rs",
-      "sha256": "sha256:613acc98dca71d151f95adb3a245c7004b1dcc143f89f7b44c325da38b00d03c",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight",
-        "analysis.revisions",
-        "analysis.validation",
-        "completion.candidates",
-        "interaction.completion_request",
-        "interaction.editing",
-        "interaction.external_output",
-        "interaction.history_navigation",
-        "platform.portable_engine",
-        "platform.posix_linux",
-        "platform.posix_macos",
-        "presentation.completion_ux",
-        "presentation.composed_prompt",
-        "presentation.multiline_ux",
-        "presentation.prompt",
-        "presentation.status",
-        "presentation.structured_output",
-        "presentation.table",
-        "presentation.theme"
-      ],
-      "category": "behavior",
-      "path": "src/engine.rs",
-      "sha256": "sha256:c8e0e34b4ad39427d9edac2efd60d0239874231bd0ecc24989bde0756f54a152",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.validation",
-        "embedding.driven",
-        "embedding.session",
-        "interaction.completion_request",
-        "interaction.editing",
-        "interaction.external_output",
-        "interaction.history_navigation",
-        "platform.portable_engine",
-        "platform.posix_linux",
-        "platform.posix_macos",
-        "presentation.multiline_ux",
-        "presentation.prompt"
-      ],
-      "category": "behavior",
-      "path": "src/event.rs",
-      "sha256": "sha256:b2b2ef3dbc9c0bcb5d420127f0c162ef46e5599488bad71c47b2023cb555c650",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.candidates",
-        "interaction.completion_request",
-        "interaction.editing",
-        "interaction.external_output",
-        "interaction.history_navigation",
-        "platform.portable_engine",
-        "platform.posix_linux",
-        "platform.posix_macos",
-        "presentation.completion_ux",
-        "presentation.prompt"
-      ],
-      "category": "behavior",
-      "path": "src/input.rs",
-      "sha256": "sha256:39723e00add7a5fd5a2e44a1b9c6cb26b27a1cff1de0698707b2af718ff06c61",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight",
-        "analysis.revisions",
-        "analysis.validation",
-        "completion.candidates",
-        "embedding.blocking",
-        "embedding.driven",
-        "embedding.readiness",
-        "embedding.session",
-        "interaction.completion_request",
-        "interaction.editing",
-        "interaction.external_output",
-        "interaction.history_navigation",
-        "platform.portable_engine",
-        "platform.posix_linux",
-        "platform.posix_macos",
-        "presentation.completion_ux",
-        "presentation.composed_prompt",
-        "presentation.multiline_ux",
-        "presentation.prompt",
-        "presentation.status",
-        "presentation.structured_output",
-        "presentation.table",
-        "presentation.theme",
-        "terminal.admission",
-        "terminal.capability_snapshot"
-      ],
-      "category": "api",
-      "path": "src/interaction.rs",
-      "sha256": "sha256:13895facc811ec9330c9f0e19cde8296c687df9d9d5be776c8cfdcd08eafd493",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.candidates",
-        "interaction.completion_request",
-        "interaction.editing",
-        "interaction.external_output",
-        "interaction.history_navigation",
-        "platform.portable_engine",
-        "platform.posix_linux",
-        "platform.posix_macos",
-        "presentation.completion_ux",
-        "presentation.prompt"
-      ],
-      "category": "behavior",
-      "path": "src/keymap.rs",
-      "sha256": "sha256:af7145660766c51c1167805842b0b002f9de73f38f239be03034a6dac2f52b95",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight",
-        "analysis.revisions",
-        "analysis.validation",
-        "completion.candidates",
-        "embedding.blocking",
-        "embedding.driven",
-        "embedding.readiness",
-        "embedding.session",
-        "interaction.completion_request",
-        "interaction.editing",
-        "interaction.external_output",
-        "interaction.history_navigation",
-        "platform.portable_engine",
-        "platform.posix_linux",
-        "platform.posix_macos",
-        "presentation.completion_ux",
-        "presentation.composed_prompt",
-        "presentation.multiline_ux",
-        "presentation.prompt",
-        "presentation.status",
-        "presentation.structured_output",
-        "presentation.table",
-        "presentation.theme",
-        "terminal.admission",
-        "terminal.capability_snapshot",
-        "terminal.width_policy"
-      ],
-      "category": "api",
-      "path": "src/lib.rs",
-      "sha256": "sha256:5acf9cdb565056c7f7d3c17ea54a7c74fcc4bca105fe65a101aaa4df0e89a1b6",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight",
-        "embedding.blocking",
-        "embedding.driven",
-        "embedding.readiness",
-        "embedding.session",
-        "interaction.completion_request",
-        "interaction.editing",
-        "interaction.external_output",
-        "interaction.history_navigation",
-        "platform.portable_engine",
-        "platform.posix_linux",
-        "platform.posix_macos",
-        "presentation.composed_prompt",
-        "presentation.prompt",
-        "presentation.status",
-        "presentation.structured_output",
-        "presentation.table",
-        "presentation.theme",
-        "terminal.admission",
-        "terminal.width_policy"
-      ],
-      "category": "api",
-      "path": "src/presentation.rs",
-      "sha256": "sha256:18d2c0c2d994b67f68f96aed2490b975a174a79a6820f0011eb60611e1003288",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "interaction.editing",
-        "interaction.history_navigation",
-        "interaction.completion_request",
-        "interaction.external_output",
-        "presentation.prompt",
-        "platform.posix_linux",
-        "platform.posix_macos",
-        "platform.portable_engine",
-        "presentation.structured_output",
-        "presentation.table",
-        "presentation.status",
-        "presentation.composed_prompt",
-        "presentation.theme"
-      ],
-      "category": "behavior",
-      "path": "src/protocol.rs",
-      "sha256": "sha256:1feec7c69562900e04d0e6a14f44cea6c49254c2e332d4b6be40cb8a21758ada",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "interaction.editing",
-        "interaction.history_navigation",
-        "interaction.completion_request",
-        "interaction.external_output",
-        "presentation.prompt",
-        "platform.posix_linux",
-        "platform.posix_macos",
-        "platform.portable_engine"
-      ],
-      "category": "behavior",
-      "path": "src/render.rs",
-      "sha256": "sha256:9b50bc67bd1b4c0d865c92fb8923b49cfdd1f20cd8be4c17fb8d4f2be2e58788",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "embedding.blocking",
-        "embedding.driven",
-        "embedding.readiness",
-        "embedding.session",
-        "interaction.completion_request",
-        "interaction.editing",
-        "interaction.external_output",
-        "interaction.history_navigation",
-        "platform.portable_engine",
-        "platform.posix_linux",
-        "platform.posix_macos",
-        "presentation.prompt",
-        "terminal.admission"
-      ],
-      "category": "behavior",
-      "path": "src/system.rs",
-      "sha256": "sha256:c62f90d1f7f4636b93fe7cee796642b7d7c1d0ba47a4512b0a6f107a7f5c1416",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "embedding.blocking",
-        "embedding.driven",
-        "embedding.readiness",
-        "embedding.session",
-        "interaction.completion_request",
-        "interaction.editing",
-        "interaction.external_output",
-        "interaction.history_navigation",
-        "platform.portable_engine",
-        "platform.posix_linux",
-        "platform.posix_macos",
-        "presentation.composed_prompt",
-        "presentation.prompt",
-        "presentation.status",
-        "presentation.structured_output",
-        "presentation.table",
-        "presentation.theme",
-        "terminal.admission"
-      ],
-      "category": "behavior",
-      "path": "src/terminal.rs",
-      "sha256": "sha256:0cea572b85be0a6ba3726b900cb3d0cbee3610a432d623389911fa60a02e30c4",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight",
-        "analysis.validation",
-        "presentation.multiline_ux"
-      ],
-      "category": "api",
-      "path": "src/validation.rs",
-      "sha256": "sha256:60315c69d0b422a5ab9259b775bc7c04bb308cc2511a5fd16db96bfecbef9345",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.validation",
-        "presentation.multiline_ux"
-      ],
-      "category": "qualification",
-      "path": "src/validation_tests.rs",
-      "sha256": "sha256:89b97e1a4db05a81a171abb7c194c88bd92f59d187466f52a967048abeb29e0f",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "terminal.width_policy"
-      ],
-      "category": "api",
-      "path": "src/width.rs",
-      "sha256": "sha256:ea8859ec7bbfeacf641b798f70ae8723154ec0b31f3247b92046d3fa3e2c47d3",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.revisions"
-      ],
-      "category": "qualification",
-      "path": "tests/analysis.rs",
-      "sha256": "sha256:a4d7c6efe268324bcbefdeb3591d7b81fefba5731ddeddd5f0bc7cc653e3e6c5",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight"
-      ],
-      "category": "qualification",
-      "path": "tests/analysis_presentation.rs",
-      "sha256": "sha256:6f568e219590462daea80fde141ef26b91100c6f1b76137c18a8d316844be43c",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight",
-        "analysis.validation",
-        "completion.candidates",
-        "presentation.completion_ux",
-        "presentation.multiline_ux"
-      ],
-      "category": "qualification",
-      "path": "tests/architecture.rs",
-      "sha256": "sha256:f78c4e531580d9cdd0aabe7effcdec21efa9aa92308d7812f512fa3d2e8ffdfb",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "terminal.capability_snapshot"
-      ],
-      "category": "qualification",
-      "path": "tests/capabilities.rs",
-      "sha256": "sha256:191660c55d0f964ef60f14b3ae55f1f88de0409b135d07635531f92a0d7c0a31",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "terminal.capability_snapshot"
-      ],
-      "category": "qualification",
-      "path": "tests/capabilities_pty.rs",
-      "sha256": "sha256:54f2e60f462f399f1115ca9510a60f9940c4df368c886fe7c7c48bf4d53e64dd",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.candidates",
-        "presentation.completion_ux"
-      ],
-      "category": "qualification",
-      "path": "tests/completion.rs",
-      "sha256": "sha256:c6f92cf01bdaeb39194b1774c0b4689be96417bca9d7b8f0b17002224da053ea",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "interaction.editing",
-        "embedding.blocking",
-        "embedding.session",
-        "embedding.driven",
-        "embedding.readiness",
-        "terminal.admission"
-      ],
-      "category": "qualification",
-      "path": "tests/embedding.rs",
-      "sha256": "sha256:69447daadf0062e2b891e8b995fbb8cdeee264bbe02feab86ee60b21c16c9412",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.revisions"
-      ],
-      "category": "qualification",
-      "path": "tests/foundation.rs",
-      "sha256": "sha256:77fe4b4004cf9b7bb7887937a6aecb61a8f762481151aa7bcb21e5b64f4a0170",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.candidates",
-        "platform.posix_linux",
-        "presentation.completion_ux"
-      ],
-      "category": "qualification",
-      "path": "tests/pty.rs",
-      "sha256": "sha256:668eacf780b66bcd8a8ec300be27e7a9261e87c03d0669c2b4cf97419a38d75f",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.validation",
-        "presentation.multiline_ux"
-      ],
-      "category": "qualification",
-      "path": "tests/validation.rs",
-      "sha256": "sha256:28b69f7a3554ae06e3d14a4ca85fa109c34540c3a4fa3546c07a4747998d4a22",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight"
-      ],
-      "category": "qualification",
-      "path": "tools/analysis_presentation_pty.py",
-      "sha256": "sha256:e4349b3b6253b98899e5e1400b76e8e8691b84399051778b69c7911d2f9eba43",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.revisions"
-      ],
-      "category": "qualification",
-      "path": "tools/analysis_pty.py",
-      "sha256": "sha256:93e7c9569757334ef4a8a6529585c055d8d0c408a20116a35668df4206d2a502",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "abi.c.v1"
-      ],
-      "category": "qualification",
-      "path": "tools/c_pty.py",
-      "sha256": "sha256:39c169e2a4f024d88ed55adbcab596220fd984f8d0800d9e9af09e706282c8a9",
-      "surfaces": [
-        "rust-native",
-        "c-abi-v1"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight",
-        "completion.candidates",
-        "presentation.completion_ux"
-      ],
-      "category": "qualification",
-      "path": "tools/completion_pty.py",
-      "sha256": "sha256:5f54446d431b20d255f592474dd2290f544eca851be46f84b2ce220e3f560b97",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.candidates",
-        "presentation.completion_ux"
-      ],
-      "category": "qualification",
-      "path": "tools/direct_completion_benchmark.py",
-      "sha256": "sha256:2746c223ea537e9615b8edf8f67bb34ac8ca6e17020ae151e8f4ded5e4416bfe",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "embedding.session"
-      ],
-      "category": "qualification",
-      "path": "tools/docs/capture-requirements.txt",
-      "sha256": "sha256:270b3789983611df4377543f7128bd2bebd136d8efb7cb1a7cf22e559da8748c",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "embedding.session"
-      ],
-      "category": "qualification",
-      "path": "tools/docs/capture_terminal.py",
-      "sha256": "sha256:c62f74b12d2f38e1510faf3a44579e38f4f15a13cf796c95a255bea7212c7782",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "embedding.session"
-      ],
-      "category": "qualification",
-      "path": "tools/docs/check_readme.py",
-      "sha256": "sha256:c477794d5e6968b1241ce76f65461549f09eef5c91c47a0cda5fa96fcd6f9771",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight",
-        "analysis.revisions",
-        "embedding.blocking",
-        "embedding.driven",
-        "embedding.readiness",
-        "embedding.session",
-        "interaction.editing",
-        "terminal.admission"
-      ],
-      "category": "qualification",
-      "path": "tools/embedding_pty.py",
-      "sha256": "sha256:e627275e99434924ae4c1b8a4923c34a99318b39dd862190d336223aee7062dc",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
         "interaction.editing",
         "interaction.history_navigation",
         "interaction.completion_request",
@@ -2282,7 +2151,7 @@
       ],
       "category": "qualification",
       "path": "tools/hardening/Cargo.lock",
-      "sha256": "sha256:1abb5372c67eb4dc68529cde5098dba9e623fa197f744f9b8189228b01712fa6",
+      "sha256": "sha256:65e9efd567eaf813918a1b39a9f1ca53eff3af53d7d31ed20b91d12a4d36e985",
       "surfaces": [
         "rust-native"
       ]
@@ -3345,187 +3214,24 @@
     },
     {
       "capabilities": [
-        "embedding.session",
-        "analysis.revisions",
-        "completion.candidates",
-        "analysis.hints_highlight",
-        "analysis.validation",
-        "presentation.structured_output",
-        "platform.portable_engine",
-        "platform.posix_linux",
-        "platform.posix_macos"
+        "embedding.session"
       ],
       "category": "qualification",
-      "path": "tools/package/debugger-consumer/src/main.rs",
-      "sha256": "sha256:9e0333675a18301f9e1d018c827d790003e4a7e6e9fcbccd4848602405ab4213",
+      "path": "examples/showcase.rs",
+      "sha256": "sha256:cef0dcea288968c764262436c2e71c3b1cde84d7c29168f3608fee796ab957dc",
       "surfaces": [
         "rust-native"
       ]
     },
     {
       "capabilities": [
-        "embedding.session",
-        "analysis.revisions",
-        "completion.candidates",
-        "analysis.hints_highlight",
-        "analysis.validation",
-        "presentation.structured_output",
-        "platform.posix_linux",
-        "platform.posix_macos"
+        "embedding.session"
       ],
       "category": "qualification",
-      "path": "tools/package/debugger_pty.py",
-      "sha256": "sha256:6306929f72f654fd51fd1a0d4891c83473f631d32623b18639c408f3300414eb",
+      "path": "examples/support/showcase_host.rs",
+      "sha256": "sha256:5087c22ff4dfda36795cb9e3d051184a7fe5af81c454979c73a0a118380b8965",
       "surfaces": [
         "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "abi.c.v1",
-        "platform.posix_linux",
-        "platform.posix_macos"
-      ],
-      "category": "qualification",
-      "path": "tools/package_sdk.py",
-      "sha256": "sha256:f5f9851362b9464313b4e312aa8886f803fe684952c544ef66521693724db71c",
-      "surfaces": [
-        "c-abi-v1"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight",
-        "completion.candidates",
-        "presentation.completion_ux"
-      ],
-      "category": "qualification",
-      "path": "tools/perf/completions.rs",
-      "sha256": "sha256:26b71f444689761fa49ec5cd775f4ace2f999c2c1da7d91e04cb6dbaed0d2670",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight",
-        "analysis.revisions",
-        "analysis.validation",
-        "completion.candidates",
-        "presentation.completion_ux",
-        "presentation.multiline_ux",
-        "terminal.capability_snapshot"
-      ],
-      "category": "qualification",
-      "path": "tools/perf/components.rs",
-      "sha256": "sha256:13c15fc3fed09c5e3c01bb85caf08bc8aa3bb0dbfffeab117d102f2b1e00a29a",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.candidates",
-        "presentation.completion_ux"
-      ],
-      "category": "qualification",
-      "path": "tools/perf/direct_completion.rs",
-      "sha256": "sha256:6ad18816eff9dcec4c750da0d512b907246b080b6bc74d374ef423976cbc1c24",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight"
-      ],
-      "category": "qualification",
-      "path": "tools/perf/linux.py",
-      "sha256": "sha256:ce822cca5b1931dca32be763aa04b27dec555867f85ab1808c0fb36fd6c6499f",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight"
-      ],
-      "category": "qualification",
-      "path": "tools/perf/presented.rs",
-      "sha256": "sha256:90e318cd4936aaaa2381262842e78a3b659de949842ecf52b0b13b42140e2d55",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.validation",
-        "presentation.multiline_ux"
-      ],
-      "category": "qualification",
-      "path": "tools/perf/pty_host.rs",
-      "sha256": "sha256:d752e97ca09baae0309e16297e58e69b0b73c17529c4379c02ee815d5c69dc15",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.validation",
-        "presentation.multiline_ux"
-      ],
-      "category": "qualification",
-      "path": "tools/perf/validations.rs",
-      "sha256": "sha256:02751ec787cc35f0b444f201cc470bc431b6947a4ac484cc70b11980cfc63359",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "abi.c.v1",
-        "analysis.hints_highlight",
-        "analysis.revisions",
-        "analysis.validation",
-        "completion.candidates",
-        "presentation.completion_ux",
-        "presentation.multiline_ux"
-      ],
-      "category": "qualification",
-      "path": "tools/qualify.py",
-      "sha256": "sha256:b2ca4697804098cf8ecb40e9655c6a6d6c37f2ee3a01093495c0401ce4c06cd0",
-      "surfaces": [
-        "c-abi-v1",
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "abi.c.v1",
-        "platform.posix_linux",
-        "platform.posix_macos"
-      ],
-      "category": "qualification",
-      "path": "tools/qualify_c.py",
-      "sha256": "sha256:2c0d18ec7d0e8e9e21200a4869f886a292b332045ba057a46432c50997183e23",
-      "surfaces": [
-        "c-abi-v1"
-      ]
-    },
-    {
-      "capabilities": [
-        "embedding.session",
-        "abi.c.v1",
-        "platform.portable_engine",
-        "platform.posix_linux",
-        "platform.posix_macos"
-      ],
-      "category": "qualification",
-      "path": "tools/qualify_packaging.py",
-      "sha256": "sha256:a129adcd6650a48366215e746cbe7e2fb5c7e223c58d6b95c86f7fde9b326d26",
-      "surfaces": [
-        "rust-native",
-        "c-abi-v1"
       ]
     },
     {
@@ -3541,61 +3247,33 @@
     },
     {
       "capabilities": [
-        "abi.c.v1",
-        "platform.posix_linux",
-        "platform.posix_macos"
+        "embedding.session"
       ],
       "category": "qualification",
-      "path": "tools/stage_c.py",
-      "sha256": "sha256:f60f6625af70e91378ba19352d999c9bb8c59a8b56e59f030b37a4f7881b058c",
-      "surfaces": [
-        "c-abi-v1"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.revisions"
-      ],
-      "category": "qualification",
-      "path": "tools/test_analysis_pty.py",
-      "sha256": "sha256:44193e9177d713d695b11c1cb4fd381d221e05b3b33c4235285b3abe4f8e3fab",
+      "path": "assets/readme/terminal-showcase.png",
+      "sha256": "sha256:3eddd047ea901017146e1d6d6f7e4c43766248025f839269c46adbe15e296503",
       "surfaces": [
         "rust-native"
       ]
     },
     {
       "capabilities": [
-        "abi.c.v1"
+        "embedding.session"
       ],
       "category": "qualification",
-      "path": "tools/test_c_pty.py",
-      "sha256": "sha256:ad54fb8d69f482d52402e817f493aa3e114cf7150656ddf7588a9d9f98b460c6",
-      "surfaces": [
-        "rust-native",
-        "c-abi-v1"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.candidates",
-        "presentation.completion_ux"
-      ],
-      "category": "qualification",
-      "path": "tools/test_completion_pty.py",
-      "sha256": "sha256:b61b60787bcf46ff692eeaded9e4c32835aec49bef24225549da63f9f0be3f4b",
+      "path": "assets/readme/terminal-showcase.gif",
+      "sha256": "sha256:1b41960723c50719e96458edb6b43f3a0e589edd2b16826a9f888f42ef39be92",
       "surfaces": [
         "rust-native"
       ]
     },
     {
       "capabilities": [
-        "analysis.hints_highlight",
-        "analysis.validation",
-        "presentation.multiline_ux"
+        "embedding.session"
       ],
       "category": "qualification",
-      "path": "tools/validation_pty.py",
-      "sha256": "sha256:b8354eea0bc300a297d82222e0705323d67d353a38ed97e57c30ed5d02159da8",
+      "path": "assets/readme/manifest.json",
+      "sha256": "sha256:36bbe9d7393ae7bc1108805d6710c76ceb4d9d9db9afbb6d7b1f5be68cc7af6b",
       "surfaces": [
         "rust-native"
       ]
@@ -3608,10 +3286,7 @@
         "https://github.com/mothx9/replai/actions/runs/34607716592",
         "https://github.com/mothx9/replai/actions/runs/34606480203",
         "https://github.com/mothx9/replai/actions/runs/34607290912",
-        "https://github.com/mothx9/replai/blob/006e65797e8dc9fa1d6ee0d90949b56e47cb2ee5/docs/engineering/release-hardening.md",
-        "https://github.com/mothx9/replai/actions/runs/34703095088",
-        "https://github.com/mothx9/replai/actions/runs/34703089136",
-        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
+        "https://github.com/mothx9/replai/blob/006e65797e8dc9fa1d6ee0d90949b56e47cb2ee5/docs/engineering/release-hardening.md"
       ],
       "id": "linux",
       "status": "runtime-qualified",
@@ -3625,10 +3300,7 @@
         "https://github.com/mothx9/replai/actions/runs/34607716592",
         "https://github.com/mothx9/replai/actions/runs/34606480203",
         "https://github.com/mothx9/replai/actions/runs/34607290912",
-        "https://github.com/mothx9/replai/blob/006e65797e8dc9fa1d6ee0d90949b56e47cb2ee5/docs/engineering/release-hardening.md",
-        "https://github.com/mothx9/replai/actions/runs/34703095088",
-        "https://github.com/mothx9/replai/actions/runs/34703089136",
-        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
+        "https://github.com/mothx9/replai/blob/006e65797e8dc9fa1d6ee0d90949b56e47cb2ee5/docs/engineering/release-hardening.md"
       ],
       "id": "macos",
       "status": "runtime-qualified",
@@ -3641,10 +3313,7 @@
       "evidence": [
         "https://github.com/mothx9/replai/actions/runs/34607716592",
         "https://github.com/mothx9/replai/actions/runs/34607290912",
-        "https://github.com/mothx9/replai/blob/006e65797e8dc9fa1d6ee0d90949b56e47cb2ee5/docs/engineering/release-hardening.md",
-        "https://github.com/mothx9/replai/actions/runs/34703095088",
-        "https://github.com/mothx9/replai/actions/runs/34703089136",
-        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
+        "https://github.com/mothx9/replai/blob/006e65797e8dc9fa1d6ee0d90949b56e47cb2ee5/docs/engineering/release-hardening.md"
       ],
       "id": "windows",
       "status": "portable-core-qualified",
@@ -3654,17 +3323,17 @@
     }
   ],
   "predecessor": {
-    "contract_id": "sha256:ff37c4091dcb958dd49098b5dad276b570122302a5b8b994154469d042fba330",
+    "contract_id": "sha256:1d7cf47ad42465dd3387d8541a04046997565630451015783ef817cc72c25f11",
     "repository": "https://github.com/mothx9/replai",
-    "revision": "f916f2fbccb83ac8cbae21fe553ec753c5809898",
-    "tree": "8f72e6de19d07256ab9ff1c1d6c959bd3876ae14"
+    "revision": "006e65797e8dc9fa1d6ee0d90949b56e47cb2ee5",
+    "tree": "561ef9c36021febba689adb93ced6cefbb4848c3"
   },
   "repository": "https://github.com/mothx9/replai",
   "schema_version": 1,
   "source": {
     "dirty": false,
-    "revision": "7f8f696f98b33d8e4ea6f08e243fe0d5e5351724",
-    "tree": "15f1cc0e685b8523b33e97c145615bc82ac6b7be"
+    "revision": "f916f2fbccb83ac8cbae21fe553ec753c5809898",
+    "tree": "8f72e6de19d07256ab9ff1c1d6c959bd3876ae14"
   },
   "surfaces": [
     {

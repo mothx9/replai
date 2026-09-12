@@ -1,0 +1,491 @@
+{
+  "capability_contracts": [
+    {
+      "description": "Exact pre-release C ABI 1 with caller-owned spans/buffers and opaque handles",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/c-api.md"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34238242934",
+        "https://github.com/mothx9/replai/actions/runs/34703095088",
+        "https://github.com/mothx9/replai/actions/runs/34703089136",
+        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
+      ],
+      "guarantees": [
+        "Numeric ABI identity 1; layout and symbol contract qualified",
+        "Static/shared installation; caller descriptors are duplicated, not transferred",
+        "No long-term stability or Windows resource-binding claim"
+      ],
+      "id": "abi.c.v1",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos"
+      ],
+      "surfaces": [
+        "c-abi-v1"
+      ]
+    },
+    {
+      "description": "Immutable revision-identified draft snapshots and atomic stale-result refusal",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/aa137e881065f0a0615fa8ae03c84c89f052bea3/docs/interaction.md#revision-aware-host-analysis"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34475749705",
+        "https://github.com/mothx9/replai/blob/aa137e881065f0a0615fa8ae03c84c89f052bea3/docs/engineering/analysis-protocol.md",
+        "https://github.com/mothx9/replai/actions/runs/34703095088",
+        "https://github.com/mothx9/replai/actions/runs/34703089136",
+        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
+      ],
+      "guarantees": [
+        "One opaque identity scoped to the originating retained Editor; successful text/cursor changes advance, no-ops and rejected edits do not",
+        "Submit, editing interrupt and EOF end the semantic draft; unchanged close/reopen, resize and coordinated output preserve draft provenance",
+        "Snapshots own immutable shared text, cursor and revision; hosts own all parsing, context, scheduling and derived payloads",
+        "Revision-bound replacement refuses stale results before validation or mutation, without history or terminal output effects",
+        "Checked 128-bit exhaustion panics before mutation rather than wrapping; unrelated editors are separate identity domains",
+        "Rust Editor is portable; native Interaction completion is qualified on Linux/macOS; C ABI 1 remains synchronous and unchanged"
+      ],
+      "id": "analysis.revisions",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "description": "Optional host-owned revision-bound submission validation",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/interaction.md#validated-submission-and-multiline-navigation",
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/use-cases.md"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34494834221",
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md",
+        "https://github.com/mothx9/replai/actions/runs/34703095088",
+        "https://github.com/mothx9/replai/actions/runs/34703089136",
+        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
+      ],
+      "guarantees": [
+        "Host grammar and scheduling remain external; Enter emits an immutable snapshot when validation is enabled",
+        "Complete atomically submits exactly the requested current draft; Incomplete inserts LF; Invalid preserves text and shows bounded safe diagnostics",
+        "Stale results cannot submit, edit or emit terminal bytes; successful decisions consume pending Enter authority",
+        "32 diagnostics, 4096 bytes per message and 65536 aggregate bytes; grapheme-safe optional snapshot ranges",
+        "Direct submission remains default; C ABI 1 cannot enable validation"
+      ],
+      "id": "analysis.validation",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "description": "Explicit session compatibility over the common driver",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/3c0b14162cd322017bb718b71cc4b433c6100476/docs/interaction.md"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34494834221",
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md",
+        "https://github.com/mothx9/replai/actions/runs/34703095088",
+        "https://github.com/mothx9/replai/actions/runs/34703089136",
+        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
+      ],
+      "guarantees": [
+        "Existing open/poll/completion/output/close behavior and bounded read-ahead remain available",
+        "Compatibility polling retains bounded periodic resize observation; C ABI 1 unchanged",
+        "Native Event adds opt-in SubmissionRequested; exhaustive Rust matches need an additional arm. Default runtime submission is unchanged."
+      ],
+      "id": "embedding.session",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "description": "Platform-neutral editing, interaction state and logical rendering",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/architecture.md"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34370575960",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md",
+        "https://github.com/mothx9/replai/actions/runs/34703095088",
+        "https://github.com/mothx9/replai/actions/runs/34703089136",
+        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
+      ],
+      "guarantees": [
+        "Native Linux/macOS/Windows portable tests; Windows has no runtime terminal backend",
+        "No operating-system resources, scheduler or product semantics in the engine"
+      ],
+      "id": "platform.portable_engine",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "description": "Qualified Linux terminal resource binding",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/architecture.md#system-and-protocol-realizations"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34370575960",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md",
+        "https://github.com/mothx9/replai/actions/runs/34703095088",
+        "https://github.com/mothx9/replai/actions/runs/34703089136",
+        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
+      ],
+      "guarantees": [
+        "Exact termios restoration, paste lifecycle, resource exclusion and descriptor ownership",
+        "Real Rust/C PTYs and Linux Valgrind qualification"
+      ],
+      "id": "platform.posix_linux",
+      "maturity": "experimental",
+      "platforms": [
+        "linux"
+      ],
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "description": "Qualified macOS terminal resource binding through the shared POSIX backend",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/engineering/macos-perf.md"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34370575960",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md",
+        "https://github.com/mothx9/replai/actions/runs/34703095088",
+        "https://github.com/mothx9/replai/actions/runs/34703089136",
+        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
+      ],
+      "guarantees": [
+        "Real Rust/C PTYs and native leak qualification; captured console modes restored"
+      ],
+      "id": "platform.posix_macos",
+      "maturity": "experimental",
+      "platforms": [
+        "macos"
+      ],
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    }
+  ],
+  "changed_inputs": [
+    ".github/workflows/ci.yml",
+    ".github/workflows/packaging.yml",
+    "docs/c-api.md",
+    "docs/c-sdk.md",
+    "docs/engineering/release-packaging.md",
+    "docs/use-cases.md",
+    "tests/architecture.rs",
+    "tests/foundation.rs",
+    "tools/hardening/Cargo.lock",
+    "tools/package/debugger-consumer/src/main.rs",
+    "tools/package/debugger_pty.py",
+    "tools/package_sdk.py",
+    "tools/qualify_c.py",
+    "tools/qualify_packaging.py",
+    "tools/stage_c.py"
+  ],
+  "changes": [
+    {
+      "capability": "embedding.session",
+      "compatibility": "compatible",
+      "description": "Packaging qualification only: an independent debugger-style Rust host builds from the extracted crate outside the producer checkout and exercises session analysis, completion, validation, finite serialized notices and structured output. Runtime semantics and the public Rust contract are unchanged; no consumer migration or repin is assigned.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34703095088",
+        "https://github.com/mothx9/replai/actions/runs/34703089136",
+        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
+      ],
+      "inputs": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/packaging.yml",
+        "docs/engineering/release-packaging.md",
+        "tools/qualify_packaging.py",
+        "docs/use-cases.md",
+        "tools/package/debugger-consumer/src/main.rs",
+        "tools/package/debugger_pty.py"
+      ],
+      "kind": "QUALIFICATION_CHANGED",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "abi.c.v1",
+      "compatibility": "compatible",
+      "description": "Packaging qualification only: the deterministic C source SDK installs ABI 1 as relocatable static/shared pkg-config and CMake targets, consumed by external C11/C++17 builds after prefix movement. Symbols, layouts, numeric identity and ABI semantics are unchanged.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34703095088",
+        "https://github.com/mothx9/replai/actions/runs/34703089136",
+        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
+      ],
+      "inputs": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/packaging.yml",
+        "docs/engineering/release-packaging.md",
+        "tools/qualify_packaging.py",
+        "docs/c-sdk.md",
+        "tools/package_sdk.py",
+        "tools/qualify_c.py",
+        "tools/stage_c.py",
+        "docs/c-api.md"
+      ],
+      "kind": "QUALIFICATION_CHANGED",
+      "platforms": [
+        "linux",
+        "macos"
+      ],
+      "surfaces": [
+        "c-abi-v1"
+      ]
+    },
+    {
+      "capability": "platform.portable_engine",
+      "compatibility": "compatible",
+      "description": "The extracted Rust package and independent portable debugger oracle compile and execute under Windows MSVC at Rust 1.98.1. Windows remains portable core only with no terminal runtime claim.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34703095088",
+        "https://github.com/mothx9/replai/actions/runs/34703089136",
+        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
+      ],
+      "inputs": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/packaging.yml",
+        "docs/engineering/release-packaging.md",
+        "tools/qualify_packaging.py",
+        "tools/package/debugger-consumer/src/main.rs",
+        "tools/hardening/Cargo.lock"
+      ],
+      "kind": "QUALIFICATION_CHANGED",
+      "platforms": [
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "platform.posix_linux",
+      "compatibility": "compatible",
+      "description": "Packaging qualification adds native GNU Linux x86_64/ARM64 MSRV and stable package, external Rust PTY, moved-prefix C/C++ installation, loader and Valgrind evidence without changing the POSIX runtime contract.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34703095088",
+        "https://github.com/mothx9/replai/actions/runs/34703089136",
+        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
+      ],
+      "inputs": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/packaging.yml",
+        "docs/engineering/release-packaging.md",
+        "tools/qualify_packaging.py",
+        "tools/package_sdk.py",
+        "tools/qualify_c.py",
+        "tools/stage_c.py",
+        "tools/package/debugger-consumer/src/main.rs",
+        "tools/package/debugger_pty.py"
+      ],
+      "kind": "QUALIFICATION_CHANGED",
+      "platforms": [
+        "linux"
+      ],
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "capability": "platform.posix_macos",
+      "compatibility": "compatible",
+      "description": "Packaging qualification adds native macOS ARM64 MSRV and stable package, external Rust PTY, moved-prefix C/C++ installation, loader and leak evidence without changing the POSIX runtime contract.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34703095088",
+        "https://github.com/mothx9/replai/actions/runs/34703089136",
+        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
+      ],
+      "inputs": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/packaging.yml",
+        "docs/engineering/release-packaging.md",
+        "tools/qualify_packaging.py",
+        "tools/package_sdk.py",
+        "tools/qualify_c.py",
+        "tools/stage_c.py",
+        "tools/package/debugger-consumer/src/main.rs",
+        "tools/package/debugger_pty.py"
+      ],
+      "kind": "QUALIFICATION_CHANGED",
+      "platforms": [
+        "macos"
+      ],
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "capability": "analysis.validation",
+      "compatibility": "compatible",
+      "description": "Cookbook qualification ties revision-bound validation and related host-analysis recipes to executed public examples and the packaged debugger fixture. Analysis semantics and host ownership are unchanged.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34703095088",
+        "https://github.com/mothx9/replai/actions/runs/34703089136",
+        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
+      ],
+      "inputs": [
+        "docs/use-cases.md",
+        "docs/engineering/release-packaging.md",
+        "tests/architecture.rs"
+      ],
+      "kind": "QUALIFICATION_CHANGED",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "analysis.revisions",
+      "compatibility": "compatible",
+      "description": "Packaging qualification only: the extracted-crate debugger oracle proves delayed stale refusal and fresh revision-bound application outside the producer checkout on Linux/macOS native PTYs and the Windows portable model. Revision identity and result semantics are unchanged.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34703095088",
+        "https://github.com/mothx9/replai/actions/runs/34703089136",
+        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
+      ],
+      "inputs": [
+        "tests/foundation.rs",
+        "tools/package/debugger-consumer/src/main.rs",
+        "tools/package/debugger_pty.py",
+        "tools/qualify_packaging.py",
+        "docs/engineering/release-packaging.md"
+      ],
+      "kind": "QUALIFICATION_CHANGED",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "current": {
+    "contract_id": "sha256:f690c80022f44a53d99dbe62ff4cc8ab7d75b602209386f0f6d963cd309be9f6",
+    "repository": "https://github.com/mothx9/replai",
+    "revision": "7f8f696f98b33d8e4ea6f08e243fe0d5e5351724",
+    "tree": "15f1cc0e685b8523b33e97c145615bc82ac6b7be"
+  },
+  "id": "sha256:f2eb65019ed9fd4dfccb41405157a96fb439f74680544070c14642295f73876b",
+  "kind": "delta",
+  "platforms": [
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34607716592",
+        "https://github.com/mothx9/replai/actions/runs/34606480203",
+        "https://github.com/mothx9/replai/actions/runs/34607290912",
+        "https://github.com/mothx9/replai/blob/006e65797e8dc9fa1d6ee0d90949b56e47cb2ee5/docs/engineering/release-hardening.md",
+        "https://github.com/mothx9/replai/actions/runs/34703095088",
+        "https://github.com/mothx9/replai/actions/runs/34703089136",
+        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
+      ],
+      "id": "linux",
+      "status": "runtime-qualified",
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34607716592",
+        "https://github.com/mothx9/replai/actions/runs/34606480203",
+        "https://github.com/mothx9/replai/actions/runs/34607290912",
+        "https://github.com/mothx9/replai/blob/006e65797e8dc9fa1d6ee0d90949b56e47cb2ee5/docs/engineering/release-hardening.md",
+        "https://github.com/mothx9/replai/actions/runs/34703095088",
+        "https://github.com/mothx9/replai/actions/runs/34703089136",
+        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
+      ],
+      "id": "macos",
+      "status": "runtime-qualified",
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34607716592",
+        "https://github.com/mothx9/replai/actions/runs/34607290912",
+        "https://github.com/mothx9/replai/blob/006e65797e8dc9fa1d6ee0d90949b56e47cb2ee5/docs/engineering/release-hardening.md",
+        "https://github.com/mothx9/replai/actions/runs/34703095088",
+        "https://github.com/mothx9/replai/actions/runs/34703089136",
+        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
+      ],
+      "id": "windows",
+      "status": "portable-core-qualified",
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "previous": {
+    "contract_id": "sha256:ff37c4091dcb958dd49098b5dad276b570122302a5b8b994154469d042fba330",
+    "repository": "https://github.com/mothx9/replai",
+    "revision": "f916f2fbccb83ac8cbae21fe553ec753c5809898",
+    "tree": "8f72e6de19d07256ab9ff1c1d6c959bd3876ae14"
+  },
+  "schema_version": 1,
+  "surfaces": [
+    {
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/interaction.md",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/presentation.md"
+      ],
+      "id": "rust-native",
+      "kind": "rust-native",
+      "version": "pre-release"
+    },
+    {
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/c-api.md"
+      ],
+      "id": "c-abi-v1",
+      "kind": "c-abi",
+      "version": "1"
+    }
+  ]
+}
