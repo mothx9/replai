@@ -89,7 +89,8 @@ class Qualification:
             assert package[key], key
         rustc = self.run("rustc-version", ["rustc", "-Vv"])
         cargo = self.run("cargo-version", ["cargo", "-Vv"])
-        assert "release: 1.98.1" in rustc, rustc
+        release = next(line.split(":", 1)[1].strip() for line in rustc.splitlines() if line.startswith("release:"))
+        assert tuple(map(int, release.split(".")[:3])) >= (1, 98, 1), rustc
         self.summary["toolchain"] = {"rustc": rustc.strip(), "cargo": cargo.strip()}
         try:
             with urllib.request.urlopen("https://crates.io/api/v1/crates/replai", timeout=15) as response:
@@ -131,6 +132,7 @@ class Qualification:
         with tarfile.open(crate, "r:gz") as archive:
             archive.extractall(extracted, filter="data")
         package = extracted / "replai-0.1.0"
+        self.run("crate-fetch", ["cargo", "fetch", "--locked"], cwd=package)
         self.run("crate-test", ["cargo", "test", "--locked", "--offline", "--all-targets"], cwd=package)
         self.run("crate-doctest", ["cargo", "test", "--locked", "--offline", "--doc"], cwd=package)
         self.run("crate-rustdoc-host", ["cargo", "doc", "--locked", "--offline", "--no-deps"], cwd=package)

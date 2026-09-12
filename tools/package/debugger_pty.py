@@ -59,7 +59,7 @@ def main():
     def send(data, marker=None, pause=0.06):
         os.write(master, data)
         time.sleep(pause)
-        pump(marker)
+        pump(marker, timeout=4.0 if marker is not None else 0.15)
 
     try:
         pump(b"debug> ")

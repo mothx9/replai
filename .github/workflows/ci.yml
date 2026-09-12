@@ -112,7 +112,7 @@ jobs:
           toolchain: stable
           components: rustfmt
       - name: Install native qualification tools
-        run: sudo apt-get update && sudo apt-get install -y valgrind pkg-config g++
+        run: sudo apt-get update && sudo apt-get install -y cmake valgrind pkg-config g++
       - name: Release C ABI, staging, layout and C11/C++17 headers
         run: python3 tools/qualify_c.py --work "$RUNNER_TEMP/replai-native" --phase prepare
       - name: External static C consumer, misuse, descriptors and PTY behavior
