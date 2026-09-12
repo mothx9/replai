@@ -251,15 +251,18 @@ class Qualification:
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--work', type=Path, help='fresh persistent evidence directory')
-    parser.add_argument('--phase', choices=['all', 'prepare', 'static', 'shared', 'memory', 'audit'], default='all')
+    parser.add_argument('--phase', choices=['all', 'installed', 'prepare', 'static', 'shared', 'memory', 'audit'], default='all')
     args = parser.parse_args()
     root = args.work or Path(tempfile.mkdtemp(prefix='replai-c-qualification-'))
     root.mkdir(parents=True, exist_ok=True)
-    if args.phase == 'all':
+    if args.phase in ('all', 'installed'):
         # Keep native tooling phases process-isolated. In particular, macOS
         # sandbox/leaks setup must not run in a Python process that previously
         # drove PTY children.
-        for phase in ['prepare', 'static', 'shared', 'memory', 'audit']:
+        phases = ['prepare', 'static', 'shared', 'audit']
+        if args.phase == 'all':
+            phases.insert(3, 'memory')
+        for phase in phases:
             result = subprocess.run(
                 [sys.executable, __file__, '--work', str(root), '--phase', phase],
                 text=True,

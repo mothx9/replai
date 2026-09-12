@@ -218,7 +218,11 @@ class Qualification:
         self.run("sdk-build", ["cargo", "build", "--locked", "--release", "-p", "replai-c"], cwd=sdk)
         if self.full and platform.system() in ("Linux", "Darwin"):
             cwork = self.work / "c-qualification"
-            self.run("c-installed-matrix", [sys.executable, "tools/qualify_c.py", "--work", cwork, "--phase", "all"], cwd=sdk)
+            # Packaging qualifies the moved installed surface. Native memory
+            # tooling remains an independent exact-source CI/release-hardening
+            # gate; nesting macOS `leaks` below the extracted-SDK orchestrator
+            # can stall after PTY children even though the native gate passes.
+            self.run("c-installed-matrix", [sys.executable, "tools/qualify_c.py", "--work", cwork, "--phase", "installed"], cwd=sdk)
             installed = cwork / "prefix-b"
             installed_files = {
                 path.relative_to(installed).as_posix(): {
