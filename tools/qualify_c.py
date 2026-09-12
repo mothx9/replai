@@ -260,10 +260,16 @@ def main():
         # sandbox/leaks setup must not run in a Python process that previously
         # drove PTY children.
         for phase in ['prepare', 'static', 'shared', 'memory', 'audit']:
-            subprocess.run(
+            result = subprocess.run(
                 [sys.executable, __file__, '--work', str(root), '--phase', phase],
-                check=True,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
             )
+            if result.returncode:
+                print(result.stdout, flush=True)
+                raise subprocess.CalledProcessError(result.returncode, result.args)
+            print('GATE ' + phase + ' PASS', flush=True)
         print('Evidence: ' + str(root.resolve()), flush=True)
         return
     q = Qualification(root)
