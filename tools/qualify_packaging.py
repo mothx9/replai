@@ -136,7 +136,17 @@ class Qualification:
             archive.extractall(extracted, filter="data")
         package = extracted / "replai-0.1.0"
         self.run("crate-fetch", ["cargo", "fetch", "--locked"], cwd=package)
-        self.run("crate-test", ["cargo", "test", "--locked", "--offline", "--all-targets"], cwd=package)
+        if platform.system() == "Windows":
+            portable_tests = [
+                "cargo", "test", "--locked", "--offline", "--lib",
+                "--test", "core", "--test", "architecture",
+                "--test", "unicode_model", "--test", "document",
+                "--test", "analysis", "--test", "completion",
+                "--test", "validation", "--test", "analysis_presentation",
+            ]
+            self.run("crate-test-portable", portable_tests, cwd=package)
+        else:
+            self.run("crate-test", ["cargo", "test", "--locked", "--offline", "--all-targets"], cwd=package)
         self.run("crate-doctest", ["cargo", "test", "--locked", "--offline", "--doc"], cwd=package)
         self.run("crate-rustdoc-host", ["cargo", "doc", "--locked", "--offline", "--no-deps"], cwd=package)
         for target in TARGETS:
