@@ -148,8 +148,11 @@ def macos_leaks_example(work):
 def macos_leaks_ergonomics(work, executable):
     """Run the self-contained new-surface PTY oracle under native leaks."""
     command = ["/usr/bin/leaks", "--atExit", "--", str(executable)]
+    # `leaks --atExit` can spend substantially longer than the executable in
+    # native heap analysis on hosted ARM64 runners. Keep the command bounded,
+    # but give the memory tool the same budget as the Linux Valgrind pass.
     result = subprocess.run(command, cwd=ROOT, text=True, stdout=subprocess.PIPE,
-                            stderr=subprocess.STDOUT, timeout=120)
+                            stderr=subprocess.STDOUT, timeout=300)
     (work / "leaks-ergonomics.txt").write_text(result.stdout)
     assert result.returncode == 0, result.stdout[-4000:]
     assert "0 leaks for 0 total leaked bytes" in result.stdout, result.stdout[-4000:]
