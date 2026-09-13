@@ -1,0 +1,160 @@
+{
+  "capability_contracts": [
+    {
+      "description": "Bounded host-ordered revision-bound completion candidates",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/interaction.md#revision-bound-completion-candidates",
+        "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/presentation.md#completion-surface",
+        "https://github.com/mothx9/replai/blob/6ee2fe1e2006f940d0046676c73306bfc7da1070/docs/interaction.md#large-completion-navigation"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34485342480",
+        "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/engineering/completion-contract.md",
+        "https://github.com/mothx9/replai/actions/runs/34772036277",
+        "https://github.com/mothx9/replai/actions/runs/34772036424",
+        "https://github.com/mothx9/replai/blob/6ee2fe1e2006f940d0046676c73306bfc7da1070/docs/engineering/completion-keymap-suggestion.md"
+      ],
+      "guarantees": [
+        "Hosts own discovery, order, ranking, application context and scheduling; no callback or executor is acquired",
+        "Per-candidate grapheme-aligned ranges, insertion, safe label and optional annotation are distinct; duplicates preserve host order",
+        "Sets bind the originating Editor DraftRevision; stale delivery refuses before validation or activation with zero terminal bytes",
+        "Whole-set validation is atomic; 4096 candidates, 65536 bytes per field and 4 MiB aggregate safe text are bounded",
+        "Same-revision explicit deliveries replace in delivery order; host request preference is not inferred",
+        "C ABI 1 retains its synchronous request/replacement contract unchanged",
+        "CompletionAction adds PageNext, PagePrevious, First and Last; because the pre-release enum was exhaustive, downstream exhaustive matches must add arms"
+      ],
+      "id": "completion.candidates",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "changed_inputs": [
+    "CHANGELOG.md",
+    "docs/engineering/completion-keymap-suggestion.md"
+  ],
+  "changes": [
+    {
+      "capability": "completion.candidates",
+      "compatibility": "breaking",
+      "description": "Rust source compatibility: public exhaustive CompletionAction gains PageNext, PagePrevious, First and Last. Downstream exhaustive matches need four arms; existing variants and C ABI 1 are unchanged.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34772036277",
+        "https://github.com/mothx9/replai/actions/runs/34772036424",
+        "https://github.com/mothx9/replai/blob/6ee2fe1e2006f940d0046676c73306bfc7da1070/docs/engineering/completion-keymap-suggestion.md"
+      ],
+      "inputs": [
+        "CHANGELOG.md",
+        "docs/engineering/completion-keymap-suggestion.md",
+        "docs/interaction.md",
+        "src/completion.rs"
+      ],
+      "kind": "BREAKING",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "current": {
+    "contract_id": "sha256:4e53933540781fbdd19745a2fef74f54cb183506af4091f95ad08d5cc530a8c8",
+    "repository": "https://github.com/mothx9/replai",
+    "revision": "6ee2fe1e2006f940d0046676c73306bfc7da1070",
+    "tree": "afec2d649d50c1a46d897b6379687367732fd262"
+  },
+  "id": "sha256:7ec072a9fe42307d7d07c087af7b15657cda0943059b9d2ea14d6f7fcdb75450",
+  "kind": "delta",
+  "platforms": [
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34607716592",
+        "https://github.com/mothx9/replai/actions/runs/34606480203",
+        "https://github.com/mothx9/replai/actions/runs/34607290912",
+        "https://github.com/mothx9/replai/blob/006e65797e8dc9fa1d6ee0d90949b56e47cb2ee5/docs/engineering/release-hardening.md",
+        "https://github.com/mothx9/replai/actions/runs/34703095088",
+        "https://github.com/mothx9/replai/actions/runs/34703089136",
+        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md",
+        "https://github.com/mothx9/replai/actions/runs/34759347027",
+        "https://github.com/mothx9/replai/actions/runs/34759339446"
+      ],
+      "id": "linux",
+      "status": "runtime-qualified",
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34607716592",
+        "https://github.com/mothx9/replai/actions/runs/34606480203",
+        "https://github.com/mothx9/replai/actions/runs/34607290912",
+        "https://github.com/mothx9/replai/blob/006e65797e8dc9fa1d6ee0d90949b56e47cb2ee5/docs/engineering/release-hardening.md",
+        "https://github.com/mothx9/replai/actions/runs/34703095088",
+        "https://github.com/mothx9/replai/actions/runs/34703089136",
+        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md",
+        "https://github.com/mothx9/replai/actions/runs/34759347027",
+        "https://github.com/mothx9/replai/actions/runs/34759339446"
+      ],
+      "id": "macos",
+      "status": "runtime-qualified",
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34607716592",
+        "https://github.com/mothx9/replai/actions/runs/34607290912",
+        "https://github.com/mothx9/replai/blob/006e65797e8dc9fa1d6ee0d90949b56e47cb2ee5/docs/engineering/release-hardening.md",
+        "https://github.com/mothx9/replai/actions/runs/34703095088",
+        "https://github.com/mothx9/replai/actions/runs/34703089136",
+        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md",
+        "https://github.com/mothx9/replai/actions/runs/34759347027",
+        "https://github.com/mothx9/replai/actions/runs/34759339446"
+      ],
+      "id": "windows",
+      "status": "portable-core-qualified",
+      "surfaces": [
+        "rust-native"
+      ]
+    }
+  ],
+  "previous": {
+    "contract_id": "sha256:2bf87048c204a1584bfa9f068b5318f266cbca81160096bf9a8bda2487839bcf",
+    "repository": "https://github.com/mothx9/replai",
+    "revision": "db4dff1dd1bd9bd1b15ac953efe2c894c51ed2fd",
+    "tree": "bce1603e1101c26164c799a5a2359c9549d7ef73"
+  },
+  "schema_version": 1,
+  "surfaces": [
+    {
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/interaction.md",
+        "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/presentation.md"
+      ],
+      "id": "rust-native",
+      "kind": "rust-native",
+      "version": "pre-release"
+    },
+    {
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/c-api.md"
+      ],
+      "id": "c-abi-v1",
+      "kind": "c-abi",
+      "version": "1"
+    }
+  ]
+}

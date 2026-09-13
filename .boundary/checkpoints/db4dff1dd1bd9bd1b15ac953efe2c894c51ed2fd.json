@@ -547,15 +547,11 @@
       "description": "Bounded host-ordered revision-bound completion candidates",
       "documentation": [
         "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/interaction.md#revision-bound-completion-candidates",
-        "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/presentation.md#completion-surface",
-        "https://github.com/mothx9/replai/blob/6ee2fe1e2006f940d0046676c73306bfc7da1070/docs/interaction.md#large-completion-navigation"
+        "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/presentation.md#completion-surface"
       ],
       "evidence": [
         "https://github.com/mothx9/replai/actions/runs/34485342480",
-        "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/engineering/completion-contract.md",
-        "https://github.com/mothx9/replai/actions/runs/34772036277",
-        "https://github.com/mothx9/replai/actions/runs/34772036424",
-        "https://github.com/mothx9/replai/blob/6ee2fe1e2006f940d0046676c73306bfc7da1070/docs/engineering/completion-keymap-suggestion.md"
+        "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/engineering/completion-contract.md"
       ],
       "guarantees": [
         "Hosts own discovery, order, ranking, application context and scheduling; no callback or executor is acquired",
@@ -563,8 +559,7 @@
         "Sets bind the originating Editor DraftRevision; stale delivery refuses before validation or activation with zero terminal bytes",
         "Whole-set validation is atomic; 4096 candidates, 65536 bytes per field and 4 MiB aggregate safe text are bounded",
         "Same-revision explicit deliveries replace in delivery order; host request preference is not inferred",
-        "C ABI 1 retains its synchronous request/replacement contract unchanged",
-        "CompletionAction adds PageNext, PagePrevious, First and Last; because the pre-release enum was exhaustive, downstream exhaustive matches must add arms"
+        "C ABI 1 retains its synchronous request/replacement contract unchanged"
       ],
       "id": "completion.candidates",
       "maturity": "experimental",
@@ -903,21 +898,256 @@
   ],
   "changes": [
     {
-      "capability": "completion.candidates",
-      "compatibility": "breaking",
-      "description": "Rust source compatibility: public exhaustive CompletionAction gains PageNext, PagePrevious, First and Last. Downstream exhaustive matches need four arms; existing variants and C ABI 1 are unchanged.",
+      "capability": "editing.keymap",
+      "compatibility": "compatible",
+      "description": "Adds a bounded configurable portable-key to semantic-action contract while preserving default behavior and isolating text/paste transport.",
       "evidence": [
         "https://github.com/mothx9/replai/actions/runs/34772036277",
         "https://github.com/mothx9/replai/actions/runs/34772036424",
-        "https://github.com/mothx9/replai/blob/6ee2fe1e2006f940d0046676c73306bfc7da1070/docs/engineering/completion-keymap-suggestion.md"
+        "https://github.com/mothx9/replai/blob/db4dff1dd1bd9bd1b15ac953efe2c894c51ed2fd/docs/engineering/completion-keymap-suggestion.md"
       ],
       "inputs": [
+        ".github/workflows/completion-keymap-suggestion.yml",
         "CHANGELOG.md",
+        "README.md",
+        "ROADMAP.md",
         "docs/engineering/completion-keymap-suggestion.md",
         "docs/interaction.md",
-        "src/completion.rs"
+        "docs/release-scope.md",
+        "docs/use-cases.md",
+        "examples/configured_completion.rs",
+        "src/actions.rs",
+        "src/engine.rs",
+        "src/ergonomics_tests.rs",
+        "src/input.rs",
+        "src/interaction.rs",
+        "src/keymap.rs",
+        "src/lib.rs",
+        "src/terminal.rs",
+        "tests/configuration_helpers.rs",
+        "tests/pty.rs",
+        "tools/check_docs.py",
+        "tools/completion/corpus.py",
+        "tools/completion/evidence/corpus-replay-linux-aarch64.json",
+        "tools/completion/evidence/fuzz-linux-aarch64.json",
+        "tools/completion/evidence/package-consumer-linux-aarch64.json",
+        "tools/completion/evidence/package-linux-aarch64.json",
+        "tools/completion/evidence/q2-linux-aarch64.json",
+        "tools/completion/evidence/q2-samples-linux-aarch64.jsonl.gz",
+        "tools/completion/evidence/semantic-sequences-linux-aarch64.json",
+        "tools/completion/qualify_package.py",
+        "tools/completion/surfaces-corpus.json.gz",
+        "tools/ergonomics/qualify_native.py",
+        "tools/hardening/Cargo.toml",
+        "tools/hardening/benchmarks.rs",
+        "tools/hardening/campaign.py",
+        "tools/hardening/campaigns.rs",
+        "tools/hardening/completion_memory.rs",
+        "tools/hardening/completion_sequences.rs",
+        "tools/hardening/ergonomics_pty.rs",
+        "tools/hardening/fuzz_targets/surfaces.rs",
+        "tools/hardening/lib.rs",
+        "tools/hardening/replay.rs",
+        "tools/hardening/surfaces.rs",
+        "tools/hardening/test_hardening.py",
+        "tools/package/check_recipes.py",
+        "tools/perf/components.rs",
+        "tools/test_check_docs.py"
       ],
-      "kind": "BREAKING",
+      "kind": "ADDED",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "completion.helpers",
+      "compatibility": "compatible",
+      "description": "Adds opt-in bounded prefix, grapheme-safe common-prefix, deterministic fuzzy and one-level filesystem completion helpers.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34772036277",
+        "https://github.com/mothx9/replai/actions/runs/34772036424",
+        "https://github.com/mothx9/replai/blob/db4dff1dd1bd9bd1b15ac953efe2c894c51ed2fd/docs/engineering/completion-keymap-suggestion.md"
+      ],
+      "inputs": [
+        ".github/workflows/completion-keymap-suggestion.yml",
+        "CHANGELOG.md",
+        "README.md",
+        "ROADMAP.md",
+        "docs/engineering/completion-keymap-suggestion.md",
+        "docs/interaction.md",
+        "docs/release-scope.md",
+        "docs/use-cases.md",
+        "examples/configured_completion.rs",
+        "src/completion.rs",
+        "src/completion_helpers.rs",
+        "src/completion_tests.rs",
+        "src/ergonomics_tests.rs",
+        "src/lib.rs",
+        "tests/configuration_helpers.rs",
+        "tests/pty.rs",
+        "tools/check_docs.py",
+        "tools/completion/corpus.py",
+        "tools/completion/evidence/corpus-replay-linux-aarch64.json",
+        "tools/completion/evidence/fuzz-linux-aarch64.json",
+        "tools/completion/evidence/package-consumer-linux-aarch64.json",
+        "tools/completion/evidence/package-linux-aarch64.json",
+        "tools/completion/evidence/q2-linux-aarch64.json",
+        "tools/completion/evidence/q2-samples-linux-aarch64.jsonl.gz",
+        "tools/completion/evidence/semantic-sequences-linux-aarch64.json",
+        "tools/completion/qualify_package.py",
+        "tools/completion/surfaces-corpus.json.gz",
+        "tools/ergonomics/qualify_native.py",
+        "tools/hardening/Cargo.toml",
+        "tools/hardening/benchmarks.rs",
+        "tools/hardening/campaign.py",
+        "tools/hardening/campaigns.rs",
+        "tools/hardening/completion_memory.rs",
+        "tools/hardening/completion_sequences.rs",
+        "tools/hardening/ergonomics_pty.rs",
+        "tools/hardening/fuzz_targets/surfaces.rs",
+        "tools/hardening/lib.rs",
+        "tools/hardening/replay.rs",
+        "tools/hardening/surfaces.rs",
+        "tools/hardening/test_hardening.py",
+        "tools/package/check_recipes.py",
+        "tools/perf/components.rs",
+        "tools/test_check_docs.py"
+      ],
+      "kind": "ADDED",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "completion.large_sets",
+      "compatibility": "compatible",
+      "description": "Adds page, first and last completion navigation with stable selected identity and bounded visible-window rendering through the existing menu.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34772036277",
+        "https://github.com/mothx9/replai/actions/runs/34772036424",
+        "https://github.com/mothx9/replai/blob/db4dff1dd1bd9bd1b15ac953efe2c894c51ed2fd/docs/engineering/completion-keymap-suggestion.md"
+      ],
+      "inputs": [
+        ".github/workflows/completion-keymap-suggestion.yml",
+        "CHANGELOG.md",
+        "README.md",
+        "ROADMAP.md",
+        "docs/engineering/completion-keymap-suggestion.md",
+        "docs/interaction.md",
+        "docs/release-scope.md",
+        "docs/use-cases.md",
+        "examples/configured_completion.rs",
+        "src/completion.rs",
+        "src/completion_tests.rs",
+        "src/engine.rs",
+        "src/ergonomics_tests.rs",
+        "src/lib.rs",
+        "tests/configuration_helpers.rs",
+        "tests/pty.rs",
+        "tools/check_docs.py",
+        "tools/completion/corpus.py",
+        "tools/completion/evidence/corpus-replay-linux-aarch64.json",
+        "tools/completion/evidence/fuzz-linux-aarch64.json",
+        "tools/completion/evidence/package-consumer-linux-aarch64.json",
+        "tools/completion/evidence/package-linux-aarch64.json",
+        "tools/completion/evidence/q2-linux-aarch64.json",
+        "tools/completion/evidence/q2-samples-linux-aarch64.jsonl.gz",
+        "tools/completion/evidence/semantic-sequences-linux-aarch64.json",
+        "tools/completion/qualify_package.py",
+        "tools/completion/surfaces-corpus.json.gz",
+        "tools/ergonomics/qualify_native.py",
+        "tools/hardening/Cargo.toml",
+        "tools/hardening/benchmarks.rs",
+        "tools/hardening/campaign.py",
+        "tools/hardening/campaigns.rs",
+        "tools/hardening/completion_memory.rs",
+        "tools/hardening/completion_sequences.rs",
+        "tools/hardening/ergonomics_pty.rs",
+        "tools/hardening/fuzz_targets/surfaces.rs",
+        "tools/hardening/lib.rs",
+        "tools/hardening/replay.rs",
+        "tools/hardening/surfaces.rs",
+        "tools/hardening/test_hardening.py",
+        "tools/package/check_recipes.py",
+        "tools/perf/components.rs",
+        "tools/test_check_docs.py"
+      ],
+      "kind": "ADDED",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "suggestion.autosuggest",
+      "compatibility": "compatible",
+      "description": "Adds a distinct bounded revision-safe autosuggestion surface, whole-suggestion acceptance and host-fed history/static helpers.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34772036277",
+        "https://github.com/mothx9/replai/actions/runs/34772036424",
+        "https://github.com/mothx9/replai/blob/db4dff1dd1bd9bd1b15ac953efe2c894c51ed2fd/docs/engineering/completion-keymap-suggestion.md"
+      ],
+      "inputs": [
+        ".github/workflows/completion-keymap-suggestion.yml",
+        "CHANGELOG.md",
+        "README.md",
+        "ROADMAP.md",
+        "docs/engineering/completion-keymap-suggestion.md",
+        "docs/interaction.md",
+        "docs/release-scope.md",
+        "docs/use-cases.md",
+        "examples/configured_completion.rs",
+        "src/engine.rs",
+        "src/ergonomics_tests.rs",
+        "src/interaction.rs",
+        "src/lib.rs",
+        "src/suggestion.rs",
+        "src/suggestion_tests.rs",
+        "tests/configuration_helpers.rs",
+        "tests/pty.rs",
+        "tools/check_docs.py",
+        "tools/completion/corpus.py",
+        "tools/completion/evidence/corpus-replay-linux-aarch64.json",
+        "tools/completion/evidence/fuzz-linux-aarch64.json",
+        "tools/completion/evidence/package-consumer-linux-aarch64.json",
+        "tools/completion/evidence/package-linux-aarch64.json",
+        "tools/completion/evidence/q2-linux-aarch64.json",
+        "tools/completion/evidence/q2-samples-linux-aarch64.jsonl.gz",
+        "tools/completion/evidence/semantic-sequences-linux-aarch64.json",
+        "tools/completion/qualify_package.py",
+        "tools/completion/surfaces-corpus.json.gz",
+        "tools/ergonomics/qualify_native.py",
+        "tools/hardening/Cargo.toml",
+        "tools/hardening/benchmarks.rs",
+        "tools/hardening/campaign.py",
+        "tools/hardening/campaigns.rs",
+        "tools/hardening/completion_memory.rs",
+        "tools/hardening/completion_sequences.rs",
+        "tools/hardening/ergonomics_pty.rs",
+        "tools/hardening/fuzz_targets/surfaces.rs",
+        "tools/hardening/lib.rs",
+        "tools/hardening/replay.rs",
+        "tools/hardening/surfaces.rs",
+        "tools/hardening/test_hardening.py",
+        "tools/package/check_recipes.py",
+        "tools/perf/components.rs",
+        "tools/test_check_docs.py"
+      ],
+      "kind": "ADDED",
       "platforms": [
         "linux",
         "macos",
@@ -928,8 +1158,8 @@
       ]
     }
   ],
-  "generation": 17,
-  "id": "sha256:4e53933540781fbdd19745a2fef74f54cb183506af4091f95ad08d5cc530a8c8",
+  "generation": 16,
+  "id": "sha256:2bf87048c204a1584bfa9f068b5318f266cbca81160096bf9a8bda2487839bcf",
   "inputs": [
     {
       "capabilities": [
@@ -1093,7 +1323,6 @@
     },
     {
       "capabilities": [
-        "completion.candidates",
         "completion.helpers",
         "completion.large_sets",
         "editing.keymap",
@@ -1101,7 +1330,7 @@
       ],
       "category": "documentation",
       "path": "CHANGELOG.md",
-      "sha256": "sha256:cf26ac0870ceb3fab08993f76b340b265c6060356c89eac1e6013c3b3de01cc9",
+      "sha256": "sha256:2f025a177aa8dfddbc4c8076b1bc3d6a4fd55067ccfada50c48c1c483e65de13",
       "surfaces": [
         "rust-native"
       ]
@@ -1297,7 +1526,6 @@
     },
     {
       "capabilities": [
-        "completion.candidates",
         "completion.helpers",
         "completion.large_sets",
         "editing.keymap",
@@ -1305,7 +1533,7 @@
       ],
       "category": "qualification",
       "path": "docs/engineering/completion-keymap-suggestion.md",
-      "sha256": "sha256:fa1044ee27510d611267542ceca9f67f869fce9a7642b42981b7dfa3d60de294",
+      "sha256": "sha256:ed1fd39fb919993919f11d9156fefcddacabb7f0c022165dd49d8faddbd992ba",
       "surfaces": [
         "rust-native"
       ]
@@ -4473,17 +4701,17 @@
     }
   ],
   "predecessor": {
-    "contract_id": "sha256:2bf87048c204a1584bfa9f068b5318f266cbca81160096bf9a8bda2487839bcf",
+    "contract_id": "sha256:da8d43514a044e5c55cc851c51b31887c980ad885c6c04f24144b7906243eb5a",
     "repository": "https://github.com/mothx9/replai",
-    "revision": "db4dff1dd1bd9bd1b15ac953efe2c894c51ed2fd",
-    "tree": "bce1603e1101c26164c799a5a2359c9549d7ef73"
+    "revision": "0e281321abe1d43af49bace6baed90a9a80f89aa",
+    "tree": "f4d671e2f086800dd9169aa4bbb6c949e366a35e"
   },
   "repository": "https://github.com/mothx9/replai",
   "schema_version": 1,
   "source": {
     "dirty": false,
-    "revision": "6ee2fe1e2006f940d0046676c73306bfc7da1070",
-    "tree": "afec2d649d50c1a46d897b6379687367732fd262"
+    "revision": "db4dff1dd1bd9bd1b15ac953efe2c894c51ed2fd",
+    "tree": "bce1603e1101c26164c799a5a2359c9549d7ef73"
   },
   "surfaces": [
     {

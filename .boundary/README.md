@@ -4,17 +4,25 @@ REPLAI owns these producer declarations. They describe generic capabilities,
 surfaces, qualification and changes; they assign no consumer paths, commands or
 migration work. Consumer profiles must be authored by their own repositories.
 
-- [Current producer snapshot](producer.json), generation 16: configurable-interaction
-  evidence source `db4dff1dd1bd9bd1b15ac953efe2c894c51ed2fd`, tree
-  `bce1603e1101c26164c799a5a2359c9549d7ef73`; its runtime tree is
+- [Current producer snapshot](producer.json), generation 17: compatibility-corrected
+  evidence source `6ee2fe1e2006f940d0046676c73306bfc7da1070`, tree
+  `afec2d649d50c1a46d897b6379687367732fd262`; its runtime tree is
+  `62596c22ad2568c46c4e742b21136b31f9e1eb96`.
+  The [completion-action compatibility delta](deltas/completion-action-compatibility.json)
+  records the Rust source break for exhaustive `CompletionAction` matches after
+  adding page/first/last variants. Existing variants and C ABI 1 are unchanged;
+  no migration or consumer repin is assigned.
+- [Previous configurable-interaction snapshot](checkpoints/db4dff1dd1bd9bd1b15ac953efe2c894c51ed2fd.json),
+  generation 16: evidence source `db4dff1dd1bd9bd1b15ac953efe2c894c51ed2fd`,
+  tree `bce1603e1101c26164c799a5a2359c9549d7ef73`; runtime tree
   `62596c22ad2568c46c4e742b21136b31f9e1eb96`.
   The [four-platform qualification](https://github.com/mothx9/replai/actions/runs/34772036424)
   and [12-lane CI](https://github.com/mothx9/replai/actions/runs/34772036277)
   qualify configurable keymaps, generic completion helpers, explicit large-set
-  navigation and revision-safe autosuggestion. C ABI 1 remains unchanged.
+  navigation and revision-safe autosuggestion.
 - [Configurable-interaction delta](deltas/completion-keymap-suggestion.json) adds
-  four compatible Rust-native capabilities and assigns no migration or consumer
-  repin.
+  four Rust-native capabilities; its compatible capability additions are followed
+  by generation 17's explicit source-compatibility correction.
 - [Previous interaction-ergonomics snapshot](checkpoints/0e281321abe1d43af49bace6baed90a9a80f89aa.json),
   generation 15: evidence source `0e281321abe1d43af49bace6baed90a9a80f89aa`,
   tree `f4d671e2f086800dd9169aa4bbb6c949e366a35e`; runtime tree
@@ -164,7 +172,7 @@ behavior, ABI and documentation inputs. Its external validation command is:
 
 ```sh
 boundary validate .boundary/producer.json --repo . \
-  --previous .boundary/checkpoints/0e281321abe1d43af49bace6baed90a9a80f89aa.json
+  --previous .boundary/checkpoints/db4dff1dd1bd9bd1b15ac953efe2c894c51ed2fd.json
 ```
 
 Run from a clean REPLAI checkout with BOUNDARY installed separately. Validation
