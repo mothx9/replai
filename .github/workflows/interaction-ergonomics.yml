@@ -36,12 +36,16 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y valgrind
       - name: Portable model, real PTY and native memory qualification
         run: python3 tools/ergonomics/qualify_native.py --work "$RUNNER_TEMP/replai-ergonomics"
+      - name: Replay retained feature corpus
+        run: python3 tools/ergonomics/corpus.py replay --archive tools/ergonomics/editor-corpus.json.gz --work "$RUNNER_TEMP/replai-ergonomics-corpus"
       - name: Retain exact receipts
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: interaction-ergonomics-${{ matrix.os }}
-          path: ${{ runner.temp }}/replai-ergonomics
+          path: |
+            ${{ runner.temp }}/replai-ergonomics
+            ${{ runner.temp }}/replai-ergonomics-corpus
 
   windows-portable:
     runs-on: windows-2025
@@ -54,9 +58,13 @@ jobs:
           toolchain: '1.98.1'
       - name: Portable editor/model qualification
         run: python tools/ergonomics/qualify_native.py --portable-only --work "$env:RUNNER_TEMP/replai-ergonomics"
+      - name: Replay retained feature corpus
+        run: python tools/ergonomics/corpus.py replay --archive tools/ergonomics/editor-corpus.json.gz --work "$env:RUNNER_TEMP/replai-ergonomics-corpus"
       - name: Retain exact receipt
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: interaction-ergonomics-windows-2025
-          path: ${{ runner.temp }}/replai-ergonomics
+          path: |
+            ${{ runner.temp }}/replai-ergonomics
+            ${{ runner.temp }}/replai-ergonomics-corpus
