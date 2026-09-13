@@ -145,6 +145,18 @@ def macos_leaks_example(work):
         os.close(slave)
 
 
+def macos_leaks_ergonomics(work, executable):
+    """Run the self-contained new-surface PTY oracle under native leaks."""
+    command = ["/usr/bin/leaks", "--atExit", "--", str(executable)]
+    result = subprocess.run(command, cwd=ROOT, text=True, stdout=subprocess.PIPE,
+                            stderr=subprocess.STDOUT, timeout=120)
+    (work / "leaks-ergonomics.txt").write_text(result.stdout)
+    assert result.returncode == 0, result.stdout[-4000:]
+    assert "0 leaks for 0 total leaked bytes" in result.stdout, result.stdout[-4000:]
+    assert '"suggestion":true' in result.stdout and '"large_completion":1000' in result.stdout
+    return command
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--work", type=Path, required=True)
@@ -186,7 +198,10 @@ def main():
         elif platform.system() == "Darwin":
             leaks = Path("/usr/bin/leaks")
             assert leaks.is_file(), "native leaks is required on macOS"
-            memory_command = macos_leaks_example(args.work)
+            memory_command = [
+                macos_leaks_example(args.work),
+                macos_leaks_ergonomics(args.work, executable),
+            ]
             summary["memory_tool"] = "macOS leaks --atExit"
             summary["memory_command"] = memory_command
         else:

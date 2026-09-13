@@ -17,12 +17,16 @@ pub use validation::{
 
 #[path = "../../src/completion.rs"]
 mod completion;
+#[path = "../../src/completion_helpers.rs"]
+mod completion_helpers;
 pub use analysis::{AnalysisOutcome, AnalysisSnapshot, DraftRevision};
 pub use completion::{
     CompletionAction, CompletionCandidate, CompletionError, CompletionSelection, CompletionSet,
+    MAX_COMPLETION_BYTES, MAX_COMPLETION_CANDIDATES, MAX_COMPLETION_FIELD_BYTES,
 };
 #[path = "../../src/actions.rs"]
 mod actions;
+pub use actions::{Action, EditAction};
 #[path = "../../src/capabilities.rs"]
 mod capabilities;
 #[path = "../../src/width.rs"]
@@ -48,6 +52,7 @@ mod input;
 mod interaction;
 #[path = "../../src/keymap.rs"]
 mod keymap;
+pub use keymap::{Key as ConfigKey, KeyMap, KeyMapError, NamedKey};
 #[path = "../../src/presentation.rs"]
 mod presentation;
 #[path = "../../src/protocol.rs"]
@@ -61,6 +66,9 @@ use terminal::pty_support;
 mod render;
 #[path = "../../src/substrate.rs"]
 mod substrate;
+#[path = "../../src/suggestion.rs"]
+mod suggestion;
+pub use suggestion::{Suggestion, SuggestionAction, SuggestionError};
 #[cfg(any(target_os = "linux", target_os = "macos"))]
 #[path = "../../src/system.rs"]
 mod system;

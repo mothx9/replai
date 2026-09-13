@@ -1,0 +1,340 @@
+{
+  "c_sdk": {
+    "bytes": 132478,
+    "filename": "replai-c-sdk-0.1.0.tar.gz",
+    "sha256": "d9c11b2960d3cfedc0e0c7bea615f36938099f5a9aa21aa0c6c3418dabac113b"
+  },
+  "crates_io": {
+    "available_at_check": true,
+    "publisher_access": "manual RELEASE.PUBLICATION.0 gate; credentials were not inspected",
+    "status": 404
+  },
+  "debugger_native": {
+    "assertions": {
+      "complete": true,
+      "delayed_stale_refusal": true,
+      "finite_serialized_notices": true,
+      "fresh_analysis": true,
+      "incomplete": true,
+      "invalid": true,
+      "portable_stale_refusal": true,
+      "rich_completion": true,
+      "structured_document": true
+    },
+    "exit_status": 0,
+    "receipts_sha256": "1cb111f7b848beb25734cf535f228d6eba563ee1698ec2dfb42f3e2841e4daa1",
+    "schema": 1,
+    "terminal_sha256": "c8bf4b56c2a77ec2c9bd1afcbeb764a83e019ea94cb0579f3747f1b31b2b2e04"
+  },
+  "external_rust_consumer": {
+    "fresh_resolution": true,
+    "lock_sha256": "f40b27e72ccd113f53c00275f157eb9eb0805097621f7b3432c229ed1a43ed29",
+    "package_sha256": "e4b4e73be42c8c272694ae0a246618fdf18aa057185ab19e6aecdbe5d8507026",
+    "source_sha256": "9e0333675a18301f9e1d018c827d790003e4a7e6e9fcbccd4848602405ab4213"
+  },
+  "host": {
+    "kernel": "6.17.0-1021-nvidia",
+    "machine": "aarch64",
+    "system": "Linux"
+  },
+  "leakage_scan": {
+    "credential_files": 0,
+    "developer_paths": 0,
+    "hostnames": 0
+  },
+  "phases": {
+    "c-sdk-bundle": {
+      "command": [
+        "/home/dgmothx/lab/venvs/hf/bin/python3",
+        "/home/dgmothx/lab/replai/tools/package_sdk.py",
+        "--revision",
+        "HEAD",
+        "--output",
+        "/tmp/replai-completion-package-ab34d0b/artifacts/replai-c-sdk-0.1.0.tar.gz",
+        "--check-reproducible"
+      ],
+      "seconds": 0.415,
+      "status": "PASS"
+    },
+    "cargo-package": {
+      "command": [
+        "cargo",
+        "package",
+        "-p",
+        "replai",
+        "--locked"
+      ],
+      "seconds": 2.035,
+      "status": "PASS"
+    },
+    "cargo-package-list": {
+      "command": [
+        "cargo",
+        "package",
+        "-p",
+        "replai",
+        "--locked",
+        "--list"
+      ],
+      "seconds": 0.041,
+      "status": "PASS"
+    },
+    "cargo-publish-dry-run": {
+      "command": [
+        "cargo",
+        "publish",
+        "-p",
+        "replai",
+        "--dry-run",
+        "--locked"
+      ],
+      "seconds": 1.165,
+      "status": "PASS"
+    },
+    "cargo-version": {
+      "command": [
+        "cargo",
+        "-Vv"
+      ],
+      "seconds": 0.018,
+      "status": "PASS"
+    },
+    "consumer-build": {
+      "command": [
+        "cargo",
+        "build",
+        "--locked"
+      ],
+      "seconds": 2.025,
+      "status": "PASS"
+    },
+    "consumer-check": {
+      "command": [
+        "cargo",
+        "check",
+        "--locked"
+      ],
+      "seconds": 1.421,
+      "status": "PASS"
+    },
+    "consumer-generate-lock": {
+      "command": [
+        "cargo",
+        "generate-lockfile"
+      ],
+      "seconds": 0.191,
+      "status": "PASS"
+    },
+    "consumer-portable": {
+      "command": [
+        "cargo",
+        "run",
+        "--locked",
+        "--",
+        "--portable-check"
+      ],
+      "seconds": 0.017,
+      "status": "PASS"
+    },
+    "consumer-test": {
+      "command": [
+        "cargo",
+        "test",
+        "--locked"
+      ],
+      "seconds": 0.216,
+      "status": "PASS"
+    },
+    "crate-doctest": {
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "--doc"
+      ],
+      "seconds": 0.473,
+      "status": "PASS"
+    },
+    "crate-fetch": {
+      "command": [
+        "cargo",
+        "fetch",
+        "--locked"
+      ],
+      "seconds": 0.041,
+      "status": "PASS"
+    },
+    "crate-rustdoc-host": {
+      "command": [
+        "cargo",
+        "doc",
+        "--locked",
+        "--offline",
+        "--no-deps"
+      ],
+      "seconds": 1.346,
+      "status": "PASS"
+    },
+    "crate-test": {
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--offline",
+        "--all-targets"
+      ],
+      "seconds": 11.334,
+      "status": "PASS"
+    },
+    "debugger-pty": {
+      "command": [
+        "/home/dgmothx/lab/venvs/hf/bin/python3",
+        "/home/dgmothx/lab/replai/tools/package/debugger_pty.py",
+        "--binary",
+        "/tmp/replai-completion-package-ab34d0b/debugger-consumer/target/debug/replai-packaged-debugger",
+        "--output",
+        "/tmp/replai-completion-package-ab34d0b/debugger-pty.json"
+      ],
+      "seconds": 2.477,
+      "status": "PASS"
+    },
+    "rustc-version": {
+      "command": [
+        "rustc",
+        "-Vv"
+      ],
+      "seconds": 0.014,
+      "status": "PASS"
+    },
+    "rustdoc-aarch64-apple-darwin": {
+      "command": [
+        "cargo",
+        "doc",
+        "--locked",
+        "--offline",
+        "--no-deps",
+        "--target",
+        "aarch64-apple-darwin"
+      ],
+      "seconds": 1.652,
+      "status": "PASS"
+    },
+    "rustdoc-aarch64-unknown-linux-gnu": {
+      "command": [
+        "cargo",
+        "doc",
+        "--locked",
+        "--offline",
+        "--no-deps",
+        "--target",
+        "aarch64-unknown-linux-gnu"
+      ],
+      "seconds": 1.187,
+      "status": "PASS"
+    },
+    "rustdoc-x86_64-pc-windows-msvc": {
+      "command": [
+        "cargo",
+        "doc",
+        "--locked",
+        "--offline",
+        "--no-deps",
+        "--target",
+        "x86_64-pc-windows-msvc"
+      ],
+      "seconds": 0.703,
+      "status": "PASS"
+    },
+    "rustdoc-x86_64-unknown-linux-gnu": {
+      "command": [
+        "cargo",
+        "doc",
+        "--locked",
+        "--offline",
+        "--no-deps",
+        "--target",
+        "x86_64-unknown-linux-gnu"
+      ],
+      "seconds": 1.533,
+      "status": "PASS"
+    },
+    "sdk-abi": {
+      "command": [
+        "/home/dgmothx/lab/venvs/hf/bin/python3",
+        "tools/generate_abi.py",
+        "--check"
+      ],
+      "seconds": 0.057,
+      "status": "PASS"
+    },
+    "sdk-build": {
+      "command": [
+        "cargo",
+        "build",
+        "--locked",
+        "--release",
+        "-p",
+        "replai-c"
+      ],
+      "seconds": 2.683,
+      "status": "PASS"
+    },
+    "target-add-aarch64-apple-darwin": {
+      "command": [
+        "rustup",
+        "target",
+        "add",
+        "aarch64-apple-darwin"
+      ],
+      "seconds": 0.033,
+      "status": "PASS"
+    },
+    "target-add-aarch64-unknown-linux-gnu": {
+      "command": [
+        "rustup",
+        "target",
+        "add",
+        "aarch64-unknown-linux-gnu"
+      ],
+      "seconds": 0.044,
+      "status": "PASS"
+    },
+    "target-add-x86_64-pc-windows-msvc": {
+      "command": [
+        "rustup",
+        "target",
+        "add",
+        "x86_64-pc-windows-msvc"
+      ],
+      "seconds": 0.044,
+      "status": "PASS"
+    },
+    "target-add-x86_64-unknown-linux-gnu": {
+      "command": [
+        "rustup",
+        "target",
+        "add",
+        "x86_64-unknown-linux-gnu"
+      ],
+      "seconds": 0.049,
+      "status": "PASS"
+    }
+  },
+  "publish_dry_run": "PASS; no upload performed",
+  "runtime_src_tree": "62596c22ad2568c46c4e742b21136b31f9e1eb96",
+  "rust_package": {
+    "bytes": 1008781,
+    "file_count": 99,
+    "filename": "replai-0.1.0.crate",
+    "sha256": "e4b4e73be42c8c272694ae0a246618fdf18aa057185ab19e6aecdbe5d8507026",
+    "uncompressed_bytes": 1786282
+  },
+  "schema": 1,
+  "source_revision": "ab34d0b78524329a0c2404c8e60a23f5ff5e92f8",
+  "source_tree": "7664048727a57d0f8ae25a535d662f403b2c7037",
+  "toolchain": {
+    "cargo": "cargo 1.98.1 (797e8a9bc 2026-08-05)\nrelease: 1.98.1\ncommit-hash: 797e8a9bca276c1c9f9f738d2a20f484fa4eea9d\ncommit-date: 2026-08-05\nhost: aarch64-unknown-linux-gnu\nlibgit2: 1.9.4 (sys:0.21.0 vendored)\nlibcurl: 8.21.0-DEV (sys:0.4.90+curl-8.21.0 vendored ssl:OpenSSL/3.6.3)\nssl: OpenSSL 3.6.3 9 Jun 2026\nos: Ubuntu 24.4.0 (noble) [64-bit]",
+    "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-unknown-linux-gnu\nrelease: 1.98.1\nLLVM version: 22.1.8"
+  }
+}

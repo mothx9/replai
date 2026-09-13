@@ -1,0 +1,43 @@
+{
+  "classification": "zero product findings; A-C01, H-C01 and Q-C01 are retained in the dossier",
+  "environment": {
+    "cargo_fuzz": "cargo-fuzz 0.13.2",
+    "dirty": false,
+    "head": "ab34d0b78524329a0c2404c8e60a23f5ff5e92f8",
+    "instrumentation": "cargo-fuzz default address sanitizer + inline coverage + trace comparisons",
+    "libc": [
+      "glibc",
+      "2.39"
+    ],
+    "requested_cpu_seconds_per_target": 1800,
+    "rustc": "rustc 1.100.0-nightly (a36d05efa 2026-09-09)\nbinary: rustc\ncommit-hash: a36d05efab632d1ddf902b6a5c33b6d5d3b64131\ncommit-date: 2026-09-09\nhost: aarch64-unknown-linux-gnu\nrelease: 1.100.0-nightly\nLLVM version: 23.1.1",
+    "start_utc": "2026-09-13T17:02:34Z",
+    "tree": "7664048727a57d0f8ae25a535d662f403b2c7037",
+    "uname": {
+      "machine": "aarch64",
+      "node": "spark-7c3d",
+      "processor": "aarch64",
+      "release": "6.17.0-1021-nvidia",
+      "system": "Linux",
+      "version": "#21-Ubuntu SMP PREEMPT_DYNAMIC Wed May 27 19:14:05 UTC 2026"
+    },
+    "workers_per_target": 4
+  },
+  "findings": [],
+  "schema": 1,
+  "target": {
+    "binary_sha256": "22a13f34f12b27f636a5ff962b84ef25d658ca903ee5c95fe7350d13f593edc7",
+    "budget_complete": true,
+    "cpu_seconds": 1806.6854759999999,
+    "final_corpus": {
+      "files": 4189,
+      "sha256": "f31f3ca3f30aa2385c73f5b8668dcc5222ed56308558e02564ab143bf6c97fb6"
+    },
+    "initial_corpus": {
+      "files": 31,
+      "sha256": "fa7cba512c02a1ee4a565614adf55af27e8d5a60079ce07e8ecbf61d9857e8e4"
+    },
+    "passed": true,
+    "target": "surfaces"
+  }
+}

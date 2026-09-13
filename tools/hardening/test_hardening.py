@@ -25,8 +25,8 @@ class HardeningGuard(unittest.TestCase):
             self.assertEqual((work / "timeout.stdout").read_text(), "partial\n")
             self.assertTrue((work / "timeout.timeout.txt").exists())
 
-    def test_five_distinct_targets(self):
-        self.assertEqual(set(campaign.TARGETS), {"protocol", "editor", "results", "geometry", "cabi"})
+    def test_distinct_targets_include_historical_five_and_new_surfaces(self):
+        self.assertEqual(set(campaign.TARGETS), {"protocol", "editor", "results", "geometry", "cabi", "surfaces"})
 
     def test_seed_identity_is_reproducible(self):
         with tempfile.TemporaryDirectory() as root:

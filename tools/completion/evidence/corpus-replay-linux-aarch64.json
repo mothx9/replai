@@ -1,7 +1,7 @@
 {
-  "head": "cedf979eb87f655b3f5daefe600c5736a3c55166",
-  "tree": "91b07d32cd736ae7794d386103fd0efed41a3957",
-  "runtime_tree": "aa3936f15206c0b14962e5b579ae264655dc3dce",
+  "head": "ab34d0b78524329a0c2404c8e60a23f5ff5e92f8",
+  "tree": "7664048727a57d0f8ae25a535d662f403b2c7037",
+  "runtime_tree": "62596c22ad2568c46c4e742b21136b31f9e1eb96",
   "platform": {
     "system": "Linux",
     "node": "spark-7c3d",
@@ -11,13 +11,13 @@
     "processor": "aarch64"
   },
   "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-unknown-linux-gnu\nrelease: 1.98.1\nLLVM version: 22.1.8",
-  "archive_sha256": "da6caf39ae2364d7e35d7960ca5ce62b32d3bbfe33c9a161ee54a5177395ac08",
-  "binary_sha256": "7d7d38d3458e4436ca19d2484e42a33c481c24fc03cd006419eb19619ffa9d41",
+  "archive_sha256": "da847fe07a5ed2c114afb0f38713d04678d41aacdf123d6330c6d2352fa28536",
+  "binary_sha256": "ce93c3f66f5ae3487e5a87e9329d5859ee010ccb89de7eec92f475cb6b258bb7",
   "corpus": {
-    "files": 4279,
-    "sha256": "e7f3f396bf0323cd367e323f66964da3878df34c12f120ea59fd8ca4a5a5b4a5"
+    "files": 4189,
+    "sha256": "f31f3ca3f30aa2385c73f5b8668dcc5222ed56308558e02564ab143bf6c97fb6"
   },
-  "start_unix": 1789318203.331404,
-  "end_unix": 1789318203.8263743,
+  "start_unix": 1789319446.626116,
+  "end_unix": 1789319447.119283,
   "status": "PASS"
 }

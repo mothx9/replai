@@ -1,0 +1,237 @@
+{
+  "environment": {
+    "machine": "aarch64",
+    "node": "spark-7c3d",
+    "platform": "Linux-6.17.0-1021-nvidia-aarch64-with-glibc2.39",
+    "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-unknown-linux-gnu\nrelease: 1.98.1\nLLVM version: 22.1.8"
+  },
+  "existing_q2": {
+    "allocation_and_encoded_bytes": "PASS",
+    "deterministic_workloads": 48,
+    "latency": "characterized under existing policy; no historical baseline overwritten"
+  },
+  "identity": {
+    "head": "ab34d0b78524329a0c2404c8e60a23f5ff5e92f8",
+    "runtime_tree": "62596c22ad2568c46c4e742b21136b31f9e1eb96",
+    "tree": "7664048727a57d0f8ae25a535d662f403b2c7037"
+  },
+  "method": {
+    "allocation_build_separate": true,
+    "control_batches": 5,
+    "preparation_outside_timing": true,
+    "repetitions_per_batch": 31,
+    "timer_resolution_ns": 16,
+    "warmup": true
+  },
+  "new_workloads": [
+    {
+      "allocation_calls": 161,
+      "encoded_bytes": 1312,
+      "id": "menu-show/1024/0",
+      "median_ns": 24592,
+      "p95_ns": 24960,
+      "requested_bytes": 22090
+    },
+    {
+      "allocation_calls": 132,
+      "encoded_bytes": 105,
+      "id": "menu-next/1024/0",
+      "median_ns": 24096,
+      "p95_ns": 24400,
+      "requested_bytes": 10289
+    },
+    {
+      "allocation_calls": 19,
+      "encoded_bytes": 211,
+      "id": "menu-accept/1024/0",
+      "median_ns": 1408,
+      "p95_ns": 1504,
+      "requested_bytes": 7434
+    },
+    {
+      "allocation_calls": 0,
+      "encoded_bytes": 0,
+      "id": "key-default/1024/0",
+      "median_ns": 32,
+      "p95_ns": 32,
+      "requested_bytes": 0
+    },
+    {
+      "allocation_calls": 0,
+      "encoded_bytes": 0,
+      "id": "key-custom/1024/0",
+      "median_ns": 32,
+      "p95_ns": 32,
+      "requested_bytes": 0
+    },
+    {
+      "allocation_calls": 0,
+      "encoded_bytes": 0,
+      "id": "key-maximum/1024/0",
+      "median_ns": 64,
+      "p95_ns": 64,
+      "requested_bytes": 0
+    },
+    {
+      "allocation_calls": 1,
+      "encoded_bytes": 0,
+      "id": "key-bind/1024/0",
+      "median_ns": 32,
+      "p95_ns": 48,
+      "requested_bytes": 16
+    },
+    {
+      "allocation_calls": 208,
+      "encoded_bytes": 0,
+      "id": "prefix-100/1024/0",
+      "median_ns": 6640,
+      "p95_ns": 7760,
+      "requested_bytes": 25568
+    },
+    {
+      "allocation_calls": 2011,
+      "encoded_bytes": 0,
+      "id": "prefix-1000/1024/0",
+      "median_ns": 68176,
+      "p95_ns": 84784,
+      "requested_bytes": 215856
+    },
+    {
+      "allocation_calls": 8204,
+      "encoded_bytes": 0,
+      "id": "prefix-4096/1024/0",
+      "median_ns": 411617,
+      "p95_ns": 430864,
+      "requested_bytes": 606992
+    },
+    {
+      "allocation_calls": 214,
+      "encoded_bytes": 0,
+      "id": "fuzzy-100/1024/0",
+      "median_ns": 7536,
+      "p95_ns": 8432,
+      "requested_bytes": 33632
+    },
+    {
+      "allocation_calls": 2021,
+      "encoded_bytes": 0,
+      "id": "fuzzy-1000/1024/0",
+      "median_ns": 71505,
+      "p95_ns": 73776,
+      "requested_bytes": 313264
+    },
+    {
+      "allocation_calls": 1,
+      "encoded_bytes": 0,
+      "id": "common-prefix-unicode/1024/0",
+      "median_ns": 144,
+      "p95_ns": 144,
+      "requested_bytes": 9
+    },
+    {
+      "allocation_calls": 1621,
+      "encoded_bytes": 0,
+      "id": "path-small/1024/0",
+      "median_ns": 84544,
+      "p95_ns": 86768,
+      "requested_bytes": 68735
+    },
+    {
+      "allocation_calls": 16027,
+      "encoded_bytes": 0,
+      "id": "path-large/1024/0",
+      "median_ns": 830241,
+      "p95_ns": 864272,
+      "requested_bytes": 599376
+    },
+    {
+      "allocation_calls": 132,
+      "encoded_bytes": 124,
+      "id": "menu-next-4096/1024/0",
+      "median_ns": 24064,
+      "p95_ns": 24512,
+      "requested_bytes": 10357
+    },
+    {
+      "allocation_calls": 129,
+      "encoded_bytes": 87,
+      "id": "menu-page-4096/1024/0",
+      "median_ns": 23984,
+      "p95_ns": 24912,
+      "requested_bytes": 9573
+    },
+    {
+      "allocation_calls": 125,
+      "encoded_bytes": 0,
+      "id": "menu-first-4096/1024/0",
+      "median_ns": 23888,
+      "p95_ns": 24128,
+      "requested_bytes": 8833
+    },
+    {
+      "allocation_calls": 123,
+      "encoded_bytes": 1346,
+      "id": "menu-last-4096/1024/0",
+      "median_ns": 23904,
+      "p95_ns": 24576,
+      "requested_bytes": 17952
+    },
+    {
+      "allocation_calls": 89,
+      "encoded_bytes": 442,
+      "id": "menu-resize-4096/1024/0",
+      "median_ns": 24000,
+      "p95_ns": 24496,
+      "requested_bytes": 15023
+    },
+    {
+      "allocation_calls": 96,
+      "encoded_bytes": 91,
+      "id": "suggestion-present/1024/0",
+      "median_ns": 23216,
+      "p95_ns": 23392,
+      "requested_bytes": 7170
+    },
+    {
+      "allocation_calls": 0,
+      "encoded_bytes": 0,
+      "id": "suggestion-stale/1024/0",
+      "median_ns": 48,
+      "p95_ns": 64,
+      "requested_bytes": 0
+    },
+    {
+      "allocation_calls": 90,
+      "encoded_bytes": 80,
+      "id": "suggestion-accept/1024/0",
+      "median_ns": 22880,
+      "p95_ns": 23088,
+      "requested_bytes": 8753
+    },
+    {
+      "allocation_calls": 87,
+      "encoded_bytes": 73,
+      "id": "suggestion-dismiss/1024/0",
+      "median_ns": 22624,
+      "p95_ns": 22800,
+      "requested_bytes": 6684
+    },
+    {
+      "allocation_calls": 2,
+      "encoded_bytes": 0,
+      "id": "suggestion-history-small/1024/0",
+      "median_ns": 160,
+      "p95_ns": 176,
+      "requested_bytes": 2640
+    },
+    {
+      "allocation_calls": 2,
+      "encoded_bytes": 0,
+      "id": "suggestion-history-large/1024/0",
+      "median_ns": 992,
+      "p95_ns": 1056,
+      "requested_bytes": 17040
+    }
+  ],
+  "schema": 1
+}

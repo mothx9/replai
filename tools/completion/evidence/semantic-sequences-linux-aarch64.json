@@ -1,8 +1,11 @@
 {
   "final_state": 7876910469496274033,
-  "note": "100,000 generated completion/keymap/suggestion semantic sequences, 128 operations each",
+  "head": "ab34d0b78524329a0c2404c8e60a23f5ff5e92f8",
   "operations_per_sequence": 128,
   "passed": true,
+  "platform": "Linux aarch64",
+  "runtime_tree": "62596c22ad2568c46c4e742b21136b31f9e1eb96",
   "seed": 15579347612220529,
-  "sequences": 100000
+  "sequences": 100000,
+  "tree": "7664048727a57d0f8ae25a535d662f403b2c7037"
 }

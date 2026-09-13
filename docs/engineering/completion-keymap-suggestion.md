@@ -121,7 +121,10 @@ undo/redo, kill/yank and resize. The retained receipt lives under
 The `surfaces` cargo-fuzz target combines decoder/keymap lookup, bounded helper
 construction, completion navigation and suggestion lifecycle. Each input is at
 most 4096 bytes. The final Linux ARM64 campaign runs at least 1800 aggregate CPU
-seconds with ASan, inline coverage and comparison tracing; its corpus is packed
+seconds with ASan, inline coverage and comparison tracing. The final run recorded
+1806.685 CPU seconds, 4189 inputs, corpus digest
+`f31f3ca3f30aa2385c73f5b8668dcc5222ed56308558e02564ab143bf6c97fb6`
+and zero findings. Its corpus is packed
 deterministically and replayed by `tools/completion/corpus.py`. A failed initial
 campaign was a harness compile defect (`DismissCompletion` survived the action
 refoundation); it was repaired before the budgeted run and is retained in the
@@ -145,6 +148,10 @@ common prefix, path 100/1000, 4096-candidate install/navigation/resize, suggesti
 present/stale/accept/dismiss and history helpers. Allocation measurement is a
 separate instrumented build. Exact samples and summaries live under
 `tools/completion/evidence/`; these are recorded workloads, not latency SLAs.
+Representative medians/p95 are 32/32 ns for default and custom lookup, 64/64 ns
+at the 128-entry map bound, 68.2/84.8 µs for 1000 prefix sources, 71.5/73.8 µs
+for 1000 fuzzy sources, 24.0/24.9 µs for a 4096-candidate page move and
+22.9/23.1 µs for suggestion acceptance on this ARM64 runner.
 
 Retained bounds are 128 custom bindings, one existing completion set plus index,
 one 4096-byte suggestion, and helper inputs/results bounded by protocol limits.
@@ -176,7 +183,16 @@ cargo run --locked --release --manifest-path tools/hardening/Cargo.toml --bin be
 
 ## Closeout
 
-The final source/tree, producer generation/delta, CI run identities, package/MSRV
-results and exact performance summaries are recorded here by the final evidence
-carrier. `OUTPUT.LONG_LIVED.0` remains selected and unstarted. C ABI 1, YAI,
-YVEX and private BOUNDARY remain untouched.
+The public crate was packaged as `replai-0.1.0.crate`: 99 files, 1,008,781
+bytes compressed, SHA-256
+`e4b4e73be42c8c272694ae0a246618fdf18aa057185ab19e6aecdbe5d8507026`.
+Unpacked tests/rustdoc and `cargo publish --dry-run --locked` pass. A separate
+sparse-registry consumer, with no workspace or path dependency, builds and runs
+the custom keymap, prefix helper and autosuggestion under Rust 1.98.1. The
+MSRV and current stable are the same qualified 1.98.1 toolchain on this date.
+
+Native workflow `34770458423` passed Linux x86_64, Linux ARM64, macOS ARM64 and
+Windows portable jobs at implementation carrier `ab34d0b78524329a0c2404c8e60a23f5ff5e92f8`.
+The final carrier reruns CI and this native workflow after harness/evidence and
+producer closure. `OUTPUT.LONG_LIVED.0` remains selected and unstarted. C ABI 1,
+YAI, YVEX and private BOUNDARY remain untouched.

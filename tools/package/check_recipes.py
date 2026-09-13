@@ -10,6 +10,8 @@ required = {
     "finite-notices", "coalesced-output", "closed-chat-stream", "structured-report",
     "c-pkg-config", "cmake-static", "cmake-shared", "cpp", "no-color",
     "secret-input", "concurrent-writers",
+    "custom-keymap", "completion-helpers", "fuzzy-completion", "path-completion",
+    "autosuggestion", "large-completion",
 }
 observed = {line.split("recipe:", 1)[1].split(" -->", 1)[0] for line in text.splitlines() if "<!-- recipe:" in line}
 missing = sorted(required - observed)
@@ -19,8 +21,8 @@ if missing or extra:
 for path in [
     "examples/simple.rs", "examples/completion.rs", "examples/validation.rs",
     "examples/analysis-presentation.rs", "examples/driven.rs", "examples/query.rs",
-    "examples/report.rs", "tools/qualify_c.py", "docs/c-sdk.md",
+    "examples/report.rs", "examples/configured_completion.rs", "tools/qualify_c.py", "docs/c-sdk.md",
 ]:
     if not (ROOT / path).is_file():
         raise SystemExit(f"recipe carrier missing: {path}")
-print("PASS cookbook: 19 selected supported/deferred recipe contracts")
+print("PASS cookbook: 25 selected supported/deferred recipe contracts")

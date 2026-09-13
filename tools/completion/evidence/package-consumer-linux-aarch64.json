@@ -1,0 +1,8 @@
+{
+  "consumer_source_sha256": "c6808b518681c9a3678a4c2a33bc5526a64ac3809c9f51a9931cb0ff4a414558",
+  "crate_sha256": "e4b4e73be42c8c272694ae0a246618fdf18aa057185ab19e6aecdbe5d8507026",
+  "dependency": "isolated sparse registry, no path/workspace dependency",
+  "lock_sha256": "d458a7d1892a964490af6bcd784ea49252d0ff62543f9f7fe6a39a356a350ac8",
+  "status": "PASS",
+  "toolchain": "1.98.1"
+}
