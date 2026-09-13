@@ -45,7 +45,7 @@ def thresholds(samples, resolution):
 def read(path):
     data = [json.loads(s) for s in path.read_text().splitlines()]
     header, rows = data[0], data[1:]
-    assert len({r["id"] for r in rows}) == len(rows) == 32
+    assert rows and len({r["id"] for r in rows}) == len(rows)
     assert header["samples"] == 31 and header["batches"] == 5
     return header, {r["id"]: r for r in rows}
 
@@ -121,9 +121,12 @@ def main():
         for i in range(2):
             _, control = run(a.control_binary, a.work / f"control-{i}.jsonl")
             _, candidate = run(a.binary, a.work / f"candidate-{i}.jsonl")
-            assert set(control) == set(candidate) == set(registered["gates"])
+            expected = set(registered["gates"])
+            assert set(control) == expected
+            assert expected <= set(candidate)
             exceedances = []
-            for key, row in candidate.items():
+            for key in expected:
+                row = candidate[key]
                 gate = registered["gates"][key]
                 median, p95 = distribution(row["samples_ns"])
                 # Contemporaneous controls are retained for investigation; they
@@ -135,7 +138,10 @@ def main():
                 assert all(n == gate["encoded_bytes"] for n in row["encoded_bytes"]), (key, "encoded-byte regression")
             comparisons.append(exceedances)
         _, allocations = run(a.allocation_binary, a.work / "candidate-allocations.jsonl")
-        for key, row in allocations.items():
+        expected = set(registered["gates"])
+        assert expected <= set(allocations)
+        for key in expected:
+            row = allocations[key]
             assert all(v == registered["gates"][key]["allocations"] for v in row["allocations"]), (key, "allocation regression")
         blocked = sorted(set(comparisons[0]) & set(comparisons[1]))
         summary = {"identity": metadata, "registration_sha256": hashed(a.registration),

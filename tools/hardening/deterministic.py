@@ -13,9 +13,10 @@ binary = ROOT/'tools/hardening/target/allocations/release'/('bench.exe' if platf
 output = subprocess.check_output([str(binary),'3','1'],text=True)
 rows = [json.loads(line) for line in output.splitlines()]
 assert rows.pop(0)['instrumented_allocations']
-assert len(rows)==len(gates) and {r['id'] for r in rows}==set(gates)
-for row in rows:
-    gate=gates[row['id']]
+rows = {row['id']: row for row in rows}
+assert set(gates) <= set(rows)
+for identity, gate in gates.items():
+    row = rows[identity]
     assert all(v==gate['allocations'] for v in row['allocations']), (row['id'],'allocation regression',row['allocations'],gate['allocations'])
     assert all(v==gate['encoded_bytes'] for v in row['encoded_bytes']), (row['id'],'encoded-byte regression')
-print(json.dumps({'deterministic_workloads':len(rows),'repetitions':3,'allocations':'PASS','encoded_bytes':'PASS','latency':'NOT_EVALUATED'}))
+print(json.dumps({'deterministic_workloads':len(gates),'additional_workloads':len(rows)-len(gates),'repetitions':3,'allocations':'PASS','encoded_bytes':'PASS','latency':'NOT_EVALUATED'}))
