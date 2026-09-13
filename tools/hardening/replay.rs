@@ -5,6 +5,7 @@ fn dispatch(target: &str, bytes: &[u8]) {
         "editor" => replai_hardening::editor_case(bytes),
         "results" => replai_hardening::results_case(bytes),
         "geometry" => replai_hardening::geometry_case(bytes),
+        "surfaces" => replai_hardening::surface_case(bytes),
         #[cfg(unix)]
         "cabi" => replai_hardening::cabi_case(bytes),
         _ => panic!("unsupported target {target}"),
