@@ -693,11 +693,11 @@
     {
       "description": "Bounded literal reverse history search over admitted and host-provided entries",
       "documentation": [
-        "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/interaction.md#daily-driver-editing-and-history-search"
+        "https://github.com/mothx9/replai/blob/0e281321abe1d43af49bace6baed90a9a80f89aa/docs/interaction.md#daily-driver-editing-and-history-search"
       ],
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34759347027",
-        "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/engineering/interaction-ergonomics.md"
+        "https://github.com/mothx9/replai/actions/runs/34760786690",
+        "https://github.com/mothx9/replai/blob/0e281321abe1d43af49bace6baed90a9a80f89aa/docs/engineering/interaction-ergonomics.md"
       ],
       "guarantees": [
         "Host owns persistence, I/O, admission, retention, privacy and encryption; REPLAI retains only one explicitly bounded immutable search view",
@@ -719,11 +719,11 @@
     {
       "description": "Locale-independent Unicode word movement and deletion over grapheme-safe boundaries",
       "documentation": [
-        "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/interaction.md#daily-driver-editing-and-history-search"
+        "https://github.com/mothx9/replai/blob/0e281321abe1d43af49bace6baed90a9a80f89aa/docs/interaction.md#daily-driver-editing-and-history-search"
       ],
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34759347027",
-        "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/engineering/interaction-ergonomics.md"
+        "https://github.com/mothx9/replai/actions/runs/34760786690",
+        "https://github.com/mothx9/replai/blob/0e281321abe1d43af49bace6baed90a9a80f89aa/docs/engineering/interaction-ergonomics.md"
       ],
       "guarantees": [
         "UAX #29 default word boundaries are snapped to extended-grapheme boundaries across punctuation, whitespace, multiline and mixed Unicode text",
@@ -743,11 +743,11 @@
     {
       "description": "Bounded delta-based undo and redo with monotonic draft identity",
       "documentation": [
-        "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/interaction.md#daily-driver-editing-and-history-search"
+        "https://github.com/mothx9/replai/blob/0e281321abe1d43af49bace6baed90a9a80f89aa/docs/interaction.md#daily-driver-editing-and-history-search"
       ],
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34759347027",
-        "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/engineering/interaction-ergonomics.md"
+        "https://github.com/mothx9/replai/actions/runs/34760786690",
+        "https://github.com/mothx9/replai/blob/0e281321abe1d43af49bace6baed90a9a80f89aa/docs/engineering/interaction-ergonomics.md"
       ],
       "guarantees": [
         "Undo restores content and cursor with a fresh DraftRevision; it never revives an old analysis identity",
@@ -768,11 +768,11 @@
     {
       "description": "Bounded editor-owned single-register kill and yank mechanics",
       "documentation": [
-        "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/interaction.md#daily-driver-editing-and-history-search"
+        "https://github.com/mothx9/replai/blob/0e281321abe1d43af49bace6baed90a9a80f89aa/docs/interaction.md#daily-driver-editing-and-history-search"
       ],
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34759347027",
-        "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/engineering/interaction-ergonomics.md"
+        "https://github.com/mothx9/replai/actions/runs/34760786690",
+        "https://github.com/mothx9/replai/blob/0e281321abe1d43af49bace6baed90a9a80f89aa/docs/engineering/interaction-ergonomics.md"
       ],
       "guarantees": [
         "Word and logical-line kills replace one bounded private register; it is not a system clipboard, application store or Readline kill ring",
@@ -797,14 +797,13 @@
       "compatibility": "compatible",
       "description": "Adds a bounded synchronous host-provider seam and non-canonical literal reverse search. Persistence and scheduling remain host-owned; C ABI 1 is unchanged.",
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34759347027",
-        "https://github.com/mothx9/replai/actions/runs/34759339446",
-        "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/engineering/interaction-ergonomics.md"
+        "https://github.com/mothx9/replai/actions/runs/34760786690",
+        "https://github.com/mothx9/replai/actions/runs/34760953707",
+        "https://github.com/mothx9/replai/blob/0e281321abe1d43af49bace6baed90a9a80f89aa/docs/engineering/interaction-ergonomics.md"
       ],
       "inputs": [
         ".github/workflows/ci.yml",
         ".github/workflows/interaction-ergonomics.yml",
-        "crates/replai-c/src/lib.rs",
         "docs/architecture.md",
         "docs/engineering/interaction-ergonomics.md",
         "docs/interaction.md",
@@ -854,9 +853,9 @@
       "compatibility": "compatible",
       "description": "Adds grapheme-safe Unicode word movement and deletion with portable Editor methods and conservative fixed compatibility bindings.",
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34759347027",
-        "https://github.com/mothx9/replai/actions/runs/34759339446",
-        "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/engineering/interaction-ergonomics.md"
+        "https://github.com/mothx9/replai/actions/runs/34760786690",
+        "https://github.com/mothx9/replai/actions/runs/34760953707",
+        "https://github.com/mothx9/replai/blob/0e281321abe1d43af49bace6baed90a9a80f89aa/docs/engineering/interaction-ergonomics.md"
       ],
       "inputs": [
         ".github/workflows/ci.yml",
@@ -910,9 +909,9 @@
       "compatibility": "compatible",
       "description": "Adds bounded delta undo/redo with deterministic grouping and fresh revision identity for every restored canonical state.",
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34759347027",
-        "https://github.com/mothx9/replai/actions/runs/34759339446",
-        "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/engineering/interaction-ergonomics.md"
+        "https://github.com/mothx9/replai/actions/runs/34760786690",
+        "https://github.com/mothx9/replai/actions/runs/34760953707",
+        "https://github.com/mothx9/replai/blob/0e281321abe1d43af49bace6baed90a9a80f89aa/docs/engineering/interaction-ergonomics.md"
       ],
       "inputs": [
         ".github/workflows/ci.yml",
@@ -966,9 +965,9 @@
       "compatibility": "compatible",
       "description": "Adds a bounded editor-owned single kill register, word/line kills and atomic yank; no clipboard or full kill-ring contract is introduced.",
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34759347027",
-        "https://github.com/mothx9/replai/actions/runs/34759339446",
-        "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/engineering/interaction-ergonomics.md"
+        "https://github.com/mothx9/replai/actions/runs/34760786690",
+        "https://github.com/mothx9/replai/actions/runs/34760953707",
+        "https://github.com/mothx9/replai/blob/0e281321abe1d43af49bace6baed90a9a80f89aa/docs/engineering/interaction-ergonomics.md"
       ],
       "inputs": [
         ".github/workflows/ci.yml",
@@ -1019,7 +1018,7 @@
     }
   ],
   "generation": 15,
-  "id": "sha256:602f9586528b14a3a33080bac59c06078f1bf3062da5afc47e67acac1883284b",
+  "id": "sha256:da8d43514a044e5c55cc851c51b31887c980ad885c6c04f24144b7906243eb5a",
   "inputs": [
     {
       "capabilities": [
@@ -1225,13 +1224,11 @@
     {
       "capabilities": [
         "analysis.validation",
-        "editing.kill_yank",
-        "interaction.history_search",
         "presentation.multiline_ux"
       ],
       "category": "qualification",
       "path": "crates/replai-c/src/lib.rs",
-      "sha256": "sha256:3059dbd9cd68f3fdabaf7c892dd3b7087fd9baf02f26125bd5cb3a5e0e214b31",
+      "sha256": "sha256:42f4d4f359e1a1bdba51a0f13d860da6b00c7232730c5554a1456c6baf4ebfc0",
       "surfaces": [
         "rust-native"
       ]
@@ -1339,7 +1336,7 @@
       ],
       "category": "documentation",
       "path": "docs/engineering/interaction-ergonomics.md",
-      "sha256": "sha256:bad5f9645cec0412056b8ca7b8c77a417c733530c424c7ede195ae87df452bc8",
+      "sha256": "sha256:51c3bc3c771b9366091b84900590aba62dff4903d94c5e9dc045b9f4c6f17800",
       "surfaces": [
         "rust-native"
       ]
@@ -1850,7 +1847,7 @@
       ],
       "category": "behavior",
       "path": "src/core.rs",
-      "sha256": "sha256:a867dce62af958403e7199175ce124ea713f040b4d67b2d092ae72727232b752",
+      "sha256": "sha256:57f16e3427e2a2165f1e88847237417d8bfdb247b06870ac75baa63efae3086f",
       "surfaces": [
         "rust-native"
       ]
@@ -2092,7 +2089,7 @@
       ],
       "category": "api",
       "path": "src/lib.rs",
-      "sha256": "sha256:5e112023b95427c9b0715929f8de9be69f1530aa2e92e01a3ae702b0014510a2",
+      "sha256": "sha256:0deb01e7e4c667f43ff0832b13ccfa525215a3b6c40d7f911c87b6f7a58af3b1",
       "surfaces": [
         "rust-native"
       ]
@@ -2351,7 +2348,7 @@
       ],
       "category": "qualification",
       "path": "tests/ergonomics.rs",
-      "sha256": "sha256:2a587b133c6215d6426f1c525484cb73c89399eb946eee54d8aef6b7620d5f1d",
+      "sha256": "sha256:9dce18fcdf371df27415e8b09aa8ff77fbaa9e460da70cb947d77f9928df0cc8",
       "surfaces": [
         "rust-native"
       ]
@@ -2529,7 +2526,7 @@
       ],
       "category": "qualification",
       "path": "tools/ergonomics/editor-corpus.json.gz",
-      "sha256": "sha256:84c8bf5d43e16f0f94cacd9a1ecbfd79b730544634a26d10304f08fc64ee0969",
+      "sha256": "sha256:6b7bf737ca62a364ee12658566a83a5ed71ad8fb95186362b652bfb21f733acd",
       "surfaces": [
         "rust-native"
       ]
@@ -2543,7 +2540,7 @@
       ],
       "category": "qualification",
       "path": "tools/ergonomics/evidence/corpus-replay-linux-aarch64.json",
-      "sha256": "sha256:997e449bb805fc56adab5621d9c34621b176770e6e4a00e9a43239d03492b89a",
+      "sha256": "sha256:409581ace28b12bd93919e9de48d8e7cf970491fb1c06ee9ce8443fb27f4fed3",
       "surfaces": [
         "rust-native"
       ]
@@ -2557,7 +2554,7 @@
       ],
       "category": "qualification",
       "path": "tools/ergonomics/evidence/fuzz-linux-aarch64.json",
-      "sha256": "sha256:4f2f12b67cd69312e175c60c1bb638187d35a9e027071732ce5644167898b126",
+      "sha256": "sha256:349b16c44c1b54455f732c557cd9a56a3e2e725427ecae9322e74978cd90027e",
       "surfaces": [
         "rust-native"
       ]
@@ -2599,7 +2596,7 @@
       ],
       "category": "qualification",
       "path": "tools/ergonomics/evidence/q2-linux-aarch64.json",
-      "sha256": "sha256:f2359232f947f0c78f3f856d529cd35321803f7ac2b1eba85d7aa6fed7aa3f2c",
+      "sha256": "sha256:11e8e2a1a743c61ffae39832bb40a753dda52643532bae140c66c9b521096227",
       "surfaces": [
         "rust-native"
       ]
@@ -2627,7 +2624,7 @@
       ],
       "category": "qualification",
       "path": "tools/ergonomics/evidence/semantic-sequences-linux-aarch64.json",
-      "sha256": "sha256:e39c59979302c59001bd1a33bda4cc8bcff0aae42aedf04e3164062ea368c66c",
+      "sha256": "sha256:90325dd834b850f3d24814144b0fd26b58ae9dba916985a077a82ca280fa4c69",
       "surfaces": [
         "rust-native"
       ]
@@ -4106,8 +4103,8 @@
   "schema_version": 1,
   "source": {
     "dirty": false,
-    "revision": "f00cc038134329bc0267f3e694f62e0ec20f0214",
-    "tree": "12f17d5765133af3eb937c71ef4af90bcea3b867"
+    "revision": "0e281321abe1d43af49bace6baed90a9a80f89aa",
+    "tree": "f4d671e2f086800dd9169aa4bbb6c949e366a35e"
   },
   "surfaces": [
     {

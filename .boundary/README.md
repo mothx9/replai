@@ -5,11 +5,11 @@ surfaces, qualification and changes; they assign no consumer paths, commands or
 migration work. Consumer profiles must be authored by their own repositories.
 
 - [Current producer snapshot](producer.json), generation 15: interaction-ergonomics
-  evidence source `f00cc038134329bc0267f3e694f62e0ec20f0214`, tree
-  `12f17d5765133af3eb937c71ef4af90bcea3b867`; its runtime tree is
-  `d3fb692f8b4f495180eb4b667378f576c89e1bd2`.
-  The [four-platform ergonomics matrix](https://github.com/mothx9/replai/actions/runs/34759347027)
-  and [12-lane runtime-source CI](https://github.com/mothx9/replai/actions/runs/34759339446)
+  evidence source `0e281321abe1d43af49bace6baed90a9a80f89aa`, tree
+  `f4d671e2f086800dd9169aa4bbb6c949e366a35e`; its runtime tree is
+  `8db955760152f10a7d34056796e2c9f0e1e003af`.
+  The [four-platform ergonomics matrix](https://github.com/mothx9/replai/actions/runs/34760786690)
+  and [12-lane runtime-source CI](https://github.com/mothx9/replai/actions/runs/34760953707)
   qualify bounded history search/provider mechanics, Unicode word editing,
   undo/redo and kill/yank. C ABI 1 remains unchanged.
 - [Interaction-ergonomics delta](deltas/interaction-ergonomics.json) adds four
