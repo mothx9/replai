@@ -143,7 +143,7 @@ fn ergonomic_editor_case(data: &[u8]) {
             15 => Input::Edit(E::HistorySearchOlder),
             16 => Input::Edit(E::HistorySearchNewer),
             17 => Input::Edit(E::Backspace),
-            18 => Input::Request(R::DismissCompletion),
+            18 => Input::Request(R::CompletionAction(crate::CompletionAction::Dismiss)),
             19 => Input::Resize([20, 40, 80, 132][c[1] as usize % 4], 2 + c[2] as usize % 20),
             20 => {
                 effects(&e.external_output(Role::Dim, "finite notice").unwrap());
