@@ -31,6 +31,11 @@ pub use capabilities::{InteractionRequirements, TerminalCapabilities, TerminalRe
 pub use width::WidthPolicy;
 #[path = "../../src/core.rs"]
 mod core;
+#[path = "../../src/history.rs"]
+mod history;
+pub use history::{
+    HistoryError, HistoryProvider, HistoryProviderError, HistorySearchLimits, HistorySearchSource,
+};
 #[path = "../../src/driving.rs"]
 mod driving;
 #[path = "../../src/engine.rs"]
@@ -772,7 +777,7 @@ fn main() {
                 },
                 |d, r| {
                     assert!(!d.pending());
-                    assert_eq!(r, &Some(Key::Text(normalized.clone())));
+                    assert_eq!(r, &Some(Key::Paste(normalized.clone())));
                     json!({"logical_inputs":1,"wire_input_bytes":framed.len()})
                 },
             );
@@ -787,16 +792,16 @@ fn main() {
                 },
                 |d| d.feed(*framed.last().unwrap()),
                 |_, r| {
-                    assert_eq!(r, &Some(Key::Text(normalized.clone())));
+                    assert_eq!(r, &Some(Key::Paste(normalized.clone())));
                     json!({"normalized_bytes":normalized.len()})
                 },
             );
             h.measure(
                 spec("paste_keymap", "normalized_text", size, class, 0),
-                || Some(Key::Text(normalized.clone())),
+                || Some(Key::Paste(normalized.clone())),
                 |s| keymap::binding(s.take().unwrap()).unwrap(),
                 |_, r| {
-                    assert_eq!(r, &Input::Text(normalized.clone()));
+                    assert_eq!(r, &Input::Paste(normalized.clone()));
                     json!({})
                 },
             );
