@@ -182,12 +182,23 @@ reuse this identity; none restores an earlier revision.
 
 ## Semantic editing and reversible draft
 
-The terminal decoder recognizes physical keys and paste framing only. A fixed
-compatibility keymap translates those keys into one private semantic action
-vocabulary; the engine applies actions to the sole `Editor`. This vocabulary is
-deliberately not public before configurable mappings are designed. Portable
-`Editor` methods expose the underlying word operations, undo/redo and kill/yank
-without requiring callers to synthesize terminal bytes.
+The terminal decoder recognizes physical keys and paste framing only. `KeyMap`
+translates public, normalized `Key` values into the public semantic `Action`
+vocabulary; the engine applies those actions to the sole `Editor`. `NamedKey`,
+`Control` and `Meta` describe portable input meaning, never escape bytes.
+Printable text and bracketed paste remain text transports and cannot be rebound.
+Portable `Editor` methods expose word operations, undo/redo and kill/yank without
+requiring callers to synthesize terminal bytes.
+
+`KeyMap::new()` installs the qualified compatibility profile. While an
+`Interaction` is closed, a host may inspect mappings, bind or replace an action,
+unbind one key, reset it to its default, or reset the complete profile. At most
+128 custom overrides are retained in a sorted vector; lookup is allocation-free
+and bounded `O(log 128)`. Duplicate binds replace atomically. Invalid control or
+Meta values and a 129th override return typed `KeyMapError`s. Active mutation is
+refused because the terminal driver owns an immutable map clone for the session.
+`Interaction::apply_action` sends a semantic action through the same engine and
+render path as decoded input; it is available only on native open interactions.
 
 Word movement and deletion use locale-independent Unicode default word boundaries
 from `unicode-segmentation` 1.13.3 (UAX #29). A semantic boundary that falls
@@ -228,8 +239,53 @@ Compatibility bindings are Ctrl-_ undo, Alt-B/F word movement, Alt-D word-delete
 forward, Alt-Backspace word-delete backward, Ctrl-W word-kill backward, Ctrl-U/K
 kill to line start/end and Ctrl-Y yank. Redo and forward word-kill remain available
 through `Editor` methods but intentionally have no fixed terminal binding before
-I5. Bracketed paste always arrives as literal text in one transaction; embedded
-control bytes never invoke these actions.
+I5. Redo and forward word-kill are now bindable without acquiring a terminal.
+PageUp/PageDown clamp completion by one visible page. Bracketed paste always
+arrives as literal text in one transaction; embedded control bytes never invoke
+configured actions.
+
+## Completion helpers, large sets and suggestions
+
+`CompletionSet` remains the low-level revision-bound protocol. Optional helpers
+only construct valid sets from host-supplied snapshots, replacement ranges and
+sources. `complete_prefix` preserves caller order and duplicates with selectable
+case-sensitive or ASCII-insensitive matching. `common_grapheme_prefix` ends at an
+extended-grapheme boundary. `complete_fuzzy` uses deterministic Unicode-scalar
+subsequence matching, ordered by earliest byte start, then fewer byte gaps, then
+caller order; it makes no semantic-ranking claim.
+
+`complete_path` reads one directory level. Relative input resolves under an
+explicit base, absolute input remains absolute, results sort by insertion text,
+directories gain the platform separator and shell quoting, environment expansion
+and execution remain host policy. Hidden entries are optional. Missing or denied
+directories fail atomically; non-UTF-8 entry names are skipped rather than
+lossily inserted. Helpers inspect at most 4096 source items, accept at most a
+4096-byte query and remain inside the existing 4096-candidate, 65,536-byte field
+and 4 MiB aggregate `CompletionSet` bounds.
+
+Completion `Next`/`Previous` wrap. `PageNext`/`PagePrevious` move by the current
+visible-window size and clamp; `First` and `Last` select the endpoints. Resizing
+changes only the visible slice, never candidate identity or selected index. The
+menu reports selection and visible range in text, so plain mode remains legible.
+Installation validates the full set; navigation retains only an index/window and
+does not clone or rescan candidate payloads.
+
+`Suggestion` is one nonempty, control-safe suffix of at most 4096 bytes for an
+exact end-of-draft `DraftRevision`. It is distinct from informational `Hint`:
+display does not make it canonical. Stale delivery returns `AnalysisOutcome::Stale`
+without mutation or output. Acceptance inserts the suffix atomically as one undo
+transaction with a fresh revision; dismissal changes neither draft nor revision.
+`suggest_from_static` and `suggest_from_history` inspect caller-ordered bounded
+sources and return the remaining suffix of the first whole-draft prefix match.
+History persistence and scheduling remain host-owned.
+
+The default Right action accepts a visible suggestion only when the cursor is at
+the draft end; hosts may bind an explicit `SuggestionAction`. Reverse search owns
+the temporary frame, completion suppresses suggestion, invalid diagnostics suppress
+suggestion, and a suggestion suppresses an analysis hint. Hidden current state may
+return after dismissal; every canonical edit invalidates it. Resize and serialized
+host output preserve a current suggestion. No suggestion may enter history or
+submitted bytes before explicit acceptance.
 
 ## History
 

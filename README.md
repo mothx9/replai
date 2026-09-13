@@ -125,8 +125,9 @@ set/menu contract.
 | --- | --- | --- | --- |
 | Unicode/grapheme editing | 🟢 Qualified | 🟢 Qualified | Accepted input policy |
 | History navigation / reverse search | 🟢 Provider + bounded search | 🟡 Navigation only | Persistence, retention and privacy |
-| Word editing / undo / kill-yank | 🟢 Qualified | 🟡 Fixed bindings only | Mapping policy |
-| Rich completion UI | 🟢 Qualified | 🟡 Replacement only | Discovery, order and ranking |
+| Word editing / undo / kill-yank | 🟢 Qualified + configurable | 🟡 Fixed bindings only | Mapping policy |
+| Rich completion UI / helpers | 🟢 Qualified + paged | 🟡 Replacement only | Context and semantic ranking |
+| Revision-safe autosuggestion | 🟢 Qualified suffix insertion | 🔴 Outside ABI 1 | Source choice and scheduling |
 | Revision snapshots / stale refusal | 🟢 Qualified | 🔴 Outside ABI 1 | Analysis meaning and schedule |
 | Validated multiline | 🟢 Qualified | 🔴 Outside ABI 1 | Grammar and diagnostics |
 | Host spans / non-canonical hints | 🟢 Qualified | 🔴 Outside ABI 1 | Classification and hint text |
@@ -509,8 +510,8 @@ occurred. Consume Rust through the exact Git pin above; the declared and
 qualified candidate MSRV is Rust 1.98.1. Today Linux GNU x86_64/ARM64 and macOS
 ARM64 have native runtime evidence, while Windows has portable-core coverage
 only. Daily-driver word editing, bounded undo/redo, kill/yank and provider-backed
-literal history search are now present; configurable mappings and suggestions
-remain next. The expanded first-release plan still requires long-lived output,
+literal history search, configurable mappings, completion helpers, paged large
+sets and autosuggestion are now present. The expanded first-release plan still requires long-lived output,
 sensitive input, native Windows Rust runtime, complete UX/DX and agentic integration
 before final hardening and freeze. Planned work is not current API.
 [Release scope](docs/release-scope.md) · [Roadmap](ROADMAP.md).

@@ -10,6 +10,7 @@ from a checkout on Linux or macOS with a current stable Rust toolchain.
 | --- | --- | --- | --- |
 | A small deterministic command loop | `cargo run --locked --example simple` | Execute each submitted line; admit history | Blocking editable input; typed interrupt/EOF; restoration |
 | Explicit console with synchronous completion | `cargo run --locked --example completion` | Catalog, prefix filtering, ordering | Revision validation, candidate menu, acceptance |
+| Configurable completion and suggestions | `cargo run --locked --example configured_completion` | Source data, replacement context and binding choice | Bounded semantic map, generic helpers and revision-safe suffix |
 | Validated multiline statements | `cargo run --locked --example validation` | The example's brace grammar | Enter request, stale refusal, newline continuation, diagnostics |
 | Results and notices during editing | `cargo run --locked --example query -- --notice` | Static result data and notice timing | Tables, prompt/draft/cursor restoration |
 | Validated input in a host reactor | `cargo run --locked --example validation-driven` | Brace grammar and native waiting | Same request/result contract as session mode |
@@ -37,6 +38,12 @@ statements and deliberately have no executable workaround inside REPLAI.
 | <!-- recipe:history-admission --> Host-controlled history admission/search | Portable model + Linux/macOS | `examples/simple.rs`, `tests/ergonomics.rs`, `tests/pty.rs` |
 | <!-- recipe:history-persistence --> Persistence/reload owned by the application | Host responsibility | admission round-trip in `tests/core.rs` |
 | <!-- recipe:rich-completion --> Rich completion | Linux/macOS · Rust | `cargo run --locked --example completion` |
+| <!-- recipe:custom-keymap --> Custom key binding | Portable model · Rust | `cargo run --locked --example configured_completion` |
+| <!-- recipe:completion-helpers --> Prefix/common-prefix helpers | Portable model · Rust | `examples/configured_completion.rs`, `tests/configuration_helpers.rs` |
+| <!-- recipe:fuzzy-completion --> Deterministic fuzzy helper | Portable model · Rust | `examples/configured_completion.rs`, `tests/configuration_helpers.rs` |
+| <!-- recipe:path-completion --> One-level path helper | Portable + filesystem · Rust | `tests/configuration_helpers.rs` |
+| <!-- recipe:autosuggestion --> History/static autosuggestion | Portable model + Linux/macOS PTY | `examples/configured_completion.rs`, `tests/pty.rs` |
+| <!-- recipe:large-completion --> Large completion navigation | Portable model + Linux/macOS PTY | `src/suggestion_tests.rs`, `tests/pty.rs` |
 | <!-- recipe:validated-multiline --> Validated multiline | Linux/macOS · Rust | `cargo run --locked --example validation` |
 | <!-- recipe:delayed-analysis --> Delayed revision-bound analysis | Linux/macOS · Rust | `cargo run --locked --example analysis-presentation -- --delayed-analysis` |
 | <!-- recipe:spans-hints --> Host spans and hints | Linux/macOS · Rust | `cargo run --locked --example analysis-presentation` |
@@ -84,7 +91,61 @@ next move. History entries are editable multiline drafts; reach the last logical
 line and press Down to return to the saved unsent draft. Direct-submission hosts
 retain the existing Up/Down history behavior. No force-submit shortcut bypasses
 host validation. Hosts can insert explicit LF with the existing safe replacement
-API; there is no new configurable keymap or newline binding.
+API; printable text and newline insertion remain outside command remapping.
+
+## Configure actions and derive completion
+
+Configuration happens before terminal acquisition. This portable fragment is
+executed by `configured_completion` and keeps escape bytes out of application
+policy:
+
+```rust
+use replai::{Action, CompletionAction, EditAction, Key, KeyMap, NamedKey};
+
+let mut keys = KeyMap::new();
+keys.bind(Key::meta(b'r')?, Action::Edit(EditAction::Redo))?;
+keys.bind(
+    Key::Named(NamedKey::PageDown),
+    Action::Completion(CompletionAction::PageNext),
+)?;
+# Ok::<(), Box<dyn std::error::Error>>(())
+```
+
+Supply an `AnalysisSnapshot`, the host-selected replacement range and source
+items to `complete_prefix` or `complete_fuzzy`. Use
+`common_grapheme_prefix` when the host wants to insert only a shared prefix.
+The helpers retain the host's grammar and context decision. For filesystem input,
+`complete_path` examines one directory level under an explicit base, sorts the
+result and adds no shell quoting; non-UTF-8 names are skipped and I/O errors are
+returned atomically.
+
+For large sets, bind or apply `PageNext`, `PagePrevious`, `First` and `Last`.
+Next/Previous wrap; pages clamp. Resize preserves the selected candidate while
+the visible range changes.
+
+## Present an acceptable suggestion
+
+Suggestions are suffixes for an exact revision, separate from display-only
+analysis hints:
+
+```rust
+let snapshot = interaction.analysis_snapshot();
+if let Some(suggestion) = replai::suggest_from_history(
+    &snapshot,
+    &["deploy service", "debug task"],
+)? {
+    let outcome = interaction.present_suggestion(suggestion)?;
+    // Stale is a normal outcome if input changed after the snapshot.
+    let _ = outcome;
+}
+# Ok::<(), Box<dyn std::error::Error>>(())
+```
+
+Right at the end accepts a visible suggestion under the default profile. A host
+may bind `Action::Suggestion(SuggestionAction::Accept)` elsewhere. Acceptance is
+one undoable canonical edit; dismissal leaves revision and draft unchanged.
+Completion, reverse search and invalid diagnostics suppress ghost text so two
+temporary surfaces never compete visually.
 
 ## A deterministic command interpreter
 

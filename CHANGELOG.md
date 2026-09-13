@@ -6,11 +6,14 @@ next work. All entries below are unreleased and carry no compatibility promise.
 
 ## Unreleased
 
+- Added public bounded configurable `KeyMap`, semantic `Action`/`Key` vocabulary,
+  completion prefix/common-prefix/fuzzy/path helpers, explicit large-set paging
+  and revision-safe acceptable autosuggestions distinct from display-only hints.
 - Added bounded host-fed literal reverse history search, Unicode word movement
   and deletion, delta undo/redo, and a single bounded kill/yank register. Undo
   restores content with fresh `DraftRevision` identities; search remains
   non-canonical until acceptance. Conservative fixed bindings use one private
-  semantic action vocabulary, while configurable keymaps remain future work.
+  semantic action vocabulary.
   Existing exhaustive `EditError` matches remain valid; new limit validation
   uses `EditorLimitsError`. C ABI 1 gains no symbol, layout or numeric change.
 

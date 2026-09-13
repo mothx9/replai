@@ -125,9 +125,10 @@ promise full GNU Readline kill-ring behavior. The implementation boundary will
 decide a small explicit register/lifecycle contract and qualify its relation to
 undo, revisions, history and sensitive input.
 
-Configurable keymaps must drive a stable common action vocabulary without moving
-terminal decoding or editor storage into user callbacks. Full Vi, Helix or
-Kakoune modal compatibility is not required.
+Configurable keymaps now drive a public common action vocabulary without moving
+terminal decoding or editor storage into user callbacks. The bounded non-modal
+map and its qualification are established; full Vi, Helix or Kakoune modal
+compatibility is not required.
 
 ## Completion and suggestion ergonomics
 
@@ -135,16 +136,17 @@ The existing completion protocol remains authoritative: the host owns semantics,
 ordering and application context; REPLAI owns bounds, selection, revision
 binding and safe insertion.
 
-v0.1 adds optional generic helpers for static/list candidates, filesystem paths,
+The current v0.1 surface includes optional generic helpers for static/list candidates, filesystem paths,
 common-prefix operations and bounded fuzzy matching. A filesystem helper owns
 filesystem traversal only when explicitly selected. Helpers never acquire the
 application grammar or command vocabulary.
 
-Autosuggestion must accept bounded history/static/host-generated sources,
-present text as non-canonical and use explicit qualified insertion. A visible
-suggestion must never enter submitted bytes accidentally. Large candidate sets
-need deterministic paging/scrolling, selection visibility and narrow-terminal
-behavior.
+Autosuggestion accepts bounded history/static/host-generated sources, presents
+one revision-bound suffix as non-canonical and inserts only on an explicit
+qualified action. Large candidate sets provide deterministic wrapping, clamped
+paging, endpoint navigation, stable selection and narrow/plain visibility. These
+properties are established at the completion/keymap dossier scope and will be
+replayed by final expanded hardening.
 
 ## Long-lived output
 
@@ -348,12 +350,12 @@ REPLAI can support applications that own these systems. It does not own them.
 ## Release sequence and gates
 
 [ROADMAP](../ROADMAP.md#current-execution-sequence) owns the exact ordered
-boundaries. The active plan has twelve engineering/design/qualification
+boundaries. The active plan has completed the first two of twelve engineering/design/qualification
 boundaries before one separately authorized publication boundary:
 
 1. INTERACTION.ERGONOMICS.0 — established
-2. COMPLETION.KEYMAP.SUGGESTION.0 — selected, not started
-3. OUTPUT.LONG_LIVED.0
+2. COMPLETION.KEYMAP.SUGGESTION.0 — established
+3. OUTPUT.LONG_LIVED.0 — selected, not started
 4. WINDOWS.RUNTIME.0
 5. SENSITIVE.INPUT.0
 6. PRESENTATION.UX.0
@@ -367,8 +369,8 @@ boundaries before one separately authorized publication boundary:
 
 ### Final qualification and release
 
-The first boundary is established at its recorded dossier scope; the second is
-selected but not started. Each feature boundary must produce its own contract
+The first two boundaries are established at their recorded dossier scopes; the
+third is selected but not started. Each feature boundary must produce its own contract
 and qualification. Documentation/agent materials follow
 stable public surfaces. HARDENING.1 qualifies the expanded surface. E3/V0 then
 audits the Rust API and C ABI, ratifies compatibility, regenerates exact

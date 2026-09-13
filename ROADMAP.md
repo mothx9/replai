@@ -5,9 +5,9 @@
 | Axis | Current truth |
 | --- | --- |
 | Project target | Embeddable command-line interaction infrastructure: a simple entry that can grow into rich, long-lived host-driven interfaces over one engine. |
-| Current selected engineering boundary | **COMPLETION.KEYMAP.SUGGESTION.0 — SELECTED_NOT_STARTED**: configurable mappings, generic completion helpers, autosuggestion and bounded large-candidate navigation; requires separate authorization. |
-| Latest major completed boundary | INTERACTION.ERGONOMICS.0: bounded host-fed literal history search, Unicode word operations, delta undo/redo, kill/yank and one private semantic action vocabulary. |
-| Most important structural gap | The expanded v0.1 product still needs configurable completion/editing ergonomics, long-lived output, Windows runtime, sensitive input, coherent UX, large-draft scaling, developer experience and agentic integration before final hardening/freeze. |
+| Current selected engineering boundary | **OUTPUT.LONG_LIVED.0 — SELECTED_NOT_STARTED**: sustained output, bounded producer arbitration and the coupled transient lifecycle foundation; requires separate authorization. |
+| Latest major completed boundary | COMPLETION.KEYMAP.SUGGESTION.0: public semantic actions and bounded keymaps, generic completion helpers, large-set navigation and revision-safe autosuggestion. |
+| Most important structural gap | The expanded v0.1 product still needs long-lived output, Windows runtime, sensitive input, coherent UX, large-draft scaling, developer experience and agentic integration before final hardening/freeze. |
 | Executable foundation | Platform-neutral engine; bounded Unicode grapheme/word editor; history navigation/search; undo/redo; kill/yank; completion; paste, interrupts/EOF, resize, safe output and exact restoration. |
 | Qualified platforms | Linux/macOS: real Rust/C terminal runtime. Windows: portable engine/document tests only, no terminal backend. |
 | Current Rust surface | Editor/Interaction, blocking results, session events, portable wake/deadline/admission types, borrowed POSIX readiness, revision/snapshot/stale outcomes, bounded completion candidates/selection, submission requests/dispositions, diagnostics, editor analysis spans/hints, prompts/themes and structured documents. Pre-release, without API freeze. |
@@ -16,7 +16,7 @@
 | Presentation posture | Safe spans, headings, facts, lists, responsive tables/status, composed prompts/themes and deterministic plain output. Bounded completion and validated multiline interaction are qualified; bounded host editor spans/hints are qualified; broader visual refinement remains separate. |
 | Consumer posture | Packaged Rust and moved-prefix C/C++ consumers are qualified independently. Product consumers remain external owners; producer metadata assigns no migrations or repins. |
 | Public-release posture | Pre-release. The expanded v0.1 product envelope and compatibility requirements are selected in [release scope](docs/release-scope.md); adopted targets are not implementation claims. |
-| Next decision point | Authorize COMPLETION.KEYMAP.SUGGESTION.0 separately. Eleven engineering boundaries plus a separately authorized publication boundary remain in the current dependency plan. |
+| Next decision point | Authorize OUTPUT.LONG_LIVED.0 separately. Ten engineering boundaries plus a separately authorized publication boundary remain in the current dependency plan. |
 
 This is the sole authority for **public macro state, maturity, strategic programs,
 dependency ordering and release progression**. [README](README.md) owns first use;
@@ -43,7 +43,7 @@ whole program. Counts describe rows, never percentage completion. IDs are stable
 control identifiers, not new public API or producer-capability declarations.
 
 <!-- maturity-counts:start -->
-ESTABLISHED=39 PARTIAL=14 OPEN=6 LATER=4 TOTAL=63
+ESTABLISHED=43 PARTIAL=10 OPEN=6 LATER=4 TOTAL=63
 <!-- maturity-counts:end -->
 
 <!-- maturity:start -->
@@ -96,7 +96,7 @@ ESTABLISHED=39 PARTIAL=14 OPEN=6 LATER=4 TOTAL=63
 | analysis.hints_highlight | I2 hints and highlighting | 🟢 ESTABLISHED | Native revision-bound ordered editor style spans and non-canonical bounded hints; stale silence, I1/I3 composition, plain degradation, Linux/macOS PTYs/memory and Windows portable models. | Preserve canonical text/revision, safe grapheme ranges, bounded payload and measured ordinary-editing cost. Host analysis and insertion remain separate. | I / U | [I2 dossier][analysis-presentation]; [interaction][interaction] |
 | analysis.validation | I3 validation and submission policy | 🟢 ESTABLISHED | Optional host Complete/Incomplete/Invalid over immutable Enter snapshots; atomic stale refusal, exact submission and bounded diagnostics. Native Rust only. | Preserve host grammar/scheduling authority, rejected-result atomicity and completion precedence across platforms. | I | [I3/U2 dossier][validation-multiline]; [interaction][interaction] |
 | history.storage_search | I4 history provider/search | 🟢 ESTABLISHED | Host-fed newest-first bounded views and admitted history share case-sensitive literal reverse search; query/match remain non-canonical until one undoable acceptance. Persistence, retention and privacy stay host-owned. | Preserve bounded provider materialization, exact dismiss restoration, no-wrap ordering, safe presentation and revision/output/resize composition. | I | [Ergonomics dossier][interaction-ergonomics]; [interaction][interaction] |
-| editing.keymap | I5 configurable editing | 🟡 PARTIAL | One private semantic action vocabulary and conservative fixed bindings drive grapheme/word editing, history search, undo and kill/yank; mappings are not configurable. | Expose/configure common actions without moving decoder, editor storage or application policy ownership. | I | [Ergonomics dossier][interaction-ergonomics]; [Keymap][keymap] |
+| editing.keymap | I5 configurable editing | 🟢 ESTABLISHED | Public normalized keys and semantic actions feed one bounded closed-state-configurable map; printable text/paste remain transports and the compatibility profile is unchanged. | Preserve decoder/action separation, 128-entry bounds, allocation-free lookup and the non-modal contract. | I | [Completion/keymap dossier][completion-keymap-suggestion]; [Keymap][keymap] |
 | editing.word_operations | Unicode-aware word operations | 🟢 ESTABLISHED | Public portable word movement/deletion uses locale-independent Unicode default word boundaries and snaps to extended-grapheme boundaries across punctuation, whitespace, multiline and mixed-script fixtures. | Preserve deterministic UAX #29 behavior, allocation-free movement, atomic deletion and fresh revision identity. | I | [Ergonomics dossier][interaction-ergonomics]; [Editor owner][core] |
 | editing.undo_redo | Undo and redo | 🟢 ESTABLISHED | Bounded delta transactions group typing/deletion, cover replacement/paste/completion/validation/search/kill/yank and restore content/cursor with fresh revisions; divergent edits clear redo. | Preserve entry/byte bounds, lifecycle reset, no ordinary full-draft snapshot and permanent staleness of old revisions. | I | [Ergonomics dossier][interaction-ergonomics]; [analysis contract](docs/interaction.md#semantic-editing-and-reversible-draft) |
 | editing.kill_yank | Bounded kill and yank | 🟢 ESTABLISHED | One editor-owned bounded register supports word and logical-line kills plus atomic yank, with replacement semantics, undo composition and explicit persistence/clear lifecycle. | Preserve register/transaction bounds, capacity atomicity, no clipboard/ring claim and future sensitive-mode purge seam. | I | [Ergonomics dossier][interaction-ergonomics]; [keymap owner][keymap] |
@@ -106,9 +106,9 @@ ESTABLISHED=39 PARTIAL=14 OPEN=6 LATER=4 TOTAL=63
 
 | ID | Property | Maturity | Current truth / exact boundary | Promotion condition | Program | Evidence / owner |
 | --- | --- | --- | --- | --- | --- | --- |
-| completion.helpers | Generic completion helpers | 🟡 PARTIAL | Revision-bound candidates and small host-owned examples exist; no reusable static/path/common-prefix/fuzzy helper surface exists. | Qualify optional bounded helpers while leaving grammar, semantic discovery and host-specific ranking with the host. | I / D | [Completion contract][completion-contract]; [completion example](examples/completion.rs) |
-| completion.large_sets | Large candidate navigation | 🟡 PARTIAL | Bounded candidate menus and selection exist; no independently qualified paging/scrolling contract for large sets exists. | Qualify deterministic paging, scrolling, stable selection and narrow/plain visibility under bounded large candidate sets. | I / U | [I1/U1 dossier][completion-contract]; [presentation][presentation] |
-| suggestion.autosuggest | Non-canonical autosuggestion | 🟡 PARTIAL | Revision-bound non-canonical hints can present host text, but no generic suggestion source, acceptance or history-suggestion mechanics exist. | Compose history/static/host suggestions with I1 insertion, stale refusal and explicit acceptance without canonicalizing visible hints. | I / D | [I2 dossier][analysis-presentation]; [interaction][interaction] |
+| completion.helpers | Generic completion helpers | 🟢 ESTABLISHED | Optional bounded prefix, grapheme-common-prefix, deterministic fuzzy and one-level path helpers construct the existing host-owned revision protocol. | Preserve atomic bounds, stable ordering, non-lossy path behavior and host grammar/ranking ownership. | I / D | [Completion/keymap dossier][completion-keymap-suggestion]; [configured example](examples/configured_completion.rs) |
+| completion.large_sets | Large candidate navigation | 🟢 ESTABLISHED | Next/previous wrap; page movement clamps; first/last and visible-range text keep one selected identity stable across resize through 4096 candidates. | Preserve O(1) payload-free navigation, bounded visible rendering and plain/narrow selection evidence. | I / U | [Completion/keymap dossier][completion-keymap-suggestion]; [PTY][pty] |
+| suggestion.autosuggest | Non-canonical autosuggestion | 🟢 ESTABLISHED | One bounded revision-bound suffix is distinct from Hint, accepts as one undoable edit, dismisses without revision and has static/history helpers. | Preserve stale silence, explicit acceptance and deterministic search/completion/diagnostic/hint precedence. | I / D | [Completion/keymap dossier][completion-keymap-suggestion]; [interaction][interaction] |
 
 ### Terminal and platform
 
@@ -174,7 +174,7 @@ authority.
 | --- | --- | --- | --- | --- | --- | --- |
 | F | One engine, simple/session/driven embedding | 🟢 ESTABLISHED | F0 engine; F1 embedding; F2 capability/admission | Preserve one engine while editing, output, Windows, facade and adapters expand | P3 delivery; X resources; Q evidence | Host scheduler, parser, second editor/runtime |
 | P | Measurable interaction under host driving | 🟡 PARTIAL | P0 baseline; P1/P2 convergence; P3 driving; Q2 policy | Large-draft scaling and new-surface regression workloads | F contracts; Q methodology | Universal ranking, unmeasured redesign |
-| I | Daily-driver command interaction from host semantics | 🟡 PARTIAL | Revisions, candidates, validation, spans/hints, history provider/search, Unicode words, bounded undo/redo, kill/yank and normalized actions | I5 configurable mapping; I6; helpers/suggestions and large candidate navigation | F delivery/revisions; U presentation; Q bounds | Parser, command language, history database |
+| I | Daily-driver command interaction from host semantics | 🟡 PARTIAL | Revisions, candidates, validation, spans/hints, history provider/search, Unicode words, undo/redo, kill/yank, public actions/keymaps, completion helpers, paging and autosuggestion | I6 sensitive input and later cross-surface UX closure | F delivery/revisions; U presentation; Q bounds | Parser, command language, history database |
 | O | Long-lived coordinated output | 🟡 PARTIAL | O0 documents and finite serialized output with restoration | O1 sustained flow/backpressure; O2 producer arbitration; O3 transient lifetime | P3/F2; U geometry; Q stress | Token meaning, uncontrolled terminal writers |
 | U | Coherent accessible line-oriented presentation | 🟡 PARTIAL | Prompts, candidates, multiline diagnostics, hints, documents and themes | U3 hierarchy, paging, transient integration, plain/accessibility and cross-platform consistency | I/O semantics; F2 degradation; X parity | Alternate-screen dashboard or widget framework |
 | X | Native system realizations below one engine | 🟡 PARTIAL | X0 separation; Linux/macOS runtime; Windows portable core | X2 native Windows Rust runtime and resource/capability parity | F1/F2 resource contract; Q native evidence | Support inferred from compilation; automatic Windows C parity |
@@ -207,6 +207,8 @@ to their recorded source, workload and environment.
 | I2 ANALYSIS.PRESENTATION | Implementation `e0ab06bc2e9111b41968842b459c51a68855aa13`; fixture carrier `27981f0dbb22305f96a07bb7e4c7fafbbf81e90b`; [native/portable, memory and performance evidence][analysis-presentation]. Editor and C ABI 1 unchanged. |
 | RELEASE.HARDENING.0 | Five 60-CPU-minute fuzz/property campaigns, 100,000 generated semantic pairs, cross-platform corpus replay, native lifecycle/failure/memory stress and preregistered Q2 policy; [hardening dossier][hardening]. Runtime/API/C ABI unchanged; U3 and deferred features remain open. |
 | RELEASE.PACKAGING.0 | Unpublished `replai 0.1.0` crate, deterministic versioned C source SDK, Rust 1.98.1/current-stable qualification, relocatable pkg-config/CMake consumers, independent packaged debugger and 19-recipe cookbook; [packaging dossier][packaging]. Runtime/API/C ABI unchanged; no publication or consumer repin. |
+| INTERACTION.ERGONOMICS.0 | Host-owned bounded history/search, Unicode word operations, delta undo/redo and kill/yank; implementation `0e281321abe1d43af49bace6baed90a9a80f89aa`; [ergonomics dossier][interaction-ergonomics]. |
+| COMPLETION.KEYMAP.SUGGESTION.0 | Public semantic actions and bounded configurable keymaps, generic completion helpers, 4096-candidate navigation and revision-safe autosuggestion; [qualification dossier][completion-keymap-suggestion]. C ABI 1 unchanged. |
 
 ## First Release Scope
 
@@ -221,21 +223,17 @@ Every non-established maturity row is classified below. Existing ESTABLISHED row
 remain part of the release foundation at their exact qualified scope.
 
 <!-- release-counts:start -->
-MUST_V0_1=24 SHOULD_V0_1=0 LATER=0 OUT_OF_SCOPE=0 TOTAL=24
+MUST_V0_1=20 SHOULD_V0_1=0 LATER=0 OUT_OF_SCOPE=0 TOTAL=20
 <!-- release-counts:end -->
 
 <!-- release-scope:start -->
 | Capability | Current maturity | v0.1 class | Rationale | Required evidence |
 | --- | --- | --- | --- | --- |
-| editing.keymap | 🟡 PARTIAL | MUST_V0_1 | Common actions need configurable mappings without moving decoder or editor ownership. | [Interaction scope](docs/release-scope.md#interaction-and-daily-driver-editing); action/mapping and portable usability evidence |
 | input.sensitive | ⚪ LATER | MUST_V0_1 | The first product needs a defensible leakage-aware input path; masking alone is insufficient. | [Sensitive-input scope](docs/release-scope.md#sensitive-input); negative leakage, lifecycle and restoration campaign |
 | presentation.visual_system | 🟡 PARTIAL | MUST_V0_1 | Current primitives need one coherent keyboard/plain/narrow/wide/accessibility system across the expanded surface. | [Visual scope](docs/release-scope.md#visual-and-large-draft-quality); cross-platform U3 qualification |
 | output.streaming | 🔴 OPEN | MUST_V0_1 | Long-lived tools need sustained active-edit output with explicit backpressure and bounds. | [Output scope](docs/release-scope.md#long-lived-output); chunk, backpressure, latency and restoration stress |
 | output.multiplexed | 🔴 OPEN | MUST_V0_1 | Legitimate producers need bounded arbitration while Interaction mutation remains serialized. | [Output scope](docs/release-scope.md#long-lived-output); producer ordering/fairness/resource evidence |
 | output.transient | 🔴 OPEN | MUST_V0_1 | Progress and replaceable/expiring notices need a bounded lifecycle that composes with editing. | [Output scope](docs/release-scope.md#long-lived-output); replacement/removal/redraw qualification |
-| completion.helpers | 🟡 PARTIAL | MUST_V0_1 | Common static, path, prefix and fuzzy integrations should not require repeated host boilerplate. | [Completion scope](docs/release-scope.md#completion-and-suggestion-ergonomics); optional helper API and bounds |
-| completion.large_sets | 🟡 PARTIAL | MUST_V0_1 | Large candidate sets need usable deterministic paging/scrolling without losing selection or editor context. | [Completion scope](docs/release-scope.md#completion-and-suggestion-ergonomics); large-set narrow/plain/resize qualification |
-| suggestion.autosuggest | 🟡 PARTIAL | MUST_V0_1 | History/static/host suggestions need generic non-canonical presentation and explicit acceptance. | [Completion scope](docs/release-scope.md#completion-and-suggestion-ergonomics); stale/plain/acceptance qualification |
 | platform.windows_runtime | 🔴 OPEN | MUST_V0_1 | Native Windows Rust terminal use is part of the selected major-desktop product envelope. | [Windows scope](docs/release-scope.md#windows-runtime); real Console/ConPTY resource and PTY-equivalent evidence |
 | performance.large_draft | 🟡 PARTIAL | MUST_V0_1 | Measured prefix traversal must be resolved enough for practical large multiline editing. | [Large-draft scope](docs/release-scope.md#visual-and-large-draft-quality); scaling thresholds and workload replay |
 | dx.high_level_facade | 🟡 PARTIAL | MUST_V0_1 | Common applications need a smaller rich-integration path over the same engine. | [Developer experience](docs/release-scope.md#developer-experience); public facade consumers and ownership audit |
@@ -286,15 +284,15 @@ RELEASE.HARDENING.1 must extend and replay their relevant campaigns before E3/V0
 ## Current Execution Sequence
 
 The previous RELEASE.CANDIDATE.0 selection remains superseded by the expanded
-plan. INTERACTION.ERGONOMICS.0 is established; the sole selected boundary is
-COMPLETION.KEYMAP.SUGGESTION.0, selected but not started. Eleven
+plan. INTERACTION.ERGONOMICS.0 and COMPLETION.KEYMAP.SUGGESTION.0 are established;
+the sole selected boundary is OUTPUT.LONG_LIVED.0, selected but not started. Ten
 engineering/design/qualification boundaries remain before one separately
 authorized publication boundary:
 
 | Order | Boundary | Bounded closure | Dependency / exit |
 | ---: | --- | --- | --- |
 | 1 | INTERACTION.ERGONOMICS.0 | I4 history/search; word operations; undo/redo; bounded kill/yank; common action vocabulary | ESTABLISHED at the exact ergonomics dossier scope |
-| 2 | COMPLETION.KEYMAP.SUGGESTION.0 | I5 keymaps; completion helpers; autosuggestion; large candidate paging/navigation | Stable action/revision semantics from 1 |
+| 2 | COMPLETION.KEYMAP.SUGGESTION.0 | I5 keymaps; completion helpers; autosuggestion; large candidate paging/navigation | ESTABLISHED at the exact completion/keymap dossier scope |
 | 3 | OUTPUT.LONG_LIVED.0 | O1 sustained output; O2 bounded producer arbitration; coupled O3 transient foundation | Existing serialized output, driven delivery and resource ownership |
 | 4 | WINDOWS.RUNTIME.0 | X2 native Windows Rust terminal realization and capability/resource parity | Stable interaction/output contracts; real Windows execution |
 | 5 | SENSITIVE.INPUT.0 | I6 leakage-aware sensitive interaction | Editing/history/output/platform contracts established |
@@ -365,8 +363,7 @@ runtime, product rendering ontology or plugin framework. Hosts own those systems
 
 At the current source there is no native Windows terminal runtime, sustained
 output/backpressure service, producer arbitration, transient lifecycle,
-sensitive-input mode, configurable public keymap,
-generic completion helper layer, official integration skill or frozen Rust API.
+sensitive-input mode, official integration skill or frozen Rust API.
 Those are adopted targets, not present-tense capability claims. Windows C ABI 1,
 full Vi/Helix/Kakoune modes, advanced mouse/clipboard support and rich C parity
 are not implied by the expanded plan.
@@ -453,5 +450,7 @@ validate control consistency, **not the truth of a maturity promotion**. Follow
 [packaging]: docs/engineering/release-packaging.md
 
 [interaction-ergonomics]: docs/engineering/interaction-ergonomics.md
+
+[completion-keymap-suggestion]: docs/engineering/completion-keymap-suggestion.md
 
 [c-sdk]: docs/c-sdk.md

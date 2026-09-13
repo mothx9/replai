@@ -6,7 +6,7 @@ use crate::{
     *,
 };
 use serde_json::json;
-use std::{hint::black_box, time::Instant};
+use std::{hint::black_box, sync::OnceLock, time::Instant};
 #[path = "../perf/allocation.rs"]
 mod allocation;
 
@@ -22,7 +22,19 @@ struct State {
     suggestion: Option<Suggestion>,
     path: Option<std::path::PathBuf>,
 }
-impl Drop for State { fn drop(&mut self) { if let Some(path)=&self.path { let _=std::fs::remove_dir_all(path); } } }
+fn path_fixture(item_count: usize) -> std::path::PathBuf {
+    static SMALL: OnceLock<std::path::PathBuf> = OnceLock::new();
+    static LARGE: OnceLock<std::path::PathBuf> = OnceLock::new();
+    let slot = if item_count == 1_000 { &LARGE } else { &SMALL };
+    slot.get_or_init(|| {
+        let root = std::env::temp_dir().join(format!("replai-q2-{}-{item_count}", std::process::id()));
+        std::fs::create_dir(&root).unwrap();
+        for i in 0..item_count {
+            std::fs::write(root.join(format!("alpha-{i:04}")), b"x").unwrap();
+        }
+        root
+    }).clone()
+}
 fn prepare(operation: &str, bytes: usize, lines: usize) -> State {
     let mut e = Engine::new(Editor::new(2 * 1024 * 1024, 1_024));
     let text = if operation.contains("unicode") {
@@ -90,7 +102,7 @@ fn prepare(operation: &str, bytes: usize, lines: usize) -> State {
     if operation=="key-maximum" { for byte in 0..32 { keymap.bind(Key::Control(byte),Action::Redraw).unwrap(); } for byte in 33..=126 { keymap.bind(Key::Meta(byte),Action::Redraw).unwrap(); } keymap.bind(Key::Meta(8),Action::Redraw).unwrap(); keymap.bind(Key::Meta(127),Action::Redraw).unwrap(); }
     let suggestion=if operation.starts_with("suggestion-") { Some(Suggestion::new(e.editor.revision()," suffix").unwrap()) } else {None};
     if matches!(operation,"suggestion-accept"|"suggestion-dismiss") { e.present_suggestion(suggestion.clone().unwrap()).unwrap(); }
-    let path=if operation.starts_with("path-") { let root=std::env::temp_dir().join(format!("replai-q2-{}-{}",std::process::id(),NEXT_PATH.fetch_add(1,std::sync::atomic::Ordering::Relaxed))); std::fs::create_dir(&root).unwrap(); for i in 0..item_count { std::fs::write(root.join(format!("alpha-{i:04}")),b"x").unwrap(); } Some(root) } else {None};
+    let path = operation.starts_with("path-").then(|| path_fixture(item_count));
     if matches!(operation, "validation" | "incomplete") {
         e.apply(Input::Request(Request::Submit)).unwrap();
     }
@@ -367,5 +379,3 @@ pub fn benchmark(samples: usize, batches: usize) {
         );
     }
 }
-
-static NEXT_PATH: std::sync::atomic::AtomicU64=std::sync::atomic::AtomicU64::new(1);

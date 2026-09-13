@@ -306,10 +306,10 @@ def check_roadmap(text):
         reject("scope boundaries must cover LATER and OUT_OF_SCOPE")
 
     selected = re.findall(
-        r"^\| Current selected engineering boundary \| \*\*([A-Z0-9.]+)(?: — (SELECTED_NOT_STARTED|ACTIVE))?\*\*",
+        r"^\| Current selected engineering boundary \| \*\*([A-Z0-9._]+)(?: — (SELECTED_NOT_STARTED|ACTIVE))?\*\*",
         text, re.M,
     )
-    markers = re.findall(r"\*\*(?:[A-Z0-9.]+ — (?:SELECTED_NOT_STARTED|ACTIVE)|NONE)\*\*", text)
+    markers = re.findall(r"\*\*(?:[A-Z0-9._]+ — (?:SELECTED_NOT_STARTED|ACTIVE)|NONE)\*\*", text)
     valid = len(selected) == 1 and len(markers) == 1
     if valid:
         identity, state = selected[0]

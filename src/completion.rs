@@ -271,16 +271,22 @@ impl ActiveCompletion {
             frame.widths.push(width);
         };
         if header != 0 {
-            let text = clip(
-                &format!(
+            let label = if self.set.candidates.len() > 10 {
+                format!(
                     "{} / {} · visible {}–{}  Tab next · Enter accept · Esc dismiss",
                     self.selected + 1,
                     self.set.candidates.len(),
                     first + 1,
                     end,
-                ),
-                size.0.saturating_sub(1),
-            );
+                )
+            } else {
+                format!(
+                    "{} / {}  Tab next · Enter accept · Esc dismiss",
+                    self.selected + 1,
+                    self.set.candidates.len()
+                )
+            };
+            let text = clip(&label, size.0.saturating_sub(1));
             let width = crate::width::cells(&text);
             append(
                 vec![
