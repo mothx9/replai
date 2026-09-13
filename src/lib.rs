@@ -119,7 +119,9 @@ mod substrate;
 mod system;
 #[cfg_attr(not(any(target_os = "linux", target_os = "macos")), allow(dead_code))]
 mod terminal;
-pub use core::{DEFAULT_UNDO_ENTRIES, EditError, Editor, EditorLimits, MAX_UNDO_GROUP_BYTES};
+pub use core::{
+    DEFAULT_UNDO_ENTRIES, EditError, Editor, EditorLimits, EditorLimitsError, MAX_UNDO_GROUP_BYTES,
+};
 pub use event::{Error, Event};
 pub use history::{
     DEFAULT_HISTORY_QUERY_BYTES, DEFAULT_HISTORY_SEARCH_BYTES, DEFAULT_HISTORY_SEARCH_ENTRIES,

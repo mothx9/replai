@@ -21,9 +21,9 @@ impl EditorLimits {
         undo_entries: usize,
         undo_bytes: usize,
         kill_bytes: usize,
-    ) -> Result<Self, EditError> {
+    ) -> Result<Self, EditorLimitsError> {
         if undo_entries == 0 || undo_bytes < max_bytes.saturating_mul(2) || kill_bytes > max_bytes {
-            return Err(EditError::InvalidConfiguration);
+            return Err(EditorLimitsError);
         }
         Ok(Self {
             undo_entries,
@@ -51,6 +51,16 @@ impl EditorLimits {
         }
     }
 }
+
+/// Rejected reversible-editing bounds.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct EditorLimitsError;
+impl fmt::Display for EditorLimitsError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str("invalid editor limits")
+    }
+}
+impl std::error::Error for EditorLimitsError {}
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 enum EditGroup {
@@ -196,7 +206,7 @@ impl UndoState {
 /// A rejected edit. Rejection leaves the text and cursor unchanged.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum EditError {
-    /// The configured UTF-8 byte capacity would be exceeded.
+    /// A configured draft or kill-register byte capacity would be exceeded.
     Capacity,
     /// Text contains a control character other than LF or TAB.
     InvalidText,
@@ -208,10 +218,6 @@ pub enum EditError {
     InvalidUtf8,
     /// An unknown or incomplete terminal sequence was rejected.
     InvalidSequence,
-    /// Editing bounds are internally inconsistent.
-    InvalidConfiguration,
-    /// A kill would exceed the configured register capacity.
-    KillCapacity,
 }
 
 impl fmt::Display for EditError {
@@ -223,8 +229,6 @@ impl fmt::Display for EditError {
             Self::HistoryDisabled => "history is disabled",
             Self::InvalidUtf8 => "invalid or incomplete UTF-8",
             Self::InvalidSequence => "unknown or incomplete terminal sequence",
-            Self::InvalidConfiguration => "invalid editor limits",
-            Self::KillCapacity => "kill register capacity exceeded",
         })
     }
 }
@@ -321,7 +325,7 @@ impl Editor {
         max_bytes: usize,
         history_entries: usize,
         limits: EditorLimits,
-    ) -> Result<Self, EditError> {
+    ) -> Result<Self, EditorLimitsError> {
         EditorLimits::new(
             max_bytes,
             limits.undo_entries,
@@ -680,7 +684,7 @@ impl Editor {
             return Ok(());
         }
         if range.len() > self.undo.limits.kill_bytes {
-            return Err(EditError::KillCapacity);
+            return Err(EditError::Capacity);
         }
         let killed = self.text[range.clone()].to_owned();
         self.replace_group(range, "", EditGroup::Atomic)?;

@@ -100,13 +100,12 @@ unsafe fn with_handle(p: *mut Handle, f: impl FnOnce(&mut Handle) -> i32) -> i32
 }
 fn edit(e: EditError) -> i32 {
     match e {
-        EditError::Capacity | EditError::KillCapacity => REPLAI_CAPACITY,
+        EditError::Capacity => REPLAI_CAPACITY,
         EditError::InvalidText => REPLAI_INVALID_TEXT,
         EditError::InvalidRange => REPLAI_INVALID_RANGE,
         EditError::HistoryDisabled => REPLAI_HISTORY_DISABLED,
         EditError::InvalidUtf8 => REPLAI_INVALID_UTF8,
         EditError::InvalidSequence => REPLAI_INVALID_SEQUENCE,
-        EditError::InvalidConfiguration => REPLAI_INVALID_STATE,
     }
 }
 fn error(e: Error) -> i32 {

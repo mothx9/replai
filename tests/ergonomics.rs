@@ -1,7 +1,7 @@
 //! Public daily-driver editing and provider boundary regressions.
 use replai::{
-    AnalysisOutcome, EditError, Editor, EditorLimits, HistoryError, HistoryProvider,
-    HistoryProviderError, HistorySearchLimits, HistorySearchSource,
+    AnalysisOutcome, EditError, Editor, EditorLimits, EditorLimitsError, HistoryError,
+    HistoryProvider, HistoryProviderError, HistorySearchLimits, HistorySearchSource,
 };
 use unicode_segmentation::UnicodeSegmentation;
 
@@ -107,7 +107,7 @@ fn kill_yank_is_bounded_atomic_and_undoable() {
     editor.insert("12345").unwrap();
     let before = editor.analysis_snapshot();
     let register = editor.kill_register().to_owned();
-    assert_eq!(editor.kill_word_backward(), Err(EditError::KillCapacity));
+    assert_eq!(editor.kill_word_backward(), Err(EditError::Capacity));
     assert_eq!(
         (editor.text(), editor.cursor(), editor.revision()),
         (before.text(), before.cursor(), before.revision())
@@ -161,17 +161,26 @@ fn provider_view_is_newest_first_bounded_validated_and_atomic() {
 
 #[test]
 fn editor_limits_are_inspectable_and_legacy_constructor_stays_coherent() {
-    assert_eq!(
-        EditorLimits::new(16, 0, 32, 4),
-        Err(EditError::InvalidConfiguration)
-    );
-    assert_eq!(
-        EditorLimits::new(16, 8, 31, 4),
-        Err(EditError::InvalidConfiguration)
-    );
+    assert_eq!(EditorLimits::new(16, 0, 32, 4), Err(EditorLimitsError));
+    assert_eq!(EditorLimits::new(16, 8, 31, 4), Err(EditorLimitsError));
     let editor = Editor::new(16, 2);
     assert_eq!(editor.capacity(), 16);
     assert_eq!(editor.limits().undo_entries(), 256);
     assert_eq!(editor.limits().undo_bytes(), 32);
     assert_eq!(editor.limits().kill_bytes(), 16);
+}
+
+#[test]
+fn pre_ergonomics_edit_error_matches_remain_exhaustive() {
+    fn classify(error: EditError) -> u8 {
+        match error {
+            EditError::Capacity => 0,
+            EditError::InvalidText => 1,
+            EditError::InvalidRange => 2,
+            EditError::HistoryDisabled => 3,
+            EditError::InvalidUtf8 => 4,
+            EditError::InvalidSequence => 5,
+        }
+    }
+    assert_eq!(classify(EditError::Capacity), 0);
 }

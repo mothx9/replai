@@ -85,6 +85,7 @@ lifetime.
 | E-001 | Generated Unicode state, seed `7632459182231841`, state `4360685392116866849` | A Unicode word boundary could fall inside an extended grapheme and produce an invalid cursor. | Product defect in new ergonomics | Snap word boundaries with `GraphemeCursor`; mixed combining/ZWJ/RI regressions. | Closed |
 | E-002 | 1 MiB local insertion allocation probe | Initial grouping could extend a huge initial transaction and reallocate its whole payload. | Product defect in new ergonomics | Cap a coalesced typing/deletion transaction at 4096 bytes; one-byte local undo payload regression. | Closed |
 | E-003 | Identical history-search acceptance and exhausted history navigation | Identical accepted bytes could retain revision identity; navigation reset auxiliary undo state before the checked revision commit. | Product defect in new ergonomics | Always advance identical acceptance and order history revision checks before auxiliary mutation; unit regression. | Closed |
+| E-004 | Final public-surface compatibility audit | Adding limit/kill variants to the existing exhaustive `EditError` enum would break otherwise unchanged callers. | Product defect in the new public API | Use the existing `Capacity` rejection for kill bounds and a new `EditorLimitsError` only on new constructor APIs; compile an exhaustive pre-wave `EditError` match as a regression. | Closed |
 | H-001 | First fuzz invocation | A single-worker launch accumulated only 63.20 CPU-seconds before manual interruption to configure four accounted workers. | Harness execution, not product evidence | Excluded from campaign totals; exact four-worker command retained. | Closed |
 | H-002 | Linux Valgrind under the Rust test harness | Both Linux architectures retained one identical 48-byte `possibly lost` process-lifetime allocation in `std::thread::current::init_current` / `std::sync::mpmc::context::Context`, with no REPLAI frame. | Tool/harness attribution, not a product leak | Keep the complete log; fail every definite/indirect leak and every possible-loss block except this exact Rust libtest TLS signature. No blanket suppression is used. | Closed |
 | H-003 | Early macOS native qualifier runs | `leaks --atExit` did not complete around a libtest or a self-owned PTY, and the first external controller stopped draining the PTY before the leak report completed. | Harness execution, not product evidence | Keep the standalone public-API `ergonomics-pty` oracle for exact PTY semantics; drive the public blocking host from an external PTY controller and continuously drain the combined program/leak output through process exit. | Closed after replay |
@@ -177,8 +178,10 @@ wave and are not relabeled as solved.
 
 ## Compatibility and residual scope
 
-`Editor::new(max_bytes, history_entries)` remains source compatible. C ABI 1 adds
-no symbol, record, constant or numeric identity. Configurable keymaps, completion
+`Editor::new(max_bytes, history_entries)` and exhaustive matches over the prior
+`EditError` variants remain source compatible. New limit construction reports
+the additive `EditorLimitsError`. C ABI 1 adds no symbol, record, constant or
+numeric identity. Configurable keymaps, completion
 helpers, autosuggestion, large candidate paging, streaming/output arbitration,
 Windows runtime, sensitive input, U3 redesign, structural large-draft redesign,
 high-level facade, runtime adapters and agent materials remain unimplemented.
