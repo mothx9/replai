@@ -106,8 +106,10 @@ def main():
             assert all(v == values[0] for v in values), (key, "allocation oracle is not deterministic")
             gate.update(encoded_bytes=row["encoded_bytes"][0], allocations=values[0])
             gates[key] = gate
-        for key in ["append/1024/0", "cursor/1024/0"]:
-            assert gates[key]["allocations"]["allocation_calls"] == 0
+        assert gates["cursor/1024/0"]["allocations"]["allocation_calls"] == 0
+        append = gates["append/1024/0"]["allocations"]
+        assert append == {"allocation_calls": 1, "peak_live_delta_bytes": 1,
+                          "requested_bytes": 1, "retained_delta_bytes": 1}
         registration = {"identity": metadata, "allocation_binary_sha256": hashed(a.allocation_binary),
                         "controls_sha256": hashed(a.work / "controls.jsonl"), "timer_resolution_ns": header["timer_resolution_ns"],
                         "formula": "median max(15%,5*MAD,2*timer); p95 max(25%,p95-MAD,2*timer)", "gates": gates}
