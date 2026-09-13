@@ -2,7 +2,10 @@
 
 #[cfg(any(target_os = "linux", target_os = "macos"))]
 mod native {
-    use replai::{Editor, Interaction, Prompt, Role, Theme};
+    use replai::{
+        Action, CompletionCandidate, CompletionSet, EditAction, Editor, Interaction, Key, Prompt,
+        Role, Suggestion, SuggestionAction, Theme,
+    };
     use rustix::{
         fs::{OFlags, fcntl_getfl, fcntl_setfl},
         io::{FdFlags, fcntl_setfd, read, write},
@@ -82,6 +85,19 @@ mod native {
             let original = editor.analysis_snapshot();
             let mut interaction = Interaction::new(editor);
             interaction
+                .keymap_mut()
+                .unwrap()
+                .bind(
+                    Key::control(20).unwrap(),
+                    Action::Suggestion(SuggestionAction::Accept),
+                )
+                .unwrap();
+            interaction
+                .keymap_mut()
+                .unwrap()
+                .bind(Key::control(26).unwrap(), Action::Edit(EditAction::Undo))
+                .unwrap();
+            interaction
                 .open_with_theme(
                     &slave,
                     &slave,
@@ -121,12 +137,42 @@ mod native {
             );
             feed(&mut interaction, &master, b"\x1bf\x17\x19", &mut screen);
             assert_eq!(interaction.editor().text(), "draft界");
+            feed(&mut interaction, &master, b"\x05", &mut screen);
+            let revision = interaction.revision();
+            interaction
+                .present_suggestion(Suggestion::new(revision, " suffix").unwrap())
+                .unwrap();
+            screen.process(&drain(&master));
+            assert!(screen.screen().contents().contains('→'));
+            feed(&mut interaction, &master, &[20], &mut screen);
+            assert_eq!(interaction.editor().text(), "draft界 suffix");
+            feed(&mut interaction, &master, &[26], &mut screen);
+            assert_eq!(interaction.editor().text(), "draft界");
+            let revision = interaction.revision();
+            let candidates = (0..1000)
+                .map(|i| {
+                    CompletionCandidate::new(
+                        0..interaction.editor().text().len(),
+                        &format!("draft-{i}"),
+                        &format!("candidate {i}"),
+                    )
+                    .unwrap()
+                })
+                .collect();
+            interaction
+                .present_completions(CompletionSet::new(revision, candidates).unwrap())
+                .unwrap();
+            screen.process(&drain(&master));
+            feed(&mut interaction, &master, b"\x1b[6~", &mut screen);
+            assert!(interaction.completion_selection().unwrap().index > 0);
             interaction.close().unwrap();
             screen.process(&drain(&master));
             assert_eq!(format!("{:?}", tcgetattr(&slave).unwrap()), before);
             assert!(!screen.screen().bracketed_paste());
         }
-        println!("{{\"plain_styled\":true,\"real_pty\":true,\"widths\":[20,40,80,132]}}");
+        println!(
+            "{{\"plain_styled\":true,\"real_pty\":true,\"keymap\":true,\"suggestion\":true,\"large_completion\":1000,\"widths\":[20,40,80,132]}}"
+        );
     }
 }
 

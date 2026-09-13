@@ -293,7 +293,10 @@ impl Engine {
                 return self.completion_action(action).map(|(_, effects)| effects);
             }
         }
-        if self.suggestion().is_some() {
+        if self.completion_selection().is_none()
+            && self.diagnostics().is_none()
+            && self.suggestion().is_some()
+        {
             let action = match &input {
                 Input::Request(Request::SuggestionAccept) => Some(true),
                 Input::Request(Request::SuggestionDismiss) => Some(false),
@@ -615,12 +618,14 @@ impl Engine {
         {
             return Err(Error::State);
         }
-        let text = accept.then(|| suggestion.text().to_owned());
-        self.remove_suggestion();
-        if let Some(text) = text {
+        if accept {
+            let text = suggestion.text().to_owned();
             self.editor.insert_transaction(&text)?;
+            self.remove_suggestion();
             self.invalidate_validation();
             self.remove_completion();
+        } else {
+            self.remove_suggestion();
         }
         let s = self.surface.as_mut().ok_or(Error::State)?;
         s.dirty = true;

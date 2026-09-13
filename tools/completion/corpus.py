@@ -46,7 +46,7 @@ def main():
         environment = json.loads((args.campaign / "environment.json").read_text())
         summary = json.loads((args.campaign / "surfaces" / "summary.json").read_text())
         assert not environment["dirty"] and summary["passed"] and summary["budget_complete"]
-        inputs = [path.read_bytes() for path in sorted((args.campaign / "editor" / "corpus").iterdir()) if path.is_file()]
+        inputs = [path.read_bytes() for path in sorted((args.campaign / "surfaces" / "corpus").iterdir()) if path.is_file()]
         archive = {"schema": 1, "target": "surfaces", "environment": environment,
                    "summary": summary, "inputs": [base64.b64encode(value).decode() for value in inputs]}
         args.output.parent.mkdir(parents=True, exist_ok=True)

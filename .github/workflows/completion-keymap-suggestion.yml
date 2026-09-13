@@ -1,0 +1,58 @@
+name: Completion keymap suggestion qualification
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  native:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            architecture: x86_64
+          - os: ubuntu-24.04-arm
+            architecture: aarch64
+          - os: macos-15
+            architecture: arm64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87
+        with:
+          toolchain: '1.98.1'
+      - name: Require native architecture
+        run: test "$(uname -m)" = '${{ matrix.architecture }}'
+      - name: Install Linux memory tool
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y valgrind
+      - name: Portable, PTY and memory qualification
+        run: python3 tools/ergonomics/qualify_native.py --work "$RUNNER_TEMP/replai-completion"
+      - name: Replay retained surface corpus
+        run: python3 tools/completion/corpus.py replay --archive tools/completion/surfaces-corpus.json.gz --work "$RUNNER_TEMP/replai-completion-corpus"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: completion-keymap-suggestion-${{ matrix.os }}
+          path: |
+            ${{ runner.temp }}/replai-completion
+            ${{ runner.temp }}/replai-completion-corpus
+
+  windows-portable:
+    runs-on: windows-2025
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87
+        with:
+          toolchain: '1.98.1'
+      - name: Portable qualification
+        run: python tools/ergonomics/qualify_native.py --portable-only --work "$env:RUNNER_TEMP/replai-completion"
+      - name: Replay retained surface corpus
+        run: python tools/completion/corpus.py replay --archive tools/completion/surfaces-corpus.json.gz --work "$env:RUNNER_TEMP/replai-completion-corpus"

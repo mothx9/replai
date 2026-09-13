@@ -153,15 +153,18 @@ def main():
     args.work.mkdir(parents=True, exist_ok=False)
     started = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     run(["cargo", "test", "--locked", "--test", "ergonomics"])
+    run(["cargo", "test", "--locked", "--test", "configuration_helpers"])
     run(["cargo", "run", "--locked", "--release", "--manifest-path",
          "tools/hardening/Cargo.toml", "--bin", "ergonomics-sequences", "--", "1000", "7632459182231841"])
+    run(["cargo", "run", "--locked", "--release", "--manifest-path",
+         "tools/hardening/Cargo.toml", "--bin", "completion-sequences", "--", "1000", "15579347612220529"])
     summary = {
         "head": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
         "tree": subprocess.check_output(["git", "rev-parse", "HEAD^{tree}"], cwd=ROOT, text=True).strip(),
         "runtime_tree": subprocess.check_output(["git", "rev-parse", "HEAD:src"], cwd=ROOT, text=True).strip(),
         "platform": platform.platform(), "machine": platform.machine(), "started_utc": started,
         "rustc": subprocess.check_output(["rustc", "-vV"], text=True).strip(),
-        "portable_model_sequences": 1000, "portable_tests": "PASS",
+        "portable_model_sequences": 2000, "portable_tests": "PASS",
     }
     if not args.portable_only:
         executable = pty_binary()
