@@ -19,8 +19,10 @@ struct State {
     intermediate: Option<Vec<crate::render::Mutation>>,
 }
 fn prepare(operation: &str, bytes: usize, lines: usize) -> State {
-    let mut e = Engine::new(Editor::new(2 * 1024 * 1024, 8));
-    let text = if lines > 0 {
+    let mut e = Engine::new(Editor::new(2 * 1024 * 1024, 1_024));
+    let text = if operation.contains("unicode") {
+        "alpha café e\u{301}lan 東京 👩\u{200d}💻 omega".repeat((bytes / 48).max(1))
+    } else if lines > 0 {
         ("x".repeat(63) + "\n").repeat(lines)
     } else {
         "x".repeat(bytes)
@@ -32,9 +34,44 @@ fn prepare(operation: &str, bytes: usize, lines: usize) -> State {
         e.editor.backspace();
     }
     e.editor.admit_history("history\nentry").unwrap();
+    if operation == "history-search-large" {
+        let entries = (0..1_000).map(|i| format!("history item {i:04} alpha"));
+        e.set_history_source(Some(
+            HistorySearchSource::from_entries(
+                entries,
+                HistorySearchLimits::new(1_000, 64 * 1024, 128).unwrap(),
+            )
+            .unwrap(),
+        ))
+        .unwrap();
+    }
+    if matches!(
+        operation,
+        "word-right" | "word-delete-forward" | "word-right-unicode" | "word-delete-forward-unicode"
+    ) {
+        e.editor.home();
+    }
+    if matches!(operation, "undo-local" | "redo-local") {
+        e.editor.home();
+        e.editor.end();
+        e.editor.insert("z").unwrap();
+        if operation == "redo-local" {
+            assert!(e.editor.undo());
+        }
+    }
+    if operation == "undo-replace" {
+        e.editor.replace(0..1, "z").unwrap();
+    }
+    if operation == "yank" {
+        e.editor.kill_word_backward().unwrap();
+    }
     e.set_submission_policy(SubmissionPolicy::Validated)
         .unwrap();
     e.start(Prompt::new("q2").unwrap(), (80, 24)).unwrap();
+    if operation == "history-search-query" {
+        e.apply(Input::Edit(EditCommand::HistorySearchOlder))
+            .unwrap();
+    }
     let candidates =
         || vec![CompletionCandidate::new(0..text.len(), "replacement", "display").unwrap(); 10];
     if matches!(operation, "menu-next" | "menu-accept") {
@@ -141,6 +178,42 @@ fn operation(s: &mut State, name: &str) -> Effects {
             }
             e.flush()
         }
+        "word-left" | "word-left-unicode" => {
+            e.editor.word_left();
+            Effects::default()
+        }
+        "word-right" | "word-right-unicode" => {
+            e.editor.word_right();
+            Effects::default()
+        }
+        "word-delete-backward" | "word-delete-backward-unicode" => {
+            e.editor.delete_word_backward();
+            Effects::default()
+        }
+        "word-delete-forward" | "word-delete-forward-unicode" => {
+            e.editor.delete_word_forward();
+            Effects::default()
+        }
+        "undo-local" | "undo-replace" => {
+            assert!(e.editor.undo());
+            Effects::default()
+        }
+        "redo-local" => {
+            assert!(e.editor.redo());
+            Effects::default()
+        }
+        "history-search-small" | "history-search-large" => e
+            .apply(Input::Edit(EditCommand::HistorySearchOlder))
+            .unwrap(),
+        "history-search-query" => e.apply(Input::Text("alpha".into())).unwrap(),
+        "kill" => {
+            e.editor.kill_word_backward().unwrap();
+            Effects::default()
+        }
+        "yank" => {
+            e.editor.yank().unwrap();
+            Effects::default()
+        }
         _ => panic!("unknown operation {name}"),
     }
 }
@@ -163,6 +236,22 @@ pub fn benchmark(samples: usize, batches: usize) {
         "analysis",
         "output",
         "resize",
+        "word-left",
+        "word-right",
+        "word-delete-backward",
+        "word-delete-forward",
+        "undo-local",
+        "redo-local",
+        "undo-replace",
+        "history-search-small",
+        "history-search-large",
+        "history-search-query",
+        "kill",
+        "yank",
+        "word-left-unicode",
+        "word-right-unicode",
+        "word-delete-backward-unicode",
+        "word-delete-forward-unicode",
     ] {
         workloads.push((name, if name == "burst" { 0 } else { 1024 }, 0));
     }

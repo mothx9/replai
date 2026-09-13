@@ -11,6 +11,21 @@ pub(crate) enum EditCommand {
     Delete,
     HistoryPrevious,
     HistoryNext,
+    WordLeft,
+    WordRight,
+    WordDeleteBackward,
+    WordDeleteForward,
+    HistorySearchOlder,
+    HistorySearchNewer,
+    Undo,
+    #[allow(dead_code)] // Public Editor API; intentionally unbound until configurable keymaps.
+    Redo,
+    KillWordBackward,
+    #[allow(dead_code)] // Public Editor API; intentionally unbound until configurable keymaps.
+    KillWordForward,
+    KillLineStart,
+    KillLineEnd,
+    Yank,
 }
 #[derive(Debug, PartialEq)]
 pub(crate) enum Request {
@@ -25,6 +40,7 @@ pub(crate) enum Request {
 #[derive(Debug, PartialEq)]
 pub(crate) enum Input {
     Text(String),
+    Paste(String),
     Edit(EditCommand),
     Request(Request),
     Resize(usize, usize),

@@ -86,3 +86,7 @@ path = "native.rs"
 [[bin]]
 name = "bench"
 path = "bench.rs"
+
+[[bin]]
+name = "ergonomics-sequences"
+path = "ergonomics_sequences.rs"

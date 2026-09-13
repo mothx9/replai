@@ -222,6 +222,84 @@ fn pty_history_and_completion_preserve_host_control() {
 }
 
 #[test]
+fn pty_reverse_search_word_undo_kill_and_plain_narrow_restore_exactly() {
+    let _serial = serial();
+    for (cols, plain) in [(20, true), (40, false), (80, true), (132, false)] {
+        let (master, slave) = pty(cols, 12);
+        let before_termios = termios(&slave);
+        let mut editor = Editor::new(256, 4);
+        editor.admit_history("older alpha command").unwrap();
+        editor.admit_history("newest beta command").unwrap();
+        editor.insert("draft界").unwrap();
+        editor.left();
+        let original = editor.analysis_snapshot();
+        let mut interaction = Interaction::new(editor);
+        interaction
+            .open_with_theme(
+                &slave,
+                &slave,
+                prompt(),
+                replai::Theme::new(true, plain, None),
+            )
+            .unwrap();
+        let mut screen = vt100::Parser::new(12, cols, 100);
+        screen.process(&drain(&master));
+
+        feed(&mut interaction, &master, b"\x12alpha", &mut screen);
+        assert_eq!(interaction.history_search_query(), Some("alpha"));
+        assert_eq!(
+            interaction.history_search_match(),
+            Some("older alpha command")
+        );
+        assert_eq!(
+            (
+                interaction.editor().text(),
+                interaction.editor().cursor(),
+                interaction.revision()
+            ),
+            (original.text(), original.cursor(), original.revision())
+        );
+        assert!(screen.screen().contents().contains("? 'alpha' >"));
+        interaction
+            .external_output(Role::Dim, "host notice")
+            .unwrap();
+        screen.process(&drain(&master));
+        assert_eq!(interaction.history_search_query(), Some("alpha"));
+        assert_eq!(
+            interaction.history_search_match(),
+            Some("older alpha command")
+        );
+        feed(&mut interaction, &master, b"\x1b", &mut screen);
+        std::thread::sleep(Duration::from_millis(270));
+        interaction.poll(Duration::ZERO).unwrap();
+        screen.process(&drain(&master));
+        assert_eq!(
+            (
+                interaction.editor().text(),
+                interaction.editor().cursor(),
+                interaction.revision()
+            ),
+            (original.text(), original.cursor(), original.revision())
+        );
+
+        feed(&mut interaction, &master, b"\x12alpha\r", &mut screen);
+        assert_eq!(interaction.editor().text(), "older alpha command");
+        assert_ne!(interaction.revision(), original.revision());
+        feed(&mut interaction, &master, b"\x1f", &mut screen);
+        assert_eq!(
+            (interaction.editor().text(), interaction.editor().cursor()),
+            ("draft界", "draft".len())
+        );
+        feed(&mut interaction, &master, b"\x1bf\x17\x19", &mut screen);
+        assert_eq!(interaction.editor().text(), "draft界");
+        interaction.close().unwrap();
+        screen.process(&drain(&master));
+        assert_eq!(termios(&slave), before_termios);
+        assert!(!screen.screen().bracketed_paste());
+    }
+}
+
+#[test]
 fn pty_multiline_paste_resize_clear_and_external_output() {
     let _serial = serial();
     let (master, slave) = pty(12, 12);

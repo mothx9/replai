@@ -91,7 +91,7 @@ pub fn protocol_case(data: &[u8]) {
             received.push(k);
         }
     }
-    assert_eq!(received, vec![Key::Text(safe)]);
+    assert_eq!(received, vec![Key::Paste(safe)]);
 }
 
 /// Full-string editor/history oracle, including rejected edits and cursor revisions.
@@ -101,6 +101,87 @@ pub fn editor_case(data: &[u8]) {
     for c in data.as_chunks::<4>().0.iter().take(128) {
         let text = WORDS[c[3] as usize % WORDS.len()];
         model.operation(&mut e, c[0], c[1], c[2], text);
+    }
+    ergonomic_editor_case(data);
+}
+
+fn ergonomic_editor_case(data: &[u8]) {
+    let mut e = opened();
+    e.editor.admit_history("alpha old").unwrap();
+    e.editor.admit_history("界 beta").unwrap();
+    e.set_history_source(Some(
+        HistorySearchSource::from_entries(
+            ["external gamma", "duplicate alpha", "duplicate alpha"],
+            HistorySearchLimits::new(16, 4096, 128).unwrap(),
+        )
+        .unwrap(),
+    ))
+    .unwrap();
+    let mut revisions = vec![e.editor.revision()];
+    for c in data.as_chunks::<4>().0.iter().take(128) {
+        if !e.is_open() {
+            e.start(Prompt::new("test").unwrap(), (40, 10)).unwrap();
+        }
+        let before = e.editor.analysis_snapshot();
+        let text = WORDS[c[3] as usize % WORDS.len()];
+        let action = match c[0] % 24 {
+            0 => Input::Text(text.into()),
+            1 => Input::Paste(text.into()),
+            2 => Input::Edit(E::WordLeft),
+            3 => Input::Edit(E::WordRight),
+            4 => Input::Edit(E::WordDeleteBackward),
+            5 => Input::Edit(E::WordDeleteForward),
+            6 => Input::Edit(E::Undo),
+            7 => Input::Edit(E::Redo),
+            8 => Input::Edit(E::KillWordBackward),
+            9 => Input::Edit(E::KillWordForward),
+            10 => Input::Edit(E::KillLineStart),
+            11 => Input::Edit(E::KillLineEnd),
+            12 => Input::Edit(E::Yank),
+            13 => Input::Edit(E::HistoryPrevious),
+            14 => Input::Edit(E::HistoryNext),
+            15 => Input::Edit(E::HistorySearchOlder),
+            16 => Input::Edit(E::HistorySearchNewer),
+            17 => Input::Edit(E::Backspace),
+            18 => Input::Request(R::DismissCompletion),
+            19 => Input::Resize([20, 40, 80, 132][c[1] as usize % 4], 2 + c[2] as usize % 20),
+            20 => {
+                effects(&e.external_output(Role::Dim, "finite notice").unwrap());
+                continue;
+            }
+            21 => Input::Request(R::Submit),
+            22 => Input::Edit(E::Left),
+            _ => Input::Edit(E::Right),
+        };
+        if let Ok(fx) = e.apply(action) {
+            effects(&fx);
+        }
+        check_editor(&e.editor);
+        let after = e.editor.revision();
+        if after != before.revision() {
+            assert!(
+                !revisions.contains(&after),
+                "draft revision identity was reused"
+            );
+            revisions.push(after);
+            if revisions.len() > 32 {
+                revisions.remove(0);
+            }
+            let stable = e.editor.analysis_snapshot();
+            assert_eq!(
+                e.editor.replace_at(before.revision(), 0..0, "stale"),
+                Ok(AnalysisOutcome::Stale)
+            );
+            assert_eq!(
+                (e.editor.text(), e.editor.cursor(), e.editor.revision()),
+                (stable.text(), stable.cursor(), stable.revision())
+            );
+        }
+        assert!(e.editor.undo_usage().0 <= e.editor.limits().undo_entries());
+        assert!(e.editor.undo_usage().1 <= e.editor.limits().undo_bytes());
+        assert!(e.editor.redo_usage().0 <= e.editor.limits().undo_entries());
+        assert!(e.editor.redo_usage().1 <= e.editor.limits().undo_bytes());
+        assert!(e.editor.kill_register().len() <= e.editor.limits().kill_bytes());
     }
 }
 

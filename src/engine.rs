@@ -24,6 +24,8 @@ pub(crate) struct Engine {
     pub editor: Editor,
     surface: Option<Surface>,
     validation: Option<Box<crate::validation::ValidationState>>,
+    history_source: Option<crate::HistorySearchSource>,
+    history_search: Option<Box<crate::history::HistorySearchState>>,
 }
 impl Engine {
     pub fn new(editor: Editor) -> Self {
@@ -31,10 +33,94 @@ impl Engine {
             editor,
             surface: None,
             validation: None,
+            history_source: None,
+            history_search: None,
         }
     }
     pub fn is_open(&self) -> bool {
         self.surface.is_some()
+    }
+    pub fn set_history_source(
+        &mut self,
+        source: Option<crate::HistorySearchSource>,
+    ) -> Result<(), crate::HistoryError> {
+        if self.history_search.is_some() {
+            return Err(crate::HistoryError::SearchActive);
+        }
+        if source.as_ref().is_some_and(|s| {
+            s.entries()
+                .iter()
+                .any(|entry| entry.len() > self.editor.capacity())
+        }) {
+            return Err(crate::HistoryError::EntryTooLarge);
+        }
+        self.history_source = source;
+        Ok(())
+    }
+    pub fn history_search_query(&self) -> Option<&str> {
+        Some(&self.history_search.as_ref()?.query)
+    }
+    pub fn history_search_match(&self) -> Option<&str> {
+        self.history_search.as_ref()?.selected_text()
+    }
+    fn begin_history_search(&mut self) {
+        let limits = self
+            .history_source
+            .as_ref()
+            .map_or_else(crate::HistorySearchLimits::default, |s| s.limits());
+        let mut entries = Vec::with_capacity(limits.entries().min(64));
+        let mut bytes = 0usize;
+        for entry in self.editor.history_newest().chain(
+            self.history_source
+                .as_ref()
+                .into_iter()
+                .flat_map(|s| s.entries().iter().map(String::as_str)),
+        ) {
+            if entries.len() == limits.entries() {
+                break;
+            }
+            let Some(total) = bytes.checked_add(entry.len()) else {
+                break;
+            };
+            if total > limits.bytes() {
+                break;
+            }
+            bytes = total;
+            entries.push(entry.to_owned());
+        }
+        self.editor.break_undo_group();
+        self.remove_completion();
+        if let Some(validation) = &mut self.validation {
+            validation.pending = None;
+        }
+        self.history_search = Some(Box::new(crate::history::HistorySearchState::new(
+            self.editor.revision(),
+            entries,
+            limits.query_bytes(),
+        )));
+    }
+    fn history_search_changed(&mut self) -> Effects {
+        if let Some(surface) = &mut self.surface {
+            surface.dirty = true;
+            surface.damage = Damage::Rebuild;
+        }
+        self.flush()
+    }
+    fn accept_history_search(&mut self) -> Result<Effects, Error> {
+        let search = self.history_search.take().expect("active search checked");
+        if search.revision != self.editor.revision() {
+            return Ok(self.history_search_changed());
+        }
+        let selected = search.selected_text().map(str::to_owned);
+        let revision = self.editor.revision();
+        if let Some(text) = selected {
+            self.editor.replace_search_result(&text)?;
+        }
+        if revision != self.editor.revision() {
+            self.invalidate_validation();
+            self.remove_completion();
+        }
+        Ok(self.history_search_changed())
     }
     pub fn start(&mut self, prompt: Prompt, size: (usize, usize)) -> Result<Effects, Error> {
         if self.is_open() {
@@ -64,7 +150,14 @@ impl Engine {
             .expect("active surface checked by caller");
         let damage = if s.dirty { s.damage } else { Damage::Rebuild };
         s.dirty = false;
-        if let Some(completion) = &s.completion {
+        if let Some(search) = &self.history_search {
+            s.renderer.transition(search.frame(
+                &self.editor,
+                &s.prompt,
+                s.size,
+                s.analysis.as_deref(),
+            ))
+        } else if let Some(completion) = &s.completion {
             s.renderer.transition(completion.frame(
                 &self.editor,
                 &s.prompt,
@@ -118,6 +211,49 @@ impl Engine {
         if !self.is_open() {
             return Err(Error::State);
         }
+        if self.history_search.is_some() {
+            match &input {
+                Input::Text(text) | Input::Paste(text) => {
+                    if let Err(error) = self.history_search.as_mut().unwrap().insert_query(text) {
+                        return Ok(self.observable(Event::Rejected(error)));
+                    }
+                    return Ok(self.history_search_changed());
+                }
+                Input::Edit(EditCommand::Backspace) => {
+                    self.history_search.as_mut().unwrap().backspace();
+                    return Ok(self.history_search_changed());
+                }
+                Input::Edit(EditCommand::KillWordBackward) => {
+                    self.history_search.as_mut().unwrap().delete_query_word();
+                    return Ok(self.history_search_changed());
+                }
+                Input::Edit(EditCommand::KillLineStart) => {
+                    self.history_search.as_mut().unwrap().clear_query();
+                    return Ok(self.history_search_changed());
+                }
+                Input::Edit(EditCommand::HistorySearchOlder) => {
+                    self.history_search.as_mut().unwrap().older();
+                    return Ok(self.history_search_changed());
+                }
+                Input::Edit(EditCommand::HistorySearchNewer) => {
+                    self.history_search.as_mut().unwrap().newer();
+                    return Ok(self.history_search_changed());
+                }
+                Input::Request(Request::Submit) => return self.accept_history_search(),
+                Input::Request(Request::DismissCompletion) => {
+                    self.history_search = None;
+                    return Ok(self.history_search_changed());
+                }
+                Input::Resize(..) | Input::Request(Request::Redraw) => {}
+                _ => {
+                    self.history_search = None;
+                    if let Some(surface) = &mut self.surface {
+                        surface.dirty = true;
+                        surface.damage = Damage::Rebuild;
+                    }
+                }
+            }
+        }
         if self.completion_selection().is_some() {
             use crate::CompletionAction as C;
             let action = match input {
@@ -162,6 +298,11 @@ impl Engine {
                     return Ok(self.observable(Event::Rejected(error)));
                 }
             }
+            Input::Paste(text) => {
+                if let Err(error) = self.editor.insert_transaction(&text) {
+                    return Ok(self.observable(Event::Rejected(error)));
+                }
+            }
             Input::Edit(command) => match command {
                 EditCommand::Left => self.editor.left(),
                 EditCommand::Right => self.editor.right(),
@@ -169,6 +310,48 @@ impl Engine {
                 EditCommand::End => self.editor.end(),
                 EditCommand::Backspace => self.editor.backspace(),
                 EditCommand::Delete => self.editor.delete(),
+                EditCommand::WordLeft => self.editor.word_left(),
+                EditCommand::WordRight => self.editor.word_right(),
+                EditCommand::WordDeleteBackward => self.editor.delete_word_backward(),
+                EditCommand::WordDeleteForward => self.editor.delete_word_forward(),
+                EditCommand::Undo => {
+                    self.editor.undo();
+                }
+                EditCommand::Redo => {
+                    self.editor.redo();
+                }
+                EditCommand::KillWordBackward => {
+                    if let Err(error) = self.editor.kill_word_backward() {
+                        return Ok(self.observable(Event::Rejected(error)));
+                    }
+                }
+                EditCommand::KillWordForward => {
+                    if let Err(error) = self.editor.kill_word_forward() {
+                        return Ok(self.observable(Event::Rejected(error)));
+                    }
+                }
+                EditCommand::KillLineStart => {
+                    if let Err(error) = self.editor.kill_line_start() {
+                        return Ok(self.observable(Event::Rejected(error)));
+                    }
+                }
+                EditCommand::KillLineEnd => {
+                    if let Err(error) = self.editor.kill_line_end() {
+                        return Ok(self.observable(Event::Rejected(error)));
+                    }
+                }
+                EditCommand::Yank => {
+                    if let Err(error) = self.editor.yank() {
+                        return Ok(self.observable(Event::Rejected(error)));
+                    }
+                }
+                EditCommand::HistorySearchOlder => {
+                    self.begin_history_search();
+                    return Ok(self.history_search_changed());
+                }
+                EditCommand::HistorySearchNewer => {
+                    return Ok(self.observable(Event::Rejected(crate::EditError::InvalidSequence)));
+                }
                 EditCommand::HistoryPrevious => {
                     if self.validation.is_none() || !self.editor.line_up() {
                         self.editor.history_up();
@@ -181,6 +364,7 @@ impl Engine {
                 }
             },
             Input::Request(Request::Submit) => {
+                self.editor.break_undo_group();
                 if let Some(v) = &mut self.validation {
                     v.pending = Some(self.editor.revision());
                     return Ok(self
@@ -195,8 +379,9 @@ impl Engine {
             }
             Input::Request(Request::DeleteOrEof) => self.editor.delete(),
             Input::Request(Request::Completion) => {
+                self.editor.break_undo_group();
                 if let Some(spaces) = self.continuation_indent() {
-                    if let Err(error) = self.editor.insert(&"    "[..spaces]) {
+                    if let Err(error) = self.editor.insert_transaction(&"    "[..spaces]) {
                         return Ok(self.observable(Event::Rejected(error)));
                     }
                 } else {
@@ -233,6 +418,7 @@ impl Engine {
             damage = Damage::Rebuild;
         }
         if revision != self.editor.revision() {
+            self.history_search = None;
             if self.analysis_presentation().is_some() {
                 damage = Damage::Rebuild;
             }
@@ -256,6 +442,7 @@ impl Engine {
         })
     }
     fn finish(&mut self, event: Event) -> Effects {
+        self.history_search = None;
         self.remove_completion();
         self.invalidate_validation();
         self.editor.end_draft();
@@ -268,6 +455,8 @@ impl Engine {
         effects
     }
     pub fn close(&mut self) -> Effects {
+        self.history_search = None;
+        self.editor.break_undo_group();
         self.remove_completion();
         self.invalidate_validation();
         let mut effects = self.flush();
@@ -277,6 +466,7 @@ impl Engine {
         effects
     }
     pub fn abandon(&mut self) {
+        self.history_search = None;
         self.invalidate_validation();
         self.surface = None;
     }
@@ -336,6 +526,9 @@ impl Engine {
         }
         if set.revision() != self.editor.revision() {
             return Ok((crate::AnalysisOutcome::Stale, Effects::default()));
+        }
+        if self.history_search.is_some() {
+            return Err(Error::State.into());
         }
         set.validate(&self.editor)?;
         self.clear_diagnostics();
@@ -495,7 +688,7 @@ impl Engine {
         let effects = match result.into_disposition() {
             V::Complete => self.finish(Event::Submitted(self.editor.text().into())),
             V::Incomplete => {
-                self.editor.insert("\n")?;
+                self.editor.insert_transaction("\n")?;
                 self.invalidate_validation();
                 self.remove_completion();
                 let s = self.surface.as_mut().unwrap();
@@ -722,3 +915,7 @@ mod validation_tests;
 #[cfg(test)]
 #[path = "analysis_presentation_tests.rs"]
 mod analysis_presentation_tests;
+
+#[cfg(test)]
+#[path = "ergonomics_tests.rs"]
+mod ergonomics_tests;

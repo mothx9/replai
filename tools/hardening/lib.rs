@@ -35,6 +35,8 @@ pub use document::{Alignment, Block, Column, Document, ListItem, Severity, Span,
 mod core;
 #[path = "../../src/event.rs"]
 mod event;
+#[path = "../../src/history.rs"]
+mod history;
 #[path = "../../src/interaction.rs"]
 mod interaction;
 // Other system façades are intentionally absent. These internal components
@@ -69,8 +71,11 @@ mod system;
 #[cfg_attr(not(any(target_os = "linux", target_os = "macos")), allow(dead_code))]
 #[path = "../../src/terminal.rs"]
 mod terminal;
-pub use core::{EditError, Editor};
+pub use core::{EditError, Editor, EditorLimits};
 pub use event::{Error, Event};
+pub use history::{
+    HistoryError, HistoryProvider, HistoryProviderError, HistorySearchLimits, HistorySearchSource,
+};
 pub use interaction::Interaction;
 pub use presentation::{Foreground, Prompt, Role, Style, Theme};
 

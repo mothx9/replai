@@ -95,6 +95,7 @@ mod driving;
 pub use document::{Alignment, Block, Column, Document, ListItem, Severity, Span, Text};
 mod core;
 mod event;
+mod history;
 mod interaction;
 // Other system façades are intentionally absent. These internal components
 // compile everywhere and execute through deterministic tests on every CI OS.
@@ -118,8 +119,12 @@ mod substrate;
 mod system;
 #[cfg_attr(not(any(target_os = "linux", target_os = "macos")), allow(dead_code))]
 mod terminal;
-pub use core::{EditError, Editor};
+pub use core::{DEFAULT_UNDO_ENTRIES, EditError, Editor, EditorLimits, MAX_UNDO_GROUP_BYTES};
 pub use event::{Error, Event};
+pub use history::{
+    DEFAULT_HISTORY_QUERY_BYTES, DEFAULT_HISTORY_SEARCH_BYTES, DEFAULT_HISTORY_SEARCH_ENTRIES,
+    HistoryError, HistoryProvider, HistoryProviderError, HistorySearchLimits, HistorySearchSource,
+};
 pub use interaction::Interaction;
 pub use presentation::{Foreground, Prompt, Role, Style, Theme};
 

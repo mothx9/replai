@@ -76,6 +76,39 @@ impl Interaction {
             Ok(&mut self.engine.editor)
         }
     }
+    /// Install a bounded host-fed history view used by reverse search.
+    ///
+    /// The view may be replaced while open when search is inactive. Provider I/O
+    /// has already completed, so terminal input never invokes host callbacks.
+    pub fn set_history_search_source(
+        &mut self,
+        source: crate::HistorySearchSource,
+    ) -> Result<(), crate::HistoryError> {
+        self.engine.set_history_source(Some(source))
+    }
+    /// Materialize and atomically install a bounded view from host-owned storage.
+    /// Provider calls are synchronous in this host-invoked method; do not perform
+    /// unbounded database or network work here.
+    pub fn load_history_provider(
+        &mut self,
+        provider: &mut impl crate::HistoryProvider,
+        limits: crate::HistorySearchLimits,
+    ) -> Result<(), crate::HistoryError> {
+        let source = crate::HistorySearchSource::from_provider(provider, limits)?;
+        self.set_history_search_source(source)
+    }
+    /// Remove the external search view. Admitted in-memory history is unaffected.
+    pub fn clear_history_search_source(&mut self) -> Result<(), crate::HistoryError> {
+        self.engine.set_history_source(None)
+    }
+    /// Current non-canonical reverse-search query, if search is active.
+    pub fn history_search_query(&self) -> Option<&str> {
+        self.engine.history_search_query()
+    }
+    /// Current non-canonical selected history match, if any.
+    pub fn history_search_match(&self) -> Option<&str> {
+        self.engine.history_search_match()
+    }
     /// Whether an interaction is active or a system resource still awaits cleanup.
     pub fn is_open(&self) -> bool {
         #[cfg(any(target_os = "linux", target_os = "macos"))]

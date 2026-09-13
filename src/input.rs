@@ -3,6 +3,7 @@ use crate::{EditError, core::valid_text};
 #[derive(Debug, PartialEq)]
 pub(crate) enum Key {
     Text(String),
+    Paste(String),
     Enter,
     Interrupt,
     Eof,
@@ -18,6 +19,8 @@ pub(crate) enum Key {
     Down,
     Left,
     Right,
+    Control(u8),
+    Meta(u8),
     Rejected(EditError),
     IncompletePaste,
 }
@@ -138,7 +141,7 @@ impl Decoder {
                             Ok(s) => {
                                 let s = s.replace("\r\n", "\n").replace('\r', "\n");
                                 if valid_text(&s) {
-                                    Key::Text(s)
+                                    Key::Paste(s)
                                 } else {
                                     Key::Rejected(EditError::InvalidText)
                                 }
@@ -185,6 +188,7 @@ impl Decoder {
                 self.state = State::Utf8(vec![byte]);
                 return None;
             }
+            11 | 18 | 19 | 21 | 23 | 25 | 31 => Key::Control(byte),
             0..=31 => Key::Rejected(EditError::InvalidText),
             _ => Key::Rejected(EditError::InvalidUtf8),
         })
@@ -200,6 +204,7 @@ fn append(bytes: &mut Vec<u8>, byte: u8, limit: usize, overflow: &mut bool) {
 }
 fn sequence(bytes: &[u8]) -> Key {
     match bytes {
+        [27, b @ (b'b' | b'f' | b'd' | 8 | 127)] => Key::Meta(*b),
         b"\x1b[Z" => Key::BackTab,
         b"\x1b[A" => Key::Up,
         b"\x1b[B" => Key::Down,
@@ -238,14 +243,32 @@ mod tests {
         ] {
             assert_eq!(decode(bytes, 100), [expected]);
         }
+        for (bytes, expected) in [
+            (b"\x1bb".as_slice(), Key::Meta(b'b')),
+            (b"\x1bf", Key::Meta(b'f')),
+            (b"\x1bd", Key::Meta(b'd')),
+            (b"\x1b\x7f", Key::Meta(127)),
+        ] {
+            assert_eq!(decode(bytes, 100), [expected]);
+        }
         assert_eq!(
-            decode(b"\x01\x03\x04\x05\x0c\x08\x7f\t\r\n", 100),
+            decode(
+                b"\x01\x03\x04\x05\x0b\x0c\x12\x13\x15\x17\x19\x1f\x08\x7f\t\r\n",
+                100
+            ),
             [
                 Key::Home,
                 Key::Interrupt,
                 Key::Eof,
                 Key::End,
+                Key::Control(11),
                 Key::Clear,
+                Key::Control(18),
+                Key::Control(19),
+                Key::Control(21),
+                Key::Control(23),
+                Key::Control(25),
+                Key::Control(31),
                 Key::Backspace,
                 Key::Backspace,
                 Key::Tab,
@@ -258,7 +281,7 @@ mod tests {
     fn paste_is_atomic_normalized_and_not_shortcuts() {
         assert_eq!(
             decode("\x1b[200~é\r\n界\r🌍\n\x1b[201~\r".as_bytes(), 100),
-            [Key::Text("é\n界\n🌍\n".into()), Key::Enter]
+            [Key::Paste("é\n界\n🌍\n".into()), Key::Enter]
         );
         for control in [3, 4, 8, 12, 27, 127, 0] {
             let mut input = b"\x1b[200~safe".to_vec();
