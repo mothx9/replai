@@ -73,7 +73,7 @@ def macos_leaks_example(work):
         cwd=ROOT,
         stdin=slave,
         stdout=slave,
-        stderr=subprocess.PIPE,
+        stderr=slave,
         env={**os.environ, "TERM": "xterm-256color"},
     )
     output = bytearray()
@@ -105,7 +105,21 @@ def macos_leaks_example(work):
         second = len(output)
         read_until(b"simple>", second)
         os.write(master, b"\x04")
-        child.wait(timeout=30)
+        # `leaks --atExit` writes a report large enough to fill a PTY. Drain it
+        # while waiting so the instrumented child cannot block during cleanup.
+        deadline = time.monotonic() + 30
+        while child.poll() is None:
+            assert time.monotonic() < deadline, bytes(output[-4000:])
+            ready, _, _ = select.select([master], [], [], 0.1)
+            if not ready:
+                continue
+            try:
+                output.extend(os.read(master, 65536))
+            except OSError as error:
+                if error.errno != 5:
+                    raise
+                break
+        child.wait(timeout=1)
         for _ in range(10):
             ready, _, _ = select.select([master], [], [], 0.05)
             if not ready:
@@ -116,8 +130,7 @@ def macos_leaks_example(work):
                 if error.errno != 5:
                     raise
                 break
-        stderr = child.stderr.read() if child.stderr else b""
-        combined = bytes(output) + stderr
+        combined = bytes(output)
         assert child.returncode == 0, (child.returncode, combined[-4000:])
         assert b"? 'alpha' >" in output
         assert b"0 leaks for 0 total leaked bytes" in combined
