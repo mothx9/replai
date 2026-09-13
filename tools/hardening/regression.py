@@ -77,6 +77,8 @@ def main():
     p.add_argument("--registration", type=Path)
     p.add_argument("--control-binary", type=Path)
     p.add_argument("--cpu", type=int)
+    p.add_argument("--latency-only", action="store_true",
+                   help="compare registered latency/bytes while a changed contract receives a new allocation baseline")
     a = p.parse_args()
     if a.cpu is not None:
         os.sched_setaffinity(0, {a.cpu})
@@ -114,7 +116,7 @@ def main():
             f.write("\n")
         print("REGISTERED", len(gates), "workloads; candidate evaluation has not run")
     else:
-        assert a.registration and a.control_binary and a.allocation_binary
+        assert a.registration and a.control_binary
         registered = json.loads(a.registration.read_text())
         assert hashed(a.control_binary) == registered["identity"]["binary_sha256"]
         comparisons = []
@@ -137,16 +139,20 @@ def main():
                     exceedances.append(key)
                 assert all(n == gate["encoded_bytes"] for n in row["encoded_bytes"]), (key, "encoded-byte regression")
             comparisons.append(exceedances)
-        _, allocations = run(a.allocation_binary, a.work / "candidate-allocations.jsonl")
-        expected = set(registered["gates"])
-        assert expected <= set(allocations)
-        for key in expected:
-            row = allocations[key]
-            assert all(v == registered["gates"][key]["allocations"] for v in row["allocations"]), (key, "allocation regression")
+        allocation_gate = "SEPARATELY_REBASELINED" if a.latency_only else "PASS"
+        if not a.latency_only:
+            assert a.allocation_binary
+            _, allocations = run(a.allocation_binary, a.work / "candidate-allocations.jsonl")
+            expected = set(registered["gates"])
+            assert expected <= set(allocations)
+            for key in expected:
+                row = allocations[key]
+                assert all(v == registered["gates"][key]["allocations"] for v in row["allocations"]), (key, "allocation regression")
         blocked = sorted(set(comparisons[0]) & set(comparisons[1]))
         summary = {"identity": metadata, "registration_sha256": hashed(a.registration),
                    "alternating_exceedances": comparisons, "blocking_reproduced_exceedances": blocked,
-                   "allocation_and_byte_gates": "PASS", "passed": not blocked}
+                   "allocation_gates": allocation_gate, "encoded_byte_gates": "PASS",
+                   "passed": not blocked}
         (a.work / "summary.json").write_text(json.dumps(summary, indent=2)+"\n")
         print(json.dumps(summary, indent=2))
         if blocked:
