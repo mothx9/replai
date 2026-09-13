@@ -194,8 +194,13 @@ sparse-registry consumer, with no workspace or path dependency, builds and runs
 the custom keymap, prefix helper and autosuggestion under Rust 1.98.1. The
 MSRV and current stable are the same qualified 1.98.1 toolchain on this date.
 
-Native workflow `34770458423` passed Linux x86_64, Linux ARM64, macOS ARM64 and
-Windows portable jobs at implementation carrier `ab34d0b78524329a0c2404c8e60a23f5ff5e92f8`.
-The final carrier reruns CI and this native workflow after harness/evidence and
-producer closure. `OUTPUT.LONG_LIVED.0` remains selected and unstarted. C ABI 1,
-YAI, YVEX and private BOUNDARY remain untouched.
+Final native workflow
+[`34772036424`](https://github.com/mothx9/replai/actions/runs/34772036424)
+passed Linux x86_64, Linux ARM64, macOS ARM64 and Windows portable at carrier
+`dfa995b42231810defbb20a8c960bcf78d97166a`. Linux used Valgrind; macOS ran the
+real PTY oracle and live-process `leaks` qualification. Final 12-job
+[CI `34772036277`](https://github.com/mothx9/replai/actions/runs/34772036277)
+passed Rust, C ABI/static/shared/C++17, package/cookbook, real PTYs, native
+memory, portable Windows, docs and benchmark integrity. The runtime tree remains
+`62596c22ad2568c46c4e742b21136b31f9e1eb96`. `OUTPUT.LONG_LIVED.0` remains
+selected and unstarted. C ABI 1, YAI, YVEX and private BOUNDARY remain untouched.
