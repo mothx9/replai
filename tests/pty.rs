@@ -1011,3 +1011,64 @@ fn completion_drop_read_failure_and_typeahead_use_existing_lifecycle() {
     assert_eq!(termios(&slave), before);
     assert!(drain(&master).windows(8).any(|w| w == b"\x1b[?2004l"));
 }
+
+#[test]
+fn configurable_keys_suggestion_and_large_menu_survive_real_pty_profiles() {
+    use replai::{
+        Action, CompletionCandidate, CompletionSet, EditAction, Key, Suggestion, SuggestionAction,
+        Theme,
+    };
+    let _serial = serial();
+    for columns in [20, 40, 80, 132] {
+        for styled in [false, true] {
+            let (master, slave) = pty(columns, 12);
+            let before = termios(&slave);
+            let mut t = Interaction::new(Editor::new(4096, 10));
+            t.keymap_mut()
+                .unwrap()
+                .bind(
+                    Key::control(20).unwrap(),
+                    Action::Suggestion(SuggestionAction::Accept),
+                )
+                .unwrap();
+            t.keymap_mut()
+                .unwrap()
+                .bind(Key::control(26).unwrap(), Action::Edit(EditAction::Undo))
+                .unwrap();
+            t.open_with_theme(&slave, &slave, prompt(), Theme::new(styled, false, None))
+                .unwrap();
+            let mut screen = vt100::Parser::new(12, columns, 0);
+            screen.process(&drain(&master));
+            feed(&mut t, &master, b"dep", &mut screen);
+            let revision = t.revision();
+            t.present_suggestion(Suggestion::new(revision, "loy").unwrap())
+                .unwrap();
+            screen.process(&drain(&master));
+            assert!(screen.screen().contents().contains("→"));
+            feed(&mut t, &master, &[20], &mut screen);
+            assert_eq!(t.editor().text(), "deploy");
+            feed(&mut t, &master, &[26], &mut screen);
+            assert_eq!(t.editor().text(), "dep");
+            let revision = t.revision();
+            let candidates = (0..100)
+                .map(|i| {
+                    CompletionCandidate::new(0..3, &format!("dep{i}"), &format!("candidate {i}"))
+                        .unwrap()
+                })
+                .collect();
+            t.present_completions(CompletionSet::new(revision, candidates).unwrap())
+                .unwrap();
+            screen.process(&drain(&master));
+            feed(&mut t, &master, b"\x1b[6~", &mut screen);
+            assert!(t.completion_selection().unwrap().index > 0);
+            assert!(screen.screen().contents().contains('>'));
+            t.external_output(Role::Dim, "host notice").unwrap();
+            screen.process(&drain(&master));
+            assert_eq!(t.editor().text(), "dep");
+            assert!(t.completion_selection().is_some());
+            t.close().unwrap();
+            drain(&master);
+            assert_eq!(termios(&slave), before);
+        }
+    }
+}

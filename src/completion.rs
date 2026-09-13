@@ -187,6 +187,14 @@ pub enum CompletionAction {
     Next,
     /// Previous candidate, wrapping in host order. Draft unchanged.
     Previous,
+    /// Move by one visible window toward newer candidates, clamping at the end.
+    PageNext,
+    /// Move by one visible window toward older candidates, clamping at the start.
+    PagePrevious,
+    /// Select the first candidate.
+    First,
+    /// Select the final candidate.
+    Last,
     /// Atomically apply the selected candidate if its draft is still current.
     Accept,
     /// Remove temporary presentation; draft unchanged.
@@ -217,13 +225,20 @@ impl ActiveCompletion {
     pub fn candidate(&self) -> &CompletionCandidate {
         &self.set.candidates[self.selected]
     }
-    pub fn navigate(&mut self, previous: bool) {
+    pub fn navigate(&mut self, action: CompletionAction, page: usize) {
         let count = self.set.candidates.len();
-        self.selected = if previous {
-            (self.selected + count - 1) % count
-        } else {
-            (self.selected + 1) % count
+        self.selected = match action {
+            CompletionAction::Previous => (self.selected + count - 1) % count,
+            CompletionAction::Next => (self.selected + 1) % count,
+            CompletionAction::PagePrevious => self.selected.saturating_sub(page.max(1)),
+            CompletionAction::PageNext => self.selected.saturating_add(page.max(1)).min(count - 1),
+            CompletionAction::First => 0,
+            CompletionAction::Last => count - 1,
+            CompletionAction::Accept | CompletionAction::Dismiss => self.selected,
         };
+    }
+    pub fn page_size(&self, rows: usize) -> usize {
+        rows.saturating_sub(2).clamp(1, 8).saturating_sub(1).max(1)
     }
     /// One frame and one existing transition renderer, including the editable cursor.
     pub fn frame(
@@ -258,9 +273,11 @@ impl ActiveCompletion {
         if header != 0 {
             let text = clip(
                 &format!(
-                    "{} / {}  Tab next · Enter accept · Esc dismiss",
+                    "{} / {} · visible {}–{}  Tab next · Enter accept · Esc dismiss",
                     self.selected + 1,
-                    self.set.candidates.len()
+                    self.set.candidates.len(),
+                    first + 1,
+                    end,
                 ),
                 size.0.saturating_sub(1),
             );

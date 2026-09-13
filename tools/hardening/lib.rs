@@ -12,6 +12,9 @@ pub use completion::{
     CompletionAction, CompletionCandidate, CompletionError, CompletionSelection, CompletionSet,
     MAX_COMPLETION_BYTES, MAX_COMPLETION_CANDIDATES, MAX_COMPLETION_FIELD_BYTES,
 };
+#[path = "../../src/completion_helpers.rs"]
+mod completion_helpers;
+pub use completion_helpers::*;
 #[path = "../../src/analysis_presentation.rs"]
 mod analysis_presentation;
 pub use analysis_presentation::{
@@ -21,6 +24,9 @@ pub use analysis_presentation::{
 #[path = "../../src/analysis.rs"]
 mod analysis;
 pub use analysis::{AnalysisOutcome, AnalysisSnapshot, DraftRevision};
+#[path = "../../src/suggestion.rs"]
+mod suggestion;
+pub use suggestion::*;
 #[path = "../../src/capabilities.rs"]
 mod capabilities;
 #[path = "../../src/width.rs"]
@@ -44,6 +50,7 @@ mod interaction;
 #[cfg_attr(not(any(target_os = "linux", target_os = "macos")), allow(dead_code))]
 #[path = "../../src/actions.rs"]
 mod actions;
+pub use actions::{Action, EditAction};
 #[cfg_attr(not(any(target_os = "linux", target_os = "macos")), allow(dead_code))]
 #[path = "../../src/engine.rs"]
 mod engine;
@@ -53,6 +60,7 @@ mod input;
 #[cfg_attr(not(any(target_os = "linux", target_os = "macos")), allow(dead_code))]
 #[path = "../../src/keymap.rs"]
 mod keymap;
+pub use keymap::{Key, KeyMap, KeyMapError, MAX_CUSTOM_BINDINGS, NamedKey};
 #[cfg_attr(not(any(target_os = "linux", target_os = "macos")), allow(dead_code))]
 #[path = "../../src/presentation.rs"]
 mod presentation;
@@ -88,6 +96,8 @@ pub use driving::{Deadline, InteractionFeatures, ReadOutcome, WaitInterest, Wake
 mod campaigns;
 mod model;
 pub use campaigns::{editor_case, geometry_case, protocol_case, results_case};
+mod surfaces;
+pub use surfaces::surface_case;
 #[cfg(unix)]
 mod cabi;
 #[cfg(unix)]

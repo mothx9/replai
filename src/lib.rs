@@ -80,6 +80,11 @@ pub use completion::{
     CompletionAction, CompletionCandidate, CompletionError, CompletionSelection, CompletionSet,
     MAX_COMPLETION_BYTES, MAX_COMPLETION_CANDIDATES, MAX_COMPLETION_FIELD_BYTES,
 };
+mod completion_helpers;
+pub use completion_helpers::{
+    CompletionHelperError, CompletionItem, MAX_COMPLETION_QUERY_BYTES, MatchCase,
+    PathCompletionOptions, common_grapheme_prefix, complete_fuzzy, complete_path, complete_prefix,
+};
 mod analysis_presentation;
 pub use analysis_presentation::{
     AnalysisPresentation, AnalysisPresentationError, AnalysisSpan, Hint, MAX_ANALYSIS_SPANS,
@@ -87,6 +92,11 @@ pub use analysis_presentation::{
 };
 mod analysis;
 pub use analysis::{AnalysisOutcome, AnalysisSnapshot, DraftRevision};
+mod suggestion;
+pub use suggestion::{
+    MAX_SUGGESTION_BYTES, MAX_SUGGESTION_SOURCE_BYTES, MAX_SUGGESTION_SOURCE_ITEMS, Suggestion,
+    SuggestionAction, SuggestionError, suggest_from_history, suggest_from_static,
+};
 mod capabilities;
 mod width;
 pub use width::WidthPolicy;
@@ -101,12 +111,14 @@ mod interaction;
 // compile everywhere and execute through deterministic tests on every CI OS.
 #[cfg_attr(not(any(target_os = "linux", target_os = "macos")), allow(dead_code))]
 mod actions;
+pub use actions::{Action, EditAction};
 #[cfg_attr(not(any(target_os = "linux", target_os = "macos")), allow(dead_code))]
 mod engine;
 #[cfg_attr(not(any(target_os = "linux", target_os = "macos")), allow(dead_code))]
 mod input;
 #[cfg_attr(not(any(target_os = "linux", target_os = "macos")), allow(dead_code))]
 mod keymap;
+pub use keymap::{Key, KeyMap, KeyMapError, MAX_CUSTOM_BINDINGS, NamedKey};
 #[cfg_attr(not(any(target_os = "linux", target_os = "macos")), allow(dead_code))]
 mod presentation;
 #[cfg_attr(not(any(target_os = "linux", target_os = "macos")), allow(dead_code))]

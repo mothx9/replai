@@ -4,7 +4,6 @@ use crate::{
     actions::Input,
     engine::{Effects, Engine},
     input::Decoder,
-    keymap::binding,
     protocol::encode,
     render::Mutation,
     substrate::{Read, Transport, combine},
@@ -35,6 +34,7 @@ pub(crate) struct Terminal<T: Transport> {
     // Only the unread tail at a host-visible boundary; ordinary reads use stack
     // storage. The Interaction retains this bounded tail across close/reopen.
     pub(crate) pending: VecDeque<u8>,
+    pub(crate) keymap: crate::KeyMap,
 }
 impl<T: Transport> Terminal<T> {
     #[cfg(test)]
@@ -107,6 +107,7 @@ impl<T: Transport> Terminal<T> {
             features,
             capabilities,
             pending: VecDeque::new(),
+            keymap: crate::KeyMap::new(),
         };
         let result = (|| {
             let size = match terminal.capabilities.and_then(|c| c.realization.dimensions) {
@@ -241,7 +242,7 @@ impl<T: Transport> Terminal<T> {
                             && self.last_byte.elapsed() >= SEQUENCE_IDLE
                             && let Some(key) = self.decoder.expire()
                         {
-                            let input = binding(key)
+                            let input = crate::keymap::translate(&self.keymap, key)
                                 .map_err(|e| io::Error::new(io::ErrorKind::InvalidData, e))?;
                             let effects = engine.apply(input)?;
                             return self.apply(engine, effects);
@@ -268,8 +269,8 @@ impl<T: Transport> Terminal<T> {
             consumed += 1;
             let mut time_exhausted = false;
             if let Some(key) = self.decoder.feed(byte) {
-                let input =
-                    binding(key).map_err(|e| io::Error::new(io::ErrorKind::InvalidData, e))?;
+                let input = crate::keymap::translate(&self.keymap, key)
+                    .map_err(|e| io::Error::new(io::ErrorKind::InvalidData, e))?;
                 let effects = engine.apply_deferred(input)?;
                 if let Some(event) = self.apply(engine, effects)? {
                     return Ok(Some(event));

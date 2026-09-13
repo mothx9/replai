@@ -57,8 +57,10 @@ fn selection_is_presentation_and_acceptance_is_one_existing_edit() {
             (before.text(), before.cursor())
         );
     }
-    e.apply(Input::Request(Request::CompletionPrevious))
-        .unwrap();
+    e.apply(Input::Request(Request::CompletionAction(
+        crate::CompletionAction::Previous,
+    )))
+    .unwrap();
     assert_eq!(e.completion_selection().unwrap().index, 2);
     let effects = e.apply(Input::Request(Request::Submit)).unwrap();
     assert!(effects.event.is_none());

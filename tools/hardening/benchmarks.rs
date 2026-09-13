@@ -17,7 +17,12 @@ struct State {
     validation: Option<ValidationResult>,
     analysis: Option<AnalysisPresentation>,
     intermediate: Option<Vec<crate::render::Mutation>>,
+    keymap: KeyMap,
+    items: Vec<CompletionItem>,
+    suggestion: Option<Suggestion>,
+    path: Option<std::path::PathBuf>,
 }
+impl Drop for State { fn drop(&mut self) { if let Some(path)=&self.path { let _=std::fs::remove_dir_all(path); } } }
 fn prepare(operation: &str, bytes: usize, lines: usize) -> State {
     let mut e = Engine::new(Editor::new(2 * 1024 * 1024, 1_024));
     let text = if operation.contains("unicode") {
@@ -72,12 +77,20 @@ fn prepare(operation: &str, bytes: usize, lines: usize) -> State {
         e.apply(Input::Edit(EditCommand::HistorySearchOlder))
             .unwrap();
     }
-    let candidates =
-        || vec![CompletionCandidate::new(0..text.len(), "replacement", "display").unwrap(); 10];
-    if matches!(operation, "menu-next" | "menu-accept") {
+    let candidate_count=if operation.contains("4096") {4096} else {10};
+    let candidates = || vec![CompletionCandidate::new(0..text.len(), "replacement", "display").unwrap(); candidate_count];
+    if matches!(operation, "menu-next" | "menu-accept" | "menu-next-4096" | "menu-page-4096" | "menu-first-4096" | "menu-last-4096" | "menu-resize-4096") {
         e.present_completions(CompletionSet::new(e.editor.revision(), candidates()).unwrap())
             .unwrap();
     }
+    let item_count = if operation.ends_with("4096") { 4096 } else if operation.ends_with("1000") || operation == "path-large" || operation == "suggestion-history-large" { 1000 } else { 100 };
+    let items=(0..item_count).map(|i|CompletionItem::new(&format!("alpha-{i:04}")).unwrap()).collect();
+    let mut keymap=KeyMap::new();
+    if operation=="key-custom" { keymap.bind(Key::meta(b'r').unwrap(),Action::Edit(EditAction::Redo)).unwrap(); }
+    if operation=="key-maximum" { for byte in 0..32 { keymap.bind(Key::Control(byte),Action::Redraw).unwrap(); } for byte in 33..=126 { keymap.bind(Key::Meta(byte),Action::Redraw).unwrap(); } keymap.bind(Key::Meta(8),Action::Redraw).unwrap(); keymap.bind(Key::Meta(127),Action::Redraw).unwrap(); }
+    let suggestion=if operation.starts_with("suggestion-") { Some(Suggestion::new(e.editor.revision()," suffix").unwrap()) } else {None};
+    if matches!(operation,"suggestion-accept"|"suggestion-dismiss") { e.present_suggestion(suggestion.clone().unwrap()).unwrap(); }
+    let path=if operation.starts_with("path-") { let root=std::env::temp_dir().join(format!("replai-q2-{}-{}",std::process::id(),NEXT_PATH.fetch_add(1,std::sync::atomic::Ordering::Relaxed))); std::fs::create_dir(&root).unwrap(); for i in 0..item_count { std::fs::write(root.join(format!("alpha-{i:04}")),b"x").unwrap(); } Some(root) } else {None};
     if matches!(operation, "validation" | "incomplete") {
         e.apply(Input::Request(Request::Submit)).unwrap();
     }
@@ -85,6 +98,10 @@ fn prepare(operation: &str, bytes: usize, lines: usize) -> State {
     State {
         e,
         intermediate: None,
+        keymap,
+        items,
+        suggestion,
+        path,
         text: Some(if operation == "burst" {
             "a".repeat(1000)
         } else {
@@ -146,6 +163,11 @@ fn operation(s: &mut State, name: &str) -> Effects {
                 .1
         }
         "menu-next" => e.completion_action(CompletionAction::Next).unwrap().1,
+        "menu-next-4096" => e.completion_action(CompletionAction::Next).unwrap().1,
+        "menu-page-4096" => e.completion_action(CompletionAction::PageNext).unwrap().1,
+        "menu-first-4096" => e.completion_action(CompletionAction::First).unwrap().1,
+        "menu-last-4096" => e.completion_action(CompletionAction::Last).unwrap().1,
+        "menu-resize-4096" => e.apply(Input::Resize(40,12)).unwrap(),
         "menu-accept" => e.completion_action(CompletionAction::Accept).unwrap().1,
         "validation" | "incomplete" => e.apply_validation(s.validation.take().unwrap()).unwrap().1,
         "analysis" => e.present_analysis(s.analysis.take().unwrap()).unwrap().1,
@@ -214,6 +236,19 @@ fn operation(s: &mut State, name: &str) -> Effects {
             e.editor.yank().unwrap();
             Effects::default()
         }
+        "key-default" => { black_box(s.keymap.get(Key::Named(NamedKey::Left))); Effects::default() }
+        "key-custom" => { black_box(s.keymap.get(Key::Meta(b'r'))); Effects::default() }
+        "key-maximum" => { black_box(s.keymap.get(Key::Meta(127))); Effects::default() }
+        "key-bind" => { s.keymap.bind(Key::meta(b'z').unwrap(),Action::Edit(EditAction::Redo)).unwrap(); Effects::default() }
+        "prefix-100"|"prefix-1000"|"prefix-4096" => { black_box(complete_prefix(&e.editor.analysis_snapshot(),0..0,"alpha",&s.items,MatchCase::Sensitive).unwrap()); Effects::default() }
+        "fuzzy-100"|"fuzzy-1000" => { black_box(complete_fuzzy(&e.editor.analysis_snapshot(),0..0,"apa",&s.items,MatchCase::Sensitive).unwrap()); Effects::default() }
+        "common-prefix-unicode" => { black_box(common_grapheme_prefix(&["界面e\u{301}x","界面e\u{301}y"])); Effects::default() }
+        "path-small"|"path-large" => { let options=PathCompletionOptions::new(s.path.as_ref().unwrap()); black_box(complete_path(&e.editor.analysis_snapshot(),0..0,"alpha",&options).unwrap()); Effects::default() }
+        "suggestion-present" => e.present_suggestion(s.suggestion.take().unwrap()).unwrap().1,
+        "suggestion-stale" => { let suggestion=s.suggestion.take().unwrap(); e.editor.left(); let (outcome,effects)=e.present_suggestion(suggestion).unwrap(); assert_eq!(outcome,AnalysisOutcome::Stale); effects }
+        "suggestion-accept" => e.suggestion_action(true).unwrap().1,
+        "suggestion-dismiss" => e.suggestion_action(false).unwrap().1,
+        "suggestion-history-small"|"suggestion-history-large" => { let values=s.items.iter().map(|i|i.value()).collect::<Vec<_>>(); black_box(suggest_from_history(&e.editor.analysis_snapshot(),&values).unwrap()); Effects::default() }
         _ => panic!("unknown operation {name}"),
     }
 }
@@ -252,6 +287,10 @@ pub fn benchmark(samples: usize, batches: usize) {
         "word-right-unicode",
         "word-delete-backward-unicode",
         "word-delete-forward-unicode",
+        "key-default", "key-custom", "key-maximum", "key-bind",
+        "prefix-100", "prefix-1000", "prefix-4096", "fuzzy-100", "fuzzy-1000", "common-prefix-unicode",
+        "path-small", "path-large", "menu-next-4096", "menu-page-4096", "menu-first-4096", "menu-last-4096", "menu-resize-4096",
+        "suggestion-present", "suggestion-stale", "suggestion-accept", "suggestion-dismiss", "suggestion-history-small", "suggestion-history-large",
     ] {
         workloads.push((name, if name == "burst" { 0 } else { 1024 }, 0));
     }
@@ -328,3 +367,5 @@ pub fn benchmark(samples: usize, batches: usize) {
         );
     }
 }
+
+static NEXT_PATH: std::sync::atomic::AtomicU64=std::sync::atomic::AtomicU64::new(1);

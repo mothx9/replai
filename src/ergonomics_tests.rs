@@ -84,7 +84,11 @@ fn search_dismiss_resize_output_and_query_bounds_preserve_original() {
     let rejected = engine.apply(Input::Text("x".repeat(33))).unwrap();
     assert!(matches!(rejected.event, Some(crate::Event::Rejected(_))));
     assert_eq!(engine.history_search_query(), Some(""));
-    engine.apply(Input::Request(R::DismissCompletion)).unwrap();
+    engine
+        .apply(Input::Request(R::CompletionAction(
+            crate::CompletionAction::Dismiss,
+        )))
+        .unwrap();
     assert_eq!(
         (
             engine.editor.text(),
@@ -115,7 +119,11 @@ fn search_and_completion_selection_are_mutually_exclusive_but_analysis_is_safe()
             .is_err()
     );
     assert_eq!(engine.history_search_query(), Some(""));
-    engine.apply(Input::Request(R::DismissCompletion)).unwrap();
+    engine
+        .apply(Input::Request(R::CompletionAction(
+            crate::CompletionAction::Dismiss,
+        )))
+        .unwrap();
     assert!(engine.analysis_presentation().is_some());
     engine.apply(Input::Text("x".into())).unwrap();
     assert!(engine.analysis_presentation().is_none());

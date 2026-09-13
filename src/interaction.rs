@@ -18,6 +18,7 @@ use std::{collections::VecDeque, ops::Range, os::fd::AsFd, time::Duration};
 /// belongs to resource acquisition, not to the deterministic engine.
 pub struct Interaction {
     engine: Engine,
+    keymap: crate::KeyMap,
     #[cfg(any(target_os = "linux", target_os = "macos"))]
     terminal: Option<Terminal<Resource>>,
     #[cfg(any(target_os = "linux", target_os = "macos"))]
@@ -28,6 +29,7 @@ impl Interaction {
     pub fn new(editor: Editor) -> Self {
         Self {
             engine: Engine::new(editor),
+            keymap: crate::KeyMap::new(),
             #[cfg(any(target_os = "linux", target_os = "macos"))]
             terminal: None,
             #[cfg(any(target_os = "linux", target_os = "macos"))]
@@ -108,6 +110,31 @@ impl Interaction {
     /// Current non-canonical selected history match, if any.
     pub fn history_search_match(&self) -> Option<&str> {
         self.engine.history_search_match()
+    }
+    /// Inspect the single current non-canonical acceptable suffix.
+    pub fn suggestion(&self) -> Option<&crate::Suggestion> {
+        self.engine.suggestion()
+    }
+    /// Inspect the effective compatibility map and its bounded overrides.
+    pub fn keymap(&self) -> &crate::KeyMap {
+        &self.keymap
+    }
+    /// Replace key configuration while closed; no terminal acquisition is needed.
+    pub fn set_keymap(&mut self, keymap: crate::KeyMap) -> Result<(), Error> {
+        if self.is_open() {
+            Err(Error::State)
+        } else {
+            self.keymap = keymap;
+            Ok(())
+        }
+    }
+    /// Mutate bounded key configuration while closed.
+    pub fn keymap_mut(&mut self) -> Result<&mut crate::KeyMap, Error> {
+        if self.is_open() {
+            Err(Error::State)
+        } else {
+            Ok(&mut self.keymap)
+        }
     }
     /// Whether an interaction is active or a system resource still awaits cleanup.
     pub fn is_open(&self) -> bool {
@@ -232,6 +259,7 @@ impl Interaction {
             Resource::acquire(input, output, config, requirements)?;
         let mut terminal =
             Terminal::start_admitted(resource, &mut self.engine, prompt, theme, capabilities)?;
+        terminal.keymap = self.keymap.clone();
         terminal.pending = std::mem::take(&mut self.pending);
         self.terminal = Some(terminal);
         Ok(())
@@ -408,6 +436,58 @@ impl Interaction {
             return Ok(outcome);
         }
         let result = terminal.apply(&mut self.engine, effects).map(|_| outcome);
+        self.reap();
+        result
+    }
+    /// Install one acceptable suffix for exactly its originating draft revision.
+    /// Stale delivery has no state or terminal effects. Hint, completion, reverse
+    /// search and diagnostics retain their own precedence and remain distinct.
+    pub fn present_suggestion(
+        &mut self,
+        suggestion: crate::Suggestion,
+    ) -> Result<crate::AnalysisOutcome, crate::SuggestionError> {
+        let (outcome, effects) = self.engine.present_suggestion(suggestion)?;
+        if outcome == crate::AnalysisOutcome::Stale {
+            return Ok(outcome);
+        }
+        let result = self
+            .terminal
+            .as_mut()
+            .ok_or(Error::State)?
+            .apply(&mut self.engine, effects)
+            .map(|_| outcome);
+        self.reap();
+        result.map_err(Into::into)
+    }
+    /// Accept or dismiss the active suggestion without manufacturing terminal bytes.
+    pub fn suggestion_action(
+        &mut self,
+        action: crate::SuggestionAction,
+    ) -> Result<crate::AnalysisOutcome, Error> {
+        let (outcome, effects) = self
+            .engine
+            .suggestion_action(action == crate::SuggestionAction::Accept)?;
+        if outcome == crate::AnalysisOutcome::Stale {
+            return Ok(outcome);
+        }
+        let result = self
+            .terminal
+            .as_mut()
+            .ok_or(Error::State)?
+            .apply(&mut self.engine, effects)
+            .map(|_| outcome);
+        self.reap();
+        result
+    }
+    /// Apply public semantic intent through the same engine and terminal-effects path
+    /// used by decoded input. Exclusive ownership serializes every mutation.
+    pub fn apply_action(&mut self, action: crate::Action) -> Result<Option<Event>, Error> {
+        let effects = self.engine.apply(action.into())?;
+        let result = self
+            .terminal
+            .as_mut()
+            .ok_or(Error::State)?
+            .apply(&mut self.engine, effects);
         self.reap();
         result
     }

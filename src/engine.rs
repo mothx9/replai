@@ -19,6 +19,7 @@ struct Surface {
     damage: Damage,
     completion: Option<Box<crate::completion::ActiveCompletion>>,
     analysis: Option<Box<crate::AnalysisPresentation>>,
+    suggestion: Option<Box<crate::Suggestion>>,
 }
 pub(crate) struct Engine {
     pub editor: Editor,
@@ -62,6 +63,9 @@ impl Engine {
     }
     pub fn history_search_match(&self) -> Option<&str> {
         self.history_search.as_ref()?.selected_text()
+    }
+    pub fn suggestion(&self) -> Option<&crate::Suggestion> {
+        self.surface.as_ref()?.suggestion.as_deref()
     }
     fn begin_history_search(&mut self) {
         let limits = self
@@ -119,6 +123,7 @@ impl Engine {
         if revision != self.editor.revision() {
             self.invalidate_validation();
             self.remove_completion();
+            self.remove_suggestion();
         }
         Ok(self.history_search_changed())
     }
@@ -137,6 +142,7 @@ impl Engine {
             damage: Damage::Rebuild,
             completion: None,
             analysis: None,
+            suggestion: None,
         });
         Ok(Effects {
             mutations: self.redraw(),
@@ -169,6 +175,16 @@ impl Engine {
         {
             s.renderer
                 .transition(v.frame(&self.editor, &s.prompt, s.size, s.analysis.as_deref()))
+        } else if let Some(suggestion) = &s.suggestion {
+            let mut frame = crate::presentation::Frame::analyzed(
+                &self.editor,
+                &s.prompt,
+                s.size.0,
+                s.size.1,
+                s.analysis.as_deref(),
+            );
+            suggestion.append(&mut frame);
+            s.renderer.transition(frame)
         } else if let Some(a) = &s.analysis {
             let mut frame = crate::presentation::Frame::analyzed(
                 &self.editor,
@@ -239,8 +255,13 @@ impl Engine {
                     self.history_search.as_mut().unwrap().newer();
                     return Ok(self.history_search_changed());
                 }
-                Input::Request(Request::Submit) => return self.accept_history_search(),
-                Input::Request(Request::DismissCompletion) => {
+                Input::Request(Request::Submit | Request::HistorySearchAccept) => {
+                    return self.accept_history_search();
+                }
+                Input::Request(
+                    Request::CompletionAction(crate::CompletionAction::Dismiss)
+                    | Request::HistorySearchDismiss,
+                ) => {
                     self.history_search = None;
                     return Ok(self.history_search_changed());
                 }
@@ -258,13 +279,33 @@ impl Engine {
             use crate::CompletionAction as C;
             let action = match input {
                 Input::Request(Request::Completion) => Some(C::Next),
-                Input::Request(Request::CompletionPrevious) => Some(C::Previous),
+                Input::Request(Request::CompletionAction(crate::CompletionAction::Previous)) => {
+                    Some(C::Previous)
+                }
                 Input::Request(Request::Submit) => Some(C::Accept),
-                Input::Request(Request::DismissCompletion) => Some(C::Dismiss),
+                Input::Request(Request::CompletionAction(crate::CompletionAction::Dismiss)) => {
+                    Some(C::Dismiss)
+                }
+                Input::Request(Request::CompletionAction(action)) => Some(action),
                 _ => None,
             };
             if let Some(action) = action {
                 return self.completion_action(action).map(|(_, effects)| effects);
+            }
+        }
+        if self.suggestion().is_some() {
+            let action = match &input {
+                Input::Request(Request::SuggestionAccept) => Some(true),
+                Input::Request(Request::SuggestionDismiss) => Some(false),
+                Input::Edit(EditCommand::Right)
+                    if self.editor.cursor() == self.editor.text().len() =>
+                {
+                    Some(true)
+                }
+                _ => None,
+            };
+            if let Some(accept) = action {
+                return self.suggestion_action(accept).map(|(_, effects)| effects);
             }
         }
         let revision = self.editor.revision();
@@ -388,13 +429,27 @@ impl Engine {
                     return Ok(self.observable(Event::CompletionRequested));
                 }
             }
-            Input::Request(Request::CompletionPrevious | Request::DismissCompletion) => {
-                if matches!(input, Input::Request(Request::DismissCompletion))
-                    && self.clear_diagnostics()
+            Input::Request(
+                Request::CompletionAction(crate::CompletionAction::Previous)
+                | Request::CompletionAction(crate::CompletionAction::Dismiss),
+            ) => {
+                if matches!(
+                    input,
+                    Input::Request(Request::CompletionAction(crate::CompletionAction::Dismiss))
+                ) && self.clear_diagnostics()
                 {
                     return Ok(self.flush());
                 }
                 // Preserve compatibility rejection outside a completion surface.
+                return Ok(self.observable(Event::Rejected(crate::EditError::InvalidSequence)));
+            }
+            Input::Request(
+                Request::CompletionAction(_)
+                | Request::HistorySearchAccept
+                | Request::HistorySearchDismiss
+                | Request::SuggestionAccept
+                | Request::SuggestionDismiss,
+            ) => {
                 return Ok(self.observable(Event::Rejected(crate::EditError::InvalidSequence)));
             }
             Input::Request(Request::Redraw) => {
@@ -419,6 +474,7 @@ impl Engine {
         }
         if revision != self.editor.revision() {
             self.history_search = None;
+            self.remove_suggestion();
             if self.analysis_presentation().is_some() {
                 damage = Damage::Rebuild;
             }
@@ -479,6 +535,7 @@ impl Engine {
         if revision != self.editor.revision() {
             self.invalidate_validation();
             self.remove_completion();
+            self.remove_suggestion();
         }
         self.surface.as_mut().unwrap().damage = Damage::Rebuild;
         Ok(Effects {
@@ -516,6 +573,59 @@ impl Engine {
             s.dirty = true;
             s.damage = Damage::Rebuild;
         }
+    }
+    fn remove_suggestion(&mut self) {
+        if let Some(s) = &mut self.surface
+            && s.suggestion.take().is_some()
+        {
+            s.dirty = true;
+            s.damage = Damage::Rebuild;
+        }
+    }
+    pub fn present_suggestion(
+        &mut self,
+        suggestion: crate::Suggestion,
+    ) -> Result<(crate::AnalysisOutcome, Effects), crate::SuggestionError> {
+        if suggestion.revision() != self.editor.revision() {
+            return Ok((crate::AnalysisOutcome::Stale, Effects::default()));
+        }
+        if !self.is_open() {
+            return Err(Error::State.into());
+        }
+        suggestion.validate(&self.editor)?;
+        let s = self.surface.as_mut().unwrap();
+        s.suggestion = Some(Box::new(suggestion));
+        s.dirty = true;
+        s.damage = Damage::Rebuild;
+        Ok((crate::AnalysisOutcome::Applied, self.flush()))
+    }
+    pub fn suggestion_action(
+        &mut self,
+        accept: bool,
+    ) -> Result<(crate::AnalysisOutcome, Effects), Error> {
+        let suggestion = self.suggestion().ok_or(Error::State)?;
+        if suggestion.revision() != self.editor.revision() {
+            return Ok((crate::AnalysisOutcome::Stale, Effects::default()));
+        }
+        if accept
+            && self
+                .validation
+                .as_ref()
+                .is_some_and(|v| v.diagnostics.is_some())
+        {
+            return Err(Error::State);
+        }
+        let text = accept.then(|| suggestion.text().to_owned());
+        self.remove_suggestion();
+        if let Some(text) = text {
+            self.editor.insert_transaction(&text)?;
+            self.invalidate_validation();
+            self.remove_completion();
+        }
+        let s = self.surface.as_mut().ok_or(Error::State)?;
+        s.dirty = true;
+        s.damage = Damage::Rebuild;
+        Ok((crate::AnalysisOutcome::Applied, self.flush()))
     }
     pub fn present_completions(
         &mut self,
@@ -556,7 +666,10 @@ impl Engine {
             return Ok((A::Stale, Effects::default()));
         }
         match action {
-            C::Next | C::Previous => c.navigate(action == C::Previous),
+            C::Next | C::Previous | C::PageNext | C::PagePrevious | C::First | C::Last => {
+                let page = c.page_size(s.size.1);
+                c.navigate(action, page);
+            }
             C::Accept => {
                 let candidate = c.candidate();
                 let revision = self.editor.revision();
@@ -567,6 +680,7 @@ impl Engine {
                 )?;
                 if self.editor.revision() != revision {
                     self.invalidate_validation();
+                    self.remove_suggestion();
                 }
                 self.remove_completion();
             }
@@ -690,6 +804,7 @@ impl Engine {
             V::Incomplete => {
                 self.editor.insert_transaction("\n")?;
                 self.invalidate_validation();
+                self.remove_suggestion();
                 self.remove_completion();
                 let s = self.surface.as_mut().unwrap();
                 s.dirty = true;
@@ -919,3 +1034,7 @@ mod analysis_presentation_tests;
 #[cfg(test)]
 #[path = "ergonomics_tests.rs"]
 mod ergonomics_tests;
+
+#[cfg(test)]
+#[path = "suggestion_tests.rs"]
+mod suggestion_tests;

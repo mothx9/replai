@@ -13,7 +13,7 @@ import subprocess
 import time
 
 ROOT = Path(__file__).resolve().parents[2]
-TARGETS = ("protocol", "editor", "results", "geometry", "cabi")
+TARGETS = ("protocol", "editor", "results", "geometry", "cabi", "surfaces")
 
 
 def command(*args):

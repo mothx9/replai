@@ -94,3 +94,15 @@ path = "ergonomics_sequences.rs"
 [[bin]]
 name = "ergonomics-pty"
 path = "ergonomics_pty.rs"
+
+[[bin]]
+name = "completion-sequences"
+path = "completion_sequences.rs"
+
+[[bin]]
+name = "surfaces"
+path = "fuzz_targets/surfaces.rs"
+test = false
+doc = false
+bench = false
+required-features = ["fuzzing"]

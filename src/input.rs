@@ -19,6 +19,8 @@ pub(crate) enum Key {
     Down,
     Left,
     Right,
+    PageUp,
+    PageDown,
     Control(u8),
     Meta(u8),
     Rejected(EditError),
@@ -188,8 +190,7 @@ impl Decoder {
                 self.state = State::Utf8(vec![byte]);
                 return None;
             }
-            11 | 18 | 19 | 21 | 23 | 25 | 31 => Key::Control(byte),
-            0..=31 => Key::Rejected(EditError::InvalidText),
+            0..=31 => Key::Control(byte),
             _ => Key::Rejected(EditError::InvalidUtf8),
         })
     }
@@ -204,7 +205,7 @@ fn append(bytes: &mut Vec<u8>, byte: u8, limit: usize, overflow: &mut bool) {
 }
 fn sequence(bytes: &[u8]) -> Key {
     match bytes {
-        [27, b @ (b'b' | b'f' | b'd' | 8 | 127)] => Key::Meta(*b),
+        [27, b] if b.is_ascii_graphic() || matches!(b, 8 | 127) => Key::Meta(*b),
         b"\x1b[Z" => Key::BackTab,
         b"\x1b[A" => Key::Up,
         b"\x1b[B" => Key::Down,
@@ -213,6 +214,8 @@ fn sequence(bytes: &[u8]) -> Key {
         b"\x1b[H" | b"\x1bOH" | b"\x1b[1~" | b"\x1b[7~" => Key::Home,
         b"\x1b[F" | b"\x1bOF" | b"\x1b[4~" | b"\x1b[8~" => Key::End,
         b"\x1b[3~" => Key::Delete,
+        b"\x1b[5~" => Key::PageUp,
+        b"\x1b[6~" => Key::PageDown,
         _ => Key::Rejected(EditError::InvalidSequence),
     }
 }
@@ -240,6 +243,8 @@ mod tests {
             (b"\x1b[4~", Key::End),
             (b"\x1b[8~", Key::End),
             (b"\x1b[3~", Key::Delete),
+            (b"\x1b[5~", Key::PageUp),
+            (b"\x1b[6~", Key::PageDown),
         ] {
             assert_eq!(decode(bytes, 100), [expected]);
         }
