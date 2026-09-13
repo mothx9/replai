@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
 """Qualify the interaction-ergonomics delta on one exact native runner."""
 import argparse
+import fcntl
 import json
 import os
 from pathlib import Path
 import platform
 import re
+import select
 import shutil
+import struct
 import subprocess
+import termios
 import time
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -55,6 +59,78 @@ def validate_valgrind(report):
     return len(possible)
 
 
+def macos_leaks_example(work):
+    """Drive a public blocking host under leaks from an external PTY owner."""
+    run(["cargo", "build", "--locked", "--example", "simple"], timeout=300)
+    master, slave = os.openpty()
+    before = termios.tcgetattr(slave)
+    fcntl.ioctl(slave, termios.TIOCSWINSZ, struct.pack("HHHH", 12, 80, 0, 0))
+    os.set_blocking(master, False)
+    command = ["/usr/bin/leaks", "--atExit", "--", str(ROOT / "target/debug/examples/simple")]
+    child = subprocess.Popen(
+        command,
+        cwd=ROOT,
+        stdin=slave,
+        stdout=slave,
+        stderr=subprocess.PIPE,
+        env={**os.environ, "TERM": "xterm-256color"},
+    )
+    output = bytearray()
+
+    def read_until(marker, start=0, timeout=15):
+        deadline = time.monotonic() + timeout
+        while marker not in output[start:]:
+            assert time.monotonic() < deadline, (marker, bytes(output[-2000:]))
+            ready, _, _ = select.select([master], [], [], 0.1)
+            if ready:
+                try:
+                    output.extend(os.read(master, 65536))
+                except OSError as error:
+                    if error.errno != 5:  # EIO after the PTY peer exits.
+                        raise
+            assert child.poll() is None, (child.returncode, bytes(output[-2000:]))
+
+    try:
+        read_until(b"simple> ")
+        os.write(master, b"older alpha command\r")
+        first = len(output)
+        read_until(b"simple> ", first)
+
+        os.write(master, b"draft\x12alpha")
+        read_until(b"? 'alpha' >")
+        os.write(master, b"\x1b")
+        time.sleep(0.35)
+        os.write(master, b"\x12alpha\r\x1f\x17\x19\x03")
+        second = len(output)
+        read_until(b"simple> ", second)
+        os.write(master, b"\x04")
+        child.wait(timeout=30)
+        for _ in range(10):
+            ready, _, _ = select.select([master], [], [], 0.05)
+            if not ready:
+                break
+            try:
+                output.extend(os.read(master, 65536))
+            except OSError as error:
+                if error.errno != 5:
+                    raise
+                break
+        stderr = child.stderr.read() if child.stderr else b""
+        combined = bytes(output) + stderr
+        assert child.returncode == 0, (child.returncode, combined[-4000:])
+        assert b"? 'alpha' >" in output
+        assert b"0 leaks for 0 total leaked bytes" in combined
+        assert termios.tcgetattr(slave) == before
+        (work / "leaks.txt").write_bytes(combined)
+        return command
+    finally:
+        if child.poll() is None:
+            child.kill()
+            child.wait()
+        os.close(master)
+        os.close(slave)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--work", type=Path, required=True)
@@ -93,11 +169,9 @@ def main():
         elif platform.system() == "Darwin":
             leaks = Path("/usr/bin/leaks")
             assert leaks.is_file(), "native leaks is required on macOS"
-            result = run([str(leaks), "--atExit", "--", str(executable)], stdout=subprocess.PIPE,
-                         stderr=subprocess.STDOUT, timeout=300)
-            (args.work / "leaks.txt").write_text(result.stdout)
-            assert "0 leaks for 0 total leaked bytes" in result.stdout
+            memory_command = macos_leaks_example(args.work)
             summary["memory_tool"] = "macOS leaks --atExit"
+            summary["memory_command"] = memory_command
         else:
             raise AssertionError("native terminal qualification supports Linux/macOS only")
         summary.update(real_pty="PASS", memory="PASS", widths=[20, 40, 80, 132],

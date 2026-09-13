@@ -87,7 +87,7 @@ lifetime.
 | E-003 | Identical history-search acceptance and exhausted history navigation | Identical accepted bytes could retain revision identity; navigation reset auxiliary undo state before the checked revision commit. | Product defect in new ergonomics | Always advance identical acceptance and order history revision checks before auxiliary mutation; unit regression. | Closed |
 | H-001 | First fuzz invocation | A single-worker launch accumulated only 63.20 CPU-seconds before manual interruption to configure four accounted workers. | Harness execution, not product evidence | Excluded from campaign totals; exact four-worker command retained. | Closed |
 | H-002 | Linux Valgrind under the Rust test harness | Both Linux architectures retained one identical 48-byte `possibly lost` process-lifetime allocation in `std::thread::current::init_current` / `std::sync::mpmc::context::Context`, with no REPLAI frame. | Tool/harness attribution, not a product leak | Keep the complete log; fail every definite/indirect leak and every possible-loss block except this exact Rust libtest TLS signature. No blanket suppression is used. | Closed |
-| H-003 | First two macOS native qualifier runs | `leaks --atExit` did not complete around either debug or release libtest, although the enclosed PTY test completed and existing macOS memory jobs passed. | Harness execution, not product evidence | Replace libtest instrumentation with the standalone public-API `ergonomics-pty` oracle, retain the same widths/modes/restoration assertions, bound every phase, and replay the complete four-platform matrix. | Closed after replay |
+| H-003 | First two macOS native qualifier runs | `leaks --atExit` did not complete around either debug or release libtest, although the enclosed PTY test completed and existing macOS memory jobs passed. | Harness execution, not product evidence | Keep the standalone public-API `ergonomics-pty` oracle for exact PTY semantics; run the leak check on the public blocking host from an external PTY controller, matching the established macOS memory harness pattern; replay the complete matrix. | Closed after replay |
 
 ## Qualification evidence
 
@@ -126,9 +126,11 @@ receipts include the [fuzz campaign](../../tools/ergonomics/evidence/fuzz-linux-
 and [Q2 registration](../../tools/ergonomics/evidence/q2-linux-aarch64.json).
 
 The native workflow executes the same portable model plus a standalone
-public-API real-PTY oracle under Valgrind or macOS `leaks` on Linux x86_64,
-Linux ARM64 and macOS ARM64. Windows executes the portable model and retained
-corpus only. The Linux Valgrind logs contain no
+public-API real-PTY oracle on Linux x86_64, Linux ARM64 and macOS ARM64. Linux
+runs that oracle under Valgrind. macOS additionally runs the public blocking
+host under `leaks --atExit` from an external PTY controller, avoiding libtest
+instrumentation while exercising the ergonomic key path. Windows executes the
+portable model and retained corpus only. The Linux Valgrind logs contain no
 definite or indirect leak and no invalid access; the sole exact H-002 TLS record
 remains retained as non-attributable evidence. The corresponding
 [full CI](https://github.com/mothx9/replai/actions/runs/34757723745) passed all
