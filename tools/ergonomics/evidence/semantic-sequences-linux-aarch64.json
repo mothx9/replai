@@ -1,4 +1,11 @@
 {
+  "identity": {
+    "head": "55966108aab97b0b24be8e7778136594be73bb13",
+    "platform": "Linux aarch64",
+    "runtime_tree": "8db955760152f10a7d34056796e2c9f0e1e003af",
+    "rustc": "1.98.1",
+    "tree": "5be63a5be619a7d1f4bad7abf1993b4e72223b35"
+  },
   "result": {
     "final_state": 948307739503825185,
     "operations_per_sequence": 128,
