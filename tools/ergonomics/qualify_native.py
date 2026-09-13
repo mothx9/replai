@@ -1,17 +1,13 @@
 #!/usr/bin/env python3
 """Qualify the interaction-ergonomics delta on one exact native runner."""
 import argparse
-import fcntl
 import json
 import os
 from pathlib import Path
 import platform
 import re
-import select
 import shutil
-import struct
 import subprocess
-import termios
 import time
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -61,6 +57,11 @@ def validate_valgrind(report):
 
 def macos_leaks_example(work):
     """Drive a public blocking host under leaks from an external PTY owner."""
+    import fcntl
+    import select
+    import struct
+    import termios
+
     run(["cargo", "build", "--locked", "--example", "simple"], timeout=300)
     master, slave = os.openpty()
     before = termios.tcgetattr(slave)
@@ -91,10 +92,10 @@ def macos_leaks_example(work):
             assert child.poll() is None, (child.returncode, bytes(output[-2000:]))
 
     try:
-        read_until(b"simple> ")
+        read_until(b"simple>")
         os.write(master, b"older alpha command\r")
         first = len(output)
-        read_until(b"simple> ", first)
+        read_until(b"simple>", first)
 
         os.write(master, b"draft\x12alpha")
         read_until(b"? 'alpha' >")
@@ -102,7 +103,7 @@ def macos_leaks_example(work):
         time.sleep(0.35)
         os.write(master, b"\x12alpha\r\x1f\x17\x19\x03")
         second = len(output)
-        read_until(b"simple> ", second)
+        read_until(b"simple>", second)
         os.write(master, b"\x04")
         child.wait(timeout=30)
         for _ in range(10):
