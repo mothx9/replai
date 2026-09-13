@@ -6,6 +6,13 @@ next work. All entries below are unreleased and carry no compatibility promise.
 
 ## Unreleased
 
+- Added bounded host-fed literal reverse history search, Unicode word movement
+  and deletion, delta undo/redo, and a single bounded kill/yank register. Undo
+  restores content with fresh `DraftRevision` identities; search remains
+  non-canonical until acceptance. Conservative fixed bindings use one private
+  semantic action vocabulary, while configurable keymaps remain future work.
+  C ABI 1 gains no symbol, layout or numeric change.
+
 - Prepared the unpublished `replai 0.1.0` Cargo package and versioned
   `replai-c-sdk-0.1.0` source bundle. The candidate declares Rust 1.98.1,
   adds relocatable pkg-config/CMake consumption and qualifies fresh external

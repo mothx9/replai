@@ -124,7 +124,8 @@ set/menu contract.
 | Capability | Rust | C ABI 1 | Host-owned part |
 | --- | --- | --- | --- |
 | Unicode/grapheme editing | 🟢 Qualified | 🟢 Qualified | Accepted input policy |
-| In-memory history navigation | 🟢 Qualified | 🟢 Qualified | Admission and persistence |
+| History navigation / reverse search | 🟢 Provider + bounded search | 🟡 Navigation only | Persistence, retention and privacy |
+| Word editing / undo / kill-yank | 🟢 Qualified | 🟡 Fixed bindings only | Mapping policy |
 | Rich completion UI | 🟢 Qualified | 🟡 Replacement only | Discovery, order and ranking |
 | Revision snapshots / stale refusal | 🟢 Qualified | 🔴 Outside ABI 1 | Analysis meaning and schedule |
 | Validated multiline | 🟢 Qualified | 🔴 Outside ABI 1 | Grammar and diagnostics |
@@ -176,8 +177,8 @@ laid out and restored without asking the host to parse again.
 
 ### Component map
 
-- **`Editor`** owns the bounded UTF-8 draft, grapheme edits, history mechanics
-  and `DraftRevision` without requiring a terminal.
+- **`Editor`** owns the bounded UTF-8 draft, grapheme/word edits, delta undo/redo,
+  kill/yank, history mechanics and `DraftRevision` without requiring a terminal.
 - **Analysis contracts** own immutable snapshots, stale checks and bounded
   completion, validation and presentation structures.
 - **`Interaction`** gives blocking, session and driven hosts one lifecycle and
@@ -507,9 +508,11 @@ qualified at its current bounded scope, and crates.io publication has not
 occurred. Consume Rust through the exact Git pin above; the declared and
 qualified candidate MSRV is Rust 1.98.1. Today Linux GNU x86_64/ARM64 and macOS
 ARM64 have native runtime evidence, while Windows has portable-core coverage
-only. The expanded first-release plan adds daily-driver editing, long-lived
-output, sensitive input, native Windows Rust runtime, complete UX/DX and agentic
-integration before final hardening and freeze. Planned work is not current API.
+only. Daily-driver word editing, bounded undo/redo, kill/yank and provider-backed
+literal history search are now present; configurable mappings and suggestions
+remain next. The expanded first-release plan still requires long-lived output,
+sensitive input, native Windows Rust runtime, complete UX/DX and agentic integration
+before final hardening and freeze. Planned work is not current API.
 [Release scope](docs/release-scope.md) · [Roadmap](ROADMAP.md).
 
 ## Verification

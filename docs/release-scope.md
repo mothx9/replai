@@ -92,7 +92,7 @@ not weaken that boundary.
 
 | Area | Current established foundation | Required before v0.1 freeze |
 | --- | --- | --- |
-| Editing | Grapheme editing, multiline movement, bounded history navigation, fixed mappings | Search/provider, words, undo/redo, kill/yank and configurable actions |
+| Editing | Grapheme/Unicode-word editing, multiline movement, bounded history navigation/provider search, delta undo/redo, kill/yank and fixed mappings | Configurable actions |
 | Completion | Revision-bound rich candidates and host hints | Generic helpers, autosuggestion and large-menu paging |
 | Output | Finite host-serialized output with draft restoration | Sustained bounded flow, producer arbitration and transient lifetime |
 | Platforms | Linux/macOS runtime; Windows portable core | Native Windows x86_64 Rust terminal runtime |
@@ -351,8 +351,8 @@ REPLAI can support applications that own these systems. It does not own them.
 boundaries. The active plan has twelve engineering/design/qualification
 boundaries before one separately authorized publication boundary:
 
-1. INTERACTION.ERGONOMICS.0
-2. COMPLETION.KEYMAP.SUGGESTION.0
+1. INTERACTION.ERGONOMICS.0 — established
+2. COMPLETION.KEYMAP.SUGGESTION.0 — selected, not started
 3. OUTPUT.LONG_LIVED.0
 4. WINDOWS.RUNTIME.0
 5. SENSITIVE.INPUT.0
@@ -367,8 +367,9 @@ boundaries before one separately authorized publication boundary:
 
 ### Final qualification and release
 
-The first boundary is selected but not started. Each feature boundary must
-produce its own contract and qualification. Documentation/agent materials follow
+The first boundary is established at its recorded dossier scope; the second is
+selected but not started. Each feature boundary must produce its own contract
+and qualification. Documentation/agent materials follow
 stable public surfaces. HARDENING.1 qualifies the expanded surface. E3/V0 then
 audits the Rust API and C ABI, ratifies compatibility, regenerates exact
 artifacts and freezes one candidate. V1 remains a separate explicit publication

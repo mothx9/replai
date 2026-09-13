@@ -40,7 +40,8 @@ consume semantic mutations without parsing an escape-coded frame.
 
 | Source owner | Implemented responsibility | Excluded responsibility |
 | --- | --- | --- |
-| [core](../src/core.rs) | Bounded UTF-8 storage, grapheme cursor, atomic edits, history navigation and original-draft restoration | OS resources, environment, scheduling, history admission policy or persistence |
+| [core](../src/core.rs) | Bounded UTF-8 storage, grapheme/word editing, delta undo/redo, kill/yank, history navigation and original-draft restoration | OS resources, environment, scheduling, history admission policy or persistence |
+| [history](../src/history.rs) | Bounded host-fed history views and non-canonical literal reverse-search state | Durable storage, I/O, fuzzy meaning, retention or privacy policy |
 | [actions](../src/actions.rs) | Text, editing commands, interaction requests, resize, transport EOF and rejection vocabulary | Key bytes, descriptors, OS event structures |
 | [input](../src/input.rs) | Incremental bounded VT/UTF-8 recognition and atomic paste framing | Editor operations and keymap policy |
 | [keymap](../src/keymap.rs) | Current fixed compatibility mapping from recognized keys to actions | Editor storage; future configurable/Vi/Emacs modes |
@@ -70,14 +71,18 @@ The driver borrows the engine only for each operation. No stored self-reference,
 forged lifetime, pointer registry or pinned owner is necessary.
 
 `Document`, `Block`, `Text`, `Span`, table/list/severity metadata, `Style`,
-`Foreground`, `Editor`, `EditError`, `Prompt`, `Theme`, `Role`, `Interaction`, `Event` and `Error`
+`Foreground`, `Editor`, `EditorLimits`, history-provider/search types, `EditError`,
+`Prompt`, `Theme`, `Role`, `Interaction`, `Event` and `Error`
 are exported on every compilation target. Construction and closed editor access
 are portable. The existing `open`, `poll`, `complete`, `external_output`,
 `output_document`, `open_with_theme`, `interrupt` and `close` system façade is available on Linux and macOS. No fake acquisition
 method returning Unsupported is supplied on another OS. The deterministic
 engine/action/effect APIs remain private. Portable `WaitInterest`, `Wake`,
 `Deadline`, `ReadOutcome` and terminal fact/policy types expose scheduling and
-admission without exposing frames or decoder state. `Error::CapabilityMismatch`
+admission without exposing frames, search state or decoder state. The semantic
+action vocabulary remains private until configurable mapping is designed;
+portable `Editor` methods expose the implemented word, undo/redo and kill/yank
+mechanics without terminal bytes. `Error::CapabilityMismatch`
 is the additional native variant; exhaustive Rust matches must accommodate it.
 Existing session behavior and C ABI 1 remain preserved.
 

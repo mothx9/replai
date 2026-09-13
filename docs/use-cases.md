@@ -34,7 +34,7 @@ statements and deliberately have no executable workaround inside REPLAI.
 | Recipe | Surface | Execution carrier |
 | --- | --- | --- |
 | <!-- recipe:simple-loop --> Simple read/evaluate loop | Linux/macOS · Rust | `cargo run --locked --example simple` |
-| <!-- recipe:history-admission --> Host-controlled history admission | Portable model + Linux/macOS | `examples/simple.rs`, `tests/core.rs` |
+| <!-- recipe:history-admission --> Host-controlled history admission/search | Portable model + Linux/macOS | `examples/simple.rs`, `tests/ergonomics.rs`, `tests/pty.rs` |
 | <!-- recipe:history-persistence --> Persistence/reload owned by the application | Host responsibility | admission round-trip in `tests/core.rs` |
 | <!-- recipe:rich-completion --> Rich completion | Linux/macOS · Rust | `cargo run --locked --example completion` |
 | <!-- recipe:validated-multiline --> Validated multiline | Linux/macOS · Rust | `cargo run --locked --example validation` |
@@ -91,13 +91,25 @@ API; there is no new configurable keymap or newline binding.
 Start with `Interaction::read_line`. Match `ReadOutcome`, evaluate submitted text
 in host code, optionally admit it to history, clear the retained editor and repeat.
 There is no polling loop to write. History admission and persistence are separate:
-REPLAI provides in-memory navigation; the application decides which commands to
-remember. Use session mode when completion or validation is needed.
+REPLAI provides in-memory navigation and bounded literal reverse search; the
+application decides which commands to remember. Use session mode when completion,
+validation or interactive reverse search is needed.
 
 Persist only values your application admits. On startup, load records under the
 application's privacy and retention policy and call `admit_history` for each
-accepted entry. REPLAI supplies bounded navigation; it supplies neither a history
-database nor reverse/provider search.
+accepted entry. For a larger external store, materialize a bounded newest-first
+view before the input hot path:
+
+```rust
+let limits = replai::HistorySearchLimits::new(1_024, 1 << 20, 4_096)?;
+interaction.load_history_provider(&mut application_history, limits)?;
+```
+
+`application_history` implements `HistoryProvider`; REPLAI does not retain it,
+perform durable I/O or decide privacy/retention. Ctrl-R searches case-sensitive
+literal substrings without wrapping, Enter accepts one undoable replacement and
+Escape preserves the exact original draft/cursor. The complete public fixture is
+in [`tests/ergonomics.rs`](../tests/ergonomics.rs).
 
 A synchronous validated session opts into `SubmissionPolicy::Validated` while
 closed. After `Event::SubmissionRequested(snapshot)`, parse that snapshot in host

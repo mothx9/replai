@@ -32,7 +32,8 @@ budget inserts a collection delay or interrupts one atomic editor operation.
 UTF-8 staging holds at most four bytes;
 escape staging at most 64. Supported CSI/SS3 sequences cover arrows, Home/End,
 Delete and bracketed-paste delimiters; listed control keys include Enter,
-Ctrl-A/C/D/E/L, Backspace and Tab. Unknown sequences are rejected. Oversized CSI
+Ctrl-A/C/D/E/K/L/R/S/U/W/Y/_, Backspace and Tab. Recognized Meta bindings are
+Alt-B, Alt-F, Alt-D and Alt-Backspace. Unknown sequences are rejected. Oversized CSI
 or OSC sequences drain to their terminator with constant extra memory. A bad
 UTF-8 byte and the incomplete scalar containing it are rejected together; the
 offending byte is not replayed as a shortcut.
@@ -42,7 +43,7 @@ by the selected scheduler: compatibility polling or an explicit host deadline.
 Each compatibility poll waits at most 100 ms. This is an idle bound, not a
 fixed total sequence length/time guess; tests deliver each byte with a delay
 longer than 25 ms. Expired UTF-8/incomplete escape input produces `Event::Rejected` and
-keeps the draft. A lone Escape dismisses an active completion surface; without
+keeps the draft. A lone Escape dismisses an active completion or history-search surface; without
 one it retains the same rejection. Host starvation can delay observation.
 
 Already-ready semantic edits may share one presentation update. Completion,
@@ -176,7 +177,59 @@ blocking callers need not use snapshots. Session and driven hosts can retain a
 snapshot, continue input/deadline/resize/output work, then serially apply a result.
 The [external-reactor example](../examples/analysis.rs) demonstrates that flow;
 [qualification](engineering/analysis-protocol.md) separates portable and real PTY
-proof. Rich candidates, hints/highlighting and validation remain later contracts.
+proof. Completion, validation, analysis presentation and reversible edits all
+reuse this identity; none restores an earlier revision.
+
+## Semantic editing and reversible draft
+
+The terminal decoder recognizes physical keys and paste framing only. A fixed
+compatibility keymap translates those keys into one private semantic action
+vocabulary; the engine applies actions to the sole `Editor`. This vocabulary is
+deliberately not public before configurable mappings are designed. Portable
+`Editor` methods expose the underlying word operations, undo/redo and kill/yank
+without requiring callers to synthesize terminal bytes.
+
+Word movement and deletion use locale-independent Unicode default word boundaries
+from `unicode-segmentation` 1.13.3 (UAX #29). A semantic boundary that falls
+inside an extended grapheme is snapped outward, so combining sequences, emoji
+ZWJ sequences and regional indicators are never split. Movement skips punctuation,
+spaces, tabs and LF separators to the previous word start or following word end;
+CJK word segments follow the dependency's Unicode tables. A real move advances
+`DraftRevision`; a boundary no-op does not. Word deletion is one atomic undo
+transaction.
+
+Undo records are deltas: byte start, removed/inserted UTF-8 and cursor before/after.
+They never store a revision or clone the complete draft for an ordinary local
+edit. Undo and redo each retain at most 256 records and, by default, at most twice
+the configured draft capacity in payload bytes. `Editor::with_limits` accepts
+explicit `EditorLimits`; `Editor::new(max_bytes, history_entries)` preserves its
+existing signature and uses those defaults. Contiguous typing and repeated
+Backspace/Delete coalesce up to 4096 payload bytes. Cursor movement, requests and
+atomic replacements end a group. A divergent edit clears redo; cursor-only
+movement preserves it. Undo/redo restores content and cursor with a fresh
+revision, so every old host result remains stale forever.
+
+Completion acceptance, revision-bound replacement, paste, validated continuation
+indentation, word deletion, kill, yank and accepted history search use the same
+transaction path. `clear`, semantic submit, interrupt and EOF end the logical
+draft and clear undo/redo so a prior command cannot reappear. Closing and reopening
+the terminal without ending the draft preserves its undo state.
+
+The editor owns one bounded kill register, not a clipboard or Readline kill ring.
+It supports killing one word backward/forward or from the cursor to the logical
+line start/end, plus yank. Each successful kill replaces the register; consecutive
+kills do not concatenate. The default register limit is the smaller of draft
+capacity and 64 KiB and is configurable through `EditorLimits`. A failed kill or
+yank changes no draft, cursor, revision, undo/redo or prior register. The register
+survives clear, submission and close/reopen for a retained `Editor`; the explicit
+clear method provides the future sensitive-input boundary a deterministic purge.
+
+Compatibility bindings are Ctrl-_ undo, Alt-B/F word movement, Alt-D word-delete
+forward, Alt-Backspace word-delete backward, Ctrl-W word-kill backward, Ctrl-U/K
+kill to line start/end and Ctrl-Y yank. Redo and forward word-kill remain available
+through `Editor` methods but intentionally have no fixed terminal binding before
+I5. Bracketed paste always arrives as literal text in one transaction; embedded
+control bytes never invoke these actions.
 
 ## History
 
@@ -186,6 +239,33 @@ history size, persistence, deduplication or privacy policy exists. First Up save
 the current draft **and cursor**; Down past the newest entry restores both.
 Editing a recalled entry changes only the current edit. Navigating away discards
 that recalled edit, without modifying admitted history.
+
+`HistoryProvider` is a synchronous, newest-first loading seam for storage that
+remains host-owned. The host invokes `HistorySearchSource::from_provider` outside
+the input hot path; REPLAI calls at most the configured entry count and copies at
+most the configured retained-byte bound into an immutable search view. The
+provider is never retained and cannot receive an `Interaction`, terminal resource
+or callback through this API. Database/network I/O must be scheduled by the host;
+provider failure, invalid control text or an oversized entry rejects construction
+atomically. Existing admitted in-memory history works without a provider and is
+searched first; both sources share the same reverse-search mechanics.
+
+Ctrl-R begins reverse incremental search and then selects older matches; Ctrl-S
+selects a newer match without wrapping. Matching is case-sensitive literal
+substring matching over UTF-8 strings, newest first, with duplicates retained.
+The default bounds are 1024 inspected/retained entries, 1 MiB retained entry
+payload and a 4096-byte query. Query text and the selected match are derived
+presentation: the canonical draft, cursor and revision do not change. Backspace,
+Ctrl-W and Ctrl-U edit the query. Enter accepts the selected entry as one atomic,
+undoable whole-draft replacement at its end and always creates a fresh revision;
+Escape dismisses and restores the exact pre-search draft/cursor without mutation.
+
+Search owns interactive selection while active, so beginning it dismisses a
+completion menu and cancels pending validation. Current analysis spans remain
+available behind the search frame and reappear after dismissal. A stale completion,
+validation or analysis result remains stale and silent. Resize and serialized host
+output rebuild the bounded search frame without losing query, match, draft or
+cursor. Search ends on accept, dismiss, submit lifecycle, interrupt, EOF or close.
 
 ## Coordinated output
 

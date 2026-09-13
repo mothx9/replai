@@ -153,14 +153,14 @@ class DocumentationGuard(unittest.TestCase):
         target = self.root / "ROADMAP.md"
         original = target.read_text()
         scope = original.split("<!-- release-scope:start -->")[1].split("<!-- release-scope:end -->")[0]
-        row = next(line for line in scope.splitlines() if line.startswith("| history.storage_search |"))
+        row = next(line for line in scope.splitlines() if line.startswith("| editing.keymap |"))
         count = re.search(r"MUST_V0_1=\d+", original)[0]
         mutations = [
             (row, "", "release scope coverage differs"),
             (row, row + "\n" + row, "duplicate release capability"),
             (row, row.replace("MUST_V0_1", "OPTIONAL", 1), "invalid release class"),
             (row, row.replace("🟡 PARTIAL", "🟢 ESTABLISHED"), "release maturity differs"),
-            (row, row.replace("history.storage_search", "unknown.capability"), "release scope coverage differs"),
+            (row, row.replace("editing.keymap", "unknown.capability"), "release scope coverage differs"),
             (row, row.rsplit("|", 2)[0] + "| Unlinked claim |", "missing release evidence link"),
             (count, "MUST_V0_1=9999", "release counts differ"),
             ("<!-- release-scope:end -->", "", "ordered release-scope section"),
