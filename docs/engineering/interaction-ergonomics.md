@@ -16,9 +16,9 @@ implied.
 
 The local campaign source is `65e3158123a7c90a5d03dd995601326d005672b7`,
 tree `b5a5c77b146b865e0d5526ad9243fd5a071c1d1d`; its runtime tree is the final
-`d3fb692f8b4f495180eb4b667378f576c89e1bd2`. The exact native qualifier and
-full-CI source is `a83be0804903cf35afc99f79a5e655de79f9011f`, tree
-`732c674054e83c4c803b1abe8a143540358f599f`, with the same runtime tree.
+`d3fb692f8b4f495180eb4b667378f576c89e1bd2`. The final native qualifier and
+full-CI source is `501f90a02888e61cb0ac41c98694cd0011d6d3a1`, tree
+`4963beb87906094c9feb8fc999b26b277ce75bda`, with the same runtime tree.
 
 ## Architecture and contracts
 
@@ -125,7 +125,8 @@ receipts include the [fuzz campaign](../../tools/ergonomics/evidence/fuzz-linux-
 [semantic model](../../tools/ergonomics/evidence/semantic-sequences-linux-aarch64.json)
 and [Q2 registration](../../tools/ergonomics/evidence/q2-linux-aarch64.json).
 
-The native workflow executes the same portable model plus a standalone
+The [final native workflow](https://github.com/mothx9/replai/actions/runs/34759347027)
+executes the same portable model plus a standalone
 public-API real-PTY oracle on Linux x86_64, Linux ARM64 and macOS ARM64. Linux
 runs that oracle under Valgrind. macOS additionally runs the public blocking
 host under `leaks --atExit` from an external PTY controller, avoiding libtest
@@ -133,7 +134,7 @@ instrumentation while exercising the ergonomic key path. Windows executes the
 portable model and retained corpus only. The Linux Valgrind logs contain no
 definite or indirect leak and no invalid access; the sole exact H-002 TLS record
 remains retained as non-attributable evidence. The corresponding
-[full CI](https://github.com/mothx9/replai/actions/runs/34757723745) passed all
+[full CI](https://github.com/mothx9/replai/actions/runs/34759339446) passed all
 Rust, PTY, C/C++, documentation, external-embedding, Windows-portable and
 benchmark-integrity jobs. Workflow source is
 [interaction-ergonomics.yml](../../.github/workflows/interaction-ergonomics.yml).
