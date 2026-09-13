@@ -13,12 +13,13 @@ implied.
   runtime tree `b86ae9147e28ea5a4f49c2e2ea4ccd42accfd80f`.
 - Revision-atomicity correction: `370fe9287c595884fd5ad336b51d73aa291b46b9`,
   runtime tree `d3fb692f8b4f495180eb4b667378f576c89e1bd2`.
+- Public compatibility correction: `55966108aab97b0b24be8e7778136594be73bb13`,
+  tree `5be63a5be619a7d1f4bad7abf1993b4e72223b35`, final runtime tree
+  `8db955760152f10a7d34056796e2c9f0e1e003af`.
 
-The local campaign source is `65e3158123a7c90a5d03dd995601326d005672b7`,
-tree `b5a5c77b146b865e0d5526ad9243fd5a071c1d1d`; its runtime tree is the final
-`d3fb692f8b4f495180eb4b667378f576c89e1bd2`. The final native qualifier and
-full-CI source is `501f90a02888e61cb0ac41c98694cd0011d6d3a1`, tree
-`4963beb87906094c9feb8fc999b26b277ce75bda`, with the same runtime tree.
+The final Linux campaign source is the compatibility correction above. The exact
+native qualification carrier is `e6312bd03756f658cde2321ffd8926518dad98ea`, tree
+`2dce933c3216e234d3a9c0f9038e355b93f31873`, with the same final runtime tree.
 
 ## Architecture and contracts
 
@@ -107,14 +108,15 @@ python3 tools/ergonomics/qualify_native.py --work /tmp/replai-ergonomics-native
 
 The Linux ARM64 feature campaign used nightly 1.100.0-nightly, cargo-fuzz
 0.13.2 and its default address-sanitizer, inline-coverage and trace-comparison
-instrumentation. Four accounted workers completed 1809.269397 CPU-seconds in
-60 chunks. The initial 31-file corpus digest was
+instrumentation. Four accounted workers completed 1812.313707 CPU-seconds in
+60 chunks and 861934 executions including per-chunk corpus initialization. The
+initial 31-file corpus digest was
 `fa7cba512c02a1ee4a565614adf55af27e8d5a60079ce07e8ecbf61d9857e8e4`;
-the final 6104-file corpus digest is
-`f13a67d0fdb166715e5956c81b7d3763f715dd86081312662c1e37848e80285b`.
-Peak per-worker RSS was 530488 KiB and no finding remained. The deterministic
-archive is 874819 bytes with SHA-256
-`84c8bf5d43e16f0f94cacd9a1ecbfd79b730544634a26d10304f08fc64ee0969`.
+the final 5980-file corpus digest is
+`c392a1c5fcfa241eb5c5ed269d0514f3f722bd6888d805bbfea4b5499ef9115f`.
+Peak per-worker RSS was 529084 KiB and no finding remained. The deterministic
+archive is 837951 bytes with SHA-256
+`6b7bf737ca62a364ee12658566a83a5ed71ad8fb95186362b652bfb21f733acd`.
 
 The retained feature corpus and all five RELEASE.HARDENING.0 corpora replayed
 cleanly. The latter contained 7442 C-ABI, 7296 editor, 6769 geometry, 1506
@@ -126,15 +128,14 @@ receipts include the [fuzz campaign](../../tools/ergonomics/evidence/fuzz-linux-
 [semantic model](../../tools/ergonomics/evidence/semantic-sequences-linux-aarch64.json)
 and [Q2 registration](../../tools/ergonomics/evidence/q2-linux-aarch64.json).
 
-The [final native workflow](https://github.com/mothx9/replai/actions/runs/34759347027)
+The [final native workflow](https://github.com/mothx9/replai/actions/runs/34760786690)
 executes the same portable model plus a standalone
 public-API real-PTY oracle on Linux x86_64, Linux ARM64 and macOS ARM64. Linux
 runs that oracle under Valgrind. macOS additionally runs the public blocking
 host under `leaks --atExit` from an external PTY controller, avoiding libtest
 instrumentation while exercising the ergonomic key path. Windows executes the
-portable model and retained corpus only. The Linux Valgrind logs contain no
-definite or indirect leak and no invalid access; the sole exact H-002 TLS record
-remains retained as non-attributable evidence. The corresponding
+portable model and retained corpus only. The final standalone Linux Valgrind logs contain no invalid access and zero
+definite, indirect or possible leak records attributable to REPLAI or its harness. The corresponding
 [full CI](https://github.com/mothx9/replai/actions/runs/34759339446) passed all
 Rust, PTY, C/C++, documentation, external-embedding, Windows-portable and
 benchmark-integrity jobs. Workflow source is
@@ -163,14 +164,14 @@ Representative current registrations on Linux ARM64 are:
 
 | Workload | Median / p95 (ns) | Allocations | Requested / retained bytes |
 | --- | ---: | ---: | ---: |
-| Word backward / forward, 1 KiB ASCII | 8512 / 8560; 6624 / 6640 | 0; 0 | 0 / 0 |
-| Delete word backward / forward | 8544 / 8592; 6656 / 6688 | 1; 1 | 1024 / 1024 |
-| Undo / redo local insertion | 48 / 64; 48 / 48 | 1; 0 | 320 / 320; 0 / 0 |
-| Reverse search, small / 1000 entries | 23776 / 25312; 33712 / 36576 | 125; 1128 | 19293 / 4749; 112326 / 51702 |
-| Kill / yank, 1 KiB | 8576 / 8624; 736 / 752 | 2; 2 | 2048 / 2048; 2048 / 1024 |
-| One-byte append / cursor movement | 48 / 80; 32 / 48 | 1; 0 | 1 / 1; 0 / 0 |
+| Word backward / forward, 1 KiB ASCII | 8256 / 8464; 6576 / 6752 | 0; 0 | 0 / 0 |
+| Delete word backward / forward | 8304 / 8321; 6592 / 6736 | 1; 1 | 1024 / 1024 |
+| Undo / redo local insertion | 64 / 64; 48 / 48 | 1; 0 | 320 / 320; 0 / 0 |
+| Reverse search, small / 1000 entries | 22960 / 23600; 33056 / 34560 | 125; 1128 | 19293 / 4749; 112326 / 51702 |
+| Kill / yank, 1 KiB | 8320 / 8560; 688 / 704 | 2; 2 | 2048 / 2048; 2048 / 1024 |
+| One-byte append / cursor movement | 48 / 64; 48 / 48 | 1; 0 | 1 / 1; 0 / 0 |
 
-The 64 KiB and 1 MiB edit probes register medians of 18912 ns and 240097 ns.
+The 64 KiB and 1 MiB edit probes register medians of 11184 ns and 165585 ns.
 Their total retained deltas are 65634 and 1048674 bytes because the probe also
 observes the canonical `String`; the undo delta itself is one byte. Existing
 synchronous output and large multiline/prefix-layout debt remain outside this
@@ -186,3 +187,31 @@ helpers, autosuggestion, large candidate paging, streaming/output arbitration,
 Windows runtime, sensitive input, U3 redesign, structural large-draft redesign,
 high-level facade, runtime adapters and agent materials remain unimplemented.
 COMPLETION.KEYMAP.SUGGESTION.0 is selected only after this dossier closes.
+
+## Package, API and ABI replay
+
+On the exact native-qualified runtime, Rust 1.98.1 and the current stable alias
+both built and ran an external crate extracted from `replai-0.1.0.crate`. The
+consumer exercised explicit `EditorLimits`, Unicode word movement, kill, undo,
+redo and yank without repository or workspace access. `cargo package -p replai --locked` and the corresponding publish dry-run
+passed; the latter
+performed no publication. The final carrier's package hash is reported at wave
+closeout because documentation and producer metadata are themselves package
+inputs.
+
+The compatibility correction preserves every pre-wave `EditError` variant, so
+previous exhaustive matches still compile. The additive `EditorLimitsError` is
+used only by new explicit-limit construction. The generated C schema, public
+header, symbols, layouts and numeric ABI identity remain byte-for-byte unchanged
+from the baseline; complete C/C++ qualification is retained in normal CI.
+
+## Promotion and remaining boundary
+
+The established implementation and evidence promote
+`history.storage_search`, `editing.word_operations`, `editing.undo_redo` and
+`editing.kill_yank`. The common semantic vocabulary remains crate-private, so
+`editing.keymap` stays partial. Configurable mappings, completion helpers,
+autosuggestion and large-candidate navigation remain assigned to
+`COMPLETION.KEYMAP.SUGGESTION.0`, selected but not started. Producer generation
+and the canonical delta are recorded after the final evidence carrier so their
+source identity is exact.
