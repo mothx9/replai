@@ -9,6 +9,8 @@ next work. All entries below are unreleased and carry no compatibility promise.
 - Added public bounded configurable `KeyMap`, semantic `Action`/`Key` vocabulary,
   completion prefix/common-prefix/fuzzy/path helpers, explicit large-set paging
   and revision-safe acceptable autosuggestions distinct from display-only hints.
+  `CompletionAction` gains four variants; exhaustive downstream matches must add
+  arms for `PageNext`, `PagePrevious`, `First` and `Last`. C ABI 1 is unchanged.
 - Added bounded host-fed literal reverse history search, Unicode word movement
   and deletion, delta undo/redo, and a single bounded kill/yank register. Undo
   restores content with fresh `DraftRevision` identities; search remains
