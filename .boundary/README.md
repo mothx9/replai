@@ -9,7 +9,7 @@ migration work. Consumer profiles must be authored by their own repositories.
   `12f17d5765133af3eb937c71ef4af90bcea3b867`; its runtime tree is
   `d3fb692f8b4f495180eb4b667378f576c89e1bd2`.
   The [four-platform ergonomics matrix](https://github.com/mothx9/replai/actions/runs/34759347027)
-  and [12-lane exact-source CI](https://github.com/mothx9/replai/actions/runs/34759339446)
+  and [12-lane runtime-source CI](https://github.com/mothx9/replai/actions/runs/34759339446)
   qualify bounded history search/provider mechanics, Unicode word editing,
   undo/redo and kill/yank. C ABI 1 remains unchanged.
 - [Interaction-ergonomics delta](deltas/interaction-ergonomics.json) adds four
