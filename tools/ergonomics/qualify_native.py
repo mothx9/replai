@@ -11,24 +11,22 @@ import subprocess
 import time
 
 ROOT = Path(__file__).resolve().parents[2]
-PTY_TEST = "pty_reverse_search_word_undo_kill_and_plain_narrow_restore_exactly"
-
-
 def run(command, **kwargs):
     return subprocess.run(command, cwd=ROOT, check=True, text=True, **kwargs)
 
 
-def test_binary():
+def pty_binary():
     result = run(
-        ["cargo", "test", "--locked", "--release", "--test", "pty", "--no-run",
-         "--message-format", "json"],
+        ["cargo", "build", "--locked", "--release", "--manifest-path",
+         "tools/hardening/Cargo.toml", "--bin", "ergonomics-pty", "--message-format", "json"],
         stdout=subprocess.PIPE,
         timeout=300,
     )
     artifacts = [json.loads(line) for line in result.stdout.splitlines() if line.startswith("{")]
     paths = [Path(item["executable"]) for item in artifacts
              if item.get("reason") == "compiler-artifact"
-             and item.get("target", {}).get("name") == "pty" and item.get("executable")]
+             and item.get("target", {}).get("name") == "ergonomics-pty"
+             and item.get("executable")]
     assert len(paths) == 1, paths
     return paths[0]
 
@@ -76,15 +74,15 @@ def main():
         "portable_model_sequences": 1000, "portable_tests": "PASS",
     }
     if not args.portable_only:
-        executable = test_binary()
-        run([str(executable), PTY_TEST, "--exact", "--nocapture"], timeout=120)
+        executable = pty_binary()
+        run([str(executable)], timeout=120)
         if platform.system() == "Linux":
             valgrind = shutil.which("valgrind")
             assert valgrind, "Valgrind is required on Linux"
             log = args.work / "valgrind.log"
             run([valgrind, "--leak-check=full", "--show-leak-kinds=all",
                  "--errors-for-leak-kinds=definite,indirect", "--error-exitcode=99",
-                 f"--log-file={log}", str(executable), PTY_TEST, "--exact", "--nocapture"],
+                 f"--log-file={log}", str(executable)],
                 timeout=300)
             report = log.read_text()
             possible_harness_records = validate_valgrind(report)
@@ -95,8 +93,7 @@ def main():
         elif platform.system() == "Darwin":
             leaks = Path("/usr/bin/leaks")
             assert leaks.is_file(), "native leaks is required on macOS"
-            result = run([str(leaks), "--atExit", "--", str(executable), PTY_TEST,
-                          "--exact", "--nocapture"], stdout=subprocess.PIPE,
+            result = run([str(leaks), "--atExit", "--", str(executable)], stdout=subprocess.PIPE,
                          stderr=subprocess.STDOUT, timeout=300)
             (args.work / "leaks.txt").write_text(result.stdout)
             assert "0 leaks for 0 total leaked bytes" in result.stdout

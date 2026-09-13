@@ -90,3 +90,7 @@ path = "bench.rs"
 [[bin]]
 name = "ergonomics-sequences"
 path = "ergonomics_sequences.rs"
+
+[[bin]]
+name = "ergonomics-pty"
+path = "ergonomics_pty.rs"
