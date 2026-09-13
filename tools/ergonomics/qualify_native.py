@@ -146,17 +146,42 @@ def macos_leaks_example(work):
 
 
 def macos_leaks_surfaces(work):
-    """Run the public configurable-surface example under native leaks."""
-    run(["cargo", "build", "--locked", "--example", "configured_completion"], timeout=300)
-    executable = ROOT / "target/debug/examples/configured_completion"
-    command = ["/usr/bin/leaks", "--atExit", "--", str(executable)]
-    result = subprocess.run(command, cwd=ROOT, text=True, stdout=subprocess.PIPE,
-                            stderr=subprocess.STDOUT, timeout=120)
-    (work / "leaks-surfaces.txt").write_text(result.stdout)
-    assert result.returncode == 0, result.stdout[-4000:]
-    assert "0 leaks for 0 total leaked bytes" in result.stdout, result.stdout[-4000:]
-    assert "prefix=1 fuzzy=1 suggestion=loy service custom_keys=2" in result.stdout
-    return command
+    """Inspect live public configurable-surface state under native leaks."""
+    result = run(
+        ["cargo", "build", "--locked", "--release", "--manifest-path",
+         "tools/hardening/Cargo.toml", "--bin", "completion-memory", "--message-format", "json"],
+        stdout=subprocess.PIPE,
+        timeout=300,
+    )
+    artifacts = [json.loads(line) for line in result.stdout.splitlines() if line.startswith("{")]
+    paths = [Path(item["executable"]) for item in artifacts
+             if item.get("reason") == "compiler-artifact"
+             and item.get("target", {}).get("name") == "completion-memory"
+             and item.get("executable")]
+    assert len(paths) == 1, paths
+    child = subprocess.Popen(
+        [str(paths[0])], cwd=ROOT, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT, text=True,
+    )
+    try:
+        ready = child.stdout.readline()
+        assert ready == "READY prefix=1 fuzzy=1 suggestion=loy service custom_keys=2\n", ready
+        command = ["/usr/bin/leaks", str(child.pid)]
+        report = subprocess.run(
+            command, cwd=ROOT, text=True, stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT, timeout=120,
+        )
+        (work / "leaks-surfaces.txt").write_text(report.stdout)
+        assert report.returncode == 0, report.stdout[-4000:]
+        assert "0 leaks for 0 total leaked bytes" in report.stdout, report.stdout[-4000:]
+        child.stdin.write("\n")
+        child.stdin.flush()
+        assert child.wait(timeout=10) == 0
+        return command
+    finally:
+        if child.poll() is None:
+            child.kill()
+            child.wait()
 
 
 def main():
