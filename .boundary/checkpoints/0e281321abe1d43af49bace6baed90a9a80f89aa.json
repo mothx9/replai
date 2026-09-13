@@ -789,170 +789,54 @@
       "surfaces": [
         "rust-native"
       ]
-    },
-    {
-      "description": "Bounded configurable mapping from portable normalized keys to public semantic interaction actions",
-      "documentation": [
-        "https://github.com/mothx9/replai/blob/db4dff1dd1bd9bd1b15ac953efe2c894c51ed2fd/docs/interaction.md#configurable-semantic-keymaps"
-      ],
-      "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34772036277",
-        "https://github.com/mothx9/replai/actions/runs/34772036424",
-        "https://github.com/mothx9/replai/blob/db4dff1dd1bd9bd1b15ac953efe2c894c51ed2fd/docs/engineering/completion-keymap-suggestion.md"
-      ],
-      "guarantees": [
-        "The decoder recognizes protocol input, KeyMap assigns policy and the Engine executes one public semantic Action path",
-        "At most 128 sorted custom mappings; lookup is allocation-free O(log n), and configuration requires a closed Interaction",
-        "Printable UTF-8 and bracketed paste never enter the configurable command domain; default compatibility bindings remain intact"
-      ],
-      "id": "editing.keymap",
-      "maturity": "experimental",
-      "platforms": [
-        "linux",
-        "macos",
-        "windows"
-      ],
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "description": "Bounded generic prefix, common-prefix, fuzzy and one-level filesystem completion construction",
-      "documentation": [
-        "https://github.com/mothx9/replai/blob/db4dff1dd1bd9bd1b15ac953efe2c894c51ed2fd/docs/interaction.md#generic-completion-helpers"
-      ],
-      "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34772036277",
-        "https://github.com/mothx9/replai/actions/runs/34772036424",
-        "https://github.com/mothx9/replai/blob/db4dff1dd1bd9bd1b15ac953efe2c894c51ed2fd/docs/engineering/completion-keymap-suggestion.md"
-      ],
-      "guarantees": [
-        "Host supplies replacement context and candidate meaning; helpers own only explicitly selected generic matching",
-        "Common prefixes end on extended-grapheme boundaries; fuzzy ties and filesystem results are deterministic",
-        "Outputs are validated atomically against CompletionSet limits; path completion adds no shell quoting, expansion or lossy non-UTF-8 insertion"
-      ],
-      "id": "completion.helpers",
-      "maturity": "experimental",
-      "platforms": [
-        "linux",
-        "macos",
-        "windows"
-      ],
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "description": "Explicit bounded navigation and visible-window presentation for large completion sets",
-      "documentation": [
-        "https://github.com/mothx9/replai/blob/db4dff1dd1bd9bd1b15ac953efe2c894c51ed2fd/docs/interaction.md#large-completion-navigation"
-      ],
-      "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34772036277",
-        "https://github.com/mothx9/replai/actions/runs/34772036424",
-        "https://github.com/mothx9/replai/blob/db4dff1dd1bd9bd1b15ac953efe2c894c51ed2fd/docs/engineering/completion-keymap-suggestion.md"
-      ],
-      "guarantees": [
-        "Next/previous wrap; page movement clamps; first/last are direct and the selected index remains stable across resize",
-        "Navigation is O(1), retains one CompletionSet plus small index state and does not clone candidate payload",
-        "Sets through the 4096-candidate protocol maximum remain selectable in styled, plain and narrow terminal profiles"
-      ],
-      "id": "completion.large_sets",
-      "maturity": "experimental",
-      "platforms": [
-        "linux",
-        "macos",
-        "windows"
-      ],
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "description": "One bounded revision-bound acceptable autosuggestion distinct from display-only analysis hints",
-      "documentation": [
-        "https://github.com/mothx9/replai/blob/db4dff1dd1bd9bd1b15ac953efe2c894c51ed2fd/docs/interaction.md#revision-bound-autosuggestion"
-      ],
-      "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34772036277",
-        "https://github.com/mothx9/replai/actions/runs/34772036424",
-        "https://github.com/mothx9/replai/blob/db4dff1dd1bd9bd1b15ac953efe2c894c51ed2fd/docs/engineering/completion-keymap-suggestion.md"
-      ],
-      "guarantees": [
-        "A suggestion is non-canonical until explicit acceptance; obsolete revisions return Stale without state or terminal output",
-        "Whole-suggestion acceptance is one atomic undoable edit with a fresh DraftRevision; dismissal preserves draft and revision",
-        "Exactly one 4096-byte suffix suggestion is retained; history and static helpers remain host-fed and bounded",
-        "History search, completion and diagnostics suppress suggestions; suggestions suppress hints, and current hidden surfaces may return when precedence ends"
-      ],
-      "id": "suggestion.autosuggest",
-      "maturity": "experimental",
-      "platforms": [
-        "linux",
-        "macos",
-        "windows"
-      ],
-      "surfaces": [
-        "rust-native"
-      ]
     }
   ],
   "changes": [
     {
-      "capability": "editing.keymap",
+      "capability": "interaction.history_search",
       "compatibility": "compatible",
-      "description": "Adds a bounded configurable portable-key to semantic-action contract while preserving default behavior and isolating text/paste transport.",
+      "description": "Adds a bounded synchronous host-provider seam and non-canonical literal reverse search. Persistence and scheduling remain host-owned; C ABI 1 is unchanged.",
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34772036277",
-        "https://github.com/mothx9/replai/actions/runs/34772036424",
-        "https://github.com/mothx9/replai/blob/db4dff1dd1bd9bd1b15ac953efe2c894c51ed2fd/docs/engineering/completion-keymap-suggestion.md"
+        "https://github.com/mothx9/replai/actions/runs/34760786690",
+        "https://github.com/mothx9/replai/actions/runs/34760953707",
+        "https://github.com/mothx9/replai/blob/0e281321abe1d43af49bace6baed90a9a80f89aa/docs/engineering/interaction-ergonomics.md"
       ],
       "inputs": [
-        ".github/workflows/completion-keymap-suggestion.yml",
-        "CHANGELOG.md",
-        "README.md",
-        "ROADMAP.md",
-        "docs/engineering/completion-keymap-suggestion.md",
+        ".github/workflows/ci.yml",
+        ".github/workflows/interaction-ergonomics.yml",
+        "docs/architecture.md",
+        "docs/engineering/interaction-ergonomics.md",
         "docs/interaction.md",
-        "docs/release-scope.md",
         "docs/use-cases.md",
-        "examples/configured_completion.rs",
         "src/actions.rs",
+        "src/core.rs",
         "src/engine.rs",
         "src/ergonomics_tests.rs",
+        "src/history.rs",
         "src/input.rs",
         "src/interaction.rs",
         "src/keymap.rs",
         "src/lib.rs",
-        "src/terminal.rs",
-        "tests/configuration_helpers.rs",
+        "tests/ergonomics.rs",
         "tests/pty.rs",
-        "tools/check_docs.py",
-        "tools/completion/corpus.py",
-        "tools/completion/evidence/corpus-replay-linux-aarch64.json",
-        "tools/completion/evidence/fuzz-linux-aarch64.json",
-        "tools/completion/evidence/package-consumer-linux-aarch64.json",
-        "tools/completion/evidence/package-linux-aarch64.json",
-        "tools/completion/evidence/q2-linux-aarch64.json",
-        "tools/completion/evidence/q2-samples-linux-aarch64.jsonl.gz",
-        "tools/completion/evidence/semantic-sequences-linux-aarch64.json",
-        "tools/completion/qualify_package.py",
-        "tools/completion/surfaces-corpus.json.gz",
+        "tools/ergonomics/corpus.py",
+        "tools/ergonomics/editor-corpus.json.gz",
         "tools/ergonomics/qualify_native.py",
         "tools/hardening/Cargo.toml",
         "tools/hardening/benchmarks.rs",
-        "tools/hardening/campaign.py",
         "tools/hardening/campaigns.rs",
-        "tools/hardening/completion_memory.rs",
-        "tools/hardening/completion_sequences.rs",
-        "tools/hardening/ergonomics_pty.rs",
-        "tools/hardening/fuzz_targets/surfaces.rs",
+        "tools/hardening/deterministic.py",
+        "tools/hardening/ergonomics_sequences.rs",
         "tools/hardening/lib.rs",
-        "tools/hardening/replay.rs",
-        "tools/hardening/surfaces.rs",
-        "tools/hardening/test_hardening.py",
-        "tools/package/check_recipes.py",
+        "tools/hardening/regression.py",
         "tools/perf/components.rs",
-        "tools/test_check_docs.py"
+        "tools/ergonomics/evidence/corpus-replay-linux-aarch64.json",
+        "tools/ergonomics/evidence/fuzz-linux-aarch64.json",
+        "tools/ergonomics/evidence/historical-corpus-replay-linux-aarch64.json",
+        "tools/ergonomics/evidence/q2-historical-comparison-linux-aarch64.json",
+        "tools/ergonomics/evidence/q2-linux-aarch64.json",
+        "tools/ergonomics/evidence/q2-samples-linux-aarch64.json.gz",
+        "tools/ergonomics/evidence/semantic-sequences-linux-aarch64.json"
       ],
       "kind": "ADDED",
       "platforms": [
@@ -965,187 +849,162 @@
       ]
     },
     {
-      "capability": "completion.helpers",
+      "capability": "editing.word_operations",
       "compatibility": "compatible",
-      "description": "Adds opt-in bounded prefix, grapheme-safe common-prefix, deterministic fuzzy and one-level filesystem completion helpers.",
+      "description": "Adds grapheme-safe Unicode word movement and deletion with portable Editor methods and conservative fixed compatibility bindings.",
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34772036277",
-        "https://github.com/mothx9/replai/actions/runs/34772036424",
-        "https://github.com/mothx9/replai/blob/db4dff1dd1bd9bd1b15ac953efe2c894c51ed2fd/docs/engineering/completion-keymap-suggestion.md"
+        "https://github.com/mothx9/replai/actions/runs/34760786690",
+        "https://github.com/mothx9/replai/actions/runs/34760953707",
+        "https://github.com/mothx9/replai/blob/0e281321abe1d43af49bace6baed90a9a80f89aa/docs/engineering/interaction-ergonomics.md"
       ],
       "inputs": [
-        ".github/workflows/completion-keymap-suggestion.yml",
-        "CHANGELOG.md",
-        "README.md",
-        "ROADMAP.md",
-        "docs/engineering/completion-keymap-suggestion.md",
+        ".github/workflows/ci.yml",
+        ".github/workflows/interaction-ergonomics.yml",
+        "docs/architecture.md",
+        "docs/engineering/interaction-ergonomics.md",
         "docs/interaction.md",
-        "docs/release-scope.md",
         "docs/use-cases.md",
-        "examples/configured_completion.rs",
-        "src/completion.rs",
-        "src/completion_helpers.rs",
-        "src/completion_tests.rs",
-        "src/ergonomics_tests.rs",
-        "src/lib.rs",
-        "tests/configuration_helpers.rs",
-        "tests/pty.rs",
-        "tools/check_docs.py",
-        "tools/completion/corpus.py",
-        "tools/completion/evidence/corpus-replay-linux-aarch64.json",
-        "tools/completion/evidence/fuzz-linux-aarch64.json",
-        "tools/completion/evidence/package-consumer-linux-aarch64.json",
-        "tools/completion/evidence/package-linux-aarch64.json",
-        "tools/completion/evidence/q2-linux-aarch64.json",
-        "tools/completion/evidence/q2-samples-linux-aarch64.jsonl.gz",
-        "tools/completion/evidence/semantic-sequences-linux-aarch64.json",
-        "tools/completion/qualify_package.py",
-        "tools/completion/surfaces-corpus.json.gz",
-        "tools/ergonomics/qualify_native.py",
-        "tools/hardening/Cargo.toml",
-        "tools/hardening/benchmarks.rs",
-        "tools/hardening/campaign.py",
-        "tools/hardening/campaigns.rs",
-        "tools/hardening/completion_memory.rs",
-        "tools/hardening/completion_sequences.rs",
-        "tools/hardening/ergonomics_pty.rs",
-        "tools/hardening/fuzz_targets/surfaces.rs",
-        "tools/hardening/lib.rs",
-        "tools/hardening/replay.rs",
-        "tools/hardening/surfaces.rs",
-        "tools/hardening/test_hardening.py",
-        "tools/package/check_recipes.py",
-        "tools/perf/components.rs",
-        "tools/test_check_docs.py"
-      ],
-      "kind": "ADDED",
-      "platforms": [
-        "linux",
-        "macos",
-        "windows"
-      ],
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capability": "completion.large_sets",
-      "compatibility": "compatible",
-      "description": "Adds page, first and last completion navigation with stable selected identity and bounded visible-window rendering through the existing menu.",
-      "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34772036277",
-        "https://github.com/mothx9/replai/actions/runs/34772036424",
-        "https://github.com/mothx9/replai/blob/db4dff1dd1bd9bd1b15ac953efe2c894c51ed2fd/docs/engineering/completion-keymap-suggestion.md"
-      ],
-      "inputs": [
-        ".github/workflows/completion-keymap-suggestion.yml",
-        "CHANGELOG.md",
-        "README.md",
-        "ROADMAP.md",
-        "docs/engineering/completion-keymap-suggestion.md",
-        "docs/interaction.md",
-        "docs/release-scope.md",
-        "docs/use-cases.md",
-        "examples/configured_completion.rs",
-        "src/completion.rs",
-        "src/completion_tests.rs",
+        "src/actions.rs",
+        "src/core.rs",
         "src/engine.rs",
         "src/ergonomics_tests.rs",
-        "src/lib.rs",
-        "tests/configuration_helpers.rs",
-        "tests/pty.rs",
-        "tools/check_docs.py",
-        "tools/completion/corpus.py",
-        "tools/completion/evidence/corpus-replay-linux-aarch64.json",
-        "tools/completion/evidence/fuzz-linux-aarch64.json",
-        "tools/completion/evidence/package-consumer-linux-aarch64.json",
-        "tools/completion/evidence/package-linux-aarch64.json",
-        "tools/completion/evidence/q2-linux-aarch64.json",
-        "tools/completion/evidence/q2-samples-linux-aarch64.jsonl.gz",
-        "tools/completion/evidence/semantic-sequences-linux-aarch64.json",
-        "tools/completion/qualify_package.py",
-        "tools/completion/surfaces-corpus.json.gz",
-        "tools/ergonomics/qualify_native.py",
-        "tools/hardening/Cargo.toml",
-        "tools/hardening/benchmarks.rs",
-        "tools/hardening/campaign.py",
-        "tools/hardening/campaigns.rs",
-        "tools/hardening/completion_memory.rs",
-        "tools/hardening/completion_sequences.rs",
-        "tools/hardening/ergonomics_pty.rs",
-        "tools/hardening/fuzz_targets/surfaces.rs",
-        "tools/hardening/lib.rs",
-        "tools/hardening/replay.rs",
-        "tools/hardening/surfaces.rs",
-        "tools/hardening/test_hardening.py",
-        "tools/package/check_recipes.py",
-        "tools/perf/components.rs",
-        "tools/test_check_docs.py"
-      ],
-      "kind": "ADDED",
-      "platforms": [
-        "linux",
-        "macos",
-        "windows"
-      ],
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capability": "suggestion.autosuggest",
-      "compatibility": "compatible",
-      "description": "Adds a distinct bounded revision-safe autosuggestion surface, whole-suggestion acceptance and host-fed history/static helpers.",
-      "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34772036277",
-        "https://github.com/mothx9/replai/actions/runs/34772036424",
-        "https://github.com/mothx9/replai/blob/db4dff1dd1bd9bd1b15ac953efe2c894c51ed2fd/docs/engineering/completion-keymap-suggestion.md"
-      ],
-      "inputs": [
-        ".github/workflows/completion-keymap-suggestion.yml",
-        "CHANGELOG.md",
-        "README.md",
-        "ROADMAP.md",
-        "docs/engineering/completion-keymap-suggestion.md",
-        "docs/interaction.md",
-        "docs/release-scope.md",
-        "docs/use-cases.md",
-        "examples/configured_completion.rs",
-        "src/engine.rs",
-        "src/ergonomics_tests.rs",
+        "src/history.rs",
+        "src/input.rs",
         "src/interaction.rs",
+        "src/keymap.rs",
         "src/lib.rs",
-        "src/suggestion.rs",
-        "src/suggestion_tests.rs",
-        "tests/configuration_helpers.rs",
+        "tests/ergonomics.rs",
         "tests/pty.rs",
-        "tools/check_docs.py",
-        "tools/completion/corpus.py",
-        "tools/completion/evidence/corpus-replay-linux-aarch64.json",
-        "tools/completion/evidence/fuzz-linux-aarch64.json",
-        "tools/completion/evidence/package-consumer-linux-aarch64.json",
-        "tools/completion/evidence/package-linux-aarch64.json",
-        "tools/completion/evidence/q2-linux-aarch64.json",
-        "tools/completion/evidence/q2-samples-linux-aarch64.jsonl.gz",
-        "tools/completion/evidence/semantic-sequences-linux-aarch64.json",
-        "tools/completion/qualify_package.py",
-        "tools/completion/surfaces-corpus.json.gz",
+        "tools/ergonomics/corpus.py",
+        "tools/ergonomics/editor-corpus.json.gz",
         "tools/ergonomics/qualify_native.py",
         "tools/hardening/Cargo.toml",
         "tools/hardening/benchmarks.rs",
-        "tools/hardening/campaign.py",
         "tools/hardening/campaigns.rs",
-        "tools/hardening/completion_memory.rs",
-        "tools/hardening/completion_sequences.rs",
-        "tools/hardening/ergonomics_pty.rs",
-        "tools/hardening/fuzz_targets/surfaces.rs",
+        "tools/hardening/deterministic.py",
+        "tools/hardening/ergonomics_sequences.rs",
         "tools/hardening/lib.rs",
-        "tools/hardening/replay.rs",
-        "tools/hardening/surfaces.rs",
-        "tools/hardening/test_hardening.py",
-        "tools/package/check_recipes.py",
+        "tools/hardening/regression.py",
         "tools/perf/components.rs",
-        "tools/test_check_docs.py"
+        "tools/ergonomics/evidence/corpus-replay-linux-aarch64.json",
+        "tools/ergonomics/evidence/fuzz-linux-aarch64.json",
+        "tools/ergonomics/evidence/historical-corpus-replay-linux-aarch64.json",
+        "tools/ergonomics/evidence/q2-historical-comparison-linux-aarch64.json",
+        "tools/ergonomics/evidence/q2-linux-aarch64.json",
+        "tools/ergonomics/evidence/q2-samples-linux-aarch64.json.gz",
+        "tools/ergonomics/evidence/semantic-sequences-linux-aarch64.json"
+      ],
+      "kind": "ADDED",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "editing.undo_redo",
+      "compatibility": "compatible",
+      "description": "Adds bounded delta undo/redo with deterministic grouping and fresh revision identity for every restored canonical state.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34760786690",
+        "https://github.com/mothx9/replai/actions/runs/34760953707",
+        "https://github.com/mothx9/replai/blob/0e281321abe1d43af49bace6baed90a9a80f89aa/docs/engineering/interaction-ergonomics.md"
+      ],
+      "inputs": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/interaction-ergonomics.yml",
+        "docs/architecture.md",
+        "docs/engineering/interaction-ergonomics.md",
+        "docs/interaction.md",
+        "docs/use-cases.md",
+        "src/actions.rs",
+        "src/core.rs",
+        "src/engine.rs",
+        "src/ergonomics_tests.rs",
+        "src/history.rs",
+        "src/input.rs",
+        "src/interaction.rs",
+        "src/keymap.rs",
+        "src/lib.rs",
+        "tests/ergonomics.rs",
+        "tests/pty.rs",
+        "tools/ergonomics/corpus.py",
+        "tools/ergonomics/editor-corpus.json.gz",
+        "tools/ergonomics/qualify_native.py",
+        "tools/hardening/Cargo.toml",
+        "tools/hardening/benchmarks.rs",
+        "tools/hardening/campaigns.rs",
+        "tools/hardening/deterministic.py",
+        "tools/hardening/ergonomics_sequences.rs",
+        "tools/hardening/lib.rs",
+        "tools/hardening/regression.py",
+        "tools/perf/components.rs",
+        "tools/ergonomics/evidence/corpus-replay-linux-aarch64.json",
+        "tools/ergonomics/evidence/fuzz-linux-aarch64.json",
+        "tools/ergonomics/evidence/historical-corpus-replay-linux-aarch64.json",
+        "tools/ergonomics/evidence/q2-historical-comparison-linux-aarch64.json",
+        "tools/ergonomics/evidence/q2-linux-aarch64.json",
+        "tools/ergonomics/evidence/q2-samples-linux-aarch64.json.gz",
+        "tools/ergonomics/evidence/semantic-sequences-linux-aarch64.json"
+      ],
+      "kind": "ADDED",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "editing.kill_yank",
+      "compatibility": "compatible",
+      "description": "Adds a bounded editor-owned single kill register, word/line kills and atomic yank; no clipboard or full kill-ring contract is introduced.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34760786690",
+        "https://github.com/mothx9/replai/actions/runs/34760953707",
+        "https://github.com/mothx9/replai/blob/0e281321abe1d43af49bace6baed90a9a80f89aa/docs/engineering/interaction-ergonomics.md"
+      ],
+      "inputs": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/interaction-ergonomics.yml",
+        "docs/architecture.md",
+        "docs/engineering/interaction-ergonomics.md",
+        "docs/interaction.md",
+        "docs/use-cases.md",
+        "src/actions.rs",
+        "src/core.rs",
+        "src/engine.rs",
+        "src/ergonomics_tests.rs",
+        "src/history.rs",
+        "src/input.rs",
+        "src/interaction.rs",
+        "src/keymap.rs",
+        "src/lib.rs",
+        "tests/ergonomics.rs",
+        "tests/pty.rs",
+        "tools/ergonomics/corpus.py",
+        "tools/ergonomics/editor-corpus.json.gz",
+        "tools/ergonomics/qualify_native.py",
+        "tools/hardening/Cargo.toml",
+        "tools/hardening/benchmarks.rs",
+        "tools/hardening/campaigns.rs",
+        "tools/hardening/deterministic.py",
+        "tools/hardening/ergonomics_sequences.rs",
+        "tools/hardening/lib.rs",
+        "tools/hardening/regression.py",
+        "tools/perf/components.rs",
+        "tools/ergonomics/evidence/corpus-replay-linux-aarch64.json",
+        "tools/ergonomics/evidence/fuzz-linux-aarch64.json",
+        "tools/ergonomics/evidence/historical-corpus-replay-linux-aarch64.json",
+        "tools/ergonomics/evidence/q2-historical-comparison-linux-aarch64.json",
+        "tools/ergonomics/evidence/q2-linux-aarch64.json",
+        "tools/ergonomics/evidence/q2-samples-linux-aarch64.json.gz",
+        "tools/ergonomics/evidence/semantic-sequences-linux-aarch64.json"
       ],
       "kind": "ADDED",
       "platforms": [
@@ -1158,8 +1017,8 @@
       ]
     }
   ],
-  "generation": 16,
-  "id": "sha256:2bf87048c204a1584bfa9f068b5318f266cbca81160096bf9a8bda2487839bcf",
+  "generation": 15,
+  "id": "sha256:da8d43514a044e5c55cc851c51b31887c980ad885c6c04f24144b7906243eb5a",
   "inputs": [
     {
       "capabilities": [
@@ -1200,20 +1059,6 @@
       "sha256": "sha256:0ac945e5feedd7460efebe76ad8eb4d4f04fc71339c88d6d210762177c61f4ce",
       "surfaces": [
         "c-abi-v1",
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
-        "suggestion.autosuggest"
-      ],
-      "category": "qualification",
-      "path": ".github/workflows/completion-keymap-suggestion.yml",
-      "sha256": "sha256:1ddd1bfe846404b80fc2f0837ec06ce277cc33c9d168763e6770d70e9d0bf05c",
-      "surfaces": [
         "rust-native"
       ]
     },
@@ -1319,48 +1164,6 @@
       "surfaces": [
         "rust-native",
         "c-abi-v1"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
-        "suggestion.autosuggest"
-      ],
-      "category": "documentation",
-      "path": "CHANGELOG.md",
-      "sha256": "sha256:2f025a177aa8dfddbc4c8076b1bc3d6a4fd55067ccfada50c48c1c483e65de13",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
-        "suggestion.autosuggest"
-      ],
-      "category": "documentation",
-      "path": "README.md",
-      "sha256": "sha256:316658773355724d4b78083f0a359fe9b0e5fb086bea8f13b8fd2fa389b19d99",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
-        "suggestion.autosuggest"
-      ],
-      "category": "documentation",
-      "path": "ROADMAP.md",
-      "sha256": "sha256:79ee14219ab0380a84bba3a785a6e91e2ee84dd1676dff0c40510d997c204f3a",
-      "surfaces": [
-        "rust-native"
       ]
     },
     {
@@ -1526,20 +1329,6 @@
     },
     {
       "capabilities": [
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
-        "suggestion.autosuggest"
-      ],
-      "category": "qualification",
-      "path": "docs/engineering/completion-keymap-suggestion.md",
-      "sha256": "sha256:ed1fd39fb919993919f11d9156fefcddacabb7f0c022165dd49d8faddbd992ba",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
         "interaction.history_search",
         "editing.word_operations",
         "editing.undo_redo",
@@ -1649,9 +1438,6 @@
         "analysis.revisions",
         "analysis.validation",
         "completion.candidates",
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
         "editing.kill_yank",
         "editing.undo_redo",
         "editing.word_operations",
@@ -1670,12 +1456,11 @@
         "presentation.completion_ux",
         "presentation.multiline_ux",
         "presentation.prompt",
-        "suggestion.autosuggest",
         "terminal.admission"
       ],
       "category": "documentation",
       "path": "docs/interaction.md",
-      "sha256": "sha256:5dc3d446d5e5b50d8d54b9f1a7edc07ea2cbf85ae0c816c7e8a7d406d37820e0",
+      "sha256": "sha256:abff764c9d5f56c3a5d1b6cab46fcea3db37fac0d20beffaac0cb59cb5269991",
       "surfaces": [
         "rust-native"
       ]
@@ -1711,35 +1496,17 @@
     },
     {
       "capabilities": [
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
-        "suggestion.autosuggest"
-      ],
-      "category": "documentation",
-      "path": "docs/release-scope.md",
-      "sha256": "sha256:178754851ffb0c1dfb4fe6d30762f4818b7e6999713ddbc0f520cbdacc3af29c",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
         "analysis.hints_highlight",
         "analysis.validation",
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
         "editing.kill_yank",
         "editing.undo_redo",
         "editing.word_operations",
         "interaction.history_search",
-        "presentation.multiline_ux",
-        "suggestion.autosuggest"
+        "presentation.multiline_ux"
       ],
       "category": "documentation",
       "path": "docs/use-cases.md",
-      "sha256": "sha256:605bed197cc97bdd991fcc0d7b6a40ac46ec393b4379cd75397dd366ad9d03f1",
+      "sha256": "sha256:d217706e9af377155008d44a0ab9908578b11b6cbe5e367853997137d0bc5193",
       "surfaces": [
         "rust-native"
       ]
@@ -1788,20 +1555,6 @@
       "category": "qualification",
       "path": "examples/completion.rs",
       "sha256": "sha256:04c08c720b7c4a366d5cea60ae68d06acab8c80de6bdccef425506d144a1adc8",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
-        "suggestion.autosuggest"
-      ],
-      "category": "qualification",
-      "path": "examples/configured_completion.rs",
-      "sha256": "sha256:533f4e61c56ea6cf499a5cda2cf7c85a16fae2f2fe642ddfa5a8b515d143bdf4",
       "surfaces": [
         "rust-native"
       ]
@@ -1949,7 +1702,6 @@
     {
       "capabilities": [
         "completion.candidates",
-        "editing.keymap",
         "editing.kill_yank",
         "editing.undo_redo",
         "editing.word_operations",
@@ -1966,7 +1718,7 @@
       ],
       "category": "behavior",
       "path": "src/actions.rs",
-      "sha256": "sha256:462416ecbf8449b5d6f579299f09db85e00b72006e8b2a1f972f0c7f5169cf16",
+      "sha256": "sha256:b39649915f15ee953abc1d55b865e2c08630174a8609cbaa926984d6bf645956",
       "surfaces": [
         "rust-native"
       ]
@@ -2028,25 +1780,12 @@
         "analysis.hints_highlight",
         "analysis.validation",
         "completion.candidates",
-        "completion.helpers",
-        "completion.large_sets",
         "presentation.completion_ux",
         "presentation.multiline_ux"
       ],
       "category": "api",
       "path": "src/completion.rs",
-      "sha256": "sha256:5f1d124e36c47befba52460c72493839de545815c3514634ffd094d55ba4f4be",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.helpers"
-      ],
-      "category": "api",
-      "path": "src/completion_helpers.rs",
-      "sha256": "sha256:3a618abb25d0131b0053513ce87a7975e1d774ae301da84ddc8e68acb2a5bc8f",
+      "sha256": "sha256:e2787018a611a7ae9f97c8605c5170e4776624bc050510e381debbf07c271419",
       "surfaces": [
         "rust-native"
       ]
@@ -2055,13 +1794,11 @@
       "capabilities": [
         "analysis.hints_highlight",
         "completion.candidates",
-        "completion.helpers",
-        "completion.large_sets",
         "presentation.completion_ux"
       ],
       "category": "qualification",
       "path": "src/completion_tests.rs",
-      "sha256": "sha256:b2de0567cb14cf1347c05b84dd9e22e7390b668ad6cf3d095f44cb6809601971",
+      "sha256": "sha256:7e3f8478d68d7046f17e1c402f7784122e2b7dc54d59582a4e4bb44d8c76aaa3",
       "surfaces": [
         "rust-native"
       ]
@@ -2153,8 +1890,6 @@
         "analysis.revisions",
         "analysis.validation",
         "completion.candidates",
-        "completion.large_sets",
-        "editing.keymap",
         "editing.kill_yank",
         "editing.undo_redo",
         "editing.word_operations",
@@ -2173,30 +1908,25 @@
         "presentation.status",
         "presentation.structured_output",
         "presentation.table",
-        "presentation.theme",
-        "suggestion.autosuggest"
+        "presentation.theme"
       ],
       "category": "behavior",
       "path": "src/engine.rs",
-      "sha256": "sha256:20b1fbe8c574daee70b527552ab9d96f54a5eb30fcbca4dcac0014a1e4b47732",
+      "sha256": "sha256:f5aada86de96c418bd6590b9e6342fee0c39809ec3e8a29008392857a676a5d3",
       "surfaces": [
         "rust-native"
       ]
     },
     {
       "capabilities": [
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
-        "editing.kill_yank",
-        "editing.undo_redo",
-        "editing.word_operations",
         "interaction.history_search",
-        "suggestion.autosuggest"
+        "editing.word_operations",
+        "editing.undo_redo",
+        "editing.kill_yank"
       ],
       "category": "behavior",
       "path": "src/ergonomics_tests.rs",
-      "sha256": "sha256:492cd24f3bf4f47fadcb764d61d56485b8a3475fbd4457001fbb31602afe2f88",
+      "sha256": "sha256:97c580b7b63eb0ce8dc5f511a5871436563fb700928080901d4c6242a83549ff",
       "surfaces": [
         "rust-native"
       ]
@@ -2240,7 +1970,6 @@
     {
       "capabilities": [
         "completion.candidates",
-        "editing.keymap",
         "editing.kill_yank",
         "editing.undo_redo",
         "editing.word_operations",
@@ -2257,7 +1986,7 @@
       ],
       "category": "behavior",
       "path": "src/input.rs",
-      "sha256": "sha256:9440e29d021b320408772c0b45f0c0c4299f0bf91a492cf249e1ffc0453cb992",
+      "sha256": "sha256:22d2bca358b7cdb403a7e46e8efc063b19652943f333e6e0bf2023490979da35",
       "surfaces": [
         "rust-native"
       ]
@@ -2268,7 +1997,6 @@
         "analysis.revisions",
         "analysis.validation",
         "completion.candidates",
-        "editing.keymap",
         "editing.kill_yank",
         "editing.undo_redo",
         "editing.word_operations",
@@ -2292,13 +2020,12 @@
         "presentation.structured_output",
         "presentation.table",
         "presentation.theme",
-        "suggestion.autosuggest",
         "terminal.admission",
         "terminal.capability_snapshot"
       ],
       "category": "api",
       "path": "src/interaction.rs",
-      "sha256": "sha256:9002842e3e44ab57e11ea22999ef7d4f0c6d58b86bd699e83c9eff9792314d9f",
+      "sha256": "sha256:2404514621419677ee52c36bfb38c10c599625f0f594125a85f4129f663d295d",
       "surfaces": [
         "rust-native"
       ]
@@ -2306,7 +2033,6 @@
     {
       "capabilities": [
         "completion.candidates",
-        "editing.keymap",
         "editing.kill_yank",
         "editing.undo_redo",
         "editing.word_operations",
@@ -2323,7 +2049,7 @@
       ],
       "category": "behavior",
       "path": "src/keymap.rs",
-      "sha256": "sha256:dabe59277339d4762518e53410c11ca860a5e50a32fe2fe6c43ed8e4df03900a",
+      "sha256": "sha256:fcc0deba5f4904ab569520d797fac0ef5644259f7e3377d3e8fd551aaf1af62d",
       "surfaces": [
         "rust-native"
       ]
@@ -2334,9 +2060,6 @@
         "analysis.revisions",
         "analysis.validation",
         "completion.candidates",
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
         "editing.kill_yank",
         "editing.undo_redo",
         "editing.word_operations",
@@ -2360,14 +2083,13 @@
         "presentation.structured_output",
         "presentation.table",
         "presentation.theme",
-        "suggestion.autosuggest",
         "terminal.admission",
         "terminal.capability_snapshot",
         "terminal.width_policy"
       ],
       "category": "api",
       "path": "src/lib.rs",
-      "sha256": "sha256:e729ca26ea6d5dfbf7ce2c97a0f470076d1dcbecedd6e89b811da98c829313c4",
+      "sha256": "sha256:0deb01e7e4c667f43ff0832b13ccfa525215a3b6c40d7f911c87b6f7a58af3b1",
       "surfaces": [
         "rust-native"
       ]
@@ -2445,28 +2167,6 @@
     },
     {
       "capabilities": [
-        "suggestion.autosuggest"
-      ],
-      "category": "api",
-      "path": "src/suggestion.rs",
-      "sha256": "sha256:0a2e33f21587f6bdcf97db872c341932ea360ddd5c0995db4ed63384c5d9de73",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "suggestion.autosuggest"
-      ],
-      "category": "qualification",
-      "path": "src/suggestion_tests.rs",
-      "sha256": "sha256:c15a953cb1a89694b2df3739dd50bc2f69ea439dd68d9e52898548cec4e3d908",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
         "embedding.blocking",
         "embedding.driven",
         "embedding.readiness",
@@ -2490,7 +2190,6 @@
     },
     {
       "capabilities": [
-        "editing.keymap",
         "embedding.blocking",
         "embedding.driven",
         "embedding.readiness",
@@ -2512,7 +2211,7 @@
       ],
       "category": "behavior",
       "path": "src/terminal.rs",
-      "sha256": "sha256:79dde61605b4226fe4a2638e9cd54c99c4cef3ea77e3fa88c63c2ab8e7f3af4a",
+      "sha256": "sha256:0cea572b85be0a6ba3726b900cb3d0cbee3610a432d623389911fa60a02e30c4",
       "surfaces": [
         "rust-native"
       ]
@@ -2626,20 +2325,6 @@
     },
     {
       "capabilities": [
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
-        "suggestion.autosuggest"
-      ],
-      "category": "qualification",
-      "path": "tests/configuration_helpers.rs",
-      "sha256": "sha256:6dea25ebb4cde7896c015cc9b7a357ad678a5c0b5b592ba19e61a4441380e2d0",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
         "interaction.editing",
         "embedding.blocking",
         "embedding.session",
@@ -2682,20 +2367,16 @@
     {
       "capabilities": [
         "completion.candidates",
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
         "editing.kill_yank",
         "editing.undo_redo",
         "editing.word_operations",
         "interaction.history_search",
         "platform.posix_linux",
-        "presentation.completion_ux",
-        "suggestion.autosuggest"
+        "presentation.completion_ux"
       ],
       "category": "qualification",
       "path": "tests/pty.rs",
-      "sha256": "sha256:51c0828ac6561f1ab54983bc0c370f8c54f10afb7e1ba0c4081569bc570de369",
+      "sha256": "sha256:f825e91fa6d7d70b97d1e0421c0fd6709e4c1fc1e5f3707c1cba8ed317919b1a",
       "surfaces": [
         "rust-native"
       ]
@@ -2744,160 +2425,6 @@
       "surfaces": [
         "rust-native",
         "c-abi-v1"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
-        "suggestion.autosuggest"
-      ],
-      "category": "qualification",
-      "path": "tools/check_docs.py",
-      "sha256": "sha256:d95b82bda6504a361e93552040aaecb66fb64b43671f74f6ebecbb1488e25b33",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
-        "suggestion.autosuggest"
-      ],
-      "category": "qualification",
-      "path": "tools/completion/corpus.py",
-      "sha256": "sha256:2e30b7f85563095e6d0fbeb8f93660f6e3dbf2cfc9c7ad4fe309c0c854454506",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
-        "suggestion.autosuggest"
-      ],
-      "category": "qualification",
-      "path": "tools/completion/evidence/corpus-replay-linux-aarch64.json",
-      "sha256": "sha256:e6aadf99b5a1cd95c1663f46a10147272e500bcb0952cb25b36dd0ec670fdaf5",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
-        "suggestion.autosuggest"
-      ],
-      "category": "qualification",
-      "path": "tools/completion/evidence/fuzz-linux-aarch64.json",
-      "sha256": "sha256:65de0aa71d40f14533bcbad493dcfe96baf410067b7fd1eb1a920e9a6a506024",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
-        "suggestion.autosuggest"
-      ],
-      "category": "qualification",
-      "path": "tools/completion/evidence/package-consumer-linux-aarch64.json",
-      "sha256": "sha256:e125f25b735a5a352f02596239eebd1b3705b59423208a0cf618bdb88d752136",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
-        "suggestion.autosuggest"
-      ],
-      "category": "qualification",
-      "path": "tools/completion/evidence/package-linux-aarch64.json",
-      "sha256": "sha256:28dfaea9085bf499155ea83d0557c9b947aefd46d6e8168847672d8352fa1bfb",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
-        "suggestion.autosuggest"
-      ],
-      "category": "qualification",
-      "path": "tools/completion/evidence/q2-linux-aarch64.json",
-      "sha256": "sha256:fc46ba9fd5af2004ad6fe2f1b44e384d1b44ee285643af9cd4b124ade5b92bc3",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
-        "suggestion.autosuggest"
-      ],
-      "category": "qualification",
-      "path": "tools/completion/evidence/q2-samples-linux-aarch64.jsonl.gz",
-      "sha256": "sha256:9b1312f4a70f971833f28ec07322bdc6c64948c90dc3a7586c37da2f7d6f24f1",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
-        "suggestion.autosuggest"
-      ],
-      "category": "qualification",
-      "path": "tools/completion/evidence/semantic-sequences-linux-aarch64.json",
-      "sha256": "sha256:7b03b8acff3e254af51254301abddf6ec12a5e05dee11c12283ec971466fa7d0",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
-        "suggestion.autosuggest"
-      ],
-      "category": "qualification",
-      "path": "tools/completion/qualify_package.py",
-      "sha256": "sha256:1bdc3702796ee2c30278060e858511675ebfb715ffb5891838f41047da6eb784",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
-        "suggestion.autosuggest"
-      ],
-      "category": "qualification",
-      "path": "tools/completion/surfaces-corpus.json.gz",
-      "sha256": "sha256:da847fe07a5ed2c114afb0f38713d04678d41aacdf123d6330c6d2352fa28536",
-      "surfaces": [
-        "rust-native"
       ]
     },
     {
@@ -3104,18 +2631,14 @@
     },
     {
       "capabilities": [
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
-        "editing.kill_yank",
-        "editing.undo_redo",
-        "editing.word_operations",
         "interaction.history_search",
-        "suggestion.autosuggest"
+        "editing.word_operations",
+        "editing.undo_redo",
+        "editing.kill_yank"
       ],
       "category": "qualification",
       "path": "tools/ergonomics/qualify_native.py",
-      "sha256": "sha256:bf4ae3da47dd248360a69be8aa253024263dc2b9def271356d706d7314fb0412",
+      "sha256": "sha256:d1578683dafd8143a55264729f30973c7f7dbb431673558a88f83446b9b59faa",
       "surfaces": [
         "rust-native"
       ]
@@ -3162,9 +2685,6 @@
         "analysis.revisions",
         "analysis.validation",
         "completion.candidates",
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
         "editing.kill_yank",
         "editing.undo_redo",
         "editing.word_operations",
@@ -3188,14 +2708,13 @@
         "presentation.structured_output",
         "presentation.table",
         "presentation.theme",
-        "suggestion.autosuggest",
         "terminal.admission",
         "terminal.capability_snapshot",
         "terminal.width_policy"
       ],
       "category": "qualification",
       "path": "tools/hardening/Cargo.toml",
-      "sha256": "sha256:39609a3f839ff7568a0050ea605d5dbc84976ee7c046cbe6fa1f4fcbd1e6be6e",
+      "sha256": "sha256:845b1239028bdc28d47e3544821022122002dc9d51ccdc8c5e7594ce044927ad",
       "surfaces": [
         "rust-native"
       ]
@@ -3242,9 +2761,6 @@
         "analysis.revisions",
         "analysis.validation",
         "completion.candidates",
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
         "editing.kill_yank",
         "editing.undo_redo",
         "editing.word_operations",
@@ -3268,14 +2784,13 @@
         "presentation.structured_output",
         "presentation.table",
         "presentation.theme",
-        "suggestion.autosuggest",
         "terminal.admission",
         "terminal.capability_snapshot",
         "terminal.width_policy"
       ],
       "category": "qualification",
       "path": "tools/hardening/benchmarks.rs",
-      "sha256": "sha256:791a7887a15373f0f2721eda2eeb69f0d68b119b67f5f6d0f5dfbce1d136bf0f",
+      "sha256": "sha256:fd46f560184dc6308602b3628fc176b71cef0c3347ca3d9fa8abbb5e38334436",
       "surfaces": [
         "rust-native"
       ]
@@ -3320,40 +2835,36 @@
     },
     {
       "capabilities": [
-        "analysis.hints_highlight",
-        "analysis.revisions",
-        "analysis.validation",
-        "completion.candidates",
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
-        "embedding.blocking",
-        "embedding.driven",
-        "embedding.readiness",
-        "embedding.session",
-        "interaction.completion_request",
         "interaction.editing",
-        "interaction.external_output",
         "interaction.history_navigation",
-        "platform.portable_engine",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
         "platform.posix_linux",
         "platform.posix_macos",
-        "presentation.completion_ux",
-        "presentation.composed_prompt",
-        "presentation.multiline_ux",
-        "presentation.prompt",
-        "presentation.status",
+        "platform.portable_engine",
         "presentation.structured_output",
         "presentation.table",
+        "presentation.status",
+        "presentation.composed_prompt",
         "presentation.theme",
-        "suggestion.autosuggest",
+        "embedding.blocking",
+        "embedding.session",
+        "embedding.driven",
+        "embedding.readiness",
         "terminal.admission",
         "terminal.capability_snapshot",
-        "terminal.width_policy"
+        "terminal.width_policy",
+        "analysis.revisions",
+        "completion.candidates",
+        "presentation.completion_ux",
+        "analysis.validation",
+        "presentation.multiline_ux",
+        "analysis.hints_highlight"
       ],
       "category": "qualification",
       "path": "tools/hardening/campaign.py",
-      "sha256": "sha256:75025076bb5eb88ff813ac10a06c21434fc7b77e98de3828e560db4917bbc2a3",
+      "sha256": "sha256:c38994bab38cd77ae6ebbee18af22b5a8abe81aa156fb8fd5bdf760c6edf6214",
       "surfaces": [
         "rust-native"
       ]
@@ -3364,9 +2875,6 @@
         "analysis.revisions",
         "analysis.validation",
         "completion.candidates",
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
         "editing.kill_yank",
         "editing.undo_redo",
         "editing.word_operations",
@@ -3390,42 +2898,13 @@
         "presentation.structured_output",
         "presentation.table",
         "presentation.theme",
-        "suggestion.autosuggest",
         "terminal.admission",
         "terminal.capability_snapshot",
         "terminal.width_policy"
       ],
       "category": "qualification",
       "path": "tools/hardening/campaigns.rs",
-      "sha256": "sha256:206f2a1c72545ff2f0bb6122138992aba176dce31c7f48c07a1544147e7c5f34",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
-        "suggestion.autosuggest"
-      ],
-      "category": "qualification",
-      "path": "tools/hardening/completion_memory.rs",
-      "sha256": "sha256:5cc3942f1ed43fd37d1a13698ffdaf251494471e39565044a7d56da84423d103",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
-        "suggestion.autosuggest"
-      ],
-      "category": "qualification",
-      "path": "tools/hardening/completion_sequences.rs",
-      "sha256": "sha256:5328276bd769a046521b55e55b0809f80ce1efb275d6378244e9b0307238cf9b",
+      "sha256": "sha256:cd1b71b658db6a54dfabc8264e05eda44a69d708ebe30556817bfff0586b6344",
       "surfaces": [
         "rust-native"
       ]
@@ -3502,20 +2981,6 @@
       "category": "qualification",
       "path": "tools/hardening/deterministic.py",
       "sha256": "sha256:ea72de6a158ea7f25a5845717f4a6a579960c5e5b108d464c748410c831020f9",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
-        "suggestion.autosuggest"
-      ],
-      "category": "qualification",
-      "path": "tools/hardening/ergonomics_pty.rs",
-      "sha256": "sha256:523c996407b2281707d8090ac495915cb2500a4661a4cfdd7a39d30fa139fe22",
       "surfaces": [
         "rust-native"
       ]
@@ -3936,27 +3401,10 @@
     },
     {
       "capabilities": [
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
-        "suggestion.autosuggest"
-      ],
-      "category": "qualification",
-      "path": "tools/hardening/fuzz_targets/surfaces.rs",
-      "sha256": "sha256:74cbb3a63952f0bcc7af64504c6f0c5358a8c57478b37f7d67ee96a8b3dc798f",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
         "analysis.hints_highlight",
         "analysis.revisions",
         "analysis.validation",
         "completion.candidates",
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
         "editing.kill_yank",
         "editing.undo_redo",
         "editing.word_operations",
@@ -3980,14 +3428,13 @@
         "presentation.structured_output",
         "presentation.table",
         "presentation.theme",
-        "suggestion.autosuggest",
         "terminal.admission",
         "terminal.capability_snapshot",
         "terminal.width_policy"
       ],
       "category": "qualification",
       "path": "tools/hardening/lib.rs",
-      "sha256": "sha256:8a2cb662ac93ab2775e977f249a761c8399c05c21b925a6059fa606d04431b1e",
+      "sha256": "sha256:0f2226ddbc8f583a2ca90f1f1fd60d5c0c6398150314ab765a9334b0642ba2b6",
       "surfaces": [
         "rust-native"
       ]
@@ -4220,40 +3667,36 @@
     },
     {
       "capabilities": [
-        "analysis.hints_highlight",
-        "analysis.revisions",
-        "analysis.validation",
-        "completion.candidates",
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
-        "embedding.blocking",
-        "embedding.driven",
-        "embedding.readiness",
-        "embedding.session",
-        "interaction.completion_request",
         "interaction.editing",
-        "interaction.external_output",
         "interaction.history_navigation",
-        "platform.portable_engine",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
         "platform.posix_linux",
         "platform.posix_macos",
-        "presentation.completion_ux",
-        "presentation.composed_prompt",
-        "presentation.multiline_ux",
-        "presentation.prompt",
-        "presentation.status",
+        "platform.portable_engine",
         "presentation.structured_output",
         "presentation.table",
+        "presentation.status",
+        "presentation.composed_prompt",
         "presentation.theme",
-        "suggestion.autosuggest",
+        "embedding.blocking",
+        "embedding.session",
+        "embedding.driven",
+        "embedding.readiness",
         "terminal.admission",
         "terminal.capability_snapshot",
-        "terminal.width_policy"
+        "terminal.width_policy",
+        "analysis.revisions",
+        "completion.candidates",
+        "presentation.completion_ux",
+        "analysis.validation",
+        "presentation.multiline_ux",
+        "analysis.hints_highlight"
       ],
       "category": "qualification",
       "path": "tools/hardening/replay.rs",
-      "sha256": "sha256:be55ece581fa7e1f48f81db5e7a75b8fe8397f08baa71ee4989fdc35ff2d6443",
+      "sha256": "sha256:a0b5c6b4241ffefc9fa88d2fbfe8d1db61d00c1ee2b86f6314df580ccc42c671",
       "surfaces": [
         "rust-native"
       ]
@@ -4296,68 +3739,36 @@
     },
     {
       "capabilities": [
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
-        "suggestion.autosuggest"
-      ],
-      "category": "qualification",
-      "path": "tools/hardening/surfaces.rs",
-      "sha256": "sha256:39e31cc60bf3caf4f66b936fb4a7e6abaca03c74257fba6002ad00b359ea2acf",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "analysis.hints_highlight",
-        "analysis.revisions",
-        "analysis.validation",
-        "completion.candidates",
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
-        "embedding.blocking",
-        "embedding.driven",
-        "embedding.readiness",
-        "embedding.session",
-        "interaction.completion_request",
         "interaction.editing",
-        "interaction.external_output",
         "interaction.history_navigation",
-        "platform.portable_engine",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
         "platform.posix_linux",
         "platform.posix_macos",
-        "presentation.completion_ux",
-        "presentation.composed_prompt",
-        "presentation.multiline_ux",
-        "presentation.prompt",
-        "presentation.status",
+        "platform.portable_engine",
         "presentation.structured_output",
         "presentation.table",
+        "presentation.status",
+        "presentation.composed_prompt",
         "presentation.theme",
-        "suggestion.autosuggest",
+        "embedding.blocking",
+        "embedding.session",
+        "embedding.driven",
+        "embedding.readiness",
         "terminal.admission",
         "terminal.capability_snapshot",
-        "terminal.width_policy"
+        "terminal.width_policy",
+        "analysis.revisions",
+        "completion.candidates",
+        "presentation.completion_ux",
+        "analysis.validation",
+        "presentation.multiline_ux",
+        "analysis.hints_highlight"
       ],
       "category": "qualification",
       "path": "tools/hardening/test_hardening.py",
-      "sha256": "sha256:8cef80009988bfc928f4e9947ebd8acc4be298bae35cc0550f9ec9f290e06113",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
-        "suggestion.autosuggest"
-      ],
-      "category": "qualification",
-      "path": "tools/package/check_recipes.py",
-      "sha256": "sha256:67f11295ec89082e0ed746b777deef75bb74584e6653093b6f4e0049f6cd188d",
+      "sha256": "sha256:700ea54f37bfd621b9a173ec26c1a1bbfa0379dae1f973c838125bcff6d338ed",
       "surfaces": [
         "rust-native"
       ]
@@ -4431,21 +3842,17 @@
         "analysis.revisions",
         "analysis.validation",
         "completion.candidates",
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
         "editing.kill_yank",
         "editing.undo_redo",
         "editing.word_operations",
         "interaction.history_search",
         "presentation.completion_ux",
         "presentation.multiline_ux",
-        "suggestion.autosuggest",
         "terminal.capability_snapshot"
       ],
       "category": "qualification",
       "path": "tools/perf/components.rs",
-      "sha256": "sha256:ff136c8d551e0c48477c51f230a0af63f84d92ac06f0839888e0a7d9d92db437",
+      "sha256": "sha256:af0cc950541e007bb33d763165665daf4d61c669bf55aea5bd93d02380d9f87f",
       "surfaces": [
         "rust-native"
       ]
@@ -4604,20 +4011,6 @@
     },
     {
       "capabilities": [
-        "completion.helpers",
-        "completion.large_sets",
-        "editing.keymap",
-        "suggestion.autosuggest"
-      ],
-      "category": "qualification",
-      "path": "tools/test_check_docs.py",
-      "sha256": "sha256:2a66dbc8476aed7d3902c63cf909bbf6db52e61f5fde5cf0db3befde5615727e",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
         "completion.candidates",
         "presentation.completion_ux"
       ],
@@ -4701,17 +4094,17 @@
     }
   ],
   "predecessor": {
-    "contract_id": "sha256:da8d43514a044e5c55cc851c51b31887c980ad885c6c04f24144b7906243eb5a",
+    "contract_id": "sha256:f690c80022f44a53d99dbe62ff4cc8ab7d75b602209386f0f6d963cd309be9f6",
     "repository": "https://github.com/mothx9/replai",
-    "revision": "0e281321abe1d43af49bace6baed90a9a80f89aa",
-    "tree": "f4d671e2f086800dd9169aa4bbb6c949e366a35e"
+    "revision": "7f8f696f98b33d8e4ea6f08e243fe0d5e5351724",
+    "tree": "15f1cc0e685b8523b33e97c145615bc82ac6b7be"
   },
   "repository": "https://github.com/mothx9/replai",
   "schema_version": 1,
   "source": {
     "dirty": false,
-    "revision": "db4dff1dd1bd9bd1b15ac953efe2c894c51ed2fd",
-    "tree": "bce1603e1101c26164c799a5a2359c9549d7ef73"
+    "revision": "0e281321abe1d43af49bace6baed90a9a80f89aa",
+    "tree": "f4d671e2f086800dd9169aa4bbb6c949e366a35e"
   },
   "surfaces": [
     {

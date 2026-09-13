@@ -4,14 +4,25 @@ REPLAI owns these producer declarations. They describe generic capabilities,
 surfaces, qualification and changes; they assign no consumer paths, commands or
 migration work. Consumer profiles must be authored by their own repositories.
 
-- [Current producer snapshot](producer.json), generation 15: interaction-ergonomics
-  evidence source `0e281321abe1d43af49bace6baed90a9a80f89aa`, tree
-  `f4d671e2f086800dd9169aa4bbb6c949e366a35e`; its runtime tree is
+- [Current producer snapshot](producer.json), generation 16: configurable-interaction
+  evidence source `db4dff1dd1bd9bd1b15ac953efe2c894c51ed2fd`, tree
+  `bce1603e1101c26164c799a5a2359c9549d7ef73`; its runtime tree is
+  `62596c22ad2568c46c4e742b21136b31f9e1eb96`.
+  The [four-platform qualification](https://github.com/mothx9/replai/actions/runs/34772036424)
+  and [12-lane CI](https://github.com/mothx9/replai/actions/runs/34772036277)
+  qualify configurable keymaps, generic completion helpers, explicit large-set
+  navigation and revision-safe autosuggestion. C ABI 1 remains unchanged.
+- [Configurable-interaction delta](deltas/completion-keymap-suggestion.json) adds
+  four compatible Rust-native capabilities and assigns no migration or consumer
+  repin.
+- [Previous interaction-ergonomics snapshot](checkpoints/0e281321abe1d43af49bace6baed90a9a80f89aa.json),
+  generation 15: evidence source `0e281321abe1d43af49bace6baed90a9a80f89aa`,
+  tree `f4d671e2f086800dd9169aa4bbb6c949e366a35e`; runtime tree
   `8db955760152f10a7d34056796e2c9f0e1e003af`.
   The [four-platform ergonomics matrix](https://github.com/mothx9/replai/actions/runs/34760786690)
   and [12-lane runtime-source CI](https://github.com/mothx9/replai/actions/runs/34760953707)
   qualify bounded history search/provider mechanics, Unicode word editing,
-  undo/redo and kill/yank. C ABI 1 remains unchanged.
+  undo/redo and kill/yank.
 - [Interaction-ergonomics delta](deltas/interaction-ergonomics.json) adds four
   compatible Rust-native capabilities and assigns no migration or consumer repin.
 - [Previous release-packaging snapshot](checkpoints/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724.json),
@@ -153,7 +164,7 @@ behavior, ABI and documentation inputs. Its external validation command is:
 
 ```sh
 boundary validate .boundary/producer.json --repo . \
-  --previous .boundary/checkpoints/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724.json
+  --previous .boundary/checkpoints/0e281321abe1d43af49bace6baed90a9a80f89aa.json
 ```
 
 Run from a clean REPLAI checkout with BOUNDARY installed separately. Validation
