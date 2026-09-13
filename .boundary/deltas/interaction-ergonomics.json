@@ -1,7 +1,7 @@
 {
   "capability_contracts": [
     {
-      "description": "Bounded literal reverse history search over admitted and host-provided entries",
+      "description": "Bounded editor-owned single-register kill and yank mechanics",
       "documentation": [
         "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/interaction.md#daily-driver-editing-and-history-search"
       ],
@@ -10,36 +10,11 @@
         "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/engineering/interaction-ergonomics.md"
       ],
       "guarantees": [
-        "Host owns persistence, I/O, admission, retention, privacy and encryption; REPLAI retains only one explicitly bounded immutable search view",
-        "Search query and selected match are non-canonical; dismissal preserves exact draft identity and acceptance is one undoable replacement with a fresh revision",
-        "Newest-first case-sensitive UTF-8 substring matching is duplicate-preserving and non-wrapping; provider failure and invalid text reject atomically",
-        "Linux/macOS real PTY and native memory qualification; Windows portable model only"
+        "Word and logical-line kills replace one bounded private register; it is not a system clipboard, application store or Readline kill ring",
+        "Failed kill or yank preserves draft, cursor, revision, undo/redo and prior register; successful operations compose as canonical undoable transactions",
+        "Register lifetime follows the retained Editor and can be explicitly cleared for future sensitive-input policy"
       ],
-      "id": "interaction.history_search",
-      "maturity": "experimental",
-      "platforms": [
-        "linux",
-        "macos",
-        "windows"
-      ],
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "description": "Locale-independent Unicode word movement and deletion over grapheme-safe boundaries",
-      "documentation": [
-        "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/interaction.md#daily-driver-editing-and-history-search"
-      ],
-      "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34759347027",
-        "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/engineering/interaction-ergonomics.md"
-      ],
-      "guarantees": [
-        "UAX #29 default word boundaries are snapped to extended-grapheme boundaries across punctuation, whitespace, multiline and mixed Unicode text",
-        "Movement is allocation-free; deletion is one bounded undoable canonical transaction and never splits a grapheme"
-      ],
-      "id": "editing.word_operations",
+      "id": "editing.kill_yank",
       "maturity": "experimental",
       "platforms": [
         "linux",
@@ -76,7 +51,7 @@
       ]
     },
     {
-      "description": "Bounded editor-owned single-register kill and yank mechanics",
+      "description": "Locale-independent Unicode word movement and deletion over grapheme-safe boundaries",
       "documentation": [
         "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/interaction.md#daily-driver-editing-and-history-search"
       ],
@@ -85,11 +60,36 @@
         "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/engineering/interaction-ergonomics.md"
       ],
       "guarantees": [
-        "Word and logical-line kills replace one bounded private register; it is not a system clipboard, application store or Readline kill ring",
-        "Failed kill or yank preserves draft, cursor, revision, undo/redo and prior register; successful operations compose as canonical undoable transactions",
-        "Register lifetime follows the retained Editor and can be explicitly cleared for future sensitive-input policy"
+        "UAX #29 default word boundaries are snapped to extended-grapheme boundaries across punctuation, whitespace, multiline and mixed Unicode text",
+        "Movement is allocation-free; deletion is one bounded undoable canonical transaction and never splits a grapheme"
       ],
-      "id": "editing.kill_yank",
+      "id": "editing.word_operations",
+      "maturity": "experimental",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "description": "Bounded literal reverse history search over admitted and host-provided entries",
+      "documentation": [
+        "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/interaction.md#daily-driver-editing-and-history-search"
+      ],
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34759347027",
+        "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/engineering/interaction-ergonomics.md"
+      ],
+      "guarantees": [
+        "Host owns persistence, I/O, admission, retention, privacy and encryption; REPLAI retains only one explicitly bounded immutable search view",
+        "Search query and selected match are non-canonical; dismissal preserves exact draft identity and acceptance is one undoable replacement with a fresh revision",
+        "Newest-first case-sensitive UTF-8 substring matching is duplicate-preserving and non-wrapping; provider failure and invalid text reject atomically",
+        "Linux/macOS real PTY and native memory qualification; Windows portable model only"
+      ],
+      "id": "interaction.history_search",
       "maturity": "experimental",
       "platforms": [
         "linux",
@@ -372,8 +372,8 @@
     "revision": "f00cc038134329bc0267f3e694f62e0ec20f0214",
     "tree": "12f17d5765133af3eb937c71ef4af90bcea3b867"
   },
-  "id": "sha256:1cb918f6cf89ba6c378510c7ffea19e737ff371c5bda643b286567f6afa70ae8",
-  "kind": "producer-delta",
+  "id": "sha256:2bf1afadc0e3bdeec49a4516ab21bd376cfad98dcd025dc52de8e31d80b37112",
+  "kind": "delta",
   "platforms": [
     {
       "evidence": [
