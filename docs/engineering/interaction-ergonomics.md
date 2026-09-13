@@ -16,8 +16,9 @@ implied.
 
 The local campaign source is `65e3158123a7c90a5d03dd995601326d005672b7`,
 tree `b5a5c77b146b865e0d5526ad9243fd5a071c1d1d`; its runtime tree is the final
-`d3fb692f8b4f495180eb4b667378f576c89e1bd2`. Native CI receipts are linked
-below when the evidence carrier is published.
+`d3fb692f8b4f495180eb4b667378f576c89e1bd2`. The exact native qualifier and
+full-CI source is `a83be0804903cf35afc99f79a5e655de79f9011f`, tree
+`732c674054e83c4c803b1abe8a143540358f599f`, with the same runtime tree.
 
 ## Architecture and contracts
 
@@ -85,6 +86,8 @@ lifetime.
 | E-002 | 1 MiB local insertion allocation probe | Initial grouping could extend a huge initial transaction and reallocate its whole payload. | Product defect in new ergonomics | Cap a coalesced typing/deletion transaction at 4096 bytes; one-byte local undo payload regression. | Closed |
 | E-003 | Identical history-search acceptance and exhausted history navigation | Identical accepted bytes could retain revision identity; navigation reset auxiliary undo state before the checked revision commit. | Product defect in new ergonomics | Always advance identical acceptance and order history revision checks before auxiliary mutation; unit regression. | Closed |
 | H-001 | First fuzz invocation | A single-worker launch accumulated only 63.20 CPU-seconds before manual interruption to configure four accounted workers. | Harness execution, not product evidence | Excluded from campaign totals; exact four-worker command retained. | Closed |
+| H-002 | Linux Valgrind under the Rust test harness | Both Linux architectures retained one identical 48-byte `possibly lost` process-lifetime allocation in `std::thread::current::init_current` / `std::sync::mpmc::context::Context`, with no REPLAI frame. | Tool/harness attribution, not a product leak | Keep the complete log; fail every definite/indirect leak and every possible-loss block except this exact Rust libtest TLS signature. No blanket suppression is used. | Closed |
+| H-003 | First macOS native qualifier run | `leaks --atExit` over the unoptimized test harness did not complete, despite the uninstrumented PTY test and existing macOS memory jobs passing. | Harness execution, not product evidence | Cancel the incomplete run, use the release test artifact, bound compilation/test/memory-tool phases, and replay the complete four-platform matrix. | Closed after replay |
 
 ## Qualification evidence
 
@@ -124,7 +127,12 @@ and [Q2 registration](../../tools/ergonomics/evidence/q2-linux-aarch64.json).
 
 The native workflow executes the same portable model plus real PTY and Valgrind
 or macOS `leaks` on Linux x86_64, Linux ARM64 and macOS ARM64. Windows executes
-the portable model only. Its workflow-dispatch source is
+the portable model and retained corpus only. The Linux Valgrind logs contain no
+definite or indirect leak and no invalid access; the sole exact H-002 TLS record
+remains retained as non-attributable evidence. The corresponding
+[full CI](https://github.com/mothx9/replai/actions/runs/34757723745) passed all
+Rust, PTY, C/C++, documentation, external-embedding, Windows-portable and
+benchmark-integrity jobs. Workflow source is
 [interaction-ergonomics.yml](../../.github/workflows/interaction-ergonomics.yml).
 
 ## Q2 and allocation policy

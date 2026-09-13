@@ -20,8 +20,10 @@ def run(command, **kwargs):
 
 def test_binary():
     result = run(
-        ["cargo", "test", "--locked", "--test", "pty", "--no-run", "--message-format", "json"],
+        ["cargo", "test", "--locked", "--release", "--test", "pty", "--no-run",
+         "--message-format", "json"],
         stdout=subprocess.PIPE,
+        timeout=300,
     )
     artifacts = [json.loads(line) for line in result.stdout.splitlines() if line.startswith("{")]
     paths = [Path(item["executable"]) for item in artifacts
@@ -75,14 +77,15 @@ def main():
     }
     if not args.portable_only:
         executable = test_binary()
-        run([str(executable), PTY_TEST, "--exact", "--nocapture"])
+        run([str(executable), PTY_TEST, "--exact", "--nocapture"], timeout=120)
         if platform.system() == "Linux":
             valgrind = shutil.which("valgrind")
             assert valgrind, "Valgrind is required on Linux"
             log = args.work / "valgrind.log"
             run([valgrind, "--leak-check=full", "--show-leak-kinds=all",
                  "--errors-for-leak-kinds=definite,indirect", "--error-exitcode=99",
-                 f"--log-file={log}", str(executable), PTY_TEST, "--exact", "--nocapture"])
+                 f"--log-file={log}", str(executable), PTY_TEST, "--exact", "--nocapture"],
+                timeout=300)
             report = log.read_text()
             possible_harness_records = validate_valgrind(report)
             summary["memory_tool"] = subprocess.check_output(
@@ -93,7 +96,8 @@ def main():
             leaks = Path("/usr/bin/leaks")
             assert leaks.is_file(), "native leaks is required on macOS"
             result = run([str(leaks), "--atExit", "--", str(executable), PTY_TEST,
-                          "--exact", "--nocapture"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                          "--exact", "--nocapture"], stdout=subprocess.PIPE,
+                         stderr=subprocess.STDOUT, timeout=300)
             (args.work / "leaks.txt").write_text(result.stdout)
             assert "0 leaks for 0 total leaked bytes" in result.stdout
             summary["memory_tool"] = "macOS leaks --atExit"
