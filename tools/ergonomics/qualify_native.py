@@ -145,18 +145,17 @@ def macos_leaks_example(work):
         os.close(slave)
 
 
-def macos_leaks_ergonomics(work, executable):
-    """Run the self-contained new-surface PTY oracle under native leaks."""
+def macos_leaks_surfaces(work):
+    """Run the public configurable-surface example under native leaks."""
+    run(["cargo", "build", "--locked", "--example", "configured_completion"], timeout=300)
+    executable = ROOT / "target/debug/examples/configured_completion"
     command = ["/usr/bin/leaks", "--atExit", "--", str(executable)]
-    # `leaks --atExit` can spend substantially longer than the executable in
-    # native heap analysis on hosted ARM64 runners. Keep the command bounded,
-    # but give the memory tool the same budget as the Linux Valgrind pass.
     result = subprocess.run(command, cwd=ROOT, text=True, stdout=subprocess.PIPE,
-                            stderr=subprocess.STDOUT, timeout=300)
-    (work / "leaks-ergonomics.txt").write_text(result.stdout)
+                            stderr=subprocess.STDOUT, timeout=120)
+    (work / "leaks-surfaces.txt").write_text(result.stdout)
     assert result.returncode == 0, result.stdout[-4000:]
     assert "0 leaks for 0 total leaked bytes" in result.stdout, result.stdout[-4000:]
-    assert '"suggestion":true' in result.stdout and '"large_completion":1000' in result.stdout
+    assert "prefix=1 fuzzy=1 suggestion=loy service custom_keys=2" in result.stdout
     return command
 
 
@@ -203,7 +202,7 @@ def main():
             assert leaks.is_file(), "native leaks is required on macOS"
             memory_command = [
                 macos_leaks_example(args.work),
-                macos_leaks_ergonomics(args.work, executable),
+                macos_leaks_surfaces(args.work),
             ]
             summary["memory_tool"] = "macOS leaks --atExit"
             summary["memory_command"] = memory_command

@@ -167,7 +167,7 @@ by that canonical edit.
 | --- | --- | --- | --- | --- |
 | A-C01 | New design defect | Early Engine-to-decoder type dependency violated the layer contract. | Keymap ownership moved to Interaction/Terminal; architecture dependency test passes. | Closed |
 | H-C01 | Harness defect | Initial fuzz launch referenced removed internal `DismissCompletion`. | Harness maps public `CompletionAction::Dismiss`; failed launch excluded and full budget restarted. | Closed |
-| H-C02 | Harness defect | The second macOS `leaks --atExit` pass exhausted a 120-second wrapper budget after the PTY oracle itself had passed. | The unchanged leak oracle retains a finite 300-second tool budget, matching the Linux memory pass; native qualification was restarted. | Closed |
+| H-C02 | Harness defect | Running `leaks --atExit` over the four-profile PTY oracle exhausted both 120- and 300-second wrapper budgets after the oracle passed normally. | PTY behavior remains a separate required run; macOS heap qualification now runs the public configurable-surface example without the unrelated VT screen parser. The zero-leak oracle remains unchanged. | Closed |
 | Q-C01 | Regression finding | Large-menu range prose changed the existing 10-candidate Q2 byte/allocation oracle. | Range prose is limited to sets above ten; unchanged small-menu gate replays exactly. | Closed |
 | — | Product findings from final fuzz | No crash, panic, hang, invalid state, control injection, stale mutation or content loss. | Retained corpus replay. | Closed |
 
