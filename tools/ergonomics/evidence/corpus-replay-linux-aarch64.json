@@ -1,0 +1,23 @@
+{
+  "head": "65e3158123a7c90a5d03dd995601326d005672b7",
+  "tree": "b5a5c77b146b865e0d5526ad9243fd5a071c1d1d",
+  "runtime_tree": "d3fb692f8b4f495180eb4b667378f576c89e1bd2",
+  "platform": {
+    "system": "Linux",
+    "node": "spark-7c3d",
+    "release": "6.17.0-1021-nvidia",
+    "version": "#21-Ubuntu SMP PREEMPT_DYNAMIC Wed May 27 19:14:05 UTC 2026",
+    "machine": "aarch64",
+    "processor": "aarch64"
+  },
+  "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-unknown-linux-gnu\nrelease: 1.98.1\nLLVM version: 22.1.8",
+  "archive_sha256": "84c8bf5d43e16f0f94cacd9a1ecbfd79b730544634a26d10304f08fc64ee0969",
+  "binary_sha256": "5740d08acd0d4a15b9ad9bccb0bd4133fe6804a7493c47f1844347d029ee5c74",
+  "corpus": {
+    "files": 6104,
+    "sha256": "f13a67d0fdb166715e5956c81b7d3763f715dd86081312662c1e37848e80285b"
+  },
+  "start_unix": 1789302113.1162975,
+  "end_unix": 1789302114.2101362,
+  "status": "PASS"
+}

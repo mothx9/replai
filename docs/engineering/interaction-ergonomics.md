@@ -14,8 +14,10 @@ implied.
 - Revision-atomicity correction: `370fe9287c595884fd5ad336b51d73aa291b46b9`,
   runtime tree `d3fb692f8b4f495180eb4b667378f576c89e1bd2`.
 
-Final carrier, native CI receipts and final performance/fuzz identities are
-recorded below after exact-source execution.
+The local campaign source is `65e3158123a7c90a5d03dd995601326d005672b7`,
+tree `b5a5c77b146b865e0d5526ad9243fd5a071c1d1d`; its runtime tree is the final
+`d3fb692f8b4f495180eb4b667378f576c89e1bd2`. Native CI receipts are linked
+below when the evidence carrier is published.
 
 ## Architecture and contracts
 
@@ -92,12 +94,33 @@ canonical Linux command sequence is:
 ```sh
 python3 tools/hardening/campaign.py --work /tmp/replai-ergonomics-fuzz \
   --cpu-seconds 1800 --workers 4 --targets editor
-python3 tools/hardening/corpus.py replay --archive tools/hardening/evidence/final-corpus.json.gz \
+python3 tools/ergonomics/corpus.py replay --archive tools/ergonomics/editor-corpus.json.gz \
   --work /tmp/replai-ergonomics-replay
 cargo run --locked --release --manifest-path tools/hardening/Cargo.toml \
   --bin ergonomics-sequences -- 100000 7632459182231841
 python3 tools/ergonomics/qualify_native.py --work /tmp/replai-ergonomics-native
 ```
+
+The Linux ARM64 feature campaign used nightly 1.100.0-nightly, cargo-fuzz
+0.13.2 and its default address-sanitizer, inline-coverage and trace-comparison
+instrumentation. Four accounted workers completed 1809.269397 CPU-seconds in
+60 chunks. The initial 31-file corpus digest was
+`fa7cba512c02a1ee4a565614adf55af27e8d5a60079ce07e8ecbf61d9857e8e4`;
+the final 6104-file corpus digest is
+`f13a67d0fdb166715e5956c81b7d3763f715dd86081312662c1e37848e80285b`.
+Peak per-worker RSS was 530488 KiB and no finding remained. The deterministic
+archive is 874819 bytes with SHA-256
+`84c8bf5d43e16f0f94cacd9a1ecbfd79b730544634a26d10304f08fc64ee0969`.
+
+The retained feature corpus and all five RELEASE.HARDENING.0 corpora replayed
+cleanly. The latter contained 7442 C-ABI, 7296 editor, 6769 geometry, 1506
+protocol and 7587 result inputs. The generated model completed 100000 sequences
+of 128 operations from seed `7632459182231841`; final oracle state
+`948307739503825185` matched, with 2212 KiB peak RSS. Exact machine-readable
+receipts include the [fuzz campaign](../../tools/ergonomics/evidence/fuzz-linux-aarch64.json),
+[corpus replay](../../tools/ergonomics/evidence/corpus-replay-linux-aarch64.json),
+[semantic model](../../tools/ergonomics/evidence/semantic-sequences-linux-aarch64.json)
+and [Q2 registration](../../tools/ergonomics/evidence/q2-linux-aarch64.json).
 
 The native workflow executes the same portable model plus real PTY and Valgrind
 or macOS `leaks` on Linux x86_64, Linux ARM64 and macOS ARM64. Windows executes
@@ -116,8 +139,29 @@ small/1000-entry history search, query refinement, kill and yank.
 
 Alternating historical-control/current-source latency, the new 48-workload
 registration, allocation measurements and known large-draft debt are retained in
-the final evidence files. Existing synchronous output and large multiline/prefix
-layout debt remain outside this wave.
+the final evidence files. The prior 32-workload registration remains immutable.
+The only independently repeated historical threshold exceedance is the
+1000-input burst: median 44656 ns before and 61232 ns after. Its cause is the
+selected undo contract (1118 versus 2127 allocation calls); encoded output
+remains exactly 1042 bytes. It is an intentional bounded contract cost rather
+than an unexplained regression.
+
+Representative current registrations on Linux ARM64 are:
+
+| Workload | Median / p95 (ns) | Allocations | Requested / retained bytes |
+| --- | ---: | ---: | ---: |
+| Word backward / forward, 1 KiB ASCII | 8512 / 8560; 6624 / 6640 | 0; 0 | 0 / 0 |
+| Delete word backward / forward | 8544 / 8592; 6656 / 6688 | 1; 1 | 1024 / 1024 |
+| Undo / redo local insertion | 48 / 64; 48 / 48 | 1; 0 | 320 / 320; 0 / 0 |
+| Reverse search, small / 1000 entries | 23776 / 25312; 33712 / 36576 | 125; 1128 | 19293 / 4749; 112326 / 51702 |
+| Kill / yank, 1 KiB | 8576 / 8624; 736 / 752 | 2; 2 | 2048 / 2048; 2048 / 1024 |
+| One-byte append / cursor movement | 48 / 80; 32 / 48 | 1; 0 | 1 / 1; 0 / 0 |
+
+The 64 KiB and 1 MiB edit probes register medians of 18912 ns and 240097 ns.
+Their total retained deltas are 65634 and 1048674 bytes because the probe also
+observes the canonical `String`; the undo delta itself is one byte. Existing
+synchronous output and large multiline/prefix-layout debt remain outside this
+wave and are not relabeled as solved.
 
 ## Compatibility and residual scope
 

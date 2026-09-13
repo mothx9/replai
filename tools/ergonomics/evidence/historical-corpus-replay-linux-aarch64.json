@@ -1,0 +1,71 @@
+{
+  "head": "65e3158123a7c90a5d03dd995601326d005672b7",
+  "tree": "b5a5c77b146b865e0d5526ad9243fd5a071c1d1d",
+  "environment": {
+    "system": "Linux",
+    "node": "spark-7c3d",
+    "release": "6.17.0-1021-nvidia",
+    "version": "#21-Ubuntu SMP PREEMPT_DYNAMIC Wed May 27 19:14:05 UTC 2026",
+    "machine": "aarch64",
+    "processor": "aarch64"
+  },
+  "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: aarch64-unknown-linux-gnu\nrelease: 1.98.1\nLLVM version: 22.1.8",
+  "terminal_environment": {
+    "TERM": "dumb",
+    "NO_COLOR": "1"
+  },
+  "archive_sha256": "7b500ad03bcc6ef94777c3e3d5ab6822d1433b4cb4b4c2f72a6fe98388d6d8ee",
+  "binary_sha256": "5740d08acd0d4a15b9ad9bccb0bd4133fe6804a7493c47f1844347d029ee5c74",
+  "results": [
+    {
+      "target": "cabi",
+      "status": "PASS",
+      "corpus": {
+        "files": 7442,
+        "sha256": "fb2874dfd96b2cb3684ab61b2aca919ea862cfd6b5c8664fded07ad05c8e65b2"
+      },
+      "start_unix": 1789302143.6661572,
+      "end_unix": 1789302145.4860337
+    },
+    {
+      "target": "editor",
+      "status": "PASS",
+      "corpus": {
+        "files": 7296,
+        "sha256": "48ce910b67ec5cb82fe22ba8a8383b205133ac6b3442175a7b07883703bc322e"
+      },
+      "start_unix": 1789302145.6148672,
+      "end_unix": 1789302146.334487
+    },
+    {
+      "target": "geometry",
+      "status": "PASS",
+      "corpus": {
+        "files": 6769,
+        "sha256": "aa9893f788d7f2eff93c731b7b953d5e54c153dd65ebfde06d9029162491a7b2"
+      },
+      "start_unix": 1789302146.446884,
+      "end_unix": 1789302147.617903
+    },
+    {
+      "target": "protocol",
+      "status": "PASS",
+      "corpus": {
+        "files": 1506,
+        "sha256": "c090bd35b6df24be850ce09ed74288690b432bab08091ebce4cb5c303a1213b4"
+      },
+      "start_unix": 1789302147.6447546,
+      "end_unix": 1789302149.416247
+    },
+    {
+      "target": "results",
+      "status": "PASS",
+      "corpus": {
+        "files": 7587,
+        "sha256": "89b2692e1f04bad00c7144bd70797664f54aa1f102d439279a609d8b70fcd99e"
+      },
+      "start_unix": 1789302149.547845,
+      "end_unix": 1789302150.5155876
+    }
+  ]
+}

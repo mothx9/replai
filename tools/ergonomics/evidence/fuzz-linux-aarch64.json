@@ -1,0 +1,1185 @@
+{
+  "environment": {
+    "head": "65e3158123a7c90a5d03dd995601326d005672b7",
+    "tree": "b5a5c77b146b865e0d5526ad9243fd5a071c1d1d",
+    "dirty": false,
+    "uname": {
+      "system": "Linux",
+      "node": "spark-7c3d",
+      "release": "6.17.0-1021-nvidia",
+      "version": "#21-Ubuntu SMP PREEMPT_DYNAMIC Wed May 27 19:14:05 UTC 2026",
+      "machine": "aarch64",
+      "processor": "aarch64"
+    },
+    "libc": [
+      "glibc",
+      "2.39"
+    ],
+    "rustc": "rustc 1.100.0-nightly (a36d05efa 2026-09-09)\nbinary: rustc\ncommit-hash: a36d05efab632d1ddf902b6a5c33b6d5d3b64131\ncommit-date: 2026-09-09\nhost: aarch64-unknown-linux-gnu\nrelease: 1.100.0-nightly\nLLVM version: 23.1.1",
+    "cargo_fuzz": "cargo-fuzz 0.13.2",
+    "instrumentation": "cargo-fuzz default address sanitizer + inline coverage + trace comparisons",
+    "requested_cpu_seconds_per_target": 1800,
+    "workers_per_target": 4,
+    "start_utc": "2026-09-13T12:13:21Z"
+  },
+  "summary": {
+    "target": "editor",
+    "initial_corpus": {
+      "files": 31,
+      "sha256": "fa7cba512c02a1ee4a565614adf55af27e8d5a60079ce07e8ecbf61d9857e8e4"
+    },
+    "chunks": [
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17011",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301611.630968,
+        "end_unix": 1789301642.8501544,
+        "user_seconds": 30.673065,
+        "system_seconds": 0.528724,
+        "peak_rss_kib": 520764,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17012",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301611.6312103,
+        "end_unix": 1789301642.8372436,
+        "user_seconds": 30.708348,
+        "system_seconds": 0.489465,
+        "peak_rss_kib": 522552,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17013",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301611.6315563,
+        "end_unix": 1789301642.842648,
+        "user_seconds": 30.686912,
+        "system_seconds": 0.509931,
+        "peak_rss_kib": 516300,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17014",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301611.631791,
+        "end_unix": 1789301642.8630314,
+        "user_seconds": 30.73203,
+        "system_seconds": 0.491818,
+        "peak_rss_kib": 519736,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17011",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301642.8898075,
+        "end_unix": 1789301674.0799022,
+        "user_seconds": 30.66792,
+        "system_seconds": 0.511084,
+        "peak_rss_kib": 514664,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17012",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301642.890065,
+        "end_unix": 1789301674.0977979,
+        "user_seconds": 30.601905,
+        "system_seconds": 0.603059,
+        "peak_rss_kib": 526688,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17013",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301642.890135,
+        "end_unix": 1789301674.097546,
+        "user_seconds": 30.652232,
+        "system_seconds": 0.5470309999999999,
+        "peak_rss_kib": 520988,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17014",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301642.8901978,
+        "end_unix": 1789301674.1336281,
+        "user_seconds": 30.713273,
+        "system_seconds": 0.5258269999999999,
+        "peak_rss_kib": 524112,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17011",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301674.1651182,
+        "end_unix": 1789301705.384571,
+        "user_seconds": 30.602623,
+        "system_seconds": 0.607347,
+        "peak_rss_kib": 516320,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17012",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301674.1651769,
+        "end_unix": 1789301705.3568475,
+        "user_seconds": 30.667151,
+        "system_seconds": 0.521245,
+        "peak_rss_kib": 520156,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17013",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301674.165589,
+        "end_unix": 1789301705.43259,
+        "user_seconds": 30.651457,
+        "system_seconds": 0.612399,
+        "peak_rss_kib": 513612,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17014",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301674.165731,
+        "end_unix": 1789301705.402186,
+        "user_seconds": 30.643069,
+        "system_seconds": 0.588707,
+        "peak_rss_kib": 518404,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17011",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301705.4681246,
+        "end_unix": 1789301736.6973538,
+        "user_seconds": 30.616075,
+        "system_seconds": 0.603575,
+        "peak_rss_kib": 521692,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17012",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301705.4681964,
+        "end_unix": 1789301736.6998785,
+        "user_seconds": 30.655213,
+        "system_seconds": 0.573429,
+        "peak_rss_kib": 513440,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17013",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301705.4687064,
+        "end_unix": 1789301736.6888454,
+        "user_seconds": 30.628847,
+        "system_seconds": 0.588167,
+        "peak_rss_kib": 508816,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17014",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301705.4689264,
+        "end_unix": 1789301736.6757894,
+        "user_seconds": 30.691907,
+        "system_seconds": 0.5134449999999999,
+        "peak_rss_kib": 513344,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17011",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301736.737936,
+        "end_unix": 1789301767.9679887,
+        "user_seconds": 30.684237,
+        "system_seconds": 0.5394329999999999,
+        "peak_rss_kib": 511544,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17012",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301736.7380302,
+        "end_unix": 1789301767.9336767,
+        "user_seconds": 30.644992,
+        "system_seconds": 0.547443,
+        "peak_rss_kib": 511084,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17013",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301736.7384233,
+        "end_unix": 1789301768.0111692,
+        "user_seconds": 30.755024,
+        "system_seconds": 0.516514,
+        "peak_rss_kib": 511136,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17014",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301736.7384784,
+        "end_unix": 1789301767.9518042,
+        "user_seconds": 30.654922,
+        "system_seconds": 0.5568179999999999,
+        "peak_rss_kib": 512840,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17011",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301768.0510712,
+        "end_unix": 1789301799.4609056,
+        "user_seconds": 30.874293,
+        "system_seconds": 0.527751,
+        "peak_rss_kib": 517472,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17012",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301768.0511382,
+        "end_unix": 1789301799.4044929,
+        "user_seconds": 30.797131,
+        "system_seconds": 0.543478,
+        "peak_rss_kib": 527548,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17013",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301768.0512366,
+        "end_unix": 1789301799.2409902,
+        "user_seconds": 30.689477,
+        "system_seconds": 0.497816,
+        "peak_rss_kib": 528472,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17014",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301768.0513294,
+        "end_unix": 1789301799.3211303,
+        "user_seconds": 30.650947,
+        "system_seconds": 0.6172529999999999,
+        "peak_rss_kib": 524780,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17011",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301799.5028481,
+        "end_unix": 1789301830.7068238,
+        "user_seconds": 30.622724,
+        "system_seconds": 0.581082,
+        "peak_rss_kib": 520604,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17012",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301799.5030055,
+        "end_unix": 1789301830.8332384,
+        "user_seconds": 30.791208,
+        "system_seconds": 0.534951,
+        "peak_rss_kib": 522536,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17013",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301799.5034125,
+        "end_unix": 1789301830.7680109,
+        "user_seconds": 30.687613,
+        "system_seconds": 0.57524,
+        "peak_rss_kib": 527872,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17014",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301799.503535,
+        "end_unix": 1789301830.744364,
+        "user_seconds": 30.766837,
+        "system_seconds": 0.46748199999999995,
+        "peak_rss_kib": 525556,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17011",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301830.8756788,
+        "end_unix": 1789301862.1366928,
+        "user_seconds": 30.740535,
+        "system_seconds": 0.5171479999999999,
+        "peak_rss_kib": 519308,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17012",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301830.8757844,
+        "end_unix": 1789301862.0742457,
+        "user_seconds": 30.676201,
+        "system_seconds": 0.517116,
+        "peak_rss_kib": 529144,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17013",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301830.8762128,
+        "end_unix": 1789301862.0656383,
+        "user_seconds": 30.67447,
+        "system_seconds": 0.513074,
+        "peak_rss_kib": 530348,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17014",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301830.8763032,
+        "end_unix": 1789301862.298191,
+        "user_seconds": 30.832045,
+        "system_seconds": 0.58777,
+        "peak_rss_kib": 526492,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17011",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301862.3420336,
+        "end_unix": 1789301893.5534117,
+        "user_seconds": 30.69069,
+        "system_seconds": 0.51864,
+        "peak_rss_kib": 517820,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17012",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301862.3421504,
+        "end_unix": 1789301893.5880146,
+        "user_seconds": 30.732139,
+        "system_seconds": 0.512192,
+        "peak_rss_kib": 520656,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17013",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301862.3425946,
+        "end_unix": 1789301893.545316,
+        "user_seconds": 30.639077,
+        "system_seconds": 0.562093,
+        "peak_rss_kib": 517140,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17014",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301862.342634,
+        "end_unix": 1789301893.8185203,
+        "user_seconds": 30.943346,
+        "system_seconds": 0.5265409999999999,
+        "peak_rss_kib": 522408,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17011",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301893.8639312,
+        "end_unix": 1789301925.0784416,
+        "user_seconds": 30.633634,
+        "system_seconds": 0.577576,
+        "peak_rss_kib": 525152,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17012",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301893.8640258,
+        "end_unix": 1789301925.1420662,
+        "user_seconds": 30.740169,
+        "system_seconds": 0.5311509999999999,
+        "peak_rss_kib": 524000,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17013",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301893.8640707,
+        "end_unix": 1789301925.0827856,
+        "user_seconds": 30.684442,
+        "system_seconds": 0.5313939999999999,
+        "peak_rss_kib": 521140,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17014",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301893.864751,
+        "end_unix": 1789301925.1020036,
+        "user_seconds": 30.655158,
+        "system_seconds": 0.577523,
+        "peak_rss_kib": 524148,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17011",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301925.2138255,
+        "end_unix": 1789301956.4145355,
+        "user_seconds": 30.626122,
+        "system_seconds": 0.5682769999999999,
+        "peak_rss_kib": 512616,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17012",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301925.213856,
+        "end_unix": 1789301956.5100799,
+        "user_seconds": 30.808096,
+        "system_seconds": 0.486384,
+        "peak_rss_kib": 519416,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17013",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301925.2144196,
+        "end_unix": 1789301956.3969293,
+        "user_seconds": 30.689407,
+        "system_seconds": 0.490871,
+        "peak_rss_kib": 519788,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17014",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301925.2147105,
+        "end_unix": 1789301956.4276223,
+        "user_seconds": 30.615393,
+        "system_seconds": 0.593228,
+        "peak_rss_kib": 525740,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17011",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301956.5565653,
+        "end_unix": 1789301987.7740908,
+        "user_seconds": 30.608839,
+        "system_seconds": 0.606637,
+        "peak_rss_kib": 522028,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17012",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301956.5568573,
+        "end_unix": 1789301987.7897658,
+        "user_seconds": 30.661323,
+        "system_seconds": 0.568624,
+        "peak_rss_kib": 526600,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17013",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301956.5569885,
+        "end_unix": 1789301987.752405,
+        "user_seconds": 30.667116,
+        "system_seconds": 0.524291,
+        "peak_rss_kib": 521444,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17014",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301956.5572546,
+        "end_unix": 1789301987.7848287,
+        "user_seconds": 30.624587,
+        "system_seconds": 0.596093,
+        "peak_rss_kib": 527624,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17011",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301987.8384151,
+        "end_unix": 1789302019.1017487,
+        "user_seconds": 30.639801,
+        "system_seconds": 0.61888,
+        "peak_rss_kib": 522608,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17012",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301987.838493,
+        "end_unix": 1789302019.0779517,
+        "user_seconds": 30.587725,
+        "system_seconds": 0.643404,
+        "peak_rss_kib": 522472,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17013",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301987.8385334,
+        "end_unix": 1789302019.0929906,
+        "user_seconds": 30.638941,
+        "system_seconds": 0.61291,
+        "peak_rss_kib": 529636,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17014",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789301987.839721,
+        "end_unix": 1789302019.0756896,
+        "user_seconds": 30.668847,
+        "system_seconds": 0.565732,
+        "peak_rss_kib": 523520,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17011",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789302019.150134,
+        "end_unix": 1789302050.3778744,
+        "user_seconds": 30.59664,
+        "system_seconds": 0.625782,
+        "peak_rss_kib": 516220,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17012",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789302019.1503794,
+        "end_unix": 1789302050.3829927,
+        "user_seconds": 30.635688,
+        "system_seconds": 0.593038,
+        "peak_rss_kib": 530488,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17013",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789302019.150422,
+        "end_unix": 1789302050.3858576,
+        "user_seconds": 30.604206,
+        "system_seconds": 0.622051,
+        "peak_rss_kib": 526616,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17014",
+          "-max_total_time=30",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789302019.1508932,
+        "end_unix": 1789302050.3833816,
+        "user_seconds": 30.648916,
+        "system_seconds": 0.5829799999999999,
+        "peak_rss_kib": 528564,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17011",
+          "-max_total_time=13",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789302050.4345329,
+        "end_unix": 1789302065.5459418,
+        "user_seconds": 14.764262,
+        "system_seconds": 0.346229,
+        "peak_rss_kib": 504468,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17012",
+          "-max_total_time=13",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789302050.4348342,
+        "end_unix": 1789302065.359033,
+        "user_seconds": 14.575758,
+        "system_seconds": 0.347507,
+        "peak_rss_kib": 505680,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17013",
+          "-max_total_time=13",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789302050.4352689,
+        "end_unix": 1789302065.4948192,
+        "user_seconds": 14.663145,
+        "system_seconds": 0.392735,
+        "peak_rss_kib": 505412,
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/replai-ergonomics-fuzz-final/editor/instrumented-target",
+          "/tmp/replai-ergonomics-fuzz-final/editor/corpus",
+          "-max_len=4096",
+          "-timeout=10",
+          "-rss_limit_mb=2048",
+          "-print_final_stats=1",
+          "-seed=17014",
+          "-max_total_time=13",
+          "-artifact_prefix=/tmp/replai-ergonomics-fuzz-final/editor/"
+        ],
+        "start_unix": 1789302050.4353392,
+        "end_unix": 1789302065.3487659,
+        "user_seconds": 14.583903,
+        "system_seconds": 0.328959,
+        "peak_rss_kib": 504704,
+        "exit_code": 0
+      }
+    ],
+    "cpu_seconds": 1809.269397,
+    "binary_sha256": "ef90e54f012b2cb15f380e7a0f062b6af77526db1249ebefeae075f5b36248c8",
+    "final_corpus": {
+      "files": 6104,
+      "sha256": "f13a67d0fdb166715e5956c81b7d3763f715dd86081312662c1e37848e80285b"
+    },
+    "budget_complete": true,
+    "passed": true
+  },
+  "executions_including_chunk_initialization": 894244,
+  "instrumented_target_sha256": "ef90e54f012b2cb15f380e7a0f062b6af77526db1249ebefeae075f5b36248c8",
+  "finding_count": 0
+}
