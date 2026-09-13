@@ -9,8 +9,10 @@ facade or modal editing.
 
 The requested baseline was `623ebadf29de609d25c72d01ffb1cffe2841b41f`
 (tree `07782e0eae6e8a63af816907410e4835cf6acc4e`, runtime tree
-`8db955760152f10a7d34056796e2c9f0e1e003af`). The implementation checkpoint is
-`5cc9482cd9a372fecdb1c4d57de96559be310170`; subsequent documentation,
+`8db955760152f10a7d34056796e2c9f0e1e003af`). Initial implementation was recorded
+at `5cc9482cd9a372fecdb1c4d57de96559be310170`; the final qualified runtime is
+`ab34d0b78524329a0c2404c8e60a23f5ff5e92f8` (runtime tree
+`62596c22ad2568c46c4e742b21136b31f9e1eb96`). Subsequent documentation,
 measurement and producer records are carriers. Exact final identities and CI
 runs are recorded in the closeout section.
 

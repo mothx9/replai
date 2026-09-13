@@ -204,12 +204,13 @@ Until crates.io publication, pin the qualified runtime implementation checkpoint
 
 ```toml
 [dependencies]
-replai = { git = "https://github.com/mothx9/replai", rev = "893fc163d379fe8bbbb78d93cbf3a6970d13d9a4" }
+replai = { git = "https://github.com/mothx9/replai", rev = "81306658151fb8a0fff9b10bfda698e79fb54e15" }
 ```
 
-This immutable checkpoint carries the runtime implementation qualified by the
-release-hardening campaign. The separately identified package candidate and its
-external-consumer evidence are recorded in the [packaging dossier](docs/engineering/release-packaging.md).
+This immutable checkpoint carries the qualified configurable-keymap, completion-helper
+and autosuggestion implementation. Package and external-consumer evidence is recorded
+in the [packaging dossier](docs/engineering/release-packaging.md) and the
+[current boundary dossier](docs/engineering/completion-keymap-suggestion.md).
 Exact Git pins keep pre-release consumption deliberate; no crates.io package
 has been published yet.
 
