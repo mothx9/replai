@@ -4,15 +4,23 @@ REPLAI owns these producer declarations. They describe generic capabilities,
 surfaces, qualification and changes; they assign no consumer paths, commands or
 migration work. Consumer profiles must be authored by their own repositories.
 
-- [Current producer snapshot](producer.json), generation 14: release-packaging
-  evidence carrier `7f8f696f98b33d8e4ea6f08e243fe0d5e5351724`, tree
-  `15f1cc0e685b8523b33e97c145615bc82ac6b7be`.
-  The exact package source is `14cacba16f3cf2a00448d720502e1cfe975f2e83`.
+- [Current producer snapshot](producer.json), generation 15: interaction-ergonomics
+  evidence source `f00cc038134329bc0267f3e694f62e0ec20f0214`, tree
+  `12f17d5765133af3eb937c71ef4af90bcea3b867`; its runtime tree is
+  `d3fb692f8b4f495180eb4b667378f576c89e1bd2`.
+  The [four-platform ergonomics matrix](https://github.com/mothx9/replai/actions/runs/34759347027)
+  and [12-lane exact-source CI](https://github.com/mothx9/replai/actions/runs/34759339446)
+  qualify bounded history search/provider mechanics, Unicode word editing,
+  undo/redo and kill/yank. C ABI 1 remains unchanged.
+- [Interaction-ergonomics delta](deltas/interaction-ergonomics.json) adds four
+  compatible Rust-native capabilities and assigns no migration or consumer repin.
+- [Previous release-packaging snapshot](checkpoints/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724.json),
+  generation 14: evidence carrier `7f8f696f98b33d8e4ea6f08e243fe0d5e5351724`,
+  tree `15f1cc0e685b8523b33e97c145615bc82ac6b7be`; exact package source
+  `14cacba16f3cf2a00448d720502e1cfe975f2e83`.
   Its [seven-lane package matrix](https://github.com/mothx9/replai/actions/runs/34703095088)
   and [exact-source CI](https://github.com/mothx9/replai/actions/runs/34703089136)
-  qualify external crate/C SDK consumers, MSRV, relocation and native memory
-  gates. Runtime semantics, public Rust behavior, C ABI 1 and all 27 capability
-  definitions are unchanged.
+  qualify external crate/C SDK consumers, MSRV, relocation and native memory.
 - [Release-packaging delta](deltas/release-packaging.json) records compatible
   `QUALIFICATION_CHANGED` evidence for session/revision analysis, validation,
   ABI 1 and the portable/Linux/macOS surfaces. It adds no capability, semantic
@@ -145,7 +153,7 @@ behavior, ABI and documentation inputs. Its external validation command is:
 
 ```sh
 boundary validate .boundary/producer.json --repo . \
-  --previous .boundary/checkpoints/f916f2fbccb83ac8cbae21fe553ec753c5809898.json
+  --previous .boundary/checkpoints/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724.json
 ```
 
 Run from a clean REPLAI checkout with BOUNDARY installed separately. Validation

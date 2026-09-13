@@ -689,157 +689,28 @@
       "surfaces": [
         "rust-native"
       ]
-    },
-    {
-      "description": "Bounded literal reverse history search over admitted and host-provided entries",
-      "documentation": [
-        "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/interaction.md#daily-driver-editing-and-history-search"
-      ],
-      "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34759347027",
-        "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/engineering/interaction-ergonomics.md"
-      ],
-      "guarantees": [
-        "Host owns persistence, I/O, admission, retention, privacy and encryption; REPLAI retains only one explicitly bounded immutable search view",
-        "Search query and selected match are non-canonical; dismissal preserves exact draft identity and acceptance is one undoable replacement with a fresh revision",
-        "Newest-first case-sensitive UTF-8 substring matching is duplicate-preserving and non-wrapping; provider failure and invalid text reject atomically",
-        "Linux/macOS real PTY and native memory qualification; Windows portable model only"
-      ],
-      "id": "interaction.history_search",
-      "maturity": "experimental",
-      "platforms": [
-        "linux",
-        "macos",
-        "windows"
-      ],
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "description": "Locale-independent Unicode word movement and deletion over grapheme-safe boundaries",
-      "documentation": [
-        "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/interaction.md#daily-driver-editing-and-history-search"
-      ],
-      "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34759347027",
-        "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/engineering/interaction-ergonomics.md"
-      ],
-      "guarantees": [
-        "UAX #29 default word boundaries are snapped to extended-grapheme boundaries across punctuation, whitespace, multiline and mixed Unicode text",
-        "Movement is allocation-free; deletion is one bounded undoable canonical transaction and never splits a grapheme"
-      ],
-      "id": "editing.word_operations",
-      "maturity": "experimental",
-      "platforms": [
-        "linux",
-        "macos",
-        "windows"
-      ],
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "description": "Bounded delta-based undo and redo with monotonic draft identity",
-      "documentation": [
-        "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/interaction.md#daily-driver-editing-and-history-search"
-      ],
-      "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34759347027",
-        "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/engineering/interaction-ergonomics.md"
-      ],
-      "guarantees": [
-        "Undo restores content and cursor with a fresh DraftRevision; it never revives an old analysis identity",
-        "Entry and payload bytes are explicitly bounded; ordinary local insertion retains a local delta rather than cloning the draft",
-        "Contiguous typing and deletion grouping is bounded and deterministic; divergent editing clears redo while cursor-only navigation preserves it"
-      ],
-      "id": "editing.undo_redo",
-      "maturity": "experimental",
-      "platforms": [
-        "linux",
-        "macos",
-        "windows"
-      ],
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "description": "Bounded editor-owned single-register kill and yank mechanics",
-      "documentation": [
-        "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/interaction.md#daily-driver-editing-and-history-search"
-      ],
-      "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34759347027",
-        "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/engineering/interaction-ergonomics.md"
-      ],
-      "guarantees": [
-        "Word and logical-line kills replace one bounded private register; it is not a system clipboard, application store or Readline kill ring",
-        "Failed kill or yank preserves draft, cursor, revision, undo/redo and prior register; successful operations compose as canonical undoable transactions",
-        "Register lifetime follows the retained Editor and can be explicitly cleared for future sensitive-input policy"
-      ],
-      "id": "editing.kill_yank",
-      "maturity": "experimental",
-      "platforms": [
-        "linux",
-        "macos",
-        "windows"
-      ],
-      "surfaces": [
-        "rust-native"
-      ]
     }
   ],
   "changes": [
     {
-      "capability": "interaction.history_search",
+      "capability": "embedding.session",
       "compatibility": "compatible",
-      "description": "Adds a bounded synchronous host-provider seam and non-canonical literal reverse search. Persistence and scheduling remain host-owned; C ABI 1 is unchanged.",
+      "description": "Packaging qualification only: an independent debugger-style Rust host builds from the extracted crate outside the producer checkout and exercises session analysis, completion, validation, finite serialized notices and structured output. Runtime semantics and the public Rust contract are unchanged; no consumer migration or repin is assigned.",
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34759347027",
-        "https://github.com/mothx9/replai/actions/runs/34759339446",
-        "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/engineering/interaction-ergonomics.md"
+        "https://github.com/mothx9/replai/actions/runs/34703095088",
+        "https://github.com/mothx9/replai/actions/runs/34703089136",
+        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
       ],
       "inputs": [
         ".github/workflows/ci.yml",
-        ".github/workflows/interaction-ergonomics.yml",
-        "crates/replai-c/src/lib.rs",
-        "docs/architecture.md",
-        "docs/engineering/interaction-ergonomics.md",
-        "docs/interaction.md",
+        ".github/workflows/packaging.yml",
+        "docs/engineering/release-packaging.md",
+        "tools/qualify_packaging.py",
         "docs/use-cases.md",
-        "src/actions.rs",
-        "src/core.rs",
-        "src/engine.rs",
-        "src/ergonomics_tests.rs",
-        "src/history.rs",
-        "src/input.rs",
-        "src/interaction.rs",
-        "src/keymap.rs",
-        "src/lib.rs",
-        "tests/ergonomics.rs",
-        "tests/pty.rs",
-        "tools/ergonomics/corpus.py",
-        "tools/ergonomics/editor-corpus.json.gz",
-        "tools/ergonomics/qualify_native.py",
-        "tools/hardening/Cargo.toml",
-        "tools/hardening/benchmarks.rs",
-        "tools/hardening/campaigns.rs",
-        "tools/hardening/deterministic.py",
-        "tools/hardening/ergonomics_sequences.rs",
-        "tools/hardening/lib.rs",
-        "tools/hardening/regression.py",
-        "tools/perf/components.rs",
-        "tools/ergonomics/evidence/corpus-replay-linux-aarch64.json",
-        "tools/ergonomics/evidence/fuzz-linux-aarch64.json",
-        "tools/ergonomics/evidence/historical-corpus-replay-linux-aarch64.json",
-        "tools/ergonomics/evidence/q2-historical-comparison-linux-aarch64.json",
-        "tools/ergonomics/evidence/q2-linux-aarch64.json",
-        "tools/ergonomics/evidence/q2-samples-linux-aarch64.json.gz",
-        "tools/ergonomics/evidence/semantic-sequences-linux-aarch64.json"
+        "tools/package/debugger-consumer/src/main.rs",
+        "tools/package/debugger_pty.py"
       ],
-      "kind": "ADDED",
+      "kind": "QUALIFICATION_CHANGED",
       "platforms": [
         "linux",
         "macos",
@@ -850,52 +721,132 @@
       ]
     },
     {
-      "capability": "editing.word_operations",
+      "capability": "abi.c.v1",
       "compatibility": "compatible",
-      "description": "Adds grapheme-safe Unicode word movement and deletion with portable Editor methods and conservative fixed compatibility bindings.",
+      "description": "Packaging qualification only: the deterministic C source SDK installs ABI 1 as relocatable static/shared pkg-config and CMake targets, consumed by external C11/C++17 builds after prefix movement. Symbols, layouts, numeric identity and ABI semantics are unchanged.",
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34759347027",
-        "https://github.com/mothx9/replai/actions/runs/34759339446",
-        "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/engineering/interaction-ergonomics.md"
+        "https://github.com/mothx9/replai/actions/runs/34703095088",
+        "https://github.com/mothx9/replai/actions/runs/34703089136",
+        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
       ],
       "inputs": [
         ".github/workflows/ci.yml",
-        ".github/workflows/interaction-ergonomics.yml",
-        "docs/architecture.md",
-        "docs/engineering/interaction-ergonomics.md",
-        "docs/interaction.md",
-        "docs/use-cases.md",
-        "src/actions.rs",
-        "src/core.rs",
-        "src/engine.rs",
-        "src/ergonomics_tests.rs",
-        "src/history.rs",
-        "src/input.rs",
-        "src/interaction.rs",
-        "src/keymap.rs",
-        "src/lib.rs",
-        "tests/ergonomics.rs",
-        "tests/pty.rs",
-        "tools/ergonomics/corpus.py",
-        "tools/ergonomics/editor-corpus.json.gz",
-        "tools/ergonomics/qualify_native.py",
-        "tools/hardening/Cargo.toml",
-        "tools/hardening/benchmarks.rs",
-        "tools/hardening/campaigns.rs",
-        "tools/hardening/deterministic.py",
-        "tools/hardening/ergonomics_sequences.rs",
-        "tools/hardening/lib.rs",
-        "tools/hardening/regression.py",
-        "tools/perf/components.rs",
-        "tools/ergonomics/evidence/corpus-replay-linux-aarch64.json",
-        "tools/ergonomics/evidence/fuzz-linux-aarch64.json",
-        "tools/ergonomics/evidence/historical-corpus-replay-linux-aarch64.json",
-        "tools/ergonomics/evidence/q2-historical-comparison-linux-aarch64.json",
-        "tools/ergonomics/evidence/q2-linux-aarch64.json",
-        "tools/ergonomics/evidence/q2-samples-linux-aarch64.json.gz",
-        "tools/ergonomics/evidence/semantic-sequences-linux-aarch64.json"
+        ".github/workflows/packaging.yml",
+        "docs/engineering/release-packaging.md",
+        "tools/qualify_packaging.py",
+        "docs/c-sdk.md",
+        "tools/package_sdk.py",
+        "tools/qualify_c.py",
+        "tools/stage_c.py",
+        "docs/c-api.md"
       ],
-      "kind": "ADDED",
+      "kind": "QUALIFICATION_CHANGED",
+      "platforms": [
+        "linux",
+        "macos"
+      ],
+      "surfaces": [
+        "c-abi-v1"
+      ]
+    },
+    {
+      "capability": "platform.portable_engine",
+      "compatibility": "compatible",
+      "description": "The extracted Rust package and independent portable debugger oracle compile and execute under Windows MSVC at Rust 1.98.1. Windows remains portable core only with no terminal runtime claim.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34703095088",
+        "https://github.com/mothx9/replai/actions/runs/34703089136",
+        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
+      ],
+      "inputs": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/packaging.yml",
+        "docs/engineering/release-packaging.md",
+        "tools/qualify_packaging.py",
+        "tools/package/debugger-consumer/src/main.rs",
+        "tools/hardening/Cargo.lock"
+      ],
+      "kind": "QUALIFICATION_CHANGED",
+      "platforms": [
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "platform.posix_linux",
+      "compatibility": "compatible",
+      "description": "Packaging qualification adds native GNU Linux x86_64/ARM64 MSRV and stable package, external Rust PTY, moved-prefix C/C++ installation, loader and Valgrind evidence without changing the POSIX runtime contract.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34703095088",
+        "https://github.com/mothx9/replai/actions/runs/34703089136",
+        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
+      ],
+      "inputs": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/packaging.yml",
+        "docs/engineering/release-packaging.md",
+        "tools/qualify_packaging.py",
+        "tools/package_sdk.py",
+        "tools/qualify_c.py",
+        "tools/stage_c.py",
+        "tools/package/debugger-consumer/src/main.rs",
+        "tools/package/debugger_pty.py"
+      ],
+      "kind": "QUALIFICATION_CHANGED",
+      "platforms": [
+        "linux"
+      ],
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "capability": "platform.posix_macos",
+      "compatibility": "compatible",
+      "description": "Packaging qualification adds native macOS ARM64 MSRV and stable package, external Rust PTY, moved-prefix C/C++ installation, loader and leak evidence without changing the POSIX runtime contract.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34703095088",
+        "https://github.com/mothx9/replai/actions/runs/34703089136",
+        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
+      ],
+      "inputs": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/packaging.yml",
+        "docs/engineering/release-packaging.md",
+        "tools/qualify_packaging.py",
+        "tools/package_sdk.py",
+        "tools/qualify_c.py",
+        "tools/stage_c.py",
+        "tools/package/debugger-consumer/src/main.rs",
+        "tools/package/debugger_pty.py"
+      ],
+      "kind": "QUALIFICATION_CHANGED",
+      "platforms": [
+        "macos"
+      ],
+      "surfaces": [
+        "rust-native",
+        "c-abi-v1"
+      ]
+    },
+    {
+      "capability": "analysis.validation",
+      "compatibility": "compatible",
+      "description": "Cookbook qualification ties revision-bound validation and related host-analysis recipes to executed public examples and the packaged debugger fixture. Analysis semantics and host ownership are unchanged.",
+      "evidence": [
+        "https://github.com/mothx9/replai/actions/runs/34703095088",
+        "https://github.com/mothx9/replai/actions/runs/34703089136",
+        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
+      ],
+      "inputs": [
+        "docs/use-cases.md",
+        "docs/engineering/release-packaging.md",
+        "tests/architecture.rs"
+      ],
+      "kind": "QUALIFICATION_CHANGED",
       "platforms": [
         "linux",
         "macos",
@@ -906,108 +857,22 @@
       ]
     },
     {
-      "capability": "editing.undo_redo",
+      "capability": "analysis.revisions",
       "compatibility": "compatible",
-      "description": "Adds bounded delta undo/redo with deterministic grouping and fresh revision identity for every restored canonical state.",
+      "description": "Packaging qualification only: the extracted-crate debugger oracle proves delayed stale refusal and fresh revision-bound application outside the producer checkout on Linux/macOS native PTYs and the Windows portable model. Revision identity and result semantics are unchanged.",
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34759347027",
-        "https://github.com/mothx9/replai/actions/runs/34759339446",
-        "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/engineering/interaction-ergonomics.md"
+        "https://github.com/mothx9/replai/actions/runs/34703095088",
+        "https://github.com/mothx9/replai/actions/runs/34703089136",
+        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
       ],
       "inputs": [
-        ".github/workflows/ci.yml",
-        ".github/workflows/interaction-ergonomics.yml",
-        "docs/architecture.md",
-        "docs/engineering/interaction-ergonomics.md",
-        "docs/interaction.md",
-        "docs/use-cases.md",
-        "src/actions.rs",
-        "src/core.rs",
-        "src/engine.rs",
-        "src/ergonomics_tests.rs",
-        "src/history.rs",
-        "src/input.rs",
-        "src/interaction.rs",
-        "src/keymap.rs",
-        "src/lib.rs",
-        "tests/ergonomics.rs",
-        "tests/pty.rs",
-        "tools/ergonomics/corpus.py",
-        "tools/ergonomics/editor-corpus.json.gz",
-        "tools/ergonomics/qualify_native.py",
-        "tools/hardening/Cargo.toml",
-        "tools/hardening/benchmarks.rs",
-        "tools/hardening/campaigns.rs",
-        "tools/hardening/deterministic.py",
-        "tools/hardening/ergonomics_sequences.rs",
-        "tools/hardening/lib.rs",
-        "tools/hardening/regression.py",
-        "tools/perf/components.rs",
-        "tools/ergonomics/evidence/corpus-replay-linux-aarch64.json",
-        "tools/ergonomics/evidence/fuzz-linux-aarch64.json",
-        "tools/ergonomics/evidence/historical-corpus-replay-linux-aarch64.json",
-        "tools/ergonomics/evidence/q2-historical-comparison-linux-aarch64.json",
-        "tools/ergonomics/evidence/q2-linux-aarch64.json",
-        "tools/ergonomics/evidence/q2-samples-linux-aarch64.json.gz",
-        "tools/ergonomics/evidence/semantic-sequences-linux-aarch64.json"
+        "tests/foundation.rs",
+        "tools/package/debugger-consumer/src/main.rs",
+        "tools/package/debugger_pty.py",
+        "tools/qualify_packaging.py",
+        "docs/engineering/release-packaging.md"
       ],
-      "kind": "ADDED",
-      "platforms": [
-        "linux",
-        "macos",
-        "windows"
-      ],
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capability": "editing.kill_yank",
-      "compatibility": "compatible",
-      "description": "Adds a bounded editor-owned single kill register, word/line kills and atomic yank; no clipboard or full kill-ring contract is introduced.",
-      "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34759347027",
-        "https://github.com/mothx9/replai/actions/runs/34759339446",
-        "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/engineering/interaction-ergonomics.md"
-      ],
-      "inputs": [
-        ".github/workflows/ci.yml",
-        ".github/workflows/interaction-ergonomics.yml",
-        "docs/architecture.md",
-        "docs/engineering/interaction-ergonomics.md",
-        "docs/interaction.md",
-        "docs/use-cases.md",
-        "src/actions.rs",
-        "src/core.rs",
-        "src/engine.rs",
-        "src/ergonomics_tests.rs",
-        "src/history.rs",
-        "src/input.rs",
-        "src/interaction.rs",
-        "src/keymap.rs",
-        "src/lib.rs",
-        "tests/ergonomics.rs",
-        "tests/pty.rs",
-        "tools/ergonomics/corpus.py",
-        "tools/ergonomics/editor-corpus.json.gz",
-        "tools/ergonomics/qualify_native.py",
-        "tools/hardening/Cargo.toml",
-        "tools/hardening/benchmarks.rs",
-        "tools/hardening/campaigns.rs",
-        "tools/hardening/deterministic.py",
-        "tools/hardening/ergonomics_sequences.rs",
-        "tools/hardening/lib.rs",
-        "tools/hardening/regression.py",
-        "tools/perf/components.rs",
-        "tools/ergonomics/evidence/corpus-replay-linux-aarch64.json",
-        "tools/ergonomics/evidence/fuzz-linux-aarch64.json",
-        "tools/ergonomics/evidence/historical-corpus-replay-linux-aarch64.json",
-        "tools/ergonomics/evidence/q2-historical-comparison-linux-aarch64.json",
-        "tools/ergonomics/evidence/q2-linux-aarch64.json",
-        "tools/ergonomics/evidence/q2-samples-linux-aarch64.json.gz",
-        "tools/ergonomics/evidence/semantic-sequences-linux-aarch64.json"
-      ],
-      "kind": "ADDED",
+      "kind": "QUALIFICATION_CHANGED",
       "platforms": [
         "linux",
         "macos",
@@ -1018,46 +883,42 @@
       ]
     }
   ],
-  "generation": 15,
-  "id": "sha256:602f9586528b14a3a33080bac59c06078f1bf3062da5afc47e67acac1883284b",
+  "generation": 14,
+  "id": "sha256:f690c80022f44a53d99dbe62ff4cc8ab7d75b602209386f0f6d963cd309be9f6",
   "inputs": [
     {
       "capabilities": [
-        "abi.c.v1",
-        "analysis.hints_highlight",
-        "analysis.revisions",
-        "analysis.validation",
-        "completion.candidates",
-        "editing.kill_yank",
-        "editing.undo_redo",
-        "editing.word_operations",
-        "embedding.blocking",
-        "embedding.driven",
-        "embedding.readiness",
-        "embedding.session",
-        "interaction.completion_request",
         "interaction.editing",
-        "interaction.external_output",
         "interaction.history_navigation",
-        "interaction.history_search",
-        "platform.portable_engine",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
+        "abi.c.v1",
         "platform.posix_linux",
         "platform.posix_macos",
-        "presentation.completion_ux",
-        "presentation.composed_prompt",
-        "presentation.multiline_ux",
-        "presentation.prompt",
-        "presentation.status",
+        "platform.portable_engine",
         "presentation.structured_output",
         "presentation.table",
+        "presentation.status",
+        "presentation.composed_prompt",
         "presentation.theme",
+        "embedding.blocking",
+        "embedding.session",
+        "embedding.driven",
+        "embedding.readiness",
         "terminal.admission",
         "terminal.capability_snapshot",
-        "terminal.width_policy"
+        "terminal.width_policy",
+        "analysis.revisions",
+        "completion.candidates",
+        "presentation.completion_ux",
+        "analysis.validation",
+        "presentation.multiline_ux",
+        "analysis.hints_highlight"
       ],
       "category": "qualification",
       "path": ".github/workflows/ci.yml",
-      "sha256": "sha256:0ac945e5feedd7460efebe76ad8eb4d4f04fc71339c88d6d210762177c61f4ce",
+      "sha256": "sha256:7f0d40d315929aaa0b10f64741912439f99cc804293500eb25678b591d17c226",
       "surfaces": [
         "c-abi-v1",
         "rust-native"
@@ -1139,20 +1000,6 @@
     },
     {
       "capabilities": [
-        "interaction.history_search",
-        "editing.word_operations",
-        "editing.undo_redo",
-        "editing.kill_yank"
-      ],
-      "category": "qualification",
-      "path": ".github/workflows/interaction-ergonomics.yml",
-      "sha256": "sha256:669811291d38b3a2f1433fda5944c69dd96195b07aaa5f3213bf52c0a5e155fc",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
         "embedding.session",
         "abi.c.v1",
         "platform.portable_engine",
@@ -1225,13 +1072,11 @@
     {
       "capabilities": [
         "analysis.validation",
-        "editing.kill_yank",
-        "interaction.history_search",
         "presentation.multiline_ux"
       ],
       "category": "qualification",
       "path": "crates/replai-c/src/lib.rs",
-      "sha256": "sha256:3059dbd9cd68f3fdabaf7c892dd3b7087fd9baf02f26125bd5cb3a5e0e214b31",
+      "sha256": "sha256:42f4d4f359e1a1bdba51a0f13d860da6b00c7232730c5554a1456c6baf4ebfc0",
       "surfaces": [
         "rust-native"
       ]
@@ -1242,9 +1087,6 @@
         "analysis.revisions",
         "analysis.validation",
         "completion.candidates",
-        "editing.kill_yank",
-        "editing.undo_redo",
-        "editing.word_operations",
         "embedding.blocking",
         "embedding.driven",
         "embedding.readiness",
@@ -1253,7 +1095,6 @@
         "interaction.editing",
         "interaction.external_output",
         "interaction.history_navigation",
-        "interaction.history_search",
         "platform.portable_engine",
         "platform.posix_linux",
         "platform.posix_macos",
@@ -1269,7 +1110,7 @@
       ],
       "category": "documentation",
       "path": "docs/architecture.md",
-      "sha256": "sha256:61e5c3f017f30ad70b432e8afbab6fecaf44509727d98c11f4cf2e6995075e07",
+      "sha256": "sha256:82e6f4dc23bd13331280b3c9d0e8ce52e3605b02eb9cb5f8642220439bc21741",
       "surfaces": [
         "rust-native"
       ]
@@ -1326,20 +1167,6 @@
       "category": "qualification",
       "path": "docs/engineering/completion-contract.md",
       "sha256": "sha256:38fd2483820da2eb55053e5f310b25d4a87ffed5d49db654c2a490f70ce8f582",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "interaction.history_search",
-        "editing.word_operations",
-        "editing.undo_redo",
-        "editing.kill_yank"
-      ],
-      "category": "documentation",
-      "path": "docs/engineering/interaction-ergonomics.md",
-      "sha256": "sha256:bad5f9645cec0412056b8ca7b8c77a417c733530c424c7ede195ae87df452bc8",
       "surfaces": [
         "rust-native"
       ]
@@ -1441,9 +1268,6 @@
         "analysis.revisions",
         "analysis.validation",
         "completion.candidates",
-        "editing.kill_yank",
-        "editing.undo_redo",
-        "editing.word_operations",
         "embedding.blocking",
         "embedding.driven",
         "embedding.readiness",
@@ -1452,7 +1276,6 @@
         "interaction.editing",
         "interaction.external_output",
         "interaction.history_navigation",
-        "interaction.history_search",
         "platform.portable_engine",
         "platform.posix_linux",
         "platform.posix_macos",
@@ -1463,7 +1286,7 @@
       ],
       "category": "documentation",
       "path": "docs/interaction.md",
-      "sha256": "sha256:abff764c9d5f56c3a5d1b6cab46fcea3db37fac0d20beffaac0cb59cb5269991",
+      "sha256": "sha256:37c8dab9d8168ad5f314f7f941b778471a182692b7a76590efab60d67fb4b2d8",
       "surfaces": [
         "rust-native"
       ]
@@ -1501,15 +1324,11 @@
       "capabilities": [
         "analysis.hints_highlight",
         "analysis.validation",
-        "editing.kill_yank",
-        "editing.undo_redo",
-        "editing.word_operations",
-        "interaction.history_search",
         "presentation.multiline_ux"
       ],
       "category": "documentation",
       "path": "docs/use-cases.md",
-      "sha256": "sha256:d217706e9af377155008d44a0ab9908578b11b6cbe5e367853997137d0bc5193",
+      "sha256": "sha256:d467e9b1bfd4b04fbd3aab4a9208247b5fd84d7f74bd57cfd05503f782dbd4cd",
       "surfaces": [
         "rust-native"
       ]
@@ -1705,14 +1524,10 @@
     {
       "capabilities": [
         "completion.candidates",
-        "editing.kill_yank",
-        "editing.undo_redo",
-        "editing.word_operations",
         "interaction.completion_request",
         "interaction.editing",
         "interaction.external_output",
         "interaction.history_navigation",
-        "interaction.history_search",
         "platform.portable_engine",
         "platform.posix_linux",
         "platform.posix_macos",
@@ -1721,7 +1536,7 @@
       ],
       "category": "behavior",
       "path": "src/actions.rs",
-      "sha256": "sha256:b39649915f15ee953abc1d55b865e2c08630174a8609cbaa926984d6bf645956",
+      "sha256": "sha256:72f5c10f87df2699d385e56f12e9094494c9eeb06d0e4ad297e490ce330c6605",
       "surfaces": [
         "rust-native"
       ]
@@ -1833,14 +1648,10 @@
         "analysis.revisions",
         "analysis.validation",
         "completion.candidates",
-        "editing.kill_yank",
-        "editing.undo_redo",
-        "editing.word_operations",
         "interaction.completion_request",
         "interaction.editing",
         "interaction.external_output",
         "interaction.history_navigation",
-        "interaction.history_search",
         "platform.portable_engine",
         "platform.posix_linux",
         "platform.posix_macos",
@@ -1850,7 +1661,7 @@
       ],
       "category": "behavior",
       "path": "src/core.rs",
-      "sha256": "sha256:a867dce62af958403e7199175ce124ea713f040b4d67b2d092ae72727232b752",
+      "sha256": "sha256:89b1c711b8fe9f833318e1a0f4aa86917aa40a7fa61e3b3d1701cd7139cf2e7d",
       "surfaces": [
         "rust-native"
       ]
@@ -1893,14 +1704,10 @@
         "analysis.revisions",
         "analysis.validation",
         "completion.candidates",
-        "editing.kill_yank",
-        "editing.undo_redo",
-        "editing.word_operations",
         "interaction.completion_request",
         "interaction.editing",
         "interaction.external_output",
         "interaction.history_navigation",
-        "interaction.history_search",
         "platform.portable_engine",
         "platform.posix_linux",
         "platform.posix_macos",
@@ -1915,21 +1722,7 @@
       ],
       "category": "behavior",
       "path": "src/engine.rs",
-      "sha256": "sha256:f5aada86de96c418bd6590b9e6342fee0c39809ec3e8a29008392857a676a5d3",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "interaction.history_search",
-        "editing.word_operations",
-        "editing.undo_redo",
-        "editing.kill_yank"
-      ],
-      "category": "behavior",
-      "path": "src/ergonomics_tests.rs",
-      "sha256": "sha256:97c580b7b63eb0ce8dc5f511a5871436563fb700928080901d4c6242a83549ff",
+      "sha256": "sha256:c8e0e34b4ad39427d9edac2efd60d0239874231bd0ecc24989bde0756f54a152",
       "surfaces": [
         "rust-native"
       ]
@@ -1958,29 +1751,11 @@
     },
     {
       "capabilities": [
-        "interaction.history_search",
-        "editing.word_operations",
-        "editing.undo_redo",
-        "editing.kill_yank"
-      ],
-      "category": "api",
-      "path": "src/history.rs",
-      "sha256": "sha256:248ccb803cf57b78fe2ed8137f6e5a491cfd79a7e63e7862f1120d1e3e09fed4",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
         "completion.candidates",
-        "editing.kill_yank",
-        "editing.undo_redo",
-        "editing.word_operations",
         "interaction.completion_request",
         "interaction.editing",
         "interaction.external_output",
         "interaction.history_navigation",
-        "interaction.history_search",
         "platform.portable_engine",
         "platform.posix_linux",
         "platform.posix_macos",
@@ -1989,7 +1764,7 @@
       ],
       "category": "behavior",
       "path": "src/input.rs",
-      "sha256": "sha256:22d2bca358b7cdb403a7e46e8efc063b19652943f333e6e0bf2023490979da35",
+      "sha256": "sha256:39723e00add7a5fd5a2e44a1b9c6cb26b27a1cff1de0698707b2af718ff06c61",
       "surfaces": [
         "rust-native"
       ]
@@ -2000,9 +1775,6 @@
         "analysis.revisions",
         "analysis.validation",
         "completion.candidates",
-        "editing.kill_yank",
-        "editing.undo_redo",
-        "editing.word_operations",
         "embedding.blocking",
         "embedding.driven",
         "embedding.readiness",
@@ -2011,7 +1783,6 @@
         "interaction.editing",
         "interaction.external_output",
         "interaction.history_navigation",
-        "interaction.history_search",
         "platform.portable_engine",
         "platform.posix_linux",
         "platform.posix_macos",
@@ -2028,7 +1799,7 @@
       ],
       "category": "api",
       "path": "src/interaction.rs",
-      "sha256": "sha256:2404514621419677ee52c36bfb38c10c599625f0f594125a85f4129f663d295d",
+      "sha256": "sha256:13895facc811ec9330c9f0e19cde8296c687df9d9d5be776c8cfdcd08eafd493",
       "surfaces": [
         "rust-native"
       ]
@@ -2036,14 +1807,10 @@
     {
       "capabilities": [
         "completion.candidates",
-        "editing.kill_yank",
-        "editing.undo_redo",
-        "editing.word_operations",
         "interaction.completion_request",
         "interaction.editing",
         "interaction.external_output",
         "interaction.history_navigation",
-        "interaction.history_search",
         "platform.portable_engine",
         "platform.posix_linux",
         "platform.posix_macos",
@@ -2052,7 +1819,7 @@
       ],
       "category": "behavior",
       "path": "src/keymap.rs",
-      "sha256": "sha256:fcc0deba5f4904ab569520d797fac0ef5644259f7e3377d3e8fd551aaf1af62d",
+      "sha256": "sha256:af7145660766c51c1167805842b0b002f9de73f38f239be03034a6dac2f52b95",
       "surfaces": [
         "rust-native"
       ]
@@ -2063,9 +1830,6 @@
         "analysis.revisions",
         "analysis.validation",
         "completion.candidates",
-        "editing.kill_yank",
-        "editing.undo_redo",
-        "editing.word_operations",
         "embedding.blocking",
         "embedding.driven",
         "embedding.readiness",
@@ -2074,7 +1838,6 @@
         "interaction.editing",
         "interaction.external_output",
         "interaction.history_navigation",
-        "interaction.history_search",
         "platform.portable_engine",
         "platform.posix_linux",
         "platform.posix_macos",
@@ -2092,7 +1855,7 @@
       ],
       "category": "api",
       "path": "src/lib.rs",
-      "sha256": "sha256:5e112023b95427c9b0715929f8de9be69f1530aa2e92e01a3ae702b0014510a2",
+      "sha256": "sha256:5acf9cdb565056c7f7d3c17ea54a7c74fcc4bca105fe65a101aaa4df0e89a1b6",
       "surfaces": [
         "rust-native"
       ]
@@ -2344,20 +2107,6 @@
     },
     {
       "capabilities": [
-        "interaction.history_search",
-        "editing.word_operations",
-        "editing.undo_redo",
-        "editing.kill_yank"
-      ],
-      "category": "qualification",
-      "path": "tests/ergonomics.rs",
-      "sha256": "sha256:2a587b133c6215d6426f1c525484cb73c89399eb946eee54d8aef6b7620d5f1d",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
         "analysis.revisions"
       ],
       "category": "qualification",
@@ -2370,16 +2119,12 @@
     {
       "capabilities": [
         "completion.candidates",
-        "editing.kill_yank",
-        "editing.undo_redo",
-        "editing.word_operations",
-        "interaction.history_search",
         "platform.posix_linux",
         "presentation.completion_ux"
       ],
       "category": "qualification",
       "path": "tests/pty.rs",
-      "sha256": "sha256:f825e91fa6d7d70b97d1e0421c0fd6709e4c1fc1e5f3707c1cba8ed317919b1a",
+      "sha256": "sha256:668eacf780b66bcd8a8ec300be27e7a9261e87c03d0669c2b4cf97419a38d75f",
       "surfaces": [
         "rust-native"
       ]
@@ -2508,146 +2253,6 @@
     },
     {
       "capabilities": [
-        "interaction.history_search",
-        "editing.word_operations",
-        "editing.undo_redo",
-        "editing.kill_yank"
-      ],
-      "category": "qualification",
-      "path": "tools/ergonomics/corpus.py",
-      "sha256": "sha256:2ec92179309631b4a4a3f96b000afffda3e8f754873e1b6b88b590a815c13ee4",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "interaction.history_search",
-        "editing.word_operations",
-        "editing.undo_redo",
-        "editing.kill_yank"
-      ],
-      "category": "qualification",
-      "path": "tools/ergonomics/editor-corpus.json.gz",
-      "sha256": "sha256:84c8bf5d43e16f0f94cacd9a1ecbfd79b730544634a26d10304f08fc64ee0969",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "interaction.history_search",
-        "editing.word_operations",
-        "editing.undo_redo",
-        "editing.kill_yank"
-      ],
-      "category": "qualification",
-      "path": "tools/ergonomics/evidence/corpus-replay-linux-aarch64.json",
-      "sha256": "sha256:997e449bb805fc56adab5621d9c34621b176770e6e4a00e9a43239d03492b89a",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "interaction.history_search",
-        "editing.word_operations",
-        "editing.undo_redo",
-        "editing.kill_yank"
-      ],
-      "category": "qualification",
-      "path": "tools/ergonomics/evidence/fuzz-linux-aarch64.json",
-      "sha256": "sha256:4f2f12b67cd69312e175c60c1bb638187d35a9e027071732ce5644167898b126",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "interaction.history_search",
-        "editing.word_operations",
-        "editing.undo_redo",
-        "editing.kill_yank"
-      ],
-      "category": "qualification",
-      "path": "tools/ergonomics/evidence/historical-corpus-replay-linux-aarch64.json",
-      "sha256": "sha256:ce84e95f4ac7992472ea918fa4fb6f1131ca5adf1c37b532cba0bf196acf6059",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "interaction.history_search",
-        "editing.word_operations",
-        "editing.undo_redo",
-        "editing.kill_yank"
-      ],
-      "category": "qualification",
-      "path": "tools/ergonomics/evidence/q2-historical-comparison-linux-aarch64.json",
-      "sha256": "sha256:986a739fa7a8476336a4510855b0a84df5b5eb4b521ceb1b999e9c7fb906ba44",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "interaction.history_search",
-        "editing.word_operations",
-        "editing.undo_redo",
-        "editing.kill_yank"
-      ],
-      "category": "qualification",
-      "path": "tools/ergonomics/evidence/q2-linux-aarch64.json",
-      "sha256": "sha256:f2359232f947f0c78f3f856d529cd35321803f7ac2b1eba85d7aa6fed7aa3f2c",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "interaction.history_search",
-        "editing.word_operations",
-        "editing.undo_redo",
-        "editing.kill_yank"
-      ],
-      "category": "qualification",
-      "path": "tools/ergonomics/evidence/q2-samples-linux-aarch64.json.gz",
-      "sha256": "sha256:436b6202d749da5fa7957b68c9868d31fd4c1ce5bfc0b89d1a44f0bc01312c2a",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "interaction.history_search",
-        "editing.word_operations",
-        "editing.undo_redo",
-        "editing.kill_yank"
-      ],
-      "category": "qualification",
-      "path": "tools/ergonomics/evidence/semantic-sequences-linux-aarch64.json",
-      "sha256": "sha256:e39c59979302c59001bd1a33bda4cc8bcff0aae42aedf04e3164062ea368c66c",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "interaction.history_search",
-        "editing.word_operations",
-        "editing.undo_redo",
-        "editing.kill_yank"
-      ],
-      "category": "qualification",
-      "path": "tools/ergonomics/qualify_native.py",
-      "sha256": "sha256:d1578683dafd8143a55264729f30973c7f7dbb431673558a88f83446b9b59faa",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
         "interaction.editing",
         "interaction.history_navigation",
         "interaction.completion_request",
@@ -2684,40 +2289,36 @@
     },
     {
       "capabilities": [
-        "analysis.hints_highlight",
-        "analysis.revisions",
-        "analysis.validation",
-        "completion.candidates",
-        "editing.kill_yank",
-        "editing.undo_redo",
-        "editing.word_operations",
-        "embedding.blocking",
-        "embedding.driven",
-        "embedding.readiness",
-        "embedding.session",
-        "interaction.completion_request",
         "interaction.editing",
-        "interaction.external_output",
         "interaction.history_navigation",
-        "interaction.history_search",
-        "platform.portable_engine",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
         "platform.posix_linux",
         "platform.posix_macos",
-        "presentation.completion_ux",
-        "presentation.composed_prompt",
-        "presentation.multiline_ux",
-        "presentation.prompt",
-        "presentation.status",
+        "platform.portable_engine",
         "presentation.structured_output",
         "presentation.table",
+        "presentation.status",
+        "presentation.composed_prompt",
         "presentation.theme",
+        "embedding.blocking",
+        "embedding.session",
+        "embedding.driven",
+        "embedding.readiness",
         "terminal.admission",
         "terminal.capability_snapshot",
-        "terminal.width_policy"
+        "terminal.width_policy",
+        "analysis.revisions",
+        "completion.candidates",
+        "presentation.completion_ux",
+        "analysis.validation",
+        "presentation.multiline_ux",
+        "analysis.hints_highlight"
       ],
       "category": "qualification",
       "path": "tools/hardening/Cargo.toml",
-      "sha256": "sha256:845b1239028bdc28d47e3544821022122002dc9d51ccdc8c5e7594ce044927ad",
+      "sha256": "sha256:9d185c5c0ba7e634dbb0a8ad77d6e942c522ed84a2d7af73d48d3689ad598099",
       "surfaces": [
         "rust-native"
       ]
@@ -2760,40 +2361,36 @@
     },
     {
       "capabilities": [
-        "analysis.hints_highlight",
-        "analysis.revisions",
-        "analysis.validation",
-        "completion.candidates",
-        "editing.kill_yank",
-        "editing.undo_redo",
-        "editing.word_operations",
-        "embedding.blocking",
-        "embedding.driven",
-        "embedding.readiness",
-        "embedding.session",
-        "interaction.completion_request",
         "interaction.editing",
-        "interaction.external_output",
         "interaction.history_navigation",
-        "interaction.history_search",
-        "platform.portable_engine",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
         "platform.posix_linux",
         "platform.posix_macos",
-        "presentation.completion_ux",
-        "presentation.composed_prompt",
-        "presentation.multiline_ux",
-        "presentation.prompt",
-        "presentation.status",
+        "platform.portable_engine",
         "presentation.structured_output",
         "presentation.table",
+        "presentation.status",
+        "presentation.composed_prompt",
         "presentation.theme",
+        "embedding.blocking",
+        "embedding.session",
+        "embedding.driven",
+        "embedding.readiness",
         "terminal.admission",
         "terminal.capability_snapshot",
-        "terminal.width_policy"
+        "terminal.width_policy",
+        "analysis.revisions",
+        "completion.candidates",
+        "presentation.completion_ux",
+        "analysis.validation",
+        "presentation.multiline_ux",
+        "analysis.hints_highlight"
       ],
       "category": "qualification",
       "path": "tools/hardening/benchmarks.rs",
-      "sha256": "sha256:fd46f560184dc6308602b3628fc176b71cef0c3347ca3d9fa8abbb5e38334436",
+      "sha256": "sha256:60627274eb560532950715bf618a33f9b5d899ceef7b49ebcc0cef792e2a7978",
       "surfaces": [
         "rust-native"
       ]
@@ -2874,40 +2471,36 @@
     },
     {
       "capabilities": [
-        "analysis.hints_highlight",
-        "analysis.revisions",
-        "analysis.validation",
-        "completion.candidates",
-        "editing.kill_yank",
-        "editing.undo_redo",
-        "editing.word_operations",
-        "embedding.blocking",
-        "embedding.driven",
-        "embedding.readiness",
-        "embedding.session",
-        "interaction.completion_request",
         "interaction.editing",
-        "interaction.external_output",
         "interaction.history_navigation",
-        "interaction.history_search",
-        "platform.portable_engine",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
         "platform.posix_linux",
         "platform.posix_macos",
-        "presentation.completion_ux",
-        "presentation.composed_prompt",
-        "presentation.multiline_ux",
-        "presentation.prompt",
-        "presentation.status",
+        "platform.portable_engine",
         "presentation.structured_output",
         "presentation.table",
+        "presentation.status",
+        "presentation.composed_prompt",
         "presentation.theme",
+        "embedding.blocking",
+        "embedding.session",
+        "embedding.driven",
+        "embedding.readiness",
         "terminal.admission",
         "terminal.capability_snapshot",
-        "terminal.width_policy"
+        "terminal.width_policy",
+        "analysis.revisions",
+        "completion.candidates",
+        "presentation.completion_ux",
+        "analysis.validation",
+        "presentation.multiline_ux",
+        "analysis.hints_highlight"
       ],
       "category": "qualification",
       "path": "tools/hardening/campaigns.rs",
-      "sha256": "sha256:cd1b71b658db6a54dfabc8264e05eda44a69d708ebe30556817bfff0586b6344",
+      "sha256": "sha256:8f057cbfb618cca12ba2bc084b324dedce105631d850c606e402d165b045fae6",
       "surfaces": [
         "rust-native"
       ]
@@ -2950,54 +2543,36 @@
     },
     {
       "capabilities": [
-        "analysis.hints_highlight",
-        "analysis.revisions",
-        "analysis.validation",
-        "completion.candidates",
-        "editing.kill_yank",
-        "editing.undo_redo",
-        "editing.word_operations",
-        "embedding.blocking",
-        "embedding.driven",
-        "embedding.readiness",
-        "embedding.session",
-        "interaction.completion_request",
         "interaction.editing",
-        "interaction.external_output",
         "interaction.history_navigation",
-        "interaction.history_search",
-        "platform.portable_engine",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
         "platform.posix_linux",
         "platform.posix_macos",
-        "presentation.completion_ux",
-        "presentation.composed_prompt",
-        "presentation.multiline_ux",
-        "presentation.prompt",
-        "presentation.status",
+        "platform.portable_engine",
         "presentation.structured_output",
         "presentation.table",
+        "presentation.status",
+        "presentation.composed_prompt",
         "presentation.theme",
+        "embedding.blocking",
+        "embedding.session",
+        "embedding.driven",
+        "embedding.readiness",
         "terminal.admission",
         "terminal.capability_snapshot",
-        "terminal.width_policy"
+        "terminal.width_policy",
+        "analysis.revisions",
+        "completion.candidates",
+        "presentation.completion_ux",
+        "analysis.validation",
+        "presentation.multiline_ux",
+        "analysis.hints_highlight"
       ],
       "category": "qualification",
       "path": "tools/hardening/deterministic.py",
-      "sha256": "sha256:ea72de6a158ea7f25a5845717f4a6a579960c5e5b108d464c748410c831020f9",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "interaction.history_search",
-        "editing.word_operations",
-        "editing.undo_redo",
-        "editing.kill_yank"
-      ],
-      "category": "qualification",
-      "path": "tools/hardening/ergonomics_sequences.rs",
-      "sha256": "sha256:ca338640b70c772072677c988eada4511438bd3dec520053df4440cfe2efea34",
+      "sha256": "sha256:3b644ca3c9004197451d631c4ae017e8ccfa3f54970c778d82162f8fae8b2325",
       "surfaces": [
         "rust-native"
       ]
@@ -3404,40 +2979,36 @@
     },
     {
       "capabilities": [
-        "analysis.hints_highlight",
-        "analysis.revisions",
-        "analysis.validation",
-        "completion.candidates",
-        "editing.kill_yank",
-        "editing.undo_redo",
-        "editing.word_operations",
-        "embedding.blocking",
-        "embedding.driven",
-        "embedding.readiness",
-        "embedding.session",
-        "interaction.completion_request",
         "interaction.editing",
-        "interaction.external_output",
         "interaction.history_navigation",
-        "interaction.history_search",
-        "platform.portable_engine",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
         "platform.posix_linux",
         "platform.posix_macos",
-        "presentation.completion_ux",
-        "presentation.composed_prompt",
-        "presentation.multiline_ux",
-        "presentation.prompt",
-        "presentation.status",
+        "platform.portable_engine",
         "presentation.structured_output",
         "presentation.table",
+        "presentation.status",
+        "presentation.composed_prompt",
         "presentation.theme",
+        "embedding.blocking",
+        "embedding.session",
+        "embedding.driven",
+        "embedding.readiness",
         "terminal.admission",
         "terminal.capability_snapshot",
-        "terminal.width_policy"
+        "terminal.width_policy",
+        "analysis.revisions",
+        "completion.candidates",
+        "presentation.completion_ux",
+        "analysis.validation",
+        "presentation.multiline_ux",
+        "analysis.hints_highlight"
       ],
       "category": "qualification",
       "path": "tools/hardening/lib.rs",
-      "sha256": "sha256:0f2226ddbc8f583a2ca90f1f1fd60d5c0c6398150314ab765a9334b0642ba2b6",
+      "sha256": "sha256:a383bba27c0753dddea1567b8ad68aeb1827f727b5c4dc5cf88f13af521e6063",
       "surfaces": [
         "rust-native"
       ]
@@ -3556,40 +3127,36 @@
     },
     {
       "capabilities": [
-        "analysis.hints_highlight",
-        "analysis.revisions",
-        "analysis.validation",
-        "completion.candidates",
-        "editing.kill_yank",
-        "editing.undo_redo",
-        "editing.word_operations",
-        "embedding.blocking",
-        "embedding.driven",
-        "embedding.readiness",
-        "embedding.session",
-        "interaction.completion_request",
         "interaction.editing",
-        "interaction.external_output",
         "interaction.history_navigation",
-        "interaction.history_search",
-        "platform.portable_engine",
+        "interaction.completion_request",
+        "interaction.external_output",
+        "presentation.prompt",
         "platform.posix_linux",
         "platform.posix_macos",
-        "presentation.completion_ux",
-        "presentation.composed_prompt",
-        "presentation.multiline_ux",
-        "presentation.prompt",
-        "presentation.status",
+        "platform.portable_engine",
         "presentation.structured_output",
         "presentation.table",
+        "presentation.status",
+        "presentation.composed_prompt",
         "presentation.theme",
+        "embedding.blocking",
+        "embedding.session",
+        "embedding.driven",
+        "embedding.readiness",
         "terminal.admission",
         "terminal.capability_snapshot",
-        "terminal.width_policy"
+        "terminal.width_policy",
+        "analysis.revisions",
+        "completion.candidates",
+        "presentation.completion_ux",
+        "analysis.validation",
+        "presentation.multiline_ux",
+        "analysis.hints_highlight"
       ],
       "category": "qualification",
       "path": "tools/hardening/regression.py",
-      "sha256": "sha256:5e0ff974c953b0cb11b49561f92dbb04596ef37fa12eaac52ca2dd9265b044ec",
+      "sha256": "sha256:7255c8bb644c0851e58c68d95d200f278bb6fbd4280b70e3aa5d9f1f67a6a8ad",
       "surfaces": [
         "rust-native"
       ]
@@ -3845,17 +3412,13 @@
         "analysis.revisions",
         "analysis.validation",
         "completion.candidates",
-        "editing.kill_yank",
-        "editing.undo_redo",
-        "editing.word_operations",
-        "interaction.history_search",
         "presentation.completion_ux",
         "presentation.multiline_ux",
         "terminal.capability_snapshot"
       ],
       "category": "qualification",
       "path": "tools/perf/components.rs",
-      "sha256": "sha256:af0cc950541e007bb33d763165665daf4d61c669bf55aea5bd93d02380d9f87f",
+      "sha256": "sha256:13c15fc3fed09c5e3c01bb85caf08bc8aa3bb0dbfffeab117d102f2b1e00a29a",
       "surfaces": [
         "rust-native"
       ]
@@ -4048,9 +3611,7 @@
         "https://github.com/mothx9/replai/blob/006e65797e8dc9fa1d6ee0d90949b56e47cb2ee5/docs/engineering/release-hardening.md",
         "https://github.com/mothx9/replai/actions/runs/34703095088",
         "https://github.com/mothx9/replai/actions/runs/34703089136",
-        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md",
-        "https://github.com/mothx9/replai/actions/runs/34759347027",
-        "https://github.com/mothx9/replai/actions/runs/34759339446"
+        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
       ],
       "id": "linux",
       "status": "runtime-qualified",
@@ -4067,9 +3628,7 @@
         "https://github.com/mothx9/replai/blob/006e65797e8dc9fa1d6ee0d90949b56e47cb2ee5/docs/engineering/release-hardening.md",
         "https://github.com/mothx9/replai/actions/runs/34703095088",
         "https://github.com/mothx9/replai/actions/runs/34703089136",
-        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md",
-        "https://github.com/mothx9/replai/actions/runs/34759347027",
-        "https://github.com/mothx9/replai/actions/runs/34759339446"
+        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
       ],
       "id": "macos",
       "status": "runtime-qualified",
@@ -4085,9 +3644,7 @@
         "https://github.com/mothx9/replai/blob/006e65797e8dc9fa1d6ee0d90949b56e47cb2ee5/docs/engineering/release-hardening.md",
         "https://github.com/mothx9/replai/actions/runs/34703095088",
         "https://github.com/mothx9/replai/actions/runs/34703089136",
-        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md",
-        "https://github.com/mothx9/replai/actions/runs/34759347027",
-        "https://github.com/mothx9/replai/actions/runs/34759339446"
+        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
       ],
       "id": "windows",
       "status": "portable-core-qualified",
@@ -4097,23 +3654,23 @@
     }
   ],
   "predecessor": {
-    "contract_id": "sha256:f690c80022f44a53d99dbe62ff4cc8ab7d75b602209386f0f6d963cd309be9f6",
+    "contract_id": "sha256:ff37c4091dcb958dd49098b5dad276b570122302a5b8b994154469d042fba330",
     "repository": "https://github.com/mothx9/replai",
-    "revision": "7f8f696f98b33d8e4ea6f08e243fe0d5e5351724",
-    "tree": "15f1cc0e685b8523b33e97c145615bc82ac6b7be"
+    "revision": "f916f2fbccb83ac8cbae21fe553ec753c5809898",
+    "tree": "8f72e6de19d07256ab9ff1c1d6c959bd3876ae14"
   },
   "repository": "https://github.com/mothx9/replai",
   "schema_version": 1,
   "source": {
     "dirty": false,
-    "revision": "f00cc038134329bc0267f3e694f62e0ec20f0214",
-    "tree": "12f17d5765133af3eb937c71ef4af90bcea3b867"
+    "revision": "7f8f696f98b33d8e4ea6f08e243fe0d5e5351724",
+    "tree": "15f1cc0e685b8523b33e97c145615bc82ac6b7be"
   },
   "surfaces": [
     {
       "documentation": [
-        "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/interaction.md",
-        "https://github.com/mothx9/replai/blob/f00cc038134329bc0267f3e694f62e0ec20f0214/docs/presentation.md"
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/interaction.md",
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/presentation.md"
       ],
       "id": "rust-native",
       "kind": "rust-native",
