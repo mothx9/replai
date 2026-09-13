@@ -486,9 +486,16 @@ impl Editor {
         self.undo.break_group();
     }
     pub(crate) fn replace_search_result(&mut self, text: &str) -> Result<(), EditError> {
+        self.validate_replacement(&(0..self.text.len()), text)?;
+        if self.text == text && self.cursor == text.len() {
+            self.revision.advance();
+            self.undo.break_group();
+        } else {
+            self.replace_group(0..self.text.len(), text, EditGroup::Atomic)?;
+        }
         self.selected = None;
         self.draft = None;
-        self.replace_group(0..self.text.len(), text, EditGroup::Atomic)
+        Ok(())
     }
     /// Clear the active input and navigation draft; retain admitted history.
     pub fn clear(&mut self) {
@@ -755,11 +762,11 @@ impl Editor {
             self.undo.break_group();
             return;
         }
-        self.undo.clear();
         let index = self.selected.map_or(self.history.len() - 1, |i| i - 1);
         if self.text != self.history[index] || self.cursor != self.history[index].len() {
             self.revision.advance();
         }
+        self.undo.clear();
         if self.selected.is_none() {
             self.draft = Some((self.text.clone(), self.cursor));
         }
@@ -773,12 +780,12 @@ impl Editor {
             self.undo.break_group();
             return;
         };
-        self.undo.clear();
         if index + 1 < self.history.len() {
             if self.text != self.history[index + 1] || self.cursor != self.history[index + 1].len()
             {
                 self.revision.advance();
             }
+            self.undo.clear();
             self.selected = Some(index + 1);
             self.text.clone_from(&self.history[index + 1]);
             self.cursor = self.text.len();
@@ -790,6 +797,7 @@ impl Editor {
             {
                 self.revision.advance();
             }
+            self.undo.clear();
             if let Some((text, cursor)) = self.draft.take() {
                 self.text = text;
                 self.cursor = cursor;

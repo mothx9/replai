@@ -5,6 +5,29 @@ use crate::{
     engine::Engine,
 };
 
+#[test]
+fn accepting_identical_history_text_still_creates_a_fresh_identity() {
+    let mut engine = crate::engine::Engine::new(Editor::new(64, 2));
+    engine.editor.insert("same").unwrap();
+    engine
+        .set_history_source(Some(
+            HistorySearchSource::from_entries(
+                ["same"],
+                HistorySearchLimits::new(2, 64, 16).unwrap(),
+            )
+            .unwrap(),
+        ))
+        .unwrap();
+    engine.start(Prompt::new("q").unwrap(), (40, 8)).unwrap();
+    let before = engine.editor.revision();
+    engine.apply(Input::Edit(E::HistorySearchOlder)).unwrap();
+    engine
+        .apply(Input::Request(crate::actions::Request::Submit))
+        .unwrap();
+    assert_ne!(engine.editor.revision(), before);
+    assert_eq!((engine.editor.text(), engine.editor.cursor()), ("same", 4));
+}
+
 fn opened() -> Engine {
     let mut engine = Engine::new(Editor::new(256, 8));
     engine.editor.admit_history("older alpha").unwrap();
