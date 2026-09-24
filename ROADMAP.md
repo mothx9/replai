@@ -329,6 +329,15 @@ contract deltas; it assigns no consumer migration. Consumer state blocks an
 independent library boundary only when it exposes a **reproducible generic
 REPLAI contract defect**, not because a downstream publication is pending.
 
+YVEX chat has a concrete U3/O3 consumer pressure: completed-turn measurements
+belong in a compact, host-fed bottom status strip rather than permanent dim
+lines beneath the answer. YVEX has removed those lines from interactive
+scrollback; the current C ABI provides prompt and line-oriented external output
+but no replaceable status-strip contract. A future REPLAI presentation boundary
+must define bounded host facts, replacement/expiry, resize and narrow/plain
+fallback, and editor redraw ownership before YVEX can adopt such a strip. This
+does not select the boundary, freeze an ABI, or authorize a YVEX consumer repin.
+
 BOUNDARY metadata concerns cross-repository contract evolution. It is neither
 an engine component nor a build/runtime dependency. This roadmap changes no
 producer capability meaning, consumer profile, pin or receipt. Control IDs and
