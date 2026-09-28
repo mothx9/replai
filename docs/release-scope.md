@@ -307,6 +307,21 @@ the corresponding gate rather than being inferred from another platform.
 
 ## Compatibility policy
 
+The root `Cargo.toml` package version is the canonical REPLAI product version.
+REPLAI versions independently of YAI Core, Studio, YAI SDK and YVEX, using
+`MAJOR.MINOR.PATCH` with standard optional prerelease identifiers. Matching
+product numbers do not establish cross-product compatibility. The C ABI number
+remains a separate contract identity, not a projection of the product version.
+`tools/check_version.py` checks the C crate, locked first-party packages and
+source SDK legal payload name against the root authority; C staging and SDK
+archive metadata already derive their version from that manifest.
+
+Future qualified release tags use `vMAJOR.MINOR.PATCH` (with an optional standard
+prerelease suffix). Changing a version does not earn a tag, publication or legal
+distribution readiness. The existing package and `distribution.legal.v1` gates
+remain required. Development-only harness package versions are not product
+versions.
+
 E3 will ratify the final public contract. Until then REPLAI is unpublished and
 the Rust API remains pre-release.
 
