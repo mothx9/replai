@@ -1,5 +1,12 @@
 # Contributing
 
+First-party contributions remain under [MIT](LICENSE); contributors retain
+their copyright. No CLA, DCO or corporate assignment is established here.
+Identify incorporated third-party material and retain its applicable notices;
+only submit material you are authorized to contribute under compatible terms.
+The [ownership notice](README.md#license) distinguishes the YAI brand from any
+future incorporated owner.
+
 Start with a concrete terminal interaction problem and its observable failure
 behavior. Use the [documentation map](docs/README.md) to find the contract owner
 before introducing types, dependencies or documents. Keep host application

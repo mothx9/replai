@@ -564,3 +564,27 @@ when behavior changes. See [CONTRIBUTING.md](CONTRIBUTING.md) or
 ## License
 
 [MIT](LICENSE).
+
+Copyright (c) 2026 Francesco Maiomascio for first-party material authored and
+owned by him, consistent with the repository's author history. Other
+contributors and third parties retain their rights. Git authorship is not an
+assignment of rights.
+
+YAI is the intended company and flagship product name, not an incorporated
+owner of this pre-incorporation IP. REPLAI remains MIT independently of the
+proprietary/source-available YAI product. A later corporate assignment requires
+an actual agreement before ownership notices change; no assignment, CLA, DCO,
+trademark registration or patent ownership is asserted here.
+
+"YAI Labs" in older immutable licenses is historical attribution, not the
+current company or rights holder. Preserve those notices when distributing a
+pinned older revision. Existing repository URLs, including `mothx9/replai` and
+historical `yailabs` links, remain technical identifiers.
+
+Dependencies have their own licenses. The locked Rust graph includes Unicode
+libraries and platform bindings under their respective permissive license
+choices; REPLAI's MIT notice does not replace them. Binary distributors must
+retain notices for the exact linked dependency graph, including static C
+builds. Cargo manifests/lockfiles and the native build receipt identify inputs,
+not a complete third-party notice bundle. Documentation tooling and generated
+assets have separate input provenance documented in [development](docs/development.md#public-readme-assets).
