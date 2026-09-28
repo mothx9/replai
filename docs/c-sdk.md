@@ -1,5 +1,34 @@
 # C SDK source bundle
 
+## Distribution qualification
+
+SDK archives are source candidates labelled `distribution_legal_status =
+UNQUALIFIED`; referenced Cargo dependencies are not bundled source. Compiled
+C installations have a different closure, including Rust dependencies and
+toolchain contributions, not just REPLAI's root MIT text.
+
+`tools/distribution_legal.py` captures staged members, source/build-input identity
+and target-filtered Cargo graphs. An accountable build-membership review must
+disposition every node and classify generated/native contributions. `bundle`
+requires original notices, full selected license texts and, for MPL, included
+corresponding source. It writes deterministic `LEGAL` material and publishes
+only a verified new directory. `verify` rejects altered/missing/extra members,
+stale reviews, unknown terms and unresolved state. Use its `--help` interface.
+The `distribution.legal.v1` tool has matching MIT copies in YAI/YVEX without
+requiring a sibling checkout. The repositories remain separate authorities.
+
+`qualify_packaging.py --legal-package PATH` requires the exact reviewed source
+archives and installed binaries qualified by that run. Without it, software
+controls may pass but distribution qualification fails. The release workflow
+retains diagnostics, not unqualified payloads. Build/manifest graphs are not an
+automatic oracle for actual linked contents or generated-output obligations.
+
+REPLAI remains MIT. No MPL component occurs in the current Linux normal C-library
+graph. Rust toolchain and system terms remain separate; system-required libraries
+are not automatically redistributed. The Rust crate's visual assets need their
+separate provenance review. Exact binary closure/notices remain unqualified;
+this repository-addressable evidence gap is not closed by the checker alone.
+
 `replai-c-sdk-0.1.0.tar.gz` is the versioned source distribution for C ABI 1.
 It contains the Rust implementation and binding sources, the public header,
 locked dependencies, CMake templates and the staging tools needed to produce a

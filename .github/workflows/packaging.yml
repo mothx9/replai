@@ -60,7 +60,10 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: packaging-${{ matrix.os }}-${{ matrix.architecture }}-${{ matrix.toolchain }}
-          path: ${{ runner.temp }}/replai-packaging
+          # Unqualified binaries/source bundles must not escape via CI uploads.
+          path: |
+            ${{ runner.temp }}/replai-packaging/logs
+            ${{ runner.temp }}/replai-packaging/packaging-summary.json
 
   windows-portable:
     name: Packaging Windows portable core (Rust 1.98.1)
@@ -80,4 +83,6 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: packaging-windows-x86_64-1.98.1
-          path: ${{ runner.temp }}/replai-packaging
+          path: |
+            ${{ runner.temp }}/replai-packaging/logs
+            ${{ runner.temp }}/replai-packaging/packaging-summary.json

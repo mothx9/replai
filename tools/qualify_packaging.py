@@ -30,10 +30,11 @@ def sha256(path):
 
 
 class Qualification:
-    def __init__(self, work, source, full):
+    def __init__(self, work, source, full, legal_package=None):
         self.work = work.resolve()
         self.source = source
         self.full = full
+        self.legal_package = legal_package
         source_revision = self.git("rev-parse", source).strip()
         checkout_revision = self.git("rev-parse", "HEAD").strip()
         if source_revision != checkout_revision:
@@ -267,7 +268,26 @@ class Qualification:
         self.publish_dry_run()
         self.leakage()
         self.write_summary()
-        print("PASS RELEASE.PACKAGING.0 local qualification")
+        print("PASS software packaging controls; distribution legal qualification is separate")
+        self.summary["distribution_legal"] = "BLOCKED: exact package legal review not supplied"
+        self.write_summary()
+        if self.legal_package is None:
+            raise SystemExit("BLOCKED distribution: --legal-package with recipient material is required; software controls do not establish redistribution permission")
+        self.run("distribution-legal", [sys.executable, ROOT / "tools/distribution_legal.py",
+                 "verify", self.legal_package, "--first-party-license", ROOT / "LICENSE",
+                 "--first-party-terms", "MIT", "--policy", ROOT / "tools/distribution_policy.json"])
+        closure = json.loads((self.legal_package / "LEGAL/closure.json").read_text())
+        if closure["source_commit"] != self.summary["source_revision"]:
+            raise SystemExit("BLOCKED distribution: foreign source revision")
+        members = closure["files"].values()
+        required = [self.summary["rust_package"], self.summary["c_sdk"]]
+        required.extend(self.summary.get("c_install", {}).get("files", {}).values())
+        if any(not any(item["sha256"] == member["sha256"] and item["bytes"] == member["bytes"]
+                       for member in members) for item in required):
+            raise SystemExit("BLOCKED distribution: legal closure does not contain the qualified artifacts")
+        self.summary["distribution_legal"] = "PASS: exact package with reviewed recipient material"
+        self.write_summary()
+        print("PASS RELEASE.PACKAGING.0 including exact distribution legal gate")
 
 
 def main():
@@ -275,11 +295,12 @@ def main():
     parser.add_argument("--work", type=Path, required=True)
     parser.add_argument("--source", default="HEAD")
     parser.add_argument("--full", action="store_true", help="run native installed C matrix")
+    parser.add_argument("--legal-package", type=Path, help="reviewed recipient package matching the generated artifacts")
     args = parser.parse_args()
     if args.work.exists() and any(args.work.iterdir()):
         raise SystemExit("--work must be absent or empty")
     args.work.mkdir(parents=True, exist_ok=True)
-    Qualification(args.work, args.source, args.full).execute()
+    Qualification(args.work, args.source, args.full, args.legal_package).execute()
 
 
 if __name__ == "__main__":

@@ -1,0 +1,25 @@
+{
+  "schema": "distribution.policy.v1",
+  "product": "replai",
+  "first_party_license": "LICENSE",
+  "first_party_terms": "MIT",
+  "profiles": {
+    "c-sdk-source": {
+      "payload_names": ["replai-c-sdk-0.1.0.tar.gz"],
+      "reproduce": ["python3", "tools/package_sdk.py", "--revision", "HEAD", "--output", "{artifact}"],
+      "build_inputs": ["tools/package_sdk.py", "Cargo.toml", "Cargo.lock", "LICENSE"],
+      "cargo_manifests": [],
+      "unresolved": []
+    },
+    "rust-crate": {
+      "build_inputs": ["Cargo.toml", "Cargo.lock", "LICENSE"],
+      "cargo_manifests": [],
+      "unresolved": ["The published crate includes visual assets; distribution provenance requires its own external review."]
+    },
+    "c-binary": {
+      "build_inputs": ["tools/stage_c.py", "Cargo.toml", "Cargo.lock", "crates/replai-c/Cargo.toml", "LICENSE"],
+      "cargo_manifests": ["crates/replai-c/Cargo.toml"],
+      "unresolved": ["The staging receipt does not yet retain complete artifact-bound Rust/toolchain/native membership and original notices."]
+    }
+  }
+}

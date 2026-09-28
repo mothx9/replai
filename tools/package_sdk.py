@@ -70,6 +70,7 @@ def build(output, revision):
         "git_tree": tree,
         "c_abi": 1,
         "archive_root": root,
+        "distribution_legal_status": "UNQUALIFIED",
     }
     files = selected_files(revision)
     output.parent.mkdir(parents=True, exist_ok=True)
