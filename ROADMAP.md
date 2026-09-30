@@ -5,8 +5,8 @@
 | Axis | Current truth |
 | --- | --- |
 | Project target | Embeddable command-line interaction infrastructure: a simple entry that can grow into rich, long-lived host-driven interfaces over one engine. |
-| Current selected engineering boundary | **INTERFACES.CLI.REPLAI.PRODUCT.SURFACE.REFOUNDATION.0 — ACTIVE**: independently qualified generic presentation/interaction C extension and bounded output/transient ownership for native hosts; ABI 1 preserved. |
-| Latest major completed boundary | COMPLETION.KEYMAP.SUGGESTION.0: public semantic actions and bounded keymaps, generic completion helpers, large-set navigation and revision-safe autosuggestion. |
+| Current selected engineering boundary | **NONE**. The producer side of **INTERFACES.CLI.REPLAI.PRODUCT.SURFACE.REFOUNDATION.0** is COMPLETE at its bounded Linux C-extension scope; consumer qualification belongs to YVEX. No next boundary is started automatically. |
+| Latest major completed boundary | INTERFACES.CLI.REPLAI.PRODUCT.SURFACE.REFOUNDATION.0: independently qualified semantic C presentation, rich completion, driven notification and exclusive quiet feedback, alongside unchanged ABI 1. |
 | Most important structural gap | The expanded v0.1 product still needs long-lived output, Windows runtime, sensitive input, coherent UX, large-draft scaling, developer experience and agentic integration before final hardening/freeze. |
 | Executable foundation | Platform-neutral engine; bounded Unicode grapheme/word editor; history navigation/search; undo/redo; kill/yank; completion; paste, interrupts/EOF, resize, safe output and exact restoration. |
 | Qualified platforms | Linux/macOS: real Rust/C terminal runtime. Windows: portable engine/document tests only, no terminal backend. |
@@ -43,7 +43,7 @@ whole program. Counts describe rows, never percentage completion. IDs are stable
 control identifiers, not new public API or producer-capability declarations.
 
 <!-- maturity-counts:start -->
-ESTABLISHED=43 PARTIAL=10 OPEN=6 LATER=4 TOTAL=63
+ESTABLISHED=43 PARTIAL=11 OPEN=5 LATER=4 TOTAL=63
 <!-- maturity-counts:end -->
 
 <!-- maturity:start -->
@@ -86,13 +86,13 @@ ESTABLISHED=43 PARTIAL=10 OPEN=6 LATER=4 TOTAL=63
 | output.coordinated | Synchronous and exclusive output | 🟢 ESTABLISHED | Safe text/documents preserve active draft/cursor; submit releases editing before host execution and later reopen. | Retain failure cleanup, exact draft return and Rust/C plain compatibility. | O | [Interaction][interaction]; [PTY][pty]; [C PTY][c-pty] |
 | output.streaming | O1 sustained output | 🔴 OPEN | Bounded output measurements exist; no sustained-stream contract or stream-specific optimization qualification. | Measure long-running chunk workloads, bytes/writes/backpressure and restoration with host-owned meaning. | O / P | [P0 output evidence][p0]; [presentation owner][presentation] |
 | output.multiplexed | O2 editing with background output | 🔴 OPEN | Serialized transactions do not establish independent concurrent writers or output arbitration. | Qualify bounded producer arbitration, ordering/backpressure and exact draft/cursor preservation while the host retains scheduling. | O / P | [Interaction owner][interaction]; [F0][f0] |
-| output.transient | O3 transient feedback | 🔴 OPEN | Persistent status blocks are not transient notices, expiry or replacement surfaces. | Define lifetime/removal and redraw evidence without product rendering semantics. | O / U | [Presentation owner][presentation] |
+| output.transient | O3 transient feedback | 🟡 PARTIAL | Exclusive quiet-output replacement/clear and exact restoration are qualified on Linux through Rust and optional C presentation extension 1. Expiry, editing-time status strips and multi-producer composition remain unqualified. | Qualify the remaining lifetime/removal/redraw composition without product rendering semantics. | O / U | [C presentation evidence](docs/engineering/c-presentation.md); [Presentation owner][presentation] |
 
 ### Command interaction
 
 | ID | Property | Maturity | Current truth / exact boundary | Promotion condition | Program | Evidence / owner |
 | --- | --- | --- | --- | --- | --- | --- |
-| completion.candidates | I1 rich completion contract | 🟢 ESTABLISHED | Host-ordered bounded candidates bind DraftRevision; whole-set validation and atomic stale refusal/application. Native Rust only; C ABI 1 retains replacement. | Preserve host discovery/context ownership, bounds, rejection atomicity and delivery-order semantics. | I | [I1/U1 dossier][completion-contract]; [interaction][interaction] |
+| completion.candidates | I1 rich completion contract | 🟢 ESTABLISHED | Host-ordered bounded candidates bind DraftRevision; whole-set validation and atomic stale refusal/application. Optional C presentation extension 1 is qualified on Linux; C ABI 1 retains replacement. | Preserve host discovery/context ownership, bounds, rejection atomicity and delivery-order semantics. | I | [I1/U1 dossier][completion-contract]; [C presentation evidence](docs/engineering/c-presentation.md); [interaction][interaction] |
 | analysis.hints_highlight | I2 hints and highlighting | 🟢 ESTABLISHED | Native revision-bound ordered editor style spans and non-canonical bounded hints; stale silence, I1/I3 composition, plain degradation, Linux/macOS PTYs/memory and Windows portable models. | Preserve canonical text/revision, safe grapheme ranges, bounded payload and measured ordinary-editing cost. Host analysis and insertion remain separate. | I / U | [I2 dossier][analysis-presentation]; [interaction][interaction] |
 | analysis.validation | I3 validation and submission policy | 🟢 ESTABLISHED | Optional host Complete/Incomplete/Invalid over immutable Enter snapshots; atomic stale refusal, exact submission and bounded diagnostics. Native Rust only. | Preserve host grammar/scheduling authority, rejected-result atomicity and completion precedence across platforms. | I | [I3/U2 dossier][validation-multiline]; [interaction][interaction] |
 | history.storage_search | I4 history provider/search | 🟢 ESTABLISHED | Host-fed newest-first bounded views and admitted history share case-sensitive literal reverse search; query/match remain non-canonical until one undoable acceptance. Persistence, retention and privacy stay host-owned. | Preserve bounded provider materialization, exact dismiss restoration, no-wrap ordering, safe presentation and revision/output/resize composition. | I | [Ergonomics dossier][interaction-ergonomics]; [interaction][interaction] |
@@ -233,7 +233,7 @@ MUST_V0_1=20 SHOULD_V0_1=0 LATER=0 OUT_OF_SCOPE=0 TOTAL=20
 | presentation.visual_system | 🟡 PARTIAL | MUST_V0_1 | Current primitives need one coherent keyboard/plain/narrow/wide/accessibility system across the expanded surface. | [Visual scope](docs/release-scope.md#visual-and-large-draft-quality); cross-platform U3 qualification |
 | output.streaming | 🔴 OPEN | MUST_V0_1 | Long-lived tools need sustained active-edit output with explicit backpressure and bounds. | [Output scope](docs/release-scope.md#long-lived-output); chunk, backpressure, latency and restoration stress |
 | output.multiplexed | 🔴 OPEN | MUST_V0_1 | Legitimate producers need bounded arbitration while Interaction mutation remains serialized. | [Output scope](docs/release-scope.md#long-lived-output); producer ordering/fairness/resource evidence |
-| output.transient | 🔴 OPEN | MUST_V0_1 | Progress and replaceable/expiring notices need a bounded lifecycle that composes with editing. | [Output scope](docs/release-scope.md#long-lived-output); replacement/removal/redraw qualification |
+| output.transient | 🟡 PARTIAL | MUST_V0_1 | Exclusive quiet feedback is qualified on Linux; expiry and editing-time status composition still need a bounded lifecycle. | [Output scope](docs/release-scope.md#long-lived-output); replacement/removal/redraw qualification |
 | platform.windows_runtime | 🔴 OPEN | MUST_V0_1 | Native Windows Rust terminal use is part of the selected major-desktop product envelope. | [Windows scope](docs/release-scope.md#windows-runtime); real Console/ConPTY resource and PTY-equivalent evidence |
 | performance.large_draft | 🟡 PARTIAL | MUST_V0_1 | Measured prefix traversal must be resolved enough for practical large multiline editing. | [Large-draft scope](docs/release-scope.md#visual-and-large-draft-quality); scaling thresholds and workload replay |
 | dx.high_level_facade | 🟡 PARTIAL | MUST_V0_1 | Common applications need a smaller rich-integration path over the same engine. | [Developer experience](docs/release-scope.md#developer-experience); public facade consumers and ownership audit |
@@ -285,10 +285,12 @@ RELEASE.HARDENING.1 must extend and replay their relevant campaigns before E3/V0
 
 The previous RELEASE.CANDIDATE.0 selection remains superseded by the expanded
 plan. INTERACTION.ERGONOMICS.0 and COMPLETION.KEYMAP.SUGGESTION.0 are established;
-the sole selected boundary is INTERFACES.CLI.REPLAI.PRODUCT.SURFACE.REFOUNDATION.0,
-explicitly authorized by the native-host interface Task Pack. It closes the
-required bounded presentation/interaction/output subset, not every long-lived
-multi-producer arbitration property. Ten
+the authorized INTERFACES.CLI.REPLAI.PRODUCT.SURFACE.REFOUNDATION.0 producer
+boundary is complete at the [native C evidence](docs/engineering/c-presentation.md)
+scope. It closes the required bounded presentation/interaction/output subset,
+not every long-lived multi-producer arbitration property. Consumer qualification
+remains YVEX-owned; the producer selection is NONE and no further boundary has
+been started. Ten
 engineering/design/qualification boundaries remain before one separately
 authorized publication boundary:
 
@@ -341,9 +343,9 @@ REPLAI contract defect**, not because a downstream publication is pending.
 
 YVEX chat has a concrete U3/O3 consumer pressure: completed-turn measurements
 belong in a compact, host-fed bottom status strip rather than permanent dim
-lines beneath the answer. YVEX has removed those lines from interactive
-scrollback; the current C ABI provides prompt and line-oriented external output
-but no replaceable status-strip contract. A future REPLAI presentation boundary
+lines beneath the answer. The optional C presentation extension now supplies
+exclusive replaceable feedback between editor lifetimes, not a bottom status
+strip during editing. A future REPLAI presentation boundary
 must define bounded host facts, replacement/expiry, resize and narrow/plain
 fallback, and editor redraw ownership before YVEX can adopt such a strip. This
 does not select the boundary, freeze an ABI, or authorize a YVEX consumer repin.
