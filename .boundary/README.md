@@ -4,7 +4,13 @@ REPLAI owns these producer declarations. They describe generic capabilities,
 surfaces, qualification and changes; they assign no consumer paths, commands or
 migration work. Consumer profiles must be authored by their own repositories.
 
-- [Current producer snapshot](producer.json), generation 18: optional C presentation
+- [Current producer snapshot](producer.json), generation 19: documentation-only
+  closure reconciliation at `c1e86e2707ef80e572c7df1501cb6d53dfe2927e`, tree
+  `2fa789f198ee2e47e77d6d435174dca0bb7e9e75`.
+  The [closeout delta](deltas/presentation-closeout.json) changes project-control
+  documentation only; runtime, ABI 1 and extension semantics remain unchanged.
+  The bounded qualification source and its non-claims below still apply.
+- Generation 18 established optional C presentation
   extension 1 and safe quiet-output scope, independently qualified on Linux.
   Source/document carrier `eb246d3fd81353fc3be27c8924ee2321067530bf`, tree
   `646b95bc5a2cc555f59d0c6a8067095588c40811`; runtime source and evidence bind
