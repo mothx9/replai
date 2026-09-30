@@ -3537,17 +3537,6 @@
     },
     {
       "capabilities": [
-        "abi.c.presentation_v1"
-      ],
-      "category": "qualification",
-      "path": "tools/check_version.py",
-      "sha256": "sha256:d9fe0cfaa18c30a8fd600f7e74512c2be29a3405bf92715ad63d49ab964baaf9",
-      "surfaces": [
-        "c-presentation-v1"
-      ]
-    },
-    {
-      "capabilities": [
         "completion.helpers",
         "completion.large_sets",
         "editing.keymap",
@@ -3558,6 +3547,17 @@
       "sha256": "sha256:d95b82bda6504a361e93552040aaecb66fb64b43671f74f6ebecbb1488e25b33",
       "surfaces": [
         "rust-native"
+      ]
+    },
+    {
+      "capabilities": [
+        "abi.c.presentation_v1"
+      ],
+      "category": "qualification",
+      "path": "tools/check_version.py",
+      "sha256": "sha256:d9fe0cfaa18c30a8fd600f7e74512c2be29a3405bf92715ad63d49ab964baaf9",
+      "surfaces": [
+        "c-presentation-v1"
       ]
     },
     {
