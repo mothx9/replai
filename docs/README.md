@@ -11,6 +11,7 @@ over prose; summaries link to the owner instead of restating its contract.
 | What do editing, input, history, completion and lifecycle guarantee? | [Interaction](interaction.md) |
 | How are prompt, cells, redraw and notices presented and tested? | [Presentation](presentation.md) |
 | How does a C host install, link and use ABI 1? | [C API](c-api.md) |
+| What independently qualifies the optional native C presentation extension? | [C presentation evidence](engineering/c-presentation.md) |
 | How is the C source SDK built and consumed through pkg-config/CMake? | [C SDK](c-sdk.md) |
 | How do I propose a change? | [Contributing](../CONTRIBUTING.md) |
 | How do I reconcile, validate and report a change? | [Development](development.md) |

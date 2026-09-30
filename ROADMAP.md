@@ -11,12 +11,12 @@
 | Executable foundation | Platform-neutral engine; bounded Unicode grapheme/word editor; history navigation/search; undo/redo; kill/yank; completion; paste, interrupts/EOF, resize, safe output and exact restoration. |
 | Qualified platforms | Linux/macOS: real Rust/C terminal runtime. Windows: portable engine/document tests only, no terminal backend. |
 | Current Rust surface | Editor/Interaction, blocking results, session events, portable wake/deadline/admission types, borrowed POSIX readiness, revision/snapshot/stale outcomes, bounded completion candidates/selection, submission requests/dispositions, diagnostics, editor analysis spans/hints, prompts/themes and structured documents. Pre-release, without API freeze. |
-| Current C surface | ABI 1: POSIX descriptor binding, static/shared artifacts, caller-owned buffers and plain coordinated output. No structured-document, revision-aware analysis, rich-candidate or validation C interface. |
+| Current C surface | ABI 1 remains unchanged. Optional presentation extension 1 adds semantic documents/prompts, responsive records/tables, revision-bound rich candidates, driven interest/advance, Unicode cells and quiet feedback/restoration. Linux native and independent package consumers are qualified; no C validation/analysis-span API or Windows runtime is implied. |
 | Performance posture | P0/P1/P2 preserved at matched workloads; Q2 retains its 32-workload historical registration and adds 16 ergonomics workloads with separately recorded latency/allocation bounds. This is not a universal latency SLA or ranking. |
 | Presentation posture | Safe spans, headings, facts, lists, responsive tables/status, composed prompts/themes and deterministic plain output. Bounded completion and validated multiline interaction are qualified; bounded host editor spans/hints are qualified; broader visual refinement remains separate. |
 | Consumer posture | Packaged Rust and moved-prefix C/C++ consumers are qualified independently. Product consumers remain external owners; producer metadata assigns no migrations or repins. |
 | Public-release posture | Pre-release. The expanded v0.1 product envelope and compatibility requirements are selected in [release scope](docs/release-scope.md); adopted targets are not implementation claims. |
-| Next decision point | Qualify the selected producer extension independently before the authorized YVEX consumer repin. Broader output arbitration and release progression are not implicitly promoted. |
+| Next decision point | Producer-side interface gate is qualified at the [C presentation evidence](docs/engineering/c-presentation.md) scope. The authorized YVEX consumer composition remains external work; broader output arbitration and release progression are not promoted. |
 
 This is the sole authority for **public macro state, maturity, strategic programs,
 dependency ordering and release progression**. [README](README.md) owns first use;
