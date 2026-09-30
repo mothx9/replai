@@ -4,7 +4,17 @@ REPLAI owns these producer declarations. They describe generic capabilities,
 surfaces, qualification and changes; they assign no consumer paths, commands or
 migration work. Consumer profiles must be authored by their own repositories.
 
-- [Current producer snapshot](producer.json), generation 17: compatibility-corrected
+- [Current producer snapshot](producer.json), generation 18: optional C presentation
+  extension 1 and safe quiet-output scope, independently qualified on Linux.
+  Source/document carrier `eb246d3fd81353fc3be27c8924ee2321067530bf`, tree
+  `646b95bc5a2cc555f59d0c6a8067095588c40811`; runtime source and evidence bind
+  `19845f5ae24fc0b9589a2621d03a8d1ba1ad47c2` with unchanged runtime tree
+  `7b62ec3136df94a9f906307d2e1e9276ca19530a`.
+  [Native C evidence](../docs/engineering/c-presentation.md) and the
+  [C-presentation delta](deltas/c-presentation.json) preserve ABI 1 while exposing
+  a separately queried/versioned generic surface. New native macOS/Windows,
+  concurrent writer arbitration and release qualification are not inferred.
+- [Previous producer snapshot](checkpoints/6ee2fe1e2006f940d0046676c73306bfc7da1070.json), generation 17: compatibility-corrected
   evidence source `6ee2fe1e2006f940d0046676c73306bfc7da1070`, tree
   `afec2d649d50c1a46d897b6379687367732fd262`; its runtime tree is
   `62596c22ad2568c46c4e742b21136b31f9e1eb96`.
@@ -172,7 +182,7 @@ behavior, ABI and documentation inputs. Its external validation command is:
 
 ```sh
 boundary validate .boundary/producer.json --repo . \
-  --previous .boundary/checkpoints/db4dff1dd1bd9bd1b15ac953efe2c894c51ed2fd.json
+  --previous .boundary/checkpoints/6ee2fe1e2006f940d0046676c73306bfc7da1070.json
 ```
 
 Run from a clean REPLAI checkout with BOUNDARY installed separately. Validation

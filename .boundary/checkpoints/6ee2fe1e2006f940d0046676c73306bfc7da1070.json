@@ -225,12 +225,10 @@
     {
       "description": "Safe semantic documents, inline spans, headings, facts, lists, literals and separators",
       "documentation": [
-        "https://github.com/mothx9/replai/blob/b9581102220364b94d2bcdef49f602308d24e6c9/docs/presentation.md#structured-documents-and-semantic-ownership",
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
+        "https://github.com/mothx9/replai/blob/b9581102220364b94d2bcdef49f602308d24e6c9/docs/presentation.md#structured-documents-and-semantic-ownership"
       ],
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34251543122",
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
+        "https://github.com/mothx9/replai/actions/runs/34251543122"
       ],
       "guarantees": [
         "Document::render/write_to work without an editor; Interaction::output_document coordinates an active POSIX draft",
@@ -245,19 +243,16 @@
         "windows"
       ],
       "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
+        "rust-native"
       ]
     },
     {
       "description": "Responsive line-oriented tables over safe structured text",
       "documentation": [
-        "https://github.com/mothx9/replai/blob/b9581102220364b94d2bcdef49f602308d24e6c9/docs/presentation.md#structured-documents-and-semantic-ownership",
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
+        "https://github.com/mothx9/replai/blob/b9581102220364b94d2bcdef49f602308d24e6c9/docs/presentation.md#structured-documents-and-semantic-ownership"
       ],
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34251543122",
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
+        "https://github.com/mothx9/replai/actions/runs/34251543122"
       ],
       "guarantees": [
         "Unicode cell alignment, bounded column shrinking and multiline cells",
@@ -271,19 +266,16 @@
         "windows"
       ],
       "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
+        "rust-native"
       ]
     },
     {
       "description": "Generic severity notices with explicit non-color markers",
       "documentation": [
-        "https://github.com/mothx9/replai/blob/b9581102220364b94d2bcdef49f602308d24e6c9/docs/presentation.md#structured-documents-and-semantic-ownership",
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
+        "https://github.com/mothx9/replai/blob/b9581102220364b94d2bcdef49f602308d24e6c9/docs/presentation.md#structured-documents-and-semantic-ownership"
       ],
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34251543122",
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
+        "https://github.com/mothx9/replai/actions/runs/34251543122"
       ],
       "guarantees": [
         "Info, success, warning and error remain distinct without color",
@@ -297,19 +289,16 @@
         "windows"
       ],
       "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
+        "rust-native"
       ]
     },
     {
       "description": "Ordered safe styled segments for primary and continuation prompts",
       "documentation": [
-        "https://github.com/mothx9/replai/blob/b9581102220364b94d2bcdef49f602308d24e6c9/docs/presentation.md#theme-and-prompt-composition",
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
+        "https://github.com/mothx9/replai/blob/b9581102220364b94d2bcdef49f602308d24e6c9/docs/presentation.md#theme-and-prompt-composition"
       ],
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34251543122",
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
+        "https://github.com/mothx9/replai/actions/runs/34251543122"
       ],
       "guarantees": [
         "Prompt::composed and with_continuation_text share Text/Span geometry",
@@ -323,19 +312,16 @@
         "windows"
       ],
       "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
+        "rust-native"
       ]
     },
     {
       "description": "Explicit role-to-foreground/emphasis mapping",
       "documentation": [
-        "https://github.com/mothx9/replai/blob/b9581102220364b94d2bcdef49f602308d24e6c9/docs/presentation.md#theme-and-prompt-composition",
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
+        "https://github.com/mothx9/replai/blob/b9581102220364b94d2bcdef49f602308d24e6c9/docs/presentation.md#theme-and-prompt-composition"
       ],
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34251543122",
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
+        "https://github.com/mothx9/replai/actions/runs/34251543122"
       ],
       "guarantees": [
         "Style and Foreground accept no terminal escapes; default background is retained",
@@ -350,8 +336,7 @@
         "windows"
       ],
       "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
+        "rust-native"
       ]
     },
     {
@@ -406,13 +391,11 @@
     {
       "description": "Externally scheduled input, opaque deadlines and resize over one engine",
       "documentation": [
-        "https://github.com/mothx9/replai/blob/3c0b14162cd322017bb718b71cc4b433c6100476/docs/interaction.md",
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
+        "https://github.com/mothx9/replai/blob/3c0b14162cd322017bb718b71cc4b433c6100476/docs/interaction.md"
       ],
       "evidence": [
         "https://github.com/mothx9/replai/actions/runs/34494834221",
-        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md",
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
+        "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md"
       ],
       "guarantees": [
         "No periodic library wake when idle without a deadline; no blocking input-ready advancement",
@@ -427,19 +410,16 @@
         "macos"
       ],
       "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
+        "rust-native"
       ]
     },
     {
       "description": "Borrowed native readiness with portable scheduling vocabulary",
       "documentation": [
-        "https://github.com/mothx9/replai/blob/3c0b14162cd322017bb718b71cc4b433c6100476/docs/interaction.md",
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
+        "https://github.com/mothx9/replai/blob/3c0b14162cd322017bb718b71cc4b433c6100476/docs/interaction.md"
       ],
       "evidence": [
-        "https://github.com/mothx9/replai/actions/runs/34353630259",
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
+        "https://github.com/mothx9/replai/actions/runs/34353630259"
       ],
       "guarantees": [
         "Linux/macOS input source is borrowed and cannot transfer resource/restoration ownership",
@@ -452,8 +432,7 @@
         "macos"
       ],
       "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
+        "rust-native"
       ]
     },
     {
@@ -511,13 +490,11 @@
     {
       "description": "Public deterministic display-cell policy over the shared presentation implementation",
       "documentation": [
-        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/presentation.md#display-width-contract",
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/presentation.md#display-width-contract"
       ],
       "evidence": [
         "https://github.com/mothx9/replai/actions/runs/34370575960",
-        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md",
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
+        "https://github.com/mothx9/replai/blob/36fefcaebba8489d672eb1c5c2b4f5cb1d939d86/docs/engineering/terminal-capabilities.md"
       ],
       "guarantees": [
         "UnicodeNarrow preserves the qualified unicode-width non-CJK policy for safe single-line text",
@@ -532,23 +509,20 @@
         "windows"
       ],
       "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
+        "rust-native"
       ]
     },
     {
       "description": "Immutable revision-identified draft snapshots and atomic stale-result refusal",
       "documentation": [
-        "https://github.com/mothx9/replai/blob/aa137e881065f0a0615fa8ae03c84c89f052bea3/docs/interaction.md#revision-aware-host-analysis",
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
+        "https://github.com/mothx9/replai/blob/aa137e881065f0a0615fa8ae03c84c89f052bea3/docs/interaction.md#revision-aware-host-analysis"
       ],
       "evidence": [
         "https://github.com/mothx9/replai/actions/runs/34475749705",
         "https://github.com/mothx9/replai/blob/aa137e881065f0a0615fa8ae03c84c89f052bea3/docs/engineering/analysis-protocol.md",
         "https://github.com/mothx9/replai/actions/runs/34703095088",
         "https://github.com/mothx9/replai/actions/runs/34703089136",
-        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md",
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
+        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
       ],
       "guarantees": [
         "One opaque identity scoped to the originating retained Editor; successful text/cursor changes advance, no-ops and rejected edits do not",
@@ -566,8 +540,7 @@
         "windows"
       ],
       "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
+        "rust-native"
       ]
     },
     {
@@ -575,16 +548,14 @@
       "documentation": [
         "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/interaction.md#revision-bound-completion-candidates",
         "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/presentation.md#completion-surface",
-        "https://github.com/mothx9/replai/blob/6ee2fe1e2006f940d0046676c73306bfc7da1070/docs/interaction.md#large-completion-navigation",
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
+        "https://github.com/mothx9/replai/blob/6ee2fe1e2006f940d0046676c73306bfc7da1070/docs/interaction.md#large-completion-navigation"
       ],
       "evidence": [
         "https://github.com/mothx9/replai/actions/runs/34485342480",
         "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/engineering/completion-contract.md",
         "https://github.com/mothx9/replai/actions/runs/34772036277",
         "https://github.com/mothx9/replai/actions/runs/34772036424",
-        "https://github.com/mothx9/replai/blob/6ee2fe1e2006f940d0046676c73306bfc7da1070/docs/engineering/completion-keymap-suggestion.md",
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
+        "https://github.com/mothx9/replai/blob/6ee2fe1e2006f940d0046676c73306bfc7da1070/docs/engineering/completion-keymap-suggestion.md"
       ],
       "guarantees": [
         "Hosts own discovery, order, ranking, application context and scheduling; no callback or executor is acquired",
@@ -603,21 +574,18 @@
         "windows"
       ],
       "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
+        "rust-native"
       ]
     },
     {
       "description": "Safe responsive temporary candidate selection through the shared renderer",
       "documentation": [
         "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/interaction.md#revision-bound-completion-candidates",
-        "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/presentation.md#completion-surface",
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
+        "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/presentation.md#completion-surface"
       ],
       "evidence": [
         "https://github.com/mothx9/replai/actions/runs/34485342480",
-        "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/engineering/completion-contract.md",
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
+        "https://github.com/mothx9/replai/blob/0fef74edd5d4d6d536560036473980a41e1da3f3/docs/engineering/completion-contract.md"
       ],
       "guarantees": [
         "Nonempty sets require explicit acceptance; zero candidates silently dismiss; selection never previews by mutating the draft",
@@ -635,8 +603,7 @@
         "windows"
       ],
       "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
+        "rust-native"
       ]
     },
     {
@@ -932,847 +899,37 @@
       "surfaces": [
         "rust-native"
       ]
-    },
-    {
-      "description": "Optional bounded C semantic presentation extension alongside unchanged ABI 1",
-      "documentation": [
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
-      ],
-      "evidence": [
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
-      ],
-      "guarantees": [
-        "Explicit extension size/version/reserved-zero records; borrowed input, caller-owned output",
-        "Existing ABI 1 layouts and meanings unchanged; no private Rust layouts or allocator ownership escape"
-      ],
-      "id": "abi.c.presentation_v1",
-      "maturity": "experimental",
-      "platforms": [
-        "linux"
-      ],
-      "surfaces": [
-        "c-presentation-v1"
-      ]
-    },
-    {
-      "description": "Exclusive quiet output lifetime with replaceable feedback and exact restoration",
-      "documentation": [
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
-      ],
-      "evidence": [
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
-      ],
-      "guarantees": [
-        "Same terminal lease as editing; echo suppression preserves ISIG and canonical input",
-        "Host owns line boundaries, clear-before-write, signal meaning and explicit input discard; no concurrent arbitration"
-      ],
-      "id": "presentation.quiet_output",
-      "maturity": "experimental",
-      "platforms": [
-        "linux"
-      ],
-      "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
-      ]
     }
   ],
   "changes": [
     {
-      "capability": "presentation.structured_output",
-      "compatibility": "compatible",
-      "description": "Safe semantic documents, inline spans, headings, facts, lists, literals and separators; bounded native C projection, checked document accounting and provisional ESC presentation; no ABI 1 or decoder-deadline change",
-      "evidence": [
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
-      ],
-      "inputs": [
-        ".github/workflows/ci.yml",
-        ".github/workflows/packaging.yml",
-        "CHANGELOG.md",
-        "CONTRIBUTING.md",
-        "LICENSE",
-        "README.md",
-        "ROADMAP.md",
-        "api/c-abi.json",
-        "crates/replai-c/examples/layout.rs",
-        "crates/replai-c/src/abi.rs",
-        "crates/replai-c/src/lib.rs",
-        "crates/replai-c/src/presentation.rs",
-        "crates/replai-c/src/signatures.rs",
-        "docs/README.md",
-        "docs/architecture.md",
-        "docs/c-api.md",
-        "docs/c-sdk.md",
-        "docs/engineering/c-presentation.md",
-        "docs/presentation.md",
-        "docs/release-scope.md",
-        "include/replai.h",
-        "src/conformance.rs",
-        "src/document.rs",
-        "src/engine.rs",
-        "src/input.rs",
-        "src/lib.rs",
-        "src/output.rs",
-        "src/system.rs",
-        "src/terminal.rs",
-        "tests/c/layout.c",
-        "tests/c/presentation.c",
-        "tests/document.rs",
-        "tests/pty.rs",
-        "tools/check_version.py",
-        "tools/distribution_legal.py",
-        "tools/distribution_policy.json",
-        "tools/generate_abi.py",
-        "tools/package_sdk.py",
-        "tools/qualify_c.py",
-        "tools/qualify_packaging.py",
-        "tools/test_check_docs.py",
-        "tools/test_check_version.py",
-        "tools/test_distribution_legal.py"
-      ],
-      "kind": "BEHAVIOR_CHANGED",
-      "platforms": [
-        "linux"
-      ],
-      "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
-      ]
-    },
-    {
-      "capability": "presentation.table",
-      "compatibility": "compatible",
-      "description": "Responsive line-oriented tables over safe structured text; bounded native C projection, checked document accounting and provisional ESC presentation; no ABI 1 or decoder-deadline change",
-      "evidence": [
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
-      ],
-      "inputs": [
-        ".github/workflows/ci.yml",
-        ".github/workflows/packaging.yml",
-        "CHANGELOG.md",
-        "CONTRIBUTING.md",
-        "LICENSE",
-        "README.md",
-        "ROADMAP.md",
-        "api/c-abi.json",
-        "crates/replai-c/examples/layout.rs",
-        "crates/replai-c/src/abi.rs",
-        "crates/replai-c/src/lib.rs",
-        "crates/replai-c/src/presentation.rs",
-        "crates/replai-c/src/signatures.rs",
-        "docs/README.md",
-        "docs/architecture.md",
-        "docs/c-api.md",
-        "docs/c-sdk.md",
-        "docs/engineering/c-presentation.md",
-        "docs/presentation.md",
-        "docs/release-scope.md",
-        "include/replai.h",
-        "src/conformance.rs",
-        "src/document.rs",
-        "src/engine.rs",
-        "src/input.rs",
-        "src/lib.rs",
-        "src/output.rs",
-        "src/system.rs",
-        "src/terminal.rs",
-        "tests/c/layout.c",
-        "tests/c/presentation.c",
-        "tests/document.rs",
-        "tests/pty.rs",
-        "tools/check_version.py",
-        "tools/distribution_legal.py",
-        "tools/distribution_policy.json",
-        "tools/generate_abi.py",
-        "tools/package_sdk.py",
-        "tools/qualify_c.py",
-        "tools/qualify_packaging.py",
-        "tools/test_check_docs.py",
-        "tools/test_check_version.py",
-        "tools/test_distribution_legal.py"
-      ],
-      "kind": "BEHAVIOR_CHANGED",
-      "platforms": [
-        "linux"
-      ],
-      "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
-      ]
-    },
-    {
-      "capability": "presentation.status",
-      "compatibility": "compatible",
-      "description": "Generic severity notices with explicit non-color markers; bounded native C projection, checked document accounting and provisional ESC presentation; no ABI 1 or decoder-deadline change",
-      "evidence": [
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
-      ],
-      "inputs": [
-        ".github/workflows/ci.yml",
-        ".github/workflows/packaging.yml",
-        "CHANGELOG.md",
-        "CONTRIBUTING.md",
-        "LICENSE",
-        "README.md",
-        "ROADMAP.md",
-        "api/c-abi.json",
-        "crates/replai-c/examples/layout.rs",
-        "crates/replai-c/src/abi.rs",
-        "crates/replai-c/src/lib.rs",
-        "crates/replai-c/src/presentation.rs",
-        "crates/replai-c/src/signatures.rs",
-        "docs/README.md",
-        "docs/architecture.md",
-        "docs/c-api.md",
-        "docs/c-sdk.md",
-        "docs/engineering/c-presentation.md",
-        "docs/presentation.md",
-        "docs/release-scope.md",
-        "include/replai.h",
-        "src/conformance.rs",
-        "src/document.rs",
-        "src/engine.rs",
-        "src/input.rs",
-        "src/lib.rs",
-        "src/output.rs",
-        "src/system.rs",
-        "src/terminal.rs",
-        "tests/c/layout.c",
-        "tests/c/presentation.c",
-        "tests/document.rs",
-        "tests/pty.rs",
-        "tools/check_version.py",
-        "tools/distribution_legal.py",
-        "tools/distribution_policy.json",
-        "tools/generate_abi.py",
-        "tools/package_sdk.py",
-        "tools/qualify_c.py",
-        "tools/qualify_packaging.py",
-        "tools/test_check_docs.py",
-        "tools/test_check_version.py",
-        "tools/test_distribution_legal.py"
-      ],
-      "kind": "BEHAVIOR_CHANGED",
-      "platforms": [
-        "linux"
-      ],
-      "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
-      ]
-    },
-    {
-      "capability": "presentation.composed_prompt",
-      "compatibility": "compatible",
-      "description": "Ordered safe styled segments for primary and continuation prompts; bounded native C projection, checked document accounting and provisional ESC presentation; no ABI 1 or decoder-deadline change",
-      "evidence": [
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
-      ],
-      "inputs": [
-        ".github/workflows/ci.yml",
-        ".github/workflows/packaging.yml",
-        "CHANGELOG.md",
-        "CONTRIBUTING.md",
-        "LICENSE",
-        "README.md",
-        "ROADMAP.md",
-        "api/c-abi.json",
-        "crates/replai-c/examples/layout.rs",
-        "crates/replai-c/src/abi.rs",
-        "crates/replai-c/src/lib.rs",
-        "crates/replai-c/src/presentation.rs",
-        "crates/replai-c/src/signatures.rs",
-        "docs/README.md",
-        "docs/architecture.md",
-        "docs/c-api.md",
-        "docs/c-sdk.md",
-        "docs/engineering/c-presentation.md",
-        "docs/presentation.md",
-        "docs/release-scope.md",
-        "include/replai.h",
-        "src/conformance.rs",
-        "src/document.rs",
-        "src/engine.rs",
-        "src/input.rs",
-        "src/lib.rs",
-        "src/output.rs",
-        "src/system.rs",
-        "src/terminal.rs",
-        "tests/c/layout.c",
-        "tests/c/presentation.c",
-        "tests/document.rs",
-        "tests/pty.rs",
-        "tools/check_version.py",
-        "tools/distribution_legal.py",
-        "tools/distribution_policy.json",
-        "tools/generate_abi.py",
-        "tools/package_sdk.py",
-        "tools/qualify_c.py",
-        "tools/qualify_packaging.py",
-        "tools/test_check_docs.py",
-        "tools/test_check_version.py",
-        "tools/test_distribution_legal.py"
-      ],
-      "kind": "BEHAVIOR_CHANGED",
-      "platforms": [
-        "linux"
-      ],
-      "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
-      ]
-    },
-    {
-      "capability": "presentation.theme",
-      "compatibility": "compatible",
-      "description": "Explicit role-to-foreground/emphasis mapping; bounded native C projection, checked document accounting and provisional ESC presentation; no ABI 1 or decoder-deadline change",
-      "evidence": [
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
-      ],
-      "inputs": [
-        ".github/workflows/ci.yml",
-        ".github/workflows/packaging.yml",
-        "CHANGELOG.md",
-        "CONTRIBUTING.md",
-        "LICENSE",
-        "README.md",
-        "ROADMAP.md",
-        "api/c-abi.json",
-        "crates/replai-c/examples/layout.rs",
-        "crates/replai-c/src/abi.rs",
-        "crates/replai-c/src/lib.rs",
-        "crates/replai-c/src/presentation.rs",
-        "crates/replai-c/src/signatures.rs",
-        "docs/README.md",
-        "docs/architecture.md",
-        "docs/c-api.md",
-        "docs/c-sdk.md",
-        "docs/engineering/c-presentation.md",
-        "docs/presentation.md",
-        "docs/release-scope.md",
-        "include/replai.h",
-        "src/conformance.rs",
-        "src/document.rs",
-        "src/engine.rs",
-        "src/input.rs",
-        "src/lib.rs",
-        "src/output.rs",
-        "src/system.rs",
-        "src/terminal.rs",
-        "tests/c/layout.c",
-        "tests/c/presentation.c",
-        "tests/document.rs",
-        "tests/pty.rs",
-        "tools/check_version.py",
-        "tools/distribution_legal.py",
-        "tools/distribution_policy.json",
-        "tools/generate_abi.py",
-        "tools/package_sdk.py",
-        "tools/qualify_c.py",
-        "tools/qualify_packaging.py",
-        "tools/test_check_docs.py",
-        "tools/test_check_version.py",
-        "tools/test_distribution_legal.py"
-      ],
-      "kind": "BEHAVIOR_CHANGED",
-      "platforms": [
-        "linux"
-      ],
-      "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
-      ]
-    },
-    {
-      "capability": "embedding.driven",
-      "compatibility": "compatible",
-      "description": "Externally scheduled input, opaque deadlines and resize over one engine; bounded native C projection, checked document accounting and provisional ESC presentation; no ABI 1 or decoder-deadline change",
-      "evidence": [
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
-      ],
-      "inputs": [
-        ".github/workflows/ci.yml",
-        ".github/workflows/packaging.yml",
-        "CHANGELOG.md",
-        "CONTRIBUTING.md",
-        "LICENSE",
-        "README.md",
-        "ROADMAP.md",
-        "api/c-abi.json",
-        "crates/replai-c/examples/layout.rs",
-        "crates/replai-c/src/abi.rs",
-        "crates/replai-c/src/lib.rs",
-        "crates/replai-c/src/presentation.rs",
-        "crates/replai-c/src/signatures.rs",
-        "docs/README.md",
-        "docs/architecture.md",
-        "docs/c-api.md",
-        "docs/c-sdk.md",
-        "docs/engineering/c-presentation.md",
-        "docs/presentation.md",
-        "docs/release-scope.md",
-        "include/replai.h",
-        "src/conformance.rs",
-        "src/document.rs",
-        "src/engine.rs",
-        "src/input.rs",
-        "src/lib.rs",
-        "src/output.rs",
-        "src/system.rs",
-        "src/terminal.rs",
-        "tests/c/layout.c",
-        "tests/c/presentation.c",
-        "tests/document.rs",
-        "tests/pty.rs",
-        "tools/check_version.py",
-        "tools/distribution_legal.py",
-        "tools/distribution_policy.json",
-        "tools/generate_abi.py",
-        "tools/package_sdk.py",
-        "tools/qualify_c.py",
-        "tools/qualify_packaging.py",
-        "tools/test_check_docs.py",
-        "tools/test_check_version.py",
-        "tools/test_distribution_legal.py"
-      ],
-      "kind": "BEHAVIOR_CHANGED",
-      "platforms": [
-        "linux"
-      ],
-      "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
-      ]
-    },
-    {
-      "capability": "embedding.readiness",
-      "compatibility": "compatible",
-      "description": "Borrowed native readiness with portable scheduling vocabulary; bounded native C projection, checked document accounting and provisional ESC presentation; no ABI 1 or decoder-deadline change",
-      "evidence": [
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
-      ],
-      "inputs": [
-        ".github/workflows/ci.yml",
-        ".github/workflows/packaging.yml",
-        "CHANGELOG.md",
-        "CONTRIBUTING.md",
-        "LICENSE",
-        "README.md",
-        "ROADMAP.md",
-        "api/c-abi.json",
-        "crates/replai-c/examples/layout.rs",
-        "crates/replai-c/src/abi.rs",
-        "crates/replai-c/src/lib.rs",
-        "crates/replai-c/src/presentation.rs",
-        "crates/replai-c/src/signatures.rs",
-        "docs/README.md",
-        "docs/architecture.md",
-        "docs/c-api.md",
-        "docs/c-sdk.md",
-        "docs/engineering/c-presentation.md",
-        "docs/presentation.md",
-        "docs/release-scope.md",
-        "include/replai.h",
-        "src/conformance.rs",
-        "src/document.rs",
-        "src/engine.rs",
-        "src/input.rs",
-        "src/lib.rs",
-        "src/output.rs",
-        "src/system.rs",
-        "src/terminal.rs",
-        "tests/c/layout.c",
-        "tests/c/presentation.c",
-        "tests/document.rs",
-        "tests/pty.rs",
-        "tools/check_version.py",
-        "tools/distribution_legal.py",
-        "tools/distribution_policy.json",
-        "tools/generate_abi.py",
-        "tools/package_sdk.py",
-        "tools/qualify_c.py",
-        "tools/qualify_packaging.py",
-        "tools/test_check_docs.py",
-        "tools/test_check_version.py",
-        "tools/test_distribution_legal.py"
-      ],
-      "kind": "BEHAVIOR_CHANGED",
-      "platforms": [
-        "linux"
-      ],
-      "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
-      ]
-    },
-    {
-      "capability": "terminal.width_policy",
-      "compatibility": "compatible",
-      "description": "Public deterministic display-cell policy over the shared presentation implementation; bounded native C projection, checked document accounting and provisional ESC presentation; no ABI 1 or decoder-deadline change",
-      "evidence": [
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
-      ],
-      "inputs": [
-        ".github/workflows/ci.yml",
-        ".github/workflows/packaging.yml",
-        "CHANGELOG.md",
-        "CONTRIBUTING.md",
-        "LICENSE",
-        "README.md",
-        "ROADMAP.md",
-        "api/c-abi.json",
-        "crates/replai-c/examples/layout.rs",
-        "crates/replai-c/src/abi.rs",
-        "crates/replai-c/src/lib.rs",
-        "crates/replai-c/src/presentation.rs",
-        "crates/replai-c/src/signatures.rs",
-        "docs/README.md",
-        "docs/architecture.md",
-        "docs/c-api.md",
-        "docs/c-sdk.md",
-        "docs/engineering/c-presentation.md",
-        "docs/presentation.md",
-        "docs/release-scope.md",
-        "include/replai.h",
-        "src/conformance.rs",
-        "src/document.rs",
-        "src/engine.rs",
-        "src/input.rs",
-        "src/lib.rs",
-        "src/output.rs",
-        "src/system.rs",
-        "src/terminal.rs",
-        "tests/c/layout.c",
-        "tests/c/presentation.c",
-        "tests/document.rs",
-        "tests/pty.rs",
-        "tools/check_version.py",
-        "tools/distribution_legal.py",
-        "tools/distribution_policy.json",
-        "tools/generate_abi.py",
-        "tools/package_sdk.py",
-        "tools/qualify_c.py",
-        "tools/qualify_packaging.py",
-        "tools/test_check_docs.py",
-        "tools/test_check_version.py",
-        "tools/test_distribution_legal.py"
-      ],
-      "kind": "BEHAVIOR_CHANGED",
-      "platforms": [
-        "linux"
-      ],
-      "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
-      ]
-    },
-    {
-      "capability": "analysis.revisions",
-      "compatibility": "compatible",
-      "description": "Immutable revision-identified draft snapshots and atomic stale-result refusal; bounded native C projection, checked document accounting and provisional ESC presentation; no ABI 1 or decoder-deadline change",
-      "evidence": [
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
-      ],
-      "inputs": [
-        ".github/workflows/ci.yml",
-        ".github/workflows/packaging.yml",
-        "CHANGELOG.md",
-        "CONTRIBUTING.md",
-        "LICENSE",
-        "README.md",
-        "ROADMAP.md",
-        "api/c-abi.json",
-        "crates/replai-c/examples/layout.rs",
-        "crates/replai-c/src/abi.rs",
-        "crates/replai-c/src/lib.rs",
-        "crates/replai-c/src/presentation.rs",
-        "crates/replai-c/src/signatures.rs",
-        "docs/README.md",
-        "docs/architecture.md",
-        "docs/c-api.md",
-        "docs/c-sdk.md",
-        "docs/engineering/c-presentation.md",
-        "docs/presentation.md",
-        "docs/release-scope.md",
-        "include/replai.h",
-        "src/conformance.rs",
-        "src/document.rs",
-        "src/engine.rs",
-        "src/input.rs",
-        "src/lib.rs",
-        "src/output.rs",
-        "src/system.rs",
-        "src/terminal.rs",
-        "tests/c/layout.c",
-        "tests/c/presentation.c",
-        "tests/document.rs",
-        "tests/pty.rs",
-        "tools/check_version.py",
-        "tools/distribution_legal.py",
-        "tools/distribution_policy.json",
-        "tools/generate_abi.py",
-        "tools/package_sdk.py",
-        "tools/qualify_c.py",
-        "tools/qualify_packaging.py",
-        "tools/test_check_docs.py",
-        "tools/test_check_version.py",
-        "tools/test_distribution_legal.py"
-      ],
-      "kind": "BEHAVIOR_CHANGED",
-      "platforms": [
-        "linux"
-      ],
-      "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
-      ]
-    },
-    {
       "capability": "completion.candidates",
-      "compatibility": "compatible",
-      "description": "Bounded host-ordered revision-bound completion candidates; bounded native C projection, checked document accounting and provisional ESC presentation; no ABI 1 or decoder-deadline change",
+      "compatibility": "breaking",
+      "description": "Rust source compatibility: public exhaustive CompletionAction gains PageNext, PagePrevious, First and Last. Downstream exhaustive matches need four arms; existing variants and C ABI 1 are unchanged.",
       "evidence": [
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
+        "https://github.com/mothx9/replai/actions/runs/34772036277",
+        "https://github.com/mothx9/replai/actions/runs/34772036424",
+        "https://github.com/mothx9/replai/blob/6ee2fe1e2006f940d0046676c73306bfc7da1070/docs/engineering/completion-keymap-suggestion.md"
       ],
       "inputs": [
-        ".github/workflows/ci.yml",
-        ".github/workflows/packaging.yml",
         "CHANGELOG.md",
-        "CONTRIBUTING.md",
-        "LICENSE",
-        "README.md",
-        "ROADMAP.md",
-        "api/c-abi.json",
-        "crates/replai-c/examples/layout.rs",
-        "crates/replai-c/src/abi.rs",
-        "crates/replai-c/src/lib.rs",
-        "crates/replai-c/src/presentation.rs",
-        "crates/replai-c/src/signatures.rs",
-        "docs/README.md",
-        "docs/architecture.md",
-        "docs/c-api.md",
-        "docs/c-sdk.md",
-        "docs/engineering/c-presentation.md",
-        "docs/presentation.md",
-        "docs/release-scope.md",
-        "include/replai.h",
-        "src/conformance.rs",
-        "src/document.rs",
-        "src/engine.rs",
-        "src/input.rs",
-        "src/lib.rs",
-        "src/output.rs",
-        "src/system.rs",
-        "src/terminal.rs",
-        "tests/c/layout.c",
-        "tests/c/presentation.c",
-        "tests/document.rs",
-        "tests/pty.rs",
-        "tools/check_version.py",
-        "tools/distribution_legal.py",
-        "tools/distribution_policy.json",
-        "tools/generate_abi.py",
-        "tools/package_sdk.py",
-        "tools/qualify_c.py",
-        "tools/qualify_packaging.py",
-        "tools/test_check_docs.py",
-        "tools/test_check_version.py",
-        "tools/test_distribution_legal.py"
+        "docs/engineering/completion-keymap-suggestion.md",
+        "docs/interaction.md",
+        "src/completion.rs"
       ],
-      "kind": "BEHAVIOR_CHANGED",
+      "kind": "BREAKING",
       "platforms": [
-        "linux"
+        "linux",
+        "macos",
+        "windows"
       ],
       "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
-      ]
-    },
-    {
-      "capability": "presentation.completion_ux",
-      "compatibility": "compatible",
-      "description": "Safe responsive temporary candidate selection through the shared renderer; bounded native C projection, checked document accounting and provisional ESC presentation; no ABI 1 or decoder-deadline change",
-      "evidence": [
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
-      ],
-      "inputs": [
-        ".github/workflows/ci.yml",
-        ".github/workflows/packaging.yml",
-        "CHANGELOG.md",
-        "CONTRIBUTING.md",
-        "LICENSE",
-        "README.md",
-        "ROADMAP.md",
-        "api/c-abi.json",
-        "crates/replai-c/examples/layout.rs",
-        "crates/replai-c/src/abi.rs",
-        "crates/replai-c/src/lib.rs",
-        "crates/replai-c/src/presentation.rs",
-        "crates/replai-c/src/signatures.rs",
-        "docs/README.md",
-        "docs/architecture.md",
-        "docs/c-api.md",
-        "docs/c-sdk.md",
-        "docs/engineering/c-presentation.md",
-        "docs/presentation.md",
-        "docs/release-scope.md",
-        "include/replai.h",
-        "src/conformance.rs",
-        "src/document.rs",
-        "src/engine.rs",
-        "src/input.rs",
-        "src/lib.rs",
-        "src/output.rs",
-        "src/system.rs",
-        "src/terminal.rs",
-        "tests/c/layout.c",
-        "tests/c/presentation.c",
-        "tests/document.rs",
-        "tests/pty.rs",
-        "tools/check_version.py",
-        "tools/distribution_legal.py",
-        "tools/distribution_policy.json",
-        "tools/generate_abi.py",
-        "tools/package_sdk.py",
-        "tools/qualify_c.py",
-        "tools/qualify_packaging.py",
-        "tools/test_check_docs.py",
-        "tools/test_check_version.py",
-        "tools/test_distribution_legal.py"
-      ],
-      "kind": "BEHAVIOR_CHANGED",
-      "platforms": [
-        "linux"
-      ],
-      "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
-      ]
-    },
-    {
-      "capability": "abi.c.presentation_v1",
-      "compatibility": "compatible",
-      "description": "Optional bounded C semantic presentation extension alongside unchanged ABI 1; bounded native C projection, checked document accounting and provisional ESC presentation; no ABI 1 or decoder-deadline change",
-      "evidence": [
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
-      ],
-      "inputs": [
-        ".github/workflows/ci.yml",
-        ".github/workflows/packaging.yml",
-        "CHANGELOG.md",
-        "CONTRIBUTING.md",
-        "LICENSE",
-        "README.md",
-        "ROADMAP.md",
-        "api/c-abi.json",
-        "crates/replai-c/examples/layout.rs",
-        "crates/replai-c/src/abi.rs",
-        "crates/replai-c/src/lib.rs",
-        "crates/replai-c/src/presentation.rs",
-        "crates/replai-c/src/signatures.rs",
-        "docs/README.md",
-        "docs/architecture.md",
-        "docs/c-api.md",
-        "docs/c-sdk.md",
-        "docs/engineering/c-presentation.md",
-        "docs/presentation.md",
-        "docs/release-scope.md",
-        "include/replai.h",
-        "src/conformance.rs",
-        "src/document.rs",
-        "src/engine.rs",
-        "src/input.rs",
-        "src/lib.rs",
-        "src/output.rs",
-        "src/system.rs",
-        "src/terminal.rs",
-        "tests/c/layout.c",
-        "tests/c/presentation.c",
-        "tests/document.rs",
-        "tests/pty.rs",
-        "tools/check_version.py",
-        "tools/distribution_legal.py",
-        "tools/distribution_policy.json",
-        "tools/generate_abi.py",
-        "tools/package_sdk.py",
-        "tools/qualify_c.py",
-        "tools/qualify_packaging.py",
-        "tools/test_check_docs.py",
-        "tools/test_check_version.py",
-        "tools/test_distribution_legal.py"
-      ],
-      "kind": "ADDED",
-      "platforms": [
-        "linux"
-      ],
-      "surfaces": [
-        "c-presentation-v1"
-      ]
-    },
-    {
-      "capability": "presentation.quiet_output",
-      "compatibility": "compatible",
-      "description": "Exclusive quiet output lifetime with replaceable feedback and exact restoration; bounded native C projection, checked document accounting and provisional ESC presentation; no ABI 1 or decoder-deadline change",
-      "evidence": [
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
-      ],
-      "inputs": [
-        ".github/workflows/ci.yml",
-        ".github/workflows/packaging.yml",
-        "CHANGELOG.md",
-        "CONTRIBUTING.md",
-        "LICENSE",
-        "README.md",
-        "ROADMAP.md",
-        "api/c-abi.json",
-        "crates/replai-c/examples/layout.rs",
-        "crates/replai-c/src/abi.rs",
-        "crates/replai-c/src/lib.rs",
-        "crates/replai-c/src/presentation.rs",
-        "crates/replai-c/src/signatures.rs",
-        "docs/README.md",
-        "docs/architecture.md",
-        "docs/c-api.md",
-        "docs/c-sdk.md",
-        "docs/engineering/c-presentation.md",
-        "docs/presentation.md",
-        "docs/release-scope.md",
-        "include/replai.h",
-        "src/conformance.rs",
-        "src/document.rs",
-        "src/engine.rs",
-        "src/input.rs",
-        "src/lib.rs",
-        "src/output.rs",
-        "src/system.rs",
-        "src/terminal.rs",
-        "tests/c/layout.c",
-        "tests/c/presentation.c",
-        "tests/document.rs",
-        "tests/pty.rs",
-        "tools/check_version.py",
-        "tools/distribution_legal.py",
-        "tools/distribution_policy.json",
-        "tools/generate_abi.py",
-        "tools/package_sdk.py",
-        "tools/qualify_c.py",
-        "tools/qualify_packaging.py",
-        "tools/test_check_docs.py",
-        "tools/test_check_version.py",
-        "tools/test_distribution_legal.py"
-      ],
-      "kind": "ADDED",
-      "platforms": [
-        "linux"
-      ],
-      "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
+        "rust-native"
       ]
     }
   ],
-  "generation": 18,
-  "id": "sha256:9e519d4570c0f7c7b23b37faed4cf6cd2756336aedf2010ef81c5605a4def0fc",
+  "generation": 17,
+  "id": "sha256:4e53933540781fbdd19745a2fef74f54cb183506af4091f95ad08d5cc530a8c8",
   "inputs": [
     {
       "capabilities": [
@@ -1806,16 +963,14 @@
         "presentation.theme",
         "terminal.admission",
         "terminal.capability_snapshot",
-        "terminal.width_policy",
-        "abi.c.presentation_v1"
+        "terminal.width_policy"
       ],
       "category": "qualification",
       "path": ".github/workflows/ci.yml",
-      "sha256": "sha256:5cc912cde42ac7df65f1e24c6e115415c8a826183d6c2c338097d5bd503559e8",
+      "sha256": "sha256:0ac945e5feedd7460efebe76ad8eb4d4f04fc71339c88d6d210762177c61f4ce",
       "surfaces": [
         "c-abi-v1",
-        "rust-native",
-        "c-presentation-v1"
+        "rust-native"
       ]
     },
     {
@@ -1926,16 +1081,14 @@
         "abi.c.v1",
         "platform.portable_engine",
         "platform.posix_linux",
-        "platform.posix_macos",
-        "abi.c.presentation_v1"
+        "platform.posix_macos"
       ],
       "category": "qualification",
       "path": ".github/workflows/packaging.yml",
-      "sha256": "sha256:22afec9439649223880d753ff096f888b44125ff5a1276d07d34cb6aa79ab42e",
+      "sha256": "sha256:b651483276a05c26f05933ca84e5a793b1583a50932aa0a59882c30eac622b69",
       "surfaces": [
         "rust-native",
-        "c-abi-v1",
-        "c-presentation-v1"
+        "c-abi-v1"
       ]
     },
     {
@@ -1944,37 +1097,13 @@
         "completion.helpers",
         "completion.large_sets",
         "editing.keymap",
-        "suggestion.autosuggest",
-        "abi.c.presentation_v1"
+        "suggestion.autosuggest"
       ],
       "category": "documentation",
       "path": "CHANGELOG.md",
-      "sha256": "sha256:24a72a1c0979a967a0912a53756b2d9555d2a63977b3ec95d53aa2cb988a764e",
+      "sha256": "sha256:cf26ac0870ceb3fab08993f76b340b265c6060356c89eac1e6013c3b3de01cc9",
       "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
-      ]
-    },
-    {
-      "capabilities": [
-        "abi.c.presentation_v1"
-      ],
-      "category": "documentation",
-      "path": "CONTRIBUTING.md",
-      "sha256": "sha256:c42ecbb54d3ed72a1a8a933795aa0dca83174afdc389e5768d1b5a69ab038a3a",
-      "surfaces": [
-        "c-presentation-v1"
-      ]
-    },
-    {
-      "capabilities": [
-        "abi.c.presentation_v1"
-      ],
-      "category": "qualification",
-      "path": "LICENSE",
-      "sha256": "sha256:50ef3ef2aaef92126cefe693a3dcb3ea370390ea0f4e49a2ee2c6b361f42015a",
-      "surfaces": [
-        "c-presentation-v1"
+        "rust-native"
       ]
     },
     {
@@ -1982,15 +1111,13 @@
         "completion.helpers",
         "completion.large_sets",
         "editing.keymap",
-        "suggestion.autosuggest",
-        "abi.c.presentation_v1"
+        "suggestion.autosuggest"
       ],
       "category": "documentation",
       "path": "README.md",
-      "sha256": "sha256:276e2fef70a2ae65f34c6a57b412bac2e81bd6e2f1624e522fe33c61af022afe",
+      "sha256": "sha256:316658773355724d4b78083f0a359fe9b0e5fb086bea8f13b8fd2fa389b19d99",
       "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
+        "rust-native"
       ]
     },
     {
@@ -1998,28 +1125,24 @@
         "completion.helpers",
         "completion.large_sets",
         "editing.keymap",
-        "suggestion.autosuggest",
-        "abi.c.presentation_v1"
+        "suggestion.autosuggest"
       ],
       "category": "documentation",
       "path": "ROADMAP.md",
-      "sha256": "sha256:07b1be3462cf65db94b51a14c6a802ebc4753f55ee6385492a9ce2bdaa585b8a",
+      "sha256": "sha256:79ee14219ab0380a84bba3a785a6e91e2ee84dd1676dff0c40510d997c204f3a",
       "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
+        "rust-native"
       ]
     },
     {
       "capabilities": [
-        "abi.c.v1",
-        "abi.c.presentation_v1"
+        "abi.c.v1"
       ],
       "category": "abi",
       "path": "api/c-abi.json",
-      "sha256": "sha256:a7547f20532ef4e74a437c7dd6f5255fa83d0ab28c162a47df8d61bdfed0e9f6",
+      "sha256": "sha256:946189594ef5a57235c2d70580b1a95c6cb3fadecccf7b95f66b00c3f6cfab6b",
       "surfaces": [
-        "c-abi-v1",
-        "c-presentation-v1"
+        "c-abi-v1"
       ]
     },
     {
@@ -2068,71 +1191,14 @@
     },
     {
       "capabilities": [
-        "abi.c.presentation_v1"
-      ],
-      "category": "qualification",
-      "path": "crates/replai-c/examples/layout.rs",
-      "sha256": "sha256:7b8051565ac2849bce243ad5fcbdc7fb9ef13421f710a9eb96bb88c57e6bc0cc",
-      "surfaces": [
-        "c-presentation-v1"
-      ]
-    },
-    {
-      "capabilities": [
-        "abi.c.presentation_v1"
-      ],
-      "category": "behavior",
-      "path": "crates/replai-c/src/abi.rs",
-      "sha256": "sha256:eca4b6de227a9eba4eafa4ee789b77ada5013b1d70e63d4e102ba9050a326c18",
-      "surfaces": [
-        "c-presentation-v1"
-      ]
-    },
-    {
-      "capabilities": [
         "analysis.validation",
-        "presentation.multiline_ux",
-        "abi.c.presentation_v1"
+        "presentation.multiline_ux"
       ],
       "category": "qualification",
       "path": "crates/replai-c/src/lib.rs",
-      "sha256": "sha256:6eee08365a21141042c25df113a205dd8f2511d1dd911d4f6c9eb0107928e33d",
+      "sha256": "sha256:42f4d4f359e1a1bdba51a0f13d860da6b00c7232730c5554a1456c6baf4ebfc0",
       "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
-      ]
-    },
-    {
-      "capabilities": [
-        "abi.c.presentation_v1"
-      ],
-      "category": "behavior",
-      "path": "crates/replai-c/src/presentation.rs",
-      "sha256": "sha256:eff8e4c164efc1107e3355336c2eb99a7d1498f35d24e25b42ae112388f70488",
-      "surfaces": [
-        "c-presentation-v1"
-      ]
-    },
-    {
-      "capabilities": [
-        "abi.c.presentation_v1"
-      ],
-      "category": "behavior",
-      "path": "crates/replai-c/src/signatures.rs",
-      "sha256": "sha256:8029222ac1033e12d4f17ef3d276a305172498b647538a36136595ee1a056f03",
-      "surfaces": [
-        "c-presentation-v1"
-      ]
-    },
-    {
-      "capabilities": [
-        "abi.c.presentation_v1"
-      ],
-      "category": "documentation",
-      "path": "docs/README.md",
-      "sha256": "sha256:54c4cb23a025c5ca0a941b26daa7adbb7b94668b2f8d94cb4b4a1fde27d33f0e",
-      "surfaces": [
-        "c-presentation-v1"
+        "rust-native"
       ]
     },
     {
@@ -2164,41 +1230,35 @@
         "presentation.structured_output",
         "presentation.table",
         "presentation.theme",
-        "terminal.admission",
-        "abi.c.presentation_v1"
+        "terminal.admission"
       ],
       "category": "documentation",
       "path": "docs/architecture.md",
-      "sha256": "sha256:d5248ed490650c7fa12e78e8a89398902fa9b98731ad71657130d89c2fbc7532",
+      "sha256": "sha256:61e5c3f017f30ad70b432e8afbab6fecaf44509727d98c11f4cf2e6995075e07",
       "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
+        "rust-native"
       ]
     },
     {
       "capabilities": [
-        "abi.c.v1",
-        "abi.c.presentation_v1"
+        "abi.c.v1"
       ],
       "category": "documentation",
       "path": "docs/c-api.md",
-      "sha256": "sha256:8ca478d8e853d72d61b76b0092a4a2be412cfa20f8a1238b47631866047b2b9f",
+      "sha256": "sha256:968603ce477a42bbbd0b8ccd91232bbffb8202e06de8f98e23e23767bfa2a674",
       "surfaces": [
-        "c-abi-v1",
-        "c-presentation-v1"
+        "c-abi-v1"
       ]
     },
     {
       "capabilities": [
-        "abi.c.v1",
-        "abi.c.presentation_v1"
+        "abi.c.v1"
       ],
       "category": "documentation",
       "path": "docs/c-sdk.md",
-      "sha256": "sha256:5989517dcf3a8c1e7f5c383579ae066f69f71b8cb42edebcbc54104509d93c2d",
+      "sha256": "sha256:4e5213d0db7c945259cb840f6832cf7bb2d671f7695a8e8fe1c78a8de64995cc",
       "surfaces": [
-        "c-abi-v1",
-        "c-presentation-v1"
+        "c-abi-v1"
       ]
     },
     {
@@ -2221,17 +1281,6 @@
       "sha256": "sha256:0e3453c58f98ce172f33ecdd9d7ce239bee007762ea8f1b9134b0bde38b3adbd",
       "surfaces": [
         "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "abi.c.presentation_v1"
-      ],
-      "category": "documentation",
-      "path": "docs/engineering/c-presentation.md",
-      "sha256": "sha256:f3f30625f43f30656f852587c1e7c55b6052c8493531939d0fdedfe30c84c530",
-      "surfaces": [
-        "c-presentation-v1"
       ]
     },
     {
@@ -2423,15 +1472,13 @@
         "presentation.structured_output",
         "presentation.table",
         "presentation.theme",
-        "terminal.width_policy",
-        "abi.c.presentation_v1"
+        "terminal.width_policy"
       ],
       "category": "documentation",
       "path": "docs/presentation.md",
-      "sha256": "sha256:1152f340efab447d666a167f3a4099f8b7462f16ed4bc9db93c00b3f3e01a37c",
+      "sha256": "sha256:7a731996587e4e3dc6cec296b418b839e6dff760c918824cd1e12214b4c34deb",
       "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
+        "rust-native"
       ]
     },
     {
@@ -2439,15 +1486,13 @@
         "completion.helpers",
         "completion.large_sets",
         "editing.keymap",
-        "suggestion.autosuggest",
-        "abi.c.presentation_v1"
+        "suggestion.autosuggest"
       ],
       "category": "documentation",
       "path": "docs/release-scope.md",
-      "sha256": "sha256:54e7ccec0b66241b94d6a6505d1a64a2ce348e6968f5a210d11de0a2b33dbf3b",
+      "sha256": "sha256:178754851ffb0c1dfb4fe6d30762f4818b7e6999713ddbc0f520cbdacc3af29c",
       "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
+        "rust-native"
       ]
     },
     {
@@ -2664,15 +1709,13 @@
     },
     {
       "capabilities": [
-        "abi.c.v1",
-        "abi.c.presentation_v1"
+        "abi.c.v1"
       ],
       "category": "abi",
       "path": "include/replai.h",
-      "sha256": "sha256:23671d7f7afda723a63401fe3fe9172198e81df1f66eb711e87362483e74c201",
+      "sha256": "sha256:c0644f2d541e7537bc5c96f3d70679b2f2f18f7b89af513de96bda2e7cb49bf5",
       "surfaces": [
-        "c-abi-v1",
-        "c-presentation-v1"
+        "c-abi-v1"
       ]
     },
     {
@@ -2808,15 +1851,13 @@
         "interaction.editing",
         "presentation.completion_ux",
         "presentation.multiline_ux",
-        "terminal.admission",
-        "abi.c.presentation_v1"
+        "terminal.admission"
       ],
       "category": "qualification",
       "path": "src/conformance.rs",
-      "sha256": "sha256:3cad63721fab322bf9949230f97ec3184c549c014760853c417cb166ea7bf5cb",
+      "sha256": "sha256:bd89721bdb2f788724e34c5c8592d3684a851c38664c1b45305a59ce4d42137b",
       "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
+        "rust-native"
       ]
     },
     {
@@ -2853,15 +1894,13 @@
         "presentation.structured_output",
         "presentation.table",
         "presentation.theme",
-        "terminal.width_policy",
-        "abi.c.presentation_v1"
+        "terminal.width_policy"
       ],
       "category": "api",
       "path": "src/document.rs",
-      "sha256": "sha256:8b98f4a53a3349a647c9afcbdf518e88d905ee8d05f51a1fa0aa1137a6a9b943",
+      "sha256": "sha256:1245196c1c94872cdf1d416065689abef129dc2335854005994e879bc960251f",
       "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
+        "rust-native"
       ]
     },
     {
@@ -2907,15 +1946,13 @@
         "presentation.structured_output",
         "presentation.table",
         "presentation.theme",
-        "suggestion.autosuggest",
-        "abi.c.presentation_v1"
+        "suggestion.autosuggest"
       ],
       "category": "behavior",
       "path": "src/engine.rs",
-      "sha256": "sha256:611f2e3146a3f1d8587c54e03caaa3562e60d8a8eebdbfda72fa1928c711e539",
+      "sha256": "sha256:20b1fbe8c574daee70b527552ab9d96f54a5eb30fcbca4dcac0014a1e4b47732",
       "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
+        "rust-native"
       ]
     },
     {
@@ -2988,15 +2025,13 @@
         "platform.posix_linux",
         "platform.posix_macos",
         "presentation.completion_ux",
-        "presentation.prompt",
-        "abi.c.presentation_v1"
+        "presentation.prompt"
       ],
       "category": "behavior",
       "path": "src/input.rs",
-      "sha256": "sha256:0d6d06e7f2300035f583e08654b212a24d56c6fdac12f96d1745496f65f82ebe",
+      "sha256": "sha256:9440e29d021b320408772c0b45f0c0c4299f0bf91a492cf249e1ffc0453cb992",
       "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
+        "rust-native"
       ]
     },
     {
@@ -3100,26 +2135,13 @@
         "suggestion.autosuggest",
         "terminal.admission",
         "terminal.capability_snapshot",
-        "terminal.width_policy",
-        "abi.c.presentation_v1"
+        "terminal.width_policy"
       ],
       "category": "api",
       "path": "src/lib.rs",
-      "sha256": "sha256:97fe2eb25f36052c9bef95f0a559dda65c3f67cc314be149f2dc8197726d31f5",
+      "sha256": "sha256:e729ca26ea6d5dfbf7ce2c97a0f470076d1dcbecedd6e89b811da98c829313c4",
       "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
-      ]
-    },
-    {
-      "capabilities": [
-        "abi.c.presentation_v1"
-      ],
-      "category": "api",
-      "path": "src/output.rs",
-      "sha256": "sha256:46c883137fa7de46af5774d2db894c7ac425dd34b04b398ddc430584c715ec88",
-      "surfaces": [
-        "c-presentation-v1"
+        "rust-native"
       ]
     },
     {
@@ -3229,15 +2251,13 @@
         "platform.posix_linux",
         "platform.posix_macos",
         "presentation.prompt",
-        "terminal.admission",
-        "abi.c.presentation_v1"
+        "terminal.admission"
       ],
       "category": "behavior",
       "path": "src/system.rs",
-      "sha256": "sha256:b6e68fb4a8c3393ad4f156ca69510500dc5384d4b32942f5997e4e6ad5a79404",
+      "sha256": "sha256:c62f90d1f7f4636b93fe7cee796642b7d7c1d0ba47a4512b0a6f107a7f5c1416",
       "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
+        "rust-native"
       ]
     },
     {
@@ -3260,15 +2280,13 @@
         "presentation.structured_output",
         "presentation.table",
         "presentation.theme",
-        "terminal.admission",
-        "abi.c.presentation_v1"
+        "terminal.admission"
       ],
       "category": "behavior",
       "path": "src/terminal.rs",
-      "sha256": "sha256:ce7ee38ffecf6492f911f61b707cdbe1e70165a5c1f24cb2758cb665c299cd4f",
+      "sha256": "sha256:79dde61605b4226fe4a2638e9cd54c99c4cef3ea77e3fa88c63c2ab8e7f3af4a",
       "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
+        "rust-native"
       ]
     },
     {
@@ -3346,28 +2364,6 @@
     },
     {
       "capabilities": [
-        "abi.c.presentation_v1"
-      ],
-      "category": "qualification",
-      "path": "tests/c/layout.c",
-      "sha256": "sha256:ac769c2d7ff89b6ac7e7912a06650b514ff7acde49e9a020fba804e91bd21783",
-      "surfaces": [
-        "c-presentation-v1"
-      ]
-    },
-    {
-      "capabilities": [
-        "abi.c.presentation_v1"
-      ],
-      "category": "qualification",
-      "path": "tests/c/presentation.c",
-      "sha256": "sha256:f11a38881c4d202b1ac8790a7113eaff85adb899ab1f0c79fbb4b7f4c41c852d",
-      "surfaces": [
-        "c-presentation-v1"
-      ]
-    },
-    {
-      "capabilities": [
         "terminal.capability_snapshot"
       ],
       "category": "qualification",
@@ -3412,17 +2408,6 @@
       "sha256": "sha256:6dea25ebb4cde7896c015cc9b7a357ad678a5c0b5b592ba19e61a4441380e2d0",
       "surfaces": [
         "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "abi.c.presentation_v1"
-      ],
-      "category": "qualification",
-      "path": "tests/document.rs",
-      "sha256": "sha256:5299b1d8a6471e931cb4d25baf802d02af1a0ac8e38f8bacbdeb26acd49ab9df",
-      "surfaces": [
-        "c-presentation-v1"
       ]
     },
     {
@@ -3478,15 +2463,13 @@
         "interaction.history_search",
         "platform.posix_linux",
         "presentation.completion_ux",
-        "suggestion.autosuggest",
-        "abi.c.presentation_v1"
+        "suggestion.autosuggest"
       ],
       "category": "qualification",
       "path": "tests/pty.rs",
-      "sha256": "sha256:a025a5ce52eeadcd6adc0bc090e2906ae5dc31c178615486e2ae9b30779041bd",
+      "sha256": "sha256:51c0828ac6561f1ab54983bc0c370f8c54f10afb7e1ba0c4081569bc570de369",
       "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
+        "rust-native"
       ]
     },
     {
@@ -3533,17 +2516,6 @@
       "surfaces": [
         "rust-native",
         "c-abi-v1"
-      ]
-    },
-    {
-      "capabilities": [
-        "abi.c.presentation_v1"
-      ],
-      "category": "qualification",
-      "path": "tools/check_version.py",
-      "sha256": "sha256:d9fe0cfaa18c30a8fd600f7e74512c2be29a3405bf92715ad63d49ab964baaf9",
-      "surfaces": [
-        "c-presentation-v1"
       ]
     },
     {
@@ -3723,28 +2695,6 @@
       "sha256": "sha256:2746c223ea537e9615b8edf8f67bb34ac8ca6e17020ae151e8f4ded5e4416bfe",
       "surfaces": [
         "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "abi.c.presentation_v1"
-      ],
-      "category": "qualification",
-      "path": "tools/distribution_legal.py",
-      "sha256": "sha256:c50956afad957374cf81b68a0d8654fa0c83b502ad5a025ce3826db64d140651",
-      "surfaces": [
-        "c-presentation-v1"
-      ]
-    },
-    {
-      "capabilities": [
-        "abi.c.presentation_v1"
-      ],
-      "category": "qualification",
-      "path": "tools/distribution_policy.json",
-      "sha256": "sha256:418ce7402c987c3662757e1cfad3e7c52eb4957db23db3abdb8dbe3de8054958",
-      "surfaces": [
-        "c-presentation-v1"
       ]
     },
     {
@@ -3940,17 +2890,6 @@
       "sha256": "sha256:bf4ae3da47dd248360a69be8aa253024263dc2b9def271356d706d7314fb0412",
       "surfaces": [
         "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "abi.c.presentation_v1"
-      ],
-      "category": "qualification",
-      "path": "tools/generate_abi.py",
-      "sha256": "sha256:e437bc02b2d41d83aa9741cd3745ae8d47392154c28132d1dda9c8ca50d9424c",
-      "surfaces": [
-        "c-presentation-v1"
       ]
     },
     {
@@ -5236,15 +4175,13 @@
       "capabilities": [
         "abi.c.v1",
         "platform.posix_linux",
-        "platform.posix_macos",
-        "abi.c.presentation_v1"
+        "platform.posix_macos"
       ],
       "category": "qualification",
       "path": "tools/package_sdk.py",
-      "sha256": "sha256:f2ea4419c63b363df7bef2a16303c02cf81fd050992ed080fdb44de704bec29a",
+      "sha256": "sha256:f5f9851362b9464313b4e312aa8886f803fe684952c544ef66521693724db71c",
       "surfaces": [
-        "c-abi-v1",
-        "c-presentation-v1"
+        "c-abi-v1"
       ]
     },
     {
@@ -5365,15 +4302,13 @@
       "capabilities": [
         "abi.c.v1",
         "platform.posix_linux",
-        "platform.posix_macos",
-        "abi.c.presentation_v1"
+        "platform.posix_macos"
       ],
       "category": "qualification",
       "path": "tools/qualify_c.py",
-      "sha256": "sha256:96089d59cbf0df2ad524f77598a4e88496ae1f72ec7575c236924746483444ed",
+      "sha256": "sha256:2c0d18ec7d0e8e9e21200a4869f886a292b332045ba057a46432c50997183e23",
       "surfaces": [
-        "c-abi-v1",
-        "c-presentation-v1"
+        "c-abi-v1"
       ]
     },
     {
@@ -5382,16 +4317,14 @@
         "abi.c.v1",
         "platform.portable_engine",
         "platform.posix_linux",
-        "platform.posix_macos",
-        "abi.c.presentation_v1"
+        "platform.posix_macos"
       ],
       "category": "qualification",
       "path": "tools/qualify_packaging.py",
-      "sha256": "sha256:4fcec2533c82360d89fc62cf1e19ff856c274eec66761a78240ee33e014631ac",
+      "sha256": "sha256:a129adcd6650a48366215e746cbe7e2fb5c7e223c58d6b95c86f7fde9b326d26",
       "surfaces": [
         "rust-native",
-        "c-abi-v1",
-        "c-presentation-v1"
+        "c-abi-v1"
       ]
     },
     {
@@ -5446,26 +4379,13 @@
         "completion.helpers",
         "completion.large_sets",
         "editing.keymap",
-        "suggestion.autosuggest",
-        "abi.c.presentation_v1"
+        "suggestion.autosuggest"
       ],
       "category": "qualification",
       "path": "tools/test_check_docs.py",
-      "sha256": "sha256:48decee007050c21f11fdcc3f7f038519af85704750377b05ed247196178a6c2",
+      "sha256": "sha256:2a66dbc8476aed7d3902c63cf909bbf6db52e61f5fde5cf0db3befde5615727e",
       "surfaces": [
-        "rust-native",
-        "c-presentation-v1"
-      ]
-    },
-    {
-      "capabilities": [
-        "abi.c.presentation_v1"
-      ],
-      "category": "qualification",
-      "path": "tools/test_check_version.py",
-      "sha256": "sha256:952226c15c115b1f49ca5dc39084348fe7f3a3224597facaa35016ae30dc672f",
-      "surfaces": [
-        "c-presentation-v1"
+        "rust-native"
       ]
     },
     {
@@ -5478,17 +4398,6 @@
       "sha256": "sha256:b61b60787bcf46ff692eeaded9e4c32835aec49bef24225549da63f9f0be3f4b",
       "surfaces": [
         "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "abi.c.presentation_v1"
-      ],
-      "category": "qualification",
-      "path": "tools/test_distribution_legal.py",
-      "sha256": "sha256:37e88e6236fd8eb9b7ff35df31f8b87f45a8452e1d5e9fb2911247b6ee5815b5",
-      "surfaces": [
-        "c-presentation-v1"
       ]
     },
     {
@@ -5517,15 +4426,13 @@
         "https://github.com/mothx9/replai/actions/runs/34703089136",
         "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md",
         "https://github.com/mothx9/replai/actions/runs/34759347027",
-        "https://github.com/mothx9/replai/actions/runs/34759339446",
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
+        "https://github.com/mothx9/replai/actions/runs/34759339446"
       ],
       "id": "linux",
       "status": "runtime-qualified",
       "surfaces": [
         "rust-native",
-        "c-abi-v1",
-        "c-presentation-v1"
+        "c-abi-v1"
       ]
     },
     {
@@ -5566,17 +4473,17 @@
     }
   ],
   "predecessor": {
-    "contract_id": "sha256:4e53933540781fbdd19745a2fef74f54cb183506af4091f95ad08d5cc530a8c8",
+    "contract_id": "sha256:2bf87048c204a1584bfa9f068b5318f266cbca81160096bf9a8bda2487839bcf",
     "repository": "https://github.com/mothx9/replai",
-    "revision": "6ee2fe1e2006f940d0046676c73306bfc7da1070",
-    "tree": "afec2d649d50c1a46d897b6379687367732fd262"
+    "revision": "db4dff1dd1bd9bd1b15ac953efe2c894c51ed2fd",
+    "tree": "bce1603e1101c26164c799a5a2359c9549d7ef73"
   },
   "repository": "https://github.com/mothx9/replai",
   "schema_version": 1,
   "source": {
     "dirty": false,
-    "revision": "eb246d3fd81353fc3be27c8924ee2321067530bf",
-    "tree": "646b95bc5a2cc555f59d0c6a8067095588c40811"
+    "revision": "6ee2fe1e2006f940d0046676c73306bfc7da1070",
+    "tree": "afec2d649d50c1a46d897b6379687367732fd262"
   },
   "surfaces": [
     {
@@ -5593,14 +4500,6 @@
         "https://github.com/mothx9/replai/blob/6365f84e12865871bf26ecf0d984b48213d81ebc/docs/c-api.md"
       ],
       "id": "c-abi-v1",
-      "kind": "c-abi",
-      "version": "1"
-    },
-    {
-      "documentation": [
-        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
-      ],
-      "id": "c-presentation-v1",
       "kind": "c-abi",
       "version": "1"
     }
