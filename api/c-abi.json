@@ -144,6 +144,91 @@
       "REPLAI_ROLE_ERROR",
       "u32",
       6
+    ],
+    [
+      "REPLAI_PRESENTATION_VERSION",
+      "u32",
+      1
+    ],
+    [
+      "REPLAI_BLOCK_PARAGRAPH",
+      "u32",
+      0
+    ],
+    [
+      "REPLAI_BLOCK_HEADING",
+      "u32",
+      1
+    ],
+    [
+      "REPLAI_BLOCK_FIELD",
+      "u32",
+      2
+    ],
+    [
+      "REPLAI_BLOCK_LIST",
+      "u32",
+      3
+    ],
+    [
+      "REPLAI_BLOCK_LITERAL",
+      "u32",
+      4
+    ],
+    [
+      "REPLAI_BLOCK_STATUS",
+      "u32",
+      5
+    ],
+    [
+      "REPLAI_BLOCK_SPACER",
+      "u32",
+      6
+    ],
+    [
+      "REPLAI_BLOCK_TABLE_HEADER",
+      "u32",
+      7
+    ],
+    [
+      "REPLAI_BLOCK_TABLE_ROW",
+      "u32",
+      8
+    ],
+    [
+      "REPLAI_APPLIED",
+      "u32",
+      0
+    ],
+    [
+      "REPLAI_STALE",
+      "u32",
+      1
+    ],
+    [
+      "REPLAI_WAKE_INPUT",
+      "u32",
+      0
+    ],
+    [
+      "REPLAI_WAKE_RESIZE",
+      "u32",
+      1
+    ],
+    [
+      "REPLAI_WAKE_DEADLINE",
+      "u32",
+      2
+    ],
+    [
+      "REPLAI_WAIT_READY",
+      "u32",
+      0
+    ],
+    [
+      "REPLAI_WAIT_INPUT",
+      "u32",
+      1
     ]
   ],
   "records": [
@@ -206,6 +291,224 @@
         [
           "reserved",
           "[u64; 2]"
+        ]
+      ]
+    },
+    {
+      "name": "ReplaiSpan",
+      "c_name": "replai_span",
+      "doc": "Bounded semantic span; no control escapes.",
+      "fields": [
+        [
+          "struct_size",
+          "u32"
+        ],
+        [
+          "extension_version",
+          "u32"
+        ],
+        [
+          "text",
+          "*const u8"
+        ],
+        [
+          "text_bytes",
+          "usize"
+        ],
+        [
+          "role",
+          "u32"
+        ],
+        [
+          "reserved",
+          "u32"
+        ]
+      ]
+    },
+    {
+      "name": "ReplaiText",
+      "c_name": "replai_text",
+      "doc": "Bounded composed text, copied during the call.",
+      "fields": [
+        [
+          "struct_size",
+          "u32"
+        ],
+        [
+          "extension_version",
+          "u32"
+        ],
+        [
+          "spans",
+          "*const ReplaiSpan"
+        ],
+        [
+          "span_count",
+          "usize"
+        ],
+        [
+          "reserved",
+          "[u64; 2]"
+        ]
+      ]
+    },
+    {
+      "name": "ReplaiBlock",
+      "c_name": "replai_block",
+      "doc": "Flat block. kind selects payload; unused fields must be zero. Table rows follow their header.",
+      "fields": [
+        [
+          "struct_size",
+          "u32"
+        ],
+        [
+          "extension_version",
+          "u32"
+        ],
+        [
+          "kind",
+          "u32"
+        ],
+        [
+          "level",
+          "u32"
+        ],
+        [
+          "text",
+          "ReplaiText"
+        ],
+        [
+          "label",
+          "ReplaiText"
+        ],
+        [
+          "cells",
+          "*const ReplaiText"
+        ],
+        [
+          "cell_count",
+          "usize"
+        ],
+        [
+          "reserved",
+          "[u64; 2]"
+        ]
+      ]
+    },
+    {
+      "name": "ReplaiRender",
+      "c_name": "replai_render",
+      "doc": "Standalone layout; width includes indent. styled is 0 or 1.",
+      "fields": [
+        [
+          "struct_size",
+          "u32"
+        ],
+        [
+          "extension_version",
+          "u32"
+        ],
+        [
+          "columns",
+          "u32"
+        ],
+        [
+          "indent",
+          "u32"
+        ],
+        [
+          "styled",
+          "u32"
+        ],
+        [
+          "reserved",
+          "u32"
+        ]
+      ]
+    },
+    {
+      "name": "ReplaiCandidate",
+      "c_name": "replai_candidate",
+      "doc": "Revision-bound candidate. label and annotation are display only.",
+      "fields": [
+        [
+          "struct_size",
+          "u32"
+        ],
+        [
+          "extension_version",
+          "u32"
+        ],
+        [
+          "start",
+          "usize"
+        ],
+        [
+          "end",
+          "usize"
+        ],
+        [
+          "insertion",
+          "*const u8"
+        ],
+        [
+          "insertion_bytes",
+          "usize"
+        ],
+        [
+          "label",
+          "*const u8"
+        ],
+        [
+          "label_bytes",
+          "usize"
+        ],
+        [
+          "annotation",
+          "*const u8"
+        ],
+        [
+          "annotation_bytes",
+          "usize"
+        ],
+        [
+          "reserved",
+          "[u64; 2]"
+        ]
+      ]
+    },
+    {
+      "name": "ReplaiInterest",
+      "c_name": "replai_interest",
+      "doc": "Zero output fields before each query. FD is borrowed; timeout_ms -1 denotes no deadline.",
+      "fields": [
+        [
+          "struct_size",
+          "u32"
+        ],
+        [
+          "extension_version",
+          "u32"
+        ],
+        [
+          "kind",
+          "u32"
+        ],
+        [
+          "input_fd",
+          "i32"
+        ],
+        [
+          "timeout_ms",
+          "i32"
+        ],
+        [
+          "reserved",
+          "u32"
+        ],
+        [
+          "deadline_ticket",
+          "u64"
         ]
       ]
     }
@@ -488,6 +791,264 @@
         [
           "status",
           "i32"
+        ],
+        [
+          "buffer",
+          "*mut u8"
+        ],
+        [
+          "capacity",
+          "usize"
+        ],
+        [
+          "required",
+          "*mut usize"
+        ]
+      ]
+    },
+    {
+      "name": "replai_presentation_version",
+      "doc": "Query the separate presentation extension identity.",
+      "params": [
+        [
+          "version",
+          "*mut u32"
+        ]
+      ]
+    },
+    {
+      "name": "replai_document_render",
+      "doc": "Validate/layout before copying. NULL/0 queries exact bytes, never acquires a terminal.",
+      "params": [
+        [
+          "blocks",
+          "*const ReplaiBlock"
+        ],
+        [
+          "block_count",
+          "usize"
+        ],
+        [
+          "options",
+          "*const ReplaiRender"
+        ],
+        [
+          "buffer",
+          "*mut u8"
+        ],
+        [
+          "capacity",
+          "usize"
+        ],
+        [
+          "required",
+          "*mut usize"
+        ]
+      ]
+    },
+    {
+      "name": "replai_document_output",
+      "doc": "Validate the whole document then coordinate it with the active editor.",
+      "params": [
+        [
+          "handle",
+          "*mut Handle"
+        ],
+        [
+          "blocks",
+          "*const ReplaiBlock"
+        ],
+        [
+          "block_count",
+          "usize"
+        ]
+      ]
+    },
+    {
+      "name": "replai_prompt_composed",
+      "doc": "Configure primary and continuation semantic spans while closed.",
+      "params": [
+        [
+          "handle",
+          "*mut Handle"
+        ],
+        [
+          "primary",
+          "*const ReplaiText"
+        ],
+        [
+          "continuation",
+          "*const ReplaiText"
+        ]
+      ]
+    },
+    {
+      "name": "replai_completion_snapshot",
+      "doc": "Return coherent draft/cursor and opaque ticket; query/too-small rules match draft_copy.",
+      "params": [
+        [
+          "handle",
+          "*mut Handle"
+        ],
+        [
+          "buffer",
+          "*mut u8"
+        ],
+        [
+          "capacity",
+          "usize"
+        ],
+        [
+          "required",
+          "*mut usize"
+        ],
+        [
+          "cursor",
+          "*mut usize"
+        ],
+        [
+          "ticket",
+          "*mut u64"
+        ]
+      ]
+    },
+    {
+      "name": "replai_completions_present",
+      "doc": "Install all candidates atomically; stale ticket skips payload validation and writes STALE.",
+      "params": [
+        [
+          "handle",
+          "*mut Handle"
+        ],
+        [
+          "ticket",
+          "u64"
+        ],
+        [
+          "candidates",
+          "*const ReplaiCandidate"
+        ],
+        [
+          "candidate_count",
+          "usize"
+        ],
+        [
+          "disposition",
+          "*mut u32"
+        ]
+      ]
+    },
+    {
+      "name": "replai_wait_interest",
+      "doc": "Query driven readiness and deadline without waiting.",
+      "params": [
+        [
+          "handle",
+          "*mut Handle"
+        ],
+        [
+          "interest",
+          "*mut ReplaiInterest"
+        ]
+      ]
+    },
+    {
+      "name": "replai_advance",
+      "doc": "Advance input/resize/deadline, never waits. Event remains ABI 1.",
+      "params": [
+        [
+          "handle",
+          "*mut Handle"
+        ],
+        [
+          "wake",
+          "u32"
+        ],
+        [
+          "deadline_ticket",
+          "u64"
+        ],
+        [
+          "event",
+          "*mut ReplaiEvent"
+        ]
+      ]
+    },
+    {
+      "name": "replai_text_cells",
+      "doc": "Measure safe single-line UTF-8 under UnicodeNarrow; controls fail.",
+      "params": [
+        [
+          "text",
+          "*const u8"
+        ],
+        [
+          "text_bytes",
+          "usize"
+        ],
+        [
+          "cells",
+          "*mut usize"
+        ]
+      ]
+    },
+    {
+      "name": "replai_output_open",
+      "doc": "Acquire quiet output while editor is closed; preserves canonical mode and ISIG.",
+      "params": [
+        [
+          "handle",
+          "*mut Handle"
+        ],
+        [
+          "input_fd",
+          "i32"
+        ],
+        [
+          "output_fd",
+          "i32"
+        ]
+      ]
+    },
+    {
+      "name": "replai_output_feedback",
+      "doc": "Replace temporary semantic feedback at a host-established line boundary; empty clears.",
+      "params": [
+        [
+          "handle",
+          "*mut Handle"
+        ],
+        [
+          "text",
+          "*const ReplaiText"
+        ]
+      ]
+    },
+    {
+      "name": "replai_output_close",
+      "doc": "Clear/restore output lifetime; discard_input is an explicit 0/1 host policy.",
+      "params": [
+        [
+          "handle",
+          "*mut Handle"
+        ],
+        [
+          "discard_input",
+          "u32"
+        ]
+      ]
+    },
+    {
+      "name": "replai_role_sequence",
+      "doc": "Copy the producer-authored role sequence; styled is 0/1. Never accepts caller escape sequences.",
+      "params": [
+        [
+          "role",
+          "u32"
+        ],
+        [
+          "styled",
+          "u32"
         ],
         [
           "buffer",

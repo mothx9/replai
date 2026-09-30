@@ -58,6 +58,9 @@ impl Decoder {
     pub(crate) fn pending(&self) -> bool {
         !matches!(self.state, State::Ready)
     }
+    pub(crate) fn escape_prefix(&self) -> bool {
+        matches!(&self.state, State::Escape(bytes) if bytes == b"\x1b")
+    }
     pub(crate) fn expire(&mut self) -> Option<Key> {
         match std::mem::take(&mut self.state) {
             State::Ready => None,

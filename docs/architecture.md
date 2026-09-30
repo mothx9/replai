@@ -56,6 +56,7 @@ consume semantic mutations without parsing an escape-coded frame.
 | [terminal](../src/terminal.rs) | Generic VT driver over a statically selected transport; timing, decoder expiry, effect execution and cleanup | termios, descriptors or duplicate editing logic |
 | [system](../src/system.rs) | Shared Linux/macOS POSIX acquisition, descriptor duplication, termios, dimensions, poll/read/write, backend lease | Decoder, prompt, events, palette or editor |
 | [interaction](../src/interaction.rs), [event](../src/event.rs) | Three native facades and portable outcomes/errors | Product loop, language or command authority |
+| [output](../src/output.rs) | Disjoint quiet-output lease, bounded replaceable feedback and shared POSIX restoration | Application cancellation, concurrent producer arbitration or unrestricted writers |
 
 **Generic terminal presentation belongs to the library; semantic classification
 and content belong to the host.** The host still owns completion discovery/order/meaning,
@@ -171,8 +172,18 @@ surface transaction. Prompt segments reuse the safe inline representation.
 The [presentation contract](presentation.md) owns block geometry, bounds and
 failure atomicity. No JSON framework or new dependency is required. Old plain
 output retains its unwrapped byte semantics through the same coordinator.
-The C binding continues to expose only its qualified plain presentation surface;
-structured C output needs a separate future design, not additions to ABI 1.
+The optional C presentation extension 1 projects bounded document/prompt,
+completion and driven APIs through semantic records. It is not a reinterpretation
+of base ABI 1. The schema generates both languages' record/signature/layout facts.
+Opaque handle-local tickets retain public Rust revision/deadline identities;
+the adapter never exports private layouts or implements another interaction engine.
+
+`OutputSession` is a disjoint quiet-output lifetime sharing the POSIX lease and
+restoration owner. It suppresses echo while preserving canonical mode and ISIG;
+the host still owns signal meaning. Temporary feedback uses document geometry
+and the same mutation encoder. The caller clears it before other output. This
+bounded single-producer scope does not establish multi-producer arbitration,
+an output scheduler or streaming Markdown semantics.
 
 ## System and protocol realizations
 
@@ -208,7 +219,7 @@ does not choose an endpoint object, HANDLE entry point, callback I/O or new ABI.
 See [C API](c-api.md) and its generated schema/layout authority.
 
 The implementation crate still forbids unsafe code and requires documented
-public items. Only the unchanged C binding contains narrowly justified pointer,
+public items. Only the C binding contains narrowly justified pointer,
 span and borrowed-descriptor unsafety. No third-party type enters the public
 Rust API. There is one implementation behind both languages.
 

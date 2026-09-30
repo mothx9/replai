@@ -107,6 +107,10 @@ mod core;
 mod event;
 mod history;
 mod interaction;
+#[cfg(any(target_os = "linux", target_os = "macos"))]
+mod output;
+#[cfg(any(target_os = "linux", target_os = "macos"))]
+pub use output::OutputSession;
 // Other system façades are intentionally absent. These internal components
 // compile everywhere and execute through deterministic tests on every CI OS.
 #[cfg_attr(not(any(target_os = "linux", target_os = "macos")), allow(dead_code))]

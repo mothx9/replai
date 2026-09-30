@@ -58,6 +58,40 @@ pub const REPLAI_ROLE_SUCCESS: u32 = 4;
 pub const REPLAI_ROLE_WARNING: u32 = 5;
 /// ABI constant `REPLAI_ROLE_ERROR`.
 pub const REPLAI_ROLE_ERROR: u32 = 6;
+/// ABI constant `REPLAI_PRESENTATION_VERSION`.
+pub const REPLAI_PRESENTATION_VERSION: u32 = 1;
+/// ABI constant `REPLAI_BLOCK_PARAGRAPH`.
+pub const REPLAI_BLOCK_PARAGRAPH: u32 = 0;
+/// ABI constant `REPLAI_BLOCK_HEADING`.
+pub const REPLAI_BLOCK_HEADING: u32 = 1;
+/// ABI constant `REPLAI_BLOCK_FIELD`.
+pub const REPLAI_BLOCK_FIELD: u32 = 2;
+/// ABI constant `REPLAI_BLOCK_LIST`.
+pub const REPLAI_BLOCK_LIST: u32 = 3;
+/// ABI constant `REPLAI_BLOCK_LITERAL`.
+pub const REPLAI_BLOCK_LITERAL: u32 = 4;
+/// ABI constant `REPLAI_BLOCK_STATUS`.
+pub const REPLAI_BLOCK_STATUS: u32 = 5;
+/// ABI constant `REPLAI_BLOCK_SPACER`.
+pub const REPLAI_BLOCK_SPACER: u32 = 6;
+/// ABI constant `REPLAI_BLOCK_TABLE_HEADER`.
+pub const REPLAI_BLOCK_TABLE_HEADER: u32 = 7;
+/// ABI constant `REPLAI_BLOCK_TABLE_ROW`.
+pub const REPLAI_BLOCK_TABLE_ROW: u32 = 8;
+/// ABI constant `REPLAI_APPLIED`.
+pub const REPLAI_APPLIED: u32 = 0;
+/// ABI constant `REPLAI_STALE`.
+pub const REPLAI_STALE: u32 = 1;
+/// ABI constant `REPLAI_WAKE_INPUT`.
+pub const REPLAI_WAKE_INPUT: u32 = 0;
+/// ABI constant `REPLAI_WAKE_RESIZE`.
+pub const REPLAI_WAKE_RESIZE: u32 = 1;
+/// ABI constant `REPLAI_WAKE_DEADLINE`.
+pub const REPLAI_WAKE_DEADLINE: u32 = 2;
+/// ABI constant `REPLAI_WAIT_READY`.
+pub const REPLAI_WAIT_READY: u32 = 0;
+/// ABI constant `REPLAI_WAIT_INPUT`.
+pub const REPLAI_WAIT_INPUT: u32 = 1;
 /// Creation limits. Zero-initialize, then set struct_size, abi_version and desired limits.
 #[repr(C)]
 #[derive(Clone, Copy, Debug)]
@@ -91,4 +125,122 @@ pub struct ReplaiEvent {
     pub cursor_bytes: u64,
     /// ABI field `reserved`; see the installed header contract.
     pub reserved: [u64; 2],
+}
+/// Bounded semantic span; no control escapes.
+#[repr(C)]
+#[derive(Clone, Copy, Debug)]
+pub struct ReplaiSpan {
+    /// ABI field `struct_size`; see the installed header contract.
+    pub struct_size: u32,
+    /// ABI field `extension_version`; see the installed header contract.
+    pub extension_version: u32,
+    /// ABI field `text`; see the installed header contract.
+    pub text: *const u8,
+    /// ABI field `text_bytes`; see the installed header contract.
+    pub text_bytes: usize,
+    /// ABI field `role`; see the installed header contract.
+    pub role: u32,
+    /// ABI field `reserved`; see the installed header contract.
+    pub reserved: u32,
+}
+/// Bounded composed text, copied during the call.
+#[repr(C)]
+#[derive(Clone, Copy, Debug)]
+pub struct ReplaiText {
+    /// ABI field `struct_size`; see the installed header contract.
+    pub struct_size: u32,
+    /// ABI field `extension_version`; see the installed header contract.
+    pub extension_version: u32,
+    /// ABI field `spans`; see the installed header contract.
+    pub spans: *const ReplaiSpan,
+    /// ABI field `span_count`; see the installed header contract.
+    pub span_count: usize,
+    /// ABI field `reserved`; see the installed header contract.
+    pub reserved: [u64; 2],
+}
+/// Flat block. kind selects payload; unused fields must be zero. Table rows follow their header.
+#[repr(C)]
+#[derive(Clone, Copy, Debug)]
+pub struct ReplaiBlock {
+    /// ABI field `struct_size`; see the installed header contract.
+    pub struct_size: u32,
+    /// ABI field `extension_version`; see the installed header contract.
+    pub extension_version: u32,
+    /// ABI field `kind`; see the installed header contract.
+    pub kind: u32,
+    /// ABI field `level`; see the installed header contract.
+    pub level: u32,
+    /// ABI field `text`; see the installed header contract.
+    pub text: ReplaiText,
+    /// ABI field `label`; see the installed header contract.
+    pub label: ReplaiText,
+    /// ABI field `cells`; see the installed header contract.
+    pub cells: *const ReplaiText,
+    /// ABI field `cell_count`; see the installed header contract.
+    pub cell_count: usize,
+    /// ABI field `reserved`; see the installed header contract.
+    pub reserved: [u64; 2],
+}
+/// Standalone layout; width includes indent. styled is 0 or 1.
+#[repr(C)]
+#[derive(Clone, Copy, Debug)]
+pub struct ReplaiRender {
+    /// ABI field `struct_size`; see the installed header contract.
+    pub struct_size: u32,
+    /// ABI field `extension_version`; see the installed header contract.
+    pub extension_version: u32,
+    /// ABI field `columns`; see the installed header contract.
+    pub columns: u32,
+    /// ABI field `indent`; see the installed header contract.
+    pub indent: u32,
+    /// ABI field `styled`; see the installed header contract.
+    pub styled: u32,
+    /// ABI field `reserved`; see the installed header contract.
+    pub reserved: u32,
+}
+/// Revision-bound candidate. label and annotation are display only.
+#[repr(C)]
+#[derive(Clone, Copy, Debug)]
+pub struct ReplaiCandidate {
+    /// ABI field `struct_size`; see the installed header contract.
+    pub struct_size: u32,
+    /// ABI field `extension_version`; see the installed header contract.
+    pub extension_version: u32,
+    /// ABI field `start`; see the installed header contract.
+    pub start: usize,
+    /// ABI field `end`; see the installed header contract.
+    pub end: usize,
+    /// ABI field `insertion`; see the installed header contract.
+    pub insertion: *const u8,
+    /// ABI field `insertion_bytes`; see the installed header contract.
+    pub insertion_bytes: usize,
+    /// ABI field `label`; see the installed header contract.
+    pub label: *const u8,
+    /// ABI field `label_bytes`; see the installed header contract.
+    pub label_bytes: usize,
+    /// ABI field `annotation`; see the installed header contract.
+    pub annotation: *const u8,
+    /// ABI field `annotation_bytes`; see the installed header contract.
+    pub annotation_bytes: usize,
+    /// ABI field `reserved`; see the installed header contract.
+    pub reserved: [u64; 2],
+}
+/// Zero output fields before each query. FD is borrowed; timeout_ms -1 denotes no deadline.
+#[repr(C)]
+#[derive(Clone, Copy, Debug)]
+pub struct ReplaiInterest {
+    /// ABI field `struct_size`; see the installed header contract.
+    pub struct_size: u32,
+    /// ABI field `extension_version`; see the installed header contract.
+    pub extension_version: u32,
+    /// ABI field `kind`; see the installed header contract.
+    pub kind: u32,
+    /// ABI field `input_fd`; see the installed header contract.
+    pub input_fd: i32,
+    /// ABI field `timeout_ms`; see the installed header contract.
+    pub timeout_ms: i32,
+    /// ABI field `reserved`; see the installed header contract.
+    pub reserved: u32,
+    /// ABI field `deadline_ticket`; see the installed header contract.
+    pub deadline_ticket: u64,
 }

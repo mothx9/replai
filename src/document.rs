@@ -213,9 +213,25 @@ impl Document {
     /// deterministic; Theme resolves styling independently of document structure.
     /// Output uses LF line endings, including a final LF for every rendered row.
     pub fn render(&self, columns: usize, theme: Theme) -> Result<String, EditError> {
-        let lines = self.layout(columns)?;
+        self.render_indented(columns, theme, 0)
+    }
+    /// Render with a bounded outer gutter. Width includes that gutter; narrow
+    /// records still use the ordinary structural fallback, never truncation.
+    pub fn render_indented(
+        &self,
+        columns: usize,
+        theme: Theme,
+        indent: usize,
+    ) -> Result<String, EditError> {
+        if indent > 16 || !(2..=4096).contains(&columns) || columns < indent + 2 {
+            return Err(EditError::InvalidRange);
+        }
+        let lines = self.layout(columns - indent)?;
         let mut out = String::new();
         for line in &lines {
+            if !line.0.is_empty() {
+                out.push_str(&" ".repeat(indent));
+            }
             for run in &line.0 {
                 match run {
                     Run::Text(t) => out.push_str(t),
@@ -308,22 +324,33 @@ struct Output {
     work: usize,
 }
 fn append(out: &mut Output, rows: Vec<Line>) -> Result<(), EditError> {
-    let work: usize = rows
-        .iter()
-        .map(|l| {
-            l.0.iter()
-                .map(|r| match r {
-                    Run::Text(t) => t.len(),
-                    Run::Style(_) => 32,
-                })
-                .sum::<usize>()
-                + 2
-        })
-        .sum();
-    if out.lines.len() + rows.len() > ROWS || out.work + work > 8 * BUDGET {
+    // Account only the active variant, and reject a budget overflow before
+    // extending output. Unchecked nested sums allowed vectorized loads of
+    // inactive enum storage and obscured the exact bounded-work check.
+    let mut work = out.work;
+    for line in &rows {
+        work = work.checked_add(2).ok_or(EditError::Capacity)?;
+        for run in &line.0 {
+            let bytes = match run {
+                Run::Text(text) => text.len(),
+                Run::Style(_) => 32,
+            };
+            work = work.checked_add(bytes).ok_or(EditError::Capacity)?;
+            if work > 8 * BUDGET {
+                return Err(EditError::Capacity);
+            }
+        }
+    }
+    if out
+        .lines
+        .len()
+        .checked_add(rows.len())
+        .ok_or(EditError::Capacity)?
+        > ROWS
+    {
         return Err(EditError::Capacity);
     }
-    out.work += work;
+    out.work = work;
     out.lines.extend(rows);
     Ok(())
 }

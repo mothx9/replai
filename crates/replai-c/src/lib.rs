@@ -16,6 +16,8 @@ use std::{
 };
 mod abi;
 pub use abi::*;
+mod presentation;
+pub use presentation::*;
 
 /// Opaque C owner. Its Rust representation is never part of the ABI.
 pub struct Handle {
@@ -23,6 +25,9 @@ pub struct Handle {
     prompt: Prompt,
     submitted: Option<String>,
     poisoned: bool,
+    snapshot: Option<(u64, replai::AnalysisSnapshot)>,
+    deadline: Option<(u64, replai::Deadline)>,
+    output: Option<replai::OutputSession>,
 }
 
 fn guard(f: impl FnOnce() -> i32) -> i32 {
@@ -65,6 +70,10 @@ unsafe fn text<'a>(p: *const u8, len: usize) -> Result<&'a str, i32> {
     std::str::from_utf8(bytes).map_err(|_| REPLAI_INVALID_UTF8)
 }
 unsafe fn record<T: Copy>(p: *const T) -> Result<T, i32> {
+    // SAFETY: forwards the same caller record contract, selecting ABI 1.
+    unsafe { record_version(p, REPLAI_C_ABI_VERSION) }
+}
+unsafe fn record_version<T: Copy>(p: *const T, expected: u32) -> Result<T, i32> {
     aligned(p)?;
     // SAFETY: ABI record callers provide at least the size prefix, aligned as T.
     // The size is checked BEFORE any later fields are accessed.
@@ -75,7 +84,7 @@ unsafe fn record<T: Copy>(p: *const T) -> Result<T, i32> {
     // SAFETY: matching struct_size promises readable storage for the whole C
     // record. Both records have ABI version as their second u32.
     let version = unsafe { p.cast::<u32>().add(1).read() };
-    if version != REPLAI_C_ABI_VERSION {
+    if version != expected {
         return Err(REPLAI_ABI_MISMATCH);
     }
     // SAFETY: T is one of the Copy repr(C) ABI records, and its extent was checked.
@@ -95,6 +104,9 @@ unsafe fn with_handle(p: *mut Handle, f: impl FnOnce(&mut Handle) -> i32) -> i32
     if status == REPLAI_INTERNAL {
         h.poisoned = true;
         let _ = guard(|| result(h.interaction.close()));
+        if let Some(output) = &mut h.output {
+            let _ = guard(|| result(output.close(false)));
+        }
     }
     status
 }
@@ -251,6 +263,9 @@ pub unsafe extern "C" fn replai_create(config: *const ReplaiConfig, out: *mut *m
             prompt: Prompt::new("").expect("empty prompt is valid"),
             submitted: None,
             poisoned: false,
+            snapshot: None,
+            deadline: None,
+            output: None,
         });
         // SAFETY: ownership transfers only this Box to the validated output slot.
         // replai_destroy is its sole release operation.
@@ -281,7 +296,9 @@ pub unsafe extern "C" fn replai_destroy(handle: *mut *mut Handle) -> i32 {
         unsafe {
             handle.write(ptr::null_mut());
         }
-        result(h.interaction.close())
+        let editing = h.interaction.close();
+        let output = h.output.as_mut().map_or(Ok(()), |o| o.close(false));
+        result(editing.and(output))
     })
 }
 /// Configure literal prompt fields while closed.

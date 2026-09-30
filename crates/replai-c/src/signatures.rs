@@ -25,3 +25,33 @@ const _: unsafe extern "C" fn(*mut Handle, *const u8, usize) -> i32 = replai_his
 const _: unsafe extern "C" fn(*mut Handle, usize, usize, *const u8, usize) -> i32 = replai_complete;
 const _: unsafe extern "C" fn(*mut Handle, u32, *const u8, usize) -> i32 = replai_external_output;
 const _: unsafe extern "C" fn(i32, *mut u8, usize, *mut usize) -> i32 = replai_status_text;
+const _: unsafe extern "C" fn(*mut u32) -> i32 = replai_presentation_version;
+const _: unsafe extern "C" fn(
+    *const ReplaiBlock,
+    usize,
+    *const ReplaiRender,
+    *mut u8,
+    usize,
+    *mut usize,
+) -> i32 = replai_document_render;
+const _: unsafe extern "C" fn(*mut Handle, *const ReplaiBlock, usize) -> i32 =
+    replai_document_output;
+const _: unsafe extern "C" fn(*mut Handle, *const ReplaiText, *const ReplaiText) -> i32 =
+    replai_prompt_composed;
+const _: unsafe extern "C" fn(
+    *mut Handle,
+    *mut u8,
+    usize,
+    *mut usize,
+    *mut usize,
+    *mut u64,
+) -> i32 = replai_completion_snapshot;
+const _: unsafe extern "C" fn(*mut Handle, u64, *const ReplaiCandidate, usize, *mut u32) -> i32 =
+    replai_completions_present;
+const _: unsafe extern "C" fn(*mut Handle, *mut ReplaiInterest) -> i32 = replai_wait_interest;
+const _: unsafe extern "C" fn(*mut Handle, u32, u64, *mut ReplaiEvent) -> i32 = replai_advance;
+const _: unsafe extern "C" fn(*const u8, usize, *mut usize) -> i32 = replai_text_cells;
+const _: unsafe extern "C" fn(*mut Handle, i32, i32) -> i32 = replai_output_open;
+const _: unsafe extern "C" fn(*mut Handle, *const ReplaiText) -> i32 = replai_output_feedback;
+const _: unsafe extern "C" fn(*mut Handle, u32) -> i32 = replai_output_close;
+const _: unsafe extern "C" fn(u32, u32, *mut u8, usize, *mut usize) -> i32 = replai_role_sequence;

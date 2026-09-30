@@ -10,6 +10,33 @@ fn t(s: &str) -> Text {
 fn plain() -> Theme {
     Theme::new(false, false, None)
 }
+#[test]
+fn indented_records_use_the_same_bounded_geometry() {
+    let d = doc(vec![Block::KeyValue(vec![
+        (t("state"), t("READY")),
+        (t("name"), t("café 界 👩‍💻")),
+    ])]);
+    for width in 4..80 {
+        let s = d.render_indented(width, plain(), 2).unwrap();
+        assert!(s.lines().all(|line| line.width() <= width), "{width}: {s}");
+        assert!(
+            s.lines()
+                .all(|line| line.is_empty() || line.starts_with("  "))
+        );
+    }
+    assert_eq!(
+        d.render_indented(3, plain(), 2),
+        Err(EditError::InvalidRange)
+    );
+    assert_eq!(
+        d.render_indented(80, plain(), 17),
+        Err(EditError::InvalidRange)
+    );
+    assert_eq!(
+        d.render_indented(80, plain(), 0).unwrap(),
+        d.render(80, plain()).unwrap()
+    );
+}
 fn doc(blocks: Vec<Block>) -> Document {
     Document::new(blocks).unwrap()
 }

@@ -108,13 +108,13 @@ class Qualification:
         self.run(['python3', 'tools/stage_c.py', '--prefix', self.prefix_a], 'stage', isolated=False)
         self.prefix_a.rename(self.prefix)
         assert not self.prefix_a.exists(), 'original staging prefix still exists'
-        for source in ['examples/c/demo.c', 'tests/c/contracts.c', 'tests/c/layout.c', 'tests/fixtures/presentation.tsv']:
+        for source in ['examples/c/demo.c', 'tests/c/contracts.c', 'tests/c/presentation.c', 'tests/c/layout.c', 'tests/fixtures/presentation.tsv']:
             shutil.copy2(ROOT / source, self.consumer / Path(source).name)
         for name in ['layout', 'terminal-state']:
             shutil.copy2(ROOT / 'target/release/examples' / name, self.consumer / ('rust-' + name))
         for suffix in ['c', 'cpp']:
             (self.consumer / ('header.' + suffix)).write_text('#include <replai.h>\n')
-        smoke = '#include <replai.h>\nint main() { uint32_t v = 0; return replai_abi_version(&v) != REPLAI_OK || v != REPLAI_C_ABI_VERSION; }\n'
+        smoke = '#include <replai.h>\nint main() { uint32_t v = 0, p = 0; return replai_abi_version(&v) != REPLAI_OK || v != REPLAI_C_ABI_VERSION || replai_presentation_version(&p) != REPLAI_OK || p != REPLAI_PRESENTATION_VERSION; }\n'
         (self.consumer / 'smoke.cpp').write_text(smoke)
         (self.consumer / 'smoke.c').write_text(smoke)
         self.run(['cc', '--version'], 'compiler')
@@ -138,7 +138,7 @@ class Qualification:
                 link = [str(self.prefix / 'lib/libreplai_c.a') if arg == '-lreplai_c' else arg for arg in link]
             else:
                 link.append('-Wl,-rpath,' + str(self.prefix / 'lib'))
-            for source in ['demo.c', 'contracts.c']:
+            for source in ['demo.c', 'contracts.c', 'presentation.c']:
                 output = self.run(['cc', '-std=c11', *flags, source, *link, '-o', Path(source).stem + '-' + mode], 'build-' + Path(source).stem + '-' + mode)
                 assert output == '', 'consumer compiler emitted diagnostics'
         for mode in ['shared', 'static']:
@@ -177,6 +177,7 @@ class Qualification:
     def exercise(self, mode):
         output = self.run(['./contracts-' + mode], 'contracts-' + mode)
         print(output, flush=True)
+        print(self.run(['./presentation-' + mode], 'presentation-' + mode), flush=True)
         run_suite([str(self.consumer / ('demo-' + mode))], self.consumer / 'rust-terminal-state', self.consumer / 'presentation.tsv', self.root / ('pty-' + mode + '.json'), self.isolate, self.env)
 
     def memory(self):
@@ -185,6 +186,8 @@ class Qualification:
                 report = self.run(['/usr/bin/leaks', '--atExit', '--', './contracts-'+mode], 'leaks-'+mode)
                 assert '0 leaks for 0 total leaked bytes' in report, report
                 print(report, flush=True)
+                extension_report = self.run(['/usr/bin/leaks', '--atExit', '--', './presentation-' + mode], 'leaks-presentation-' + mode)
+                assert '0 leaks for 0 total leaked bytes' in extension_report, extension_report
             return
         executable = shutil.which(os.environ.get('VALGRIND', 'valgrind'))
         if executable is None:
@@ -202,6 +205,11 @@ class Qualification:
                 assert 'in use at exit: 0 bytes in 0 blocks' in report and 'ERROR SUMMARY: 0 errors' in report, report
                 print(report, flush=True)
             # The actual event-loop demo also runs all PTY scenarios under Memcheck.
+            for mode in ['static', 'shared']:
+                extension_log = self.root / ('valgrind-presentation-' + mode + '.log')
+                self.run([executable, '--tool=memcheck', '--leak-check=full', '--show-leak-kinds=all', '--errors-for-leak-kinds=definite,indirect', '--error-exitcode=99', '--log-file=' + str(extension_log), './presentation-' + mode], 'memory-presentation-' + mode)
+                extension_report = extension_log.read_text()
+                assert 'in use at exit: 0 bytes in 0 blocks' in extension_report and 'ERROR SUMMARY: 0 errors' in extension_report, extension_report
             command = [executable, '--tool=memcheck', '--leak-check=full', '--show-leak-kinds=all', '--errors-for-leak-kinds=definite,indirect', '--error-exitcode=99', '--log-file=' + str(self.root / 'valgrind-demo-%p.log'), str(self.consumer / 'demo-shared')]
             print('+ ' + shlex.join(command) + ' [PTY scenarios]', flush=True)
             run_suite(command, self.consumer / 'rust-terminal-state', self.consumer / 'presentation.tsv', self.root / 'pty-memory.json', self.isolate, self.env)

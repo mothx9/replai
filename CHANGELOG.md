@@ -6,6 +6,16 @@ next work. All entries below are unreleased and carry no compatibility promise.
 
 ## Unreleased
 
+- Added optional C presentation extension 1 over unchanged base C ABI 1:
+  bounded semantic documents/composed prompts, revision-ticket completion menus,
+  driven readiness/resize/deadline notifications, shared Unicode cell measurement
+  and quiet-output/transient feedback lifetimes. Existing C clients remain valid.
+  Added safe `Document::render_indented` and POSIX `OutputSession`; no application
+  semantics, scheduler, threads or terminal signal handlers are introduced.
+- Completion Escape previews dismiss immediately while preserving the complete
+  fragmented-sequence decoder deadline; partial arrow sequences retain their
+  original action. Existing polling remains available beside driven notification.
+
 - Added public bounded configurable `KeyMap`, semantic `Action`/`Key` vocabulary,
   completion prefix/common-prefix/fuzzy/path helpers, explicit large-set paging
   and revision-safe acceptable autosuggestions distinct from display-only hints.

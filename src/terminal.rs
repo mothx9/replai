@@ -269,6 +269,8 @@ impl<T: Transport> Terminal<T> {
             consumed += 1;
             let mut time_exhausted = false;
             if let Some(key) = self.decoder.feed(byte) {
+                let effects = engine.preview_escape(false);
+                self.apply(engine, effects)?;
                 let input = crate::keymap::translate(&self.keymap, key)
                     .map_err(|e| io::Error::new(io::ErrorKind::InvalidData, e))?;
                 let effects = engine.apply_deferred(input)?;
@@ -282,6 +284,8 @@ impl<T: Transport> Terminal<T> {
             // pay for probing the next burst. Full buffers may continue draining.
             let drained = self.pending.is_empty() && position == length && length < buffer.len();
             if consumed >= READY_BYTES || time_exhausted || drained {
+                let effects = engine.preview_escape(self.decoder.escape_prefix());
+                self.apply(engine, effects)?;
                 let effects = engine.flush();
                 return self.apply(engine, effects);
             }

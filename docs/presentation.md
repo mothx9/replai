@@ -167,8 +167,23 @@ terminal dimensions. There is no second editor or independent output writer.
 The old plain method projects unwrapped literal text to the same semantic
 mutation/encoding and coordination path, preserving TAB, trailing LF and ABI 1
 bytes. It intentionally does not acquire document wrapping or size limits.
-Structured documents/composed spans are native Rust APIs only; C ABI 1 is
-unchanged and retains its existing plain prompt/output functions.
+The optional [C presentation extension 1](c-api.md#presentation-extension-1)
+projects semantic documents/composed prompts through bounded caller-owned records.
+Base C ABI 1 retains its existing plain prompt/output functions. Standalone
+`render_indented` subtracts a bounded outer gutter before ordinary layout;
+there is no second width or table algorithm.
+
+`OutputSession` owns a disjoint quiet-output lifetime between editor lifetimes.
+It uses the same POSIX lease and captures/restores exact modes, suppressing echo
+but retaining ISIG. `feedback` replaces bounded semantic rows at a host-established
+line boundary; empty text clears them. Clear before other writers. Close attempts
+restoration even after output failure; input discard is explicit host policy.
+This is not arbitrary concurrent output or a full-screen/status dashboard.
+
+A bare ESC provisionally hides the completion menu immediately. Candidates and
+the full 250-ms fragmented-sequence deadline remain intact until decoding resolves
+the key. A continuation restores the menu and executes the same key action.
+Visible dismissal latency and semantic decoder settlement are distinct measurements.
 
 ## Structured qualification and characterization
 

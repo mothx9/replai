@@ -18,6 +18,7 @@ struct Surface {
     dirty: bool,
     damage: Damage,
     completion: Option<Box<crate::completion::ActiveCompletion>>,
+    completion_preview_hidden: bool,
     analysis: Option<Box<crate::AnalysisPresentation>>,
     suggestion: Option<Box<crate::Suggestion>>,
 }
@@ -141,6 +142,7 @@ impl Engine {
             dirty: true,
             damage: Damage::Rebuild,
             completion: None,
+            completion_preview_hidden: false,
             analysis: None,
             suggestion: None,
         });
@@ -163,7 +165,9 @@ impl Engine {
                 s.size,
                 s.analysis.as_deref(),
             ))
-        } else if let Some(completion) = &s.completion {
+        } else if let Some(completion) = &s.completion
+            && !s.completion_preview_hidden
+        {
             s.renderer.transition(completion.frame(
                 &self.editor,
                 &s.prompt,
@@ -202,6 +206,21 @@ impl Engine {
     }
     pub fn apply(&mut self, input: Input) -> Result<Effects, Error> {
         self.apply_inner(input, false)
+    }
+    /// Hide only the menu presentation while ESC is ambiguous. The candidate
+    /// set remains live: a fragmented sequence restores it before its action.
+    /// The decoder retains its full sequence deadline and owns semantic Escape.
+    pub(crate) fn preview_escape(&mut self, pending: bool) -> Effects {
+        if let Some(s) = &mut self.surface
+            && s.completion.is_some()
+            && s.completion_preview_hidden != pending
+        {
+            s.completion_preview_hidden = pending;
+            s.dirty = true;
+            s.damage = Damage::Rebuild;
+            return self.flush();
+        }
+        Effects::default()
     }
     /// Apply already-ready input without rebuilding intermediate presentations.
     /// Host events, explicit redraw and lifecycle transitions always flush first.
@@ -573,6 +592,7 @@ impl Engine {
         if let Some(s) = &mut self.surface
             && s.completion.take().is_some()
         {
+            s.completion_preview_hidden = false;
             s.dirty = true;
             s.damage = Damage::Rebuild;
         }

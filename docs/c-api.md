@@ -100,6 +100,88 @@ aligned size prefix and the full extent advertised by that prefix. Output
 storage must be writable, properly aligned and disjoint from other arguments.
 No reference, slice, Rust enum, bool, String or allocator-owned text crosses C.
 
+## Presentation extension 1
+
+The optional `replai_presentation_version` identity is separate from C ABI 1.
+Existing ABI 1 records, functions and statuses retain their exact meanings.
+
+| Extension tag | Value | Meaning |
+| --- | ---: | --- |
+| PRESENTATION_VERSION | 1 | Optional presentation identity, not the base ABI |
+| BLOCK_PARAGRAPH | 0 | Semantic text |
+| BLOCK_HEADING | 1 | `level` 1–3 |
+| BLOCK_FIELD | 2 | `label` / `text`; adjacent fields form a record |
+| BLOCK_LIST | 3 | One list item; depth 0–8 |
+| BLOCK_LITERAL | 4 | Whitespace-preserving literal |
+| BLOCK_STATUS | 5 | `level` info/success/warning/error = 0/1/2/3 |
+| BLOCK_SPACER | 6 | One empty line |
+| BLOCK_TABLE_HEADER | 7 | Column headings in `cells` |
+| BLOCK_TABLE_ROW | 8 | Matching row after its header |
+| APPLIED | 0 | Current revision presentation installed |
+| STALE | 1 | No editor, presentation or output mutation |
+| WAKE_INPUT | 0 | Advisory input-ready notification |
+| WAKE_RESIZE | 1 | Host observed terminal resize |
+| WAKE_DEADLINE | 2 | Opaque deadline ticket |
+| WAIT_READY | 0 | Already-read bytes; advance without waiting |
+| WAIT_INPUT | 1 | Wait for FD or deadline; `timeout_ms = -1` means none |
+
+Extension records carry an exact `struct_size`, `extension_version = 1` and
+reserved-zero fields. Hosts requiring the extension must link its qualified
+producer; the identity query does not make old binaries export new symbols.
+
+Semantic spans, flat document blocks, composed prompts and completion candidates
+are copied during the call. No caller allocation is retained. Documents support
+paragraphs, headings, key/value records, lists, literal blocks, notices, spacers
+and responsive tables. Layout, safe roles, indentation and Unicode cell geometry
+belong to REPLAI. Domain meaning and discovery remain host-owned. Standalone
+rendering does not acquire an editor or terminal; it uses explicit width/style
+and the existing exact-size caller-buffer contract. Controls cannot inject ANSI.
+The Rust document limits also bound the C extension; fields are at most 16 KiB,
+documents 1 MiB, 4096 blocks, rendering 8 MiB and 65,536 rows. Width is 2–4096
+cells; an outer gutter is at most 16 cells and leaves at least two layout cells.
+`replai_role_sequence` projects only the producer-authored foreground/weight
+palette for existing host streaming serializers; it does not admit caller ANSI.
+The host resolves style availability from the output capability and `NO_COLOR`.
+
+Consecutive FIELD blocks compose one responsive record; each uses `label` and
+`text`. TABLE_HEADER supplies 1–32 heading cells and consecutive TABLE_ROW blocks
+supply exactly that many value cells; values are start-aligned. Wrong row geometry
+returns INVALID_RANGE, an orphan row INVALID_ARGUMENT. Other blocks have no cells
+or label. Unused embedded text records remain valid versioned empty records.
+`level` is 1–3 for a heading, 0–8 for an unordered list item, 0–3 for
+info/success/warning/error status, and zero otherwise. Render width is 2–4096
+cells, with an outer indent of 0–16 and at least two remaining content cells.
+No fact is truncated merely to fit a narrow terminal.
+
+Completion snapshots return a handle-local opaque ticket and a coherent draft
+with its byte cursor. One snapshot is outstanding per handle: a new capture
+supersedes the preceding ticket. Deliver candidates against the latest captured
+ticket, not against a fresh draft. When that captured revision is stale, delivery
+returns a stale disposition before inspecting candidate payload and performs no
+terminal I/O. Unknown or superseded tickets fail closed.
+Candidates distinguish insertion, label and optional annotation; the existing
+4096-candidate/4-MiB aggregate bounds apply. All current candidates validate
+before the menu changes. Enter accepts a menu selection, not a submission.
+
+Driven interest exposes only a borrowed readiness FD, ready/input disposition,
+relative deadline delay and opaque deadline ticket. Unregister before close;
+never read, close or alter the borrowed FD. The host owns resize notification
+and its reactor. Advance never waits. Early/stale deadlines are no-ops; no
+signal handler or thread is installed. ABI 1 polling remains supported.
+
+The optional quiet-output scope is disjoint from editing and uses the same
+exclusive terminal lease. It suppresses echo, not ISIG or canonical input.
+Temporary semantic feedback is replaced/cleared without becoming transcript
+content. Callers establish a line boundary and clear before other writers run;
+this is not a multi-producer scheduler. Closing attempts both feedback cleanup
+and mode restoration. Queued-input discard is an explicit host-selected flag,
+never an implicit domain policy. Destroy also retires the scope. No unrestricted
+writer, raw ANSI injection, alternate screen or background painting is exposed.
+
+An isolated ESC immediately hides a completion menu provisionally without
+discarding candidates or shortening the fragmented-sequence deadline. A later
+sequence continuation restores the menu and performs its original action.
+
 Draft text accepts LF and TAB; other controls, including NUL and ESC, fail.
 Prompt fields accept no controls and are bounded to 1024 bytes each. They are
 literal label, suffix and continuation text, without ANSI. External text accepts

@@ -52,7 +52,7 @@ class DocumentationGuard(unittest.TestCase):
 
     def test_public_status_markers_require_text(self):
         target = self.root / "README.md"
-        target.write_text(target.read_text().replace("🟡 Replacement only", "🟡", 1))
+        target.write_text(target.read_text().replace("🟡 Revision-ticket menus; helpers remain Rust", "🟡", 1))
         self.reject("color-only public status marker: 🟡")
 
     def test_missing_relative_link(self):

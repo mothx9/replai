@@ -117,23 +117,23 @@ application threads, signals or command execution.
 
 ## Capabilities
 
-The matrix makes the intentional Rust/C asymmetry explicit. “Replacement only”
-means ABI 1 can apply a host-selected synchronous replacement but has no candidate
-set/menu contract.
+The matrix makes the intentional Rust/C asymmetry explicit. Base ABI 1 remains
+unchanged; optional **presentation extension 1** adds only the bounded generic
+surface described in the [C contract](docs/c-api.md#presentation-extension-1).
 
-| Capability | Rust | C ABI 1 | Host-owned part |
+| Capability | Rust | C ABI 1 + optional extension 1 | Host-owned part |
 | --- | --- | --- | --- |
 | Unicode/grapheme editing | 🟢 Qualified | 🟢 Qualified | Accepted input policy |
 | History navigation / reverse search | 🟢 Provider + bounded search | 🟡 Navigation only | Persistence, retention and privacy |
 | Word editing / undo / kill-yank | 🟢 Qualified + configurable | 🟡 Fixed bindings only | Mapping policy |
-| Rich completion UI / helpers | 🟢 Qualified + paged | 🟡 Replacement only | Context and semantic ranking |
+| Rich completion UI / helpers | 🟢 Qualified + paged | 🟡 Revision-ticket menus; helpers remain Rust | Context and semantic ranking |
 | Revision-safe autosuggestion | 🟢 Qualified suffix insertion | 🔴 Outside ABI 1 | Source choice and scheduling |
-| Revision snapshots / stale refusal | 🟢 Qualified | 🔴 Outside ABI 1 | Analysis meaning and schedule |
+| Revision snapshots / stale refusal | 🟢 Qualified | 🟡 Completion snapshots / stale refusal | Analysis meaning and schedule |
 | Validated multiline | 🟢 Qualified | 🔴 Outside ABI 1 | Grammar and diagnostics |
 | Host spans / non-canonical hints | 🟢 Qualified | 🔴 Outside ABI 1 | Classification and hint text |
-| Structured documents | 🟢 Qualified | 🔴 Outside ABI 1 | Semantic content |
-| Coordinated output | 🟢 Plain + documents | 🟡 Plain text only | Output meaning and serialization |
-| Blocking / Session / Driven | 🟢 All three | 🟡 Session only | Application execution/reactor |
+| Structured documents | 🟢 Qualified | 🟡 Bounded semantic records | Semantic content |
+| Coordinated output | 🟢 Plain + documents + quiet scope | 🟡 Documents / transient quiet scope | Output meaning and serialization |
+| Blocking / Session / Driven | 🟢 All three | 🟡 Session + driven notifications | Application execution/reactor |
 | Terminal lifecycle | 🟢 Qualified | 🟢 Qualified | Resource choice and call ordering |
 
 All input, candidates, diagnostics, hints and documents are bounded. Rich results
@@ -410,8 +410,10 @@ cc examples/c/demo.c $(pkg-config --cflags --libs replai) \
 Use an absent or empty staging directory. Installed consumers need a C/C++
 toolchain and staged artifacts, not Rust or a checkout. ABI 1 provides session
 polling, synchronous replacement, direct submission, prompts and plain coordinated
-output. Rich candidates, revisioned analysis, validation, documents and driven
-embedding remain Rust-native. [C installation and ABI contract](docs/c-api.md).
+output. Optional presentation extension 1 adds documents, composed prompts,
+revision-bound completion menus, driven notifications and quiet/transient output.
+Validation, arbitrary host analysis spans/hints and autosuggestions remain
+Rust-native. [C installation and ABI contract](docs/c-api.md).
 
 ## Platform support
 

@@ -62,6 +62,28 @@ impl Resource {
         config: TerminalConfig,
         requirements: InteractionRequirements,
     ) -> Result<(Self, Theme, TerminalCapabilities), Error> {
+        Self::acquire_mode(input, output, config, requirements, true)
+    }
+    pub(crate) fn acquire_quiet(
+        input: &impl AsFd,
+        output: &impl AsFd,
+    ) -> Result<(Self, Theme), Error> {
+        Self::acquire_mode(
+            input,
+            output,
+            TerminalConfig::compatibility(Theme::from_environment(true)),
+            InteractionRequirements::Editing,
+            false,
+        )
+        .map(|(r, t, _)| (r, t))
+    }
+    fn acquire_mode(
+        input: &impl AsFd,
+        output: &impl AsFd,
+        config: TerminalConfig,
+        requirements: InteractionRequirements,
+        editing: bool,
+    ) -> Result<(Self, Theme, TerminalCapabilities), Error> {
         if !termios::isatty(input) || !termios::isatty(output) {
             return Err(Error::UnsuitableTerminal);
         }
@@ -98,7 +120,14 @@ impl Resource {
             readiness: None,
         };
         let mut raw = resource.saved.clone();
-        raw.make_raw();
+        if editing {
+            raw.make_raw();
+        } else {
+            // Leave canonical input and ISIG intact. The host retains signal
+            // meaning; only unwanted echo during exclusive output is suppressed.
+            raw.local_modes
+                .remove(termios::LocalModes::ECHO | termios::LocalModes::ECHONL);
+        }
         if let Err(e) = termios::tcsetattr(&resource.input, OptionalActions::Now, &raw) {
             let error = io::Error::from(e);
             return Err(match resource.restore() {
@@ -122,6 +151,9 @@ impl Resource {
             });
         }
         Ok((resource, theme, capabilities))
+    }
+    pub(crate) fn discard_input(&self) -> io::Result<()> {
+        termios::tcflush(&self.input, termios::QueueSelector::IFlush).map_err(io::Error::from)
     }
 }
 impl Resource {

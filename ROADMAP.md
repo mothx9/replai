@@ -5,7 +5,7 @@
 | Axis | Current truth |
 | --- | --- |
 | Project target | Embeddable command-line interaction infrastructure: a simple entry that can grow into rich, long-lived host-driven interfaces over one engine. |
-| Current selected engineering boundary | **OUTPUT.LONG_LIVED.0 — SELECTED_NOT_STARTED**: sustained output, bounded producer arbitration and the coupled transient lifecycle foundation; requires separate authorization. |
+| Current selected engineering boundary | **INTERFACES.CLI.REPLAI.PRODUCT.SURFACE.REFOUNDATION.0 — ACTIVE**: independently qualified generic presentation/interaction C extension and bounded output/transient ownership for native hosts; ABI 1 preserved. |
 | Latest major completed boundary | COMPLETION.KEYMAP.SUGGESTION.0: public semantic actions and bounded keymaps, generic completion helpers, large-set navigation and revision-safe autosuggestion. |
 | Most important structural gap | The expanded v0.1 product still needs long-lived output, Windows runtime, sensitive input, coherent UX, large-draft scaling, developer experience and agentic integration before final hardening/freeze. |
 | Executable foundation | Platform-neutral engine; bounded Unicode grapheme/word editor; history navigation/search; undo/redo; kill/yank; completion; paste, interrupts/EOF, resize, safe output and exact restoration. |
@@ -16,7 +16,7 @@
 | Presentation posture | Safe spans, headings, facts, lists, responsive tables/status, composed prompts/themes and deterministic plain output. Bounded completion and validated multiline interaction are qualified; bounded host editor spans/hints are qualified; broader visual refinement remains separate. |
 | Consumer posture | Packaged Rust and moved-prefix C/C++ consumers are qualified independently. Product consumers remain external owners; producer metadata assigns no migrations or repins. |
 | Public-release posture | Pre-release. The expanded v0.1 product envelope and compatibility requirements are selected in [release scope](docs/release-scope.md); adopted targets are not implementation claims. |
-| Next decision point | Authorize OUTPUT.LONG_LIVED.0 separately. Ten engineering boundaries plus a separately authorized publication boundary remain in the current dependency plan. |
+| Next decision point | Qualify the selected producer extension independently before the authorized YVEX consumer repin. Broader output arbitration and release progression are not implicitly promoted. |
 
 This is the sole authority for **public macro state, maturity, strategic programs,
 dependency ordering and release progression**. [README](README.md) owns first use;
@@ -285,7 +285,10 @@ RELEASE.HARDENING.1 must extend and replay their relevant campaigns before E3/V0
 
 The previous RELEASE.CANDIDATE.0 selection remains superseded by the expanded
 plan. INTERACTION.ERGONOMICS.0 and COMPLETION.KEYMAP.SUGGESTION.0 are established;
-the sole selected boundary is OUTPUT.LONG_LIVED.0, selected but not started. Ten
+the sole selected boundary is INTERFACES.CLI.REPLAI.PRODUCT.SURFACE.REFOUNDATION.0,
+explicitly authorized by the native-host interface Task Pack. It closes the
+required bounded presentation/interaction/output subset, not every long-lived
+multi-producer arbitration property. Ten
 engineering/design/qualification boundaries remain before one separately
 authorized publication boundary:
 
@@ -309,6 +312,13 @@ Adjacent boundaries may later combine only when architecture and qualification
 naturally close together and reviewability remains intact. Independently risky
 problems may split. Such a control change requires an explicit roadmap update;
 it is never inferred from implementation convenience.
+
+The authorized interface Task Pack has five integration gates: specify the
+bounded generic extension; implement it behind the public safe Rust owners;
+qualify Rust and independent static/shared C consumers; commit/push the exact
+producer; let YVEX qualify its own immutable consumer pin. Its C presentation,
+completion and driven features must not reinterpret ABI 1 or introduce host
+semantics. No release, broad O2 promotion or other application migration follows.
 
 ## Ownership and Consumer Posture
 

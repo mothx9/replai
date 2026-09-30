@@ -49,6 +49,23 @@ typedef uint32_t replai_style_role;
 #define REPLAI_ROLE_SUCCESS 4
 #define REPLAI_ROLE_WARNING 5
 #define REPLAI_ROLE_ERROR 6
+#define REPLAI_PRESENTATION_VERSION 1
+#define REPLAI_BLOCK_PARAGRAPH 0
+#define REPLAI_BLOCK_HEADING 1
+#define REPLAI_BLOCK_FIELD 2
+#define REPLAI_BLOCK_LIST 3
+#define REPLAI_BLOCK_LITERAL 4
+#define REPLAI_BLOCK_STATUS 5
+#define REPLAI_BLOCK_SPACER 6
+#define REPLAI_BLOCK_TABLE_HEADER 7
+#define REPLAI_BLOCK_TABLE_ROW 8
+#define REPLAI_APPLIED 0
+#define REPLAI_STALE 1
+#define REPLAI_WAKE_INPUT 0
+#define REPLAI_WAKE_RESIZE 1
+#define REPLAI_WAKE_DEADLINE 2
+#define REPLAI_WAIT_READY 0
+#define REPLAI_WAIT_INPUT 1
 /* Creation limits. Zero-initialize, then set struct_size, abi_version and desired limits. */
 typedef struct replai_config {
     uint32_t struct_size;
@@ -67,6 +84,68 @@ typedef struct replai_event {
     uint64_t cursor_bytes;
     uint64_t reserved[2];
 } replai_event;
+/* Bounded semantic span; no control escapes. */
+typedef struct replai_span {
+    uint32_t struct_size;
+    uint32_t extension_version;
+    const uint8_t * text;
+    size_t text_bytes;
+    uint32_t role;
+    uint32_t reserved;
+} replai_span;
+/* Bounded composed text, copied during the call. */
+typedef struct replai_text {
+    uint32_t struct_size;
+    uint32_t extension_version;
+    const replai_span * spans;
+    size_t span_count;
+    uint64_t reserved[2];
+} replai_text;
+/* Flat block. kind selects payload; unused fields must be zero. Table rows follow their header. */
+typedef struct replai_block {
+    uint32_t struct_size;
+    uint32_t extension_version;
+    uint32_t kind;
+    uint32_t level;
+    replai_text text;
+    replai_text label;
+    const replai_text * cells;
+    size_t cell_count;
+    uint64_t reserved[2];
+} replai_block;
+/* Standalone layout; width includes indent. styled is 0 or 1. */
+typedef struct replai_render {
+    uint32_t struct_size;
+    uint32_t extension_version;
+    uint32_t columns;
+    uint32_t indent;
+    uint32_t styled;
+    uint32_t reserved;
+} replai_render;
+/* Revision-bound candidate. label and annotation are display only. */
+typedef struct replai_candidate {
+    uint32_t struct_size;
+    uint32_t extension_version;
+    size_t start;
+    size_t end;
+    const uint8_t * insertion;
+    size_t insertion_bytes;
+    const uint8_t * label;
+    size_t label_bytes;
+    const uint8_t * annotation;
+    size_t annotation_bytes;
+    uint64_t reserved[2];
+} replai_candidate;
+/* Zero output fields before each query. FD is borrowed; timeout_ms -1 denotes no deadline. */
+typedef struct replai_interest {
+    uint32_t struct_size;
+    uint32_t extension_version;
+    uint32_t kind;
+    int32_t input_fd;
+    int32_t timeout_ms;
+    uint32_t reserved;
+    uint64_t deadline_ticket;
+} replai_interest;
 /* Write the exact runtime ABI identity. */
 replai_status replai_abi_version(uint32_t * version);
 /* Create one owned opaque handle. *out must initially be NULL. Failures leave it unchanged. */
@@ -99,6 +178,32 @@ replai_status replai_complete(replai_handle * handle, size_t start, size_t end, 
 replai_status replai_external_output(replai_handle * handle, uint32_t role, const uint8_t * text, size_t length);
 /* Copy a static diagnostic by status using caller storage; no NUL terminator or library text allocation crosses C. */
 replai_status replai_status_text(int32_t status, uint8_t * buffer, size_t capacity, size_t * required);
+/* Query the separate presentation extension identity. */
+replai_status replai_presentation_version(uint32_t * version);
+/* Validate/layout before copying. NULL/0 queries exact bytes, never acquires a terminal. */
+replai_status replai_document_render(const replai_block * blocks, size_t block_count, const replai_render * options, uint8_t * buffer, size_t capacity, size_t * required);
+/* Validate the whole document then coordinate it with the active editor. */
+replai_status replai_document_output(replai_handle * handle, const replai_block * blocks, size_t block_count);
+/* Configure primary and continuation semantic spans while closed. */
+replai_status replai_prompt_composed(replai_handle * handle, const replai_text * primary, const replai_text * continuation);
+/* Return coherent draft/cursor and opaque ticket; query/too-small rules match draft_copy. */
+replai_status replai_completion_snapshot(replai_handle * handle, uint8_t * buffer, size_t capacity, size_t * required, size_t * cursor, uint64_t * ticket);
+/* Install all candidates atomically; stale ticket skips payload validation and writes STALE. */
+replai_status replai_completions_present(replai_handle * handle, uint64_t ticket, const replai_candidate * candidates, size_t candidate_count, uint32_t * disposition);
+/* Query driven readiness and deadline without waiting. */
+replai_status replai_wait_interest(replai_handle * handle, replai_interest * interest);
+/* Advance input/resize/deadline, never waits. Event remains ABI 1. */
+replai_status replai_advance(replai_handle * handle, uint32_t wake, uint64_t deadline_ticket, replai_event * event);
+/* Measure safe single-line UTF-8 under UnicodeNarrow; controls fail. */
+replai_status replai_text_cells(const uint8_t * text, size_t text_bytes, size_t * cells);
+/* Acquire quiet output while editor is closed; preserves canonical mode and ISIG. */
+replai_status replai_output_open(replai_handle * handle, int32_t input_fd, int32_t output_fd);
+/* Replace temporary semantic feedback at a host-established line boundary; empty clears. */
+replai_status replai_output_feedback(replai_handle * handle, const replai_text * text);
+/* Clear/restore output lifetime; discard_input is an explicit 0/1 host policy. */
+replai_status replai_output_close(replai_handle * handle, uint32_t discard_input);
+/* Copy the producer-authored role sequence; styled is 0/1. Never accepts caller escape sequences. */
+replai_status replai_role_sequence(uint32_t role, uint32_t styled, uint8_t * buffer, size_t capacity, size_t * required);
 #ifdef __cplusplus
 }
 #endif

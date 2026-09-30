@@ -140,6 +140,53 @@ fn isolated_key_is_visible_without_probing_another_read() {
 }
 
 #[test]
+fn escape_menu_preview_is_immediate_but_fragmented_sequences_keep_semantics() {
+    let d = Virtual::new();
+    let (mut e, mut t) = start(&d);
+    d.feed(b"a");
+    t.poll(&mut e, Duration::ZERO).unwrap();
+    let set = crate::CompletionSet::new(
+        e.editor.revision(),
+        vec![
+            crate::CompletionCandidate::new(0..1, "alpha", "alpha").unwrap(),
+            crate::CompletionCandidate::new(0..1, "apple", "apple").unwrap(),
+        ],
+    )
+    .unwrap();
+    let (_, fx) = e.present_completions(set).unwrap();
+    t.apply(&mut e, fx).unwrap();
+    assert!(d.screen().screen().contents().contains("alpha"));
+    d.feed(b"\x1b");
+    t.poll(&mut e, Duration::ZERO).unwrap();
+    assert!(!d.screen().screen().contents().contains("alpha"));
+    assert_eq!(e.editor.text(), "a");
+    // A slow fragmented Shift-Tab still selects the previous candidate, rather than
+    // losing the ESC or inserting its tail as text.
+    d.feed(b"[");
+    t.poll(&mut e, Duration::ZERO).unwrap();
+    d.feed(b"Z");
+    t.poll(&mut e, Duration::ZERO).unwrap();
+    assert!(d.screen().screen().contents().contains("apple"));
+    d.feed(b"\r");
+    t.poll(&mut e, Duration::ZERO).unwrap();
+    assert_eq!(e.editor.text(), "apple");
+    let set = crate::CompletionSet::new(
+        e.editor.revision(),
+        vec![crate::CompletionCandidate::new(0..5, "again", "again").unwrap()],
+    )
+    .unwrap();
+    let (_, fx) = e.present_completions(set).unwrap();
+    t.apply(&mut e, fx).unwrap();
+    assert!(d.screen().screen().contents().contains("again"));
+    d.feed(b"\x1b");
+    t.poll(&mut e, Duration::ZERO).unwrap();
+    t.expire_for_test();
+    t.poll(&mut e, Duration::ZERO).unwrap();
+    assert!(e.completion_selection().is_none());
+    assert_eq!(e.editor.text(), "apple");
+}
+
+#[test]
 fn buffered_partial_sequences_expire_and_paste_remains_atomic() {
     let d = Virtual::new();
     let (mut e, mut t) = start(&d);

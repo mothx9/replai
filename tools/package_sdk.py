@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 EXACT = {
     "Cargo.toml", "Cargo.lock", "LICENSE", "README.md",
     "include/replai.h", "api/c-abi.json", "examples/c/demo.c",
-    "tests/c/contracts.c", "tests/c/layout.c", "tests/fixtures/presentation.tsv",
+    "tests/c/contracts.c", "tests/c/presentation.c", "tests/c/layout.c", "tests/fixtures/presentation.tsv",
     "tests/support/terminal_state.rs", "tools/generate_abi.py", "tools/stage_c.py",
     "tools/qualify_c.py", "tools/c_pty.py",
     "docs/c-api.md", "docs/c-sdk.md",

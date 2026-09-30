@@ -91,7 +91,8 @@ The package files derive their prefix from their own location. Moving the whole
 installation tree preserves both pkg-config and CMake consumption. Do not move
 individual files out of the prefix layout.
 
-ABI 1 remains the complete C contract. Rich completion candidates, revisioned
-analysis, validation, structured documents and driven embedding are Rust-native
-in this release candidate. See the [C ABI contract](c-api.md) for ownership,
+Base ABI 1 remains compatible. Optional presentation extension 1 adds bounded
+documents, composed prompts, revision-bound completion and driven notification,
+plus a disjoint quiet-output/feedback lifetime. Validation and arbitrary host
+analysis remain Rust-native. See the [C ABI contract](c-api.md) for ownership,
 lifecycle, caller-buffer and failure rules.

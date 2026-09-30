@@ -75,6 +75,45 @@ fn prompt() -> Prompt {
 }
 
 #[test]
+fn quiet_output_feedback_has_one_lease_and_restores_without_transcript_residue() {
+    let _serial = serial();
+    for width in [8, 38, 96] {
+        let (master, slave) = pty(width, 24);
+        let before = termios(&slave);
+        let mut output = replai::OutputSession::open(&slave, &slave).unwrap();
+        let modes = tcgetattr(&slave).unwrap().local_modes;
+        assert!(!modes.contains(rustix::termios::LocalModes::ECHO));
+        assert!(modes.contains(rustix::termios::LocalModes::ISIG));
+        assert!(modes.contains(rustix::termios::LocalModes::ICANON));
+        let mut editor = Interaction::new(Editor::new(256, 0));
+        assert!(matches!(
+            editor.open(&slave, &slave, prompt()),
+            Err(Error::Busy)
+        ));
+        let mut screen = vt100::Parser::new(24, width, 100);
+        output
+            .feedback(replai::Text::styled(Role::Accent, "processing 界 1/5").unwrap())
+            .unwrap();
+        screen.process(&drain(&master));
+        output
+            .feedback(replai::Text::styled(Role::Accent, "processing 界 5/5").unwrap())
+            .unwrap();
+        screen.process(&drain(&master));
+        assert!(!screen.screen().contents().contains("1/5"));
+        output.feedback(replai::Text::new("").unwrap()).unwrap();
+        screen.process(&drain(&master));
+        assert_eq!(screen.screen().contents(), "");
+        assert!(!screen.screen().alternate_screen());
+        output.close(true).unwrap();
+        drop(output);
+        assert_eq!(before, termios(&slave));
+        editor.open(&slave, &slave, prompt()).unwrap();
+        editor.close().unwrap();
+        assert_eq!(before, termios(&slave));
+    }
+}
+
+#[test]
 fn ready_burst_preserves_host_boundaries_and_typeahead_across_reopen() {
     let _serial = serial();
     let (master, slave) = pty(80, 24);
