@@ -145,11 +145,14 @@ The host resolves style availability from the output capability and `NO_COLOR`.
 
 Consecutive FIELD blocks compose one responsive record; each uses `label` and
 `text`. TABLE_HEADER supplies 1–32 heading cells and consecutive TABLE_ROW blocks
-supply exactly that many value cells; values are start-aligned. Wrong row geometry
+supply exactly that many value cells. HEADER `level` is a column-alignment bitset:
+bit n selects right-aligned values in column n; zero selects start alignment.
+Bits beyond the supplied columns are refused. Wrong row geometry
 returns INVALID_RANGE, an orphan row INVALID_ARGUMENT. Other blocks have no cells
 or label. Unused embedded text records remain valid versioned empty records.
 `level` is 1–3 for a heading, 0–8 for an unordered list item, 0–3 for
-info/success/warning/error status, and zero otherwise. Render width is 2–4096
+info/success/warning/error status, the alignment bitset for TABLE_HEADER, and zero
+otherwise. Render width is 2–4096
 cells, with an outer indent of 0–16 and at least two remaining content cells.
 No fact is truncated merely to fit a narrow terminal.
 

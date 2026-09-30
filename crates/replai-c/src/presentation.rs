@@ -147,16 +147,24 @@ unsafe fn document(p: *const ReplaiBlock, count: usize) -> Result<Document, i32>
                 }
                 Block::KeyValue(vec![(label, t)])
             }
-            REPLAI_BLOCK_TABLE_HEADER if b.level == 0 && empty(&b.text) => {
+            REPLAI_BLOCK_TABLE_HEADER if empty(&b.text) => {
+                if b.cell_count < 32 && (b.level >> b.cell_count) != 0 {
+                    return Err(REPLAI_INVALID_ARGUMENT);
+                }
                 // SAFETY: cells are bounded caller-owned records, copied into Text.
                 let columns = unsafe { array(b.cells, b.cell_count, 32)? }
                     .iter()
-                    .map(|c| {
+                    .enumerate()
+                    .map(|(column, c)| {
                         // SAFETY: live cell in the checked array.
                         Ok(Column {
                             // SAFETY: live cell in the previously checked array.
                             heading: unsafe { semantic(c)? },
-                            alignment: replai::Alignment::Left,
+                            alignment: if b.level & (1u32 << column) != 0 {
+                                replai::Alignment::Right
+                            } else {
+                                replai::Alignment::Left
+                            },
                         })
                     })
                     .collect::<Result<Vec<_>, i32>>()?;

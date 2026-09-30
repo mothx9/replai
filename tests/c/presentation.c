@@ -85,6 +85,7 @@ int main(void) {
     replai_text fields[2] = {text(&value, 1), text(&literal, 1)};
     replai_block table[2] = {block(REPLAI_BLOCK_TABLE_HEADER), block(REPLAI_BLOCK_TABLE_ROW)};
     table[0].cells = headings; table[0].cell_count = 2;
+    table[0].level = 2; /* Independent generic column alignment, not caller padding. */
     table[1].cells = fields; table[1].cell_count = 2;
     for (uint32_t width = 4; width <= 120; width++) {
         options.columns = width;
@@ -96,6 +97,9 @@ int main(void) {
     table[1].cell_count = 2; table[1].reserved[0] = 1;
     assert(replai_document_render(table, 2, &options, output, sizeof output, &required) == REPLAI_INVALID_ARGUMENT);
     table[1].reserved[0] = 0;
+    table[0].level = 4;
+    assert(replai_document_render(table, 2, &options, output, sizeof output, &required) == REPLAI_INVALID_ARGUMENT);
+    table[0].level = 2;
     assert(replai_document_render(table + 1, 1, &options, output, sizeof output, &required) == REPLAI_INVALID_ARGUMENT);
     options.columns = 80;
     puts("DOCUMENT widths=4..120 plain/styled exact-buffer unsafe-text/version/tag/oversized refusal PASS");
