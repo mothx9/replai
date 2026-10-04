@@ -40,6 +40,12 @@ These are verification-only dependencies. They are not required by Cargo or
 installed Rust/C consumers. Mermaid parses actual fenced diagrams using a DOM
 provided by jsdom, without a browser, SVG copies or screenshot comparison.
 
+The multiline memory observer acknowledges large cursor-movement workloads in
+batches of at most 32 actions, checking exact text/cursor after every batch.
+Native runs keep the full burst. This bounds instrumented receipt backlog without
+changing the total actions, 30-second observation deadline or correctness gates;
+memory instrumentation is not a latency qualification.
+
 Complete native qualification additionally requires cc/c++, pkg-config,
 Valgrind and Landlock on Linux, or native `leaks` and sandbox isolation on
 macOS. Missing required memory/isolation tools fail the native gate. Tests use temporary prefixes and never install into system directories.

@@ -109,9 +109,21 @@ def run(work, prefix=(), plain=False):
                         measure(f'large_{lines}_movement',lambda: key(s,movement))
                         assert s.state()['text']==text
                     key(s,b'\x01')
-                    s.edit(b'\x1b[B'*(lines//2),text,69*(lines//2))
+                    # Memory instrumentation magnifies the work of reporting the
+                    # entire draft after each move. Bound outstanding receipts,
+                    # checking every batch's exact cursor instead of making one
+                    # 500-action transaction share a single observer deadline.
+                    # Native runs retain the full input-burst oracle unchanged.
+                    step = 32 if prefix else lines//2
+                    moved = 0
+                    batches = []
+                    while moved < lines//2:
+                        count = min(step, lines//2 - moved)
+                        moved += count
+                        s.edit(b'\x1b[B'*count,text,69*moved)
+                        batches.append(count)
                     enter();s.event(b'J');measure(f'large_{lines}_middle_output',lambda:s.event(b'O'))
-                    evidence['large'].append(dict(lines=lines,bytes=len(text),screen=s.screen()))
+                    evidence['large'].append(dict(lines=lines,bytes=len(text),movement_batches=batches,screen=s.screen()))
                     s.event(b'X');s.restored();s.reopen()
                 # Repeated drop/close while invalid; cleanup checked before process exit.
                 fds=[]
