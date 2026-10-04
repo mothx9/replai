@@ -145,8 +145,7 @@ Rust hosts can use `Text::render_flow` for streaming fragments and
 Supporting emulators can reflow this text after resize; fixed-width rendering
 remains available for grids and captured reports. See the
 [flow contract](docs/presentation.md#flow-output-and-resize) and
-[runnable example](examples/flow.rs). These additions are not in the older
-installation checkpoint below; select a revision containing them explicitly.
+[runnable example](examples/flow.rs).
 
 ## Where REPLAI fits
 
@@ -212,13 +211,15 @@ Until crates.io publication, pin the qualified runtime implementation checkpoint
 
 ```toml
 [dependencies]
-replai = { git = "https://github.com/mothx9/replai", rev = "81306658151fb8a0fff9b10bfda698e79fb54e15" }
+replai = { git = "https://github.com/mothx9/replai", rev = "a94265dae932d3033a59009814405b82dddc40b1" }
 ```
 
-This immutable checkpoint carries the qualified configurable-keymap, completion-helper
-and autosuggestion implementation. Package and external-consumer evidence is recorded
-in the [packaging dossier](docs/engineering/release-packaging.md) and the
-[current boundary dossier](docs/engineering/completion-keymap-suggestion.md).
+This immutable checkpoint includes flow output, configurable keymaps, completion
+helpers and autosuggestion. [Flow qualification](docs/presentation.md#flow-output-and-resize)
+records this source's local/native checks and the exact-source CI. Earlier package
+and external-consumer evidence remains scoped to the sources in the
+[packaging dossier](docs/engineering/release-packaging.md) and
+[completion dossier](docs/engineering/completion-keymap-suggestion.md).
 Exact Git pins keep pre-release consumption deliberate; no crates.io package
 has been published yet.
 

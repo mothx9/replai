@@ -90,6 +90,24 @@ cursor; retained-scrollback checks move past the paragraph before resizing.
 New output is checked after a resize at a logical-line boundary. This evidence
 does not qualify every emulator, multiplexer or Unicode width policy.
 
+Qualification source: `a94265dae932d3033a59009814405b82dddc40b1`, tree
+`bc20080324252425f4cf2476eb132119c5dfe7c2`. On Linux aarch64
+6.17.0-1021-nvidia, Rust/Cargo 1.98.1, Node 22.22.0 and Valgrind 3.22.0,
+`python3 tools/qualify.py --work /tmp/replai-flow-qualification-a94265d`
+passed all 23 command gates and the clean-worktree gate. The debug suite passed
+151 tests, with 6 doctests separately; release also passed. Native static/shared
+C qualification, C11/C++17 consumers, PTY restoration and memory gates passed.
+[Exact-source CI](https://github.com/mothx9/replai/actions/runs/37213638790)
+records the separate hosted platform/toolchain results; local ARM64 evidence
+alone does not establish another platform or an application integration.
+
+Closeout classification: additive Rust API and visible opt-in output behavior;
+contract, examples, CHANGELOG, README and ROADMAP are reconciled. Existing
+showcase imagery remains valid because its fixed-width rendering is unchanged;
+no benchmark or performance claim is refreshed. Producer metadata records the
+addition separately from unchanged C output semantics. Consumer adoption needs
+its own pin and terminal qualification; no release or broader O1/O2 closure follows.
+
 For example, a key/value block needs no host padding:
 
 ```rust
