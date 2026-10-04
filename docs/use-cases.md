@@ -6,6 +6,10 @@ from a checkout on Linux or macOS with a current stable Rust toolchain.
 
 ## Runnable map
 
+For output that should follow terminal width, run `cargo run --example flow`
+or `cargo run --example flow -- --fragments`. The [flow contract](presentation.md#flow-output-and-resize)
+explains logical newlines, terminal-owned scrollback reflow and structured records.
+
 | Need | Run from the repository | Host owns | REPLAI owns |
 | --- | --- | --- | --- |
 | A small deterministic command loop | `cargo run --locked --example simple` | Execute each submitted line; admit history | Blocking editable input; typed interrupt/EOF; restoration |

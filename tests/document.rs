@@ -11,6 +11,104 @@ fn plain() -> Theme {
     Theme::new(false, false, None)
 }
 #[test]
+fn flow_preserves_logical_lines_tabs_and_stream_fragments() {
+    let body = format!("{}\nsecond\tline\n", "café 界 e\u{301} ".repeat(700));
+    let text = t(&body);
+    assert_eq!(text.render_flow(plain()).unwrap(), body);
+    assert_eq!(
+        t("").render_flow(Theme::new(true, false, None)).unwrap(),
+        ""
+    );
+    let chunks = ["hello ", "界", "\n", "next\t", "line"];
+    let joined: String = chunks
+        .iter()
+        .map(|s| t(s).render_flow(plain()).unwrap())
+        .collect();
+    assert_eq!(joined, chunks.concat());
+    let d = doc(vec![Block::Paragraph(text)]);
+    assert_eq!(d.render_flow(plain()).unwrap(), format!("{body}\n"));
+    assert!(d.render(80, plain()).unwrap().lines().count() > body.lines().count());
+    for invalid in ["bad\r", "bad\x1b[2J", "bad\x07"] {
+        assert!(Text::new(invalid).is_err());
+    }
+    assert_eq!(
+        Text::new(&"x".repeat(16 * 1024 + 1)).unwrap_err(),
+        EditError::Capacity
+    );
+}
+
+#[test]
+fn flow_uses_logical_prefixes_and_stacked_records_without_padding() {
+    let d = doc(vec![
+        Block::Heading {
+            level: 2,
+            text: t("Facts"),
+        },
+        Block::KeyValue(vec![(t("Name"), t("café 界\ncontinued"))]),
+        Block::List {
+            ordered: true,
+            items: vec![ListItem {
+                depth: 1,
+                text: t("item\nnext"),
+            }],
+        },
+        Block::Status {
+            severity: Severity::Warning,
+            text: t("wait"),
+        },
+        Block::Literal(t("a\tb")),
+        Block::Spacer,
+    ]);
+    assert_eq!(
+        d.render_flow(plain()).unwrap(),
+        "## Facts\nName\n  café 界\n  continued\n  1. item\n     next\n[!] wait\n| a\tb\n\n"
+    );
+    assert_eq!(
+        matrix().render_flow(plain()).unwrap(),
+        "Name\n  café 界\nCount\n  12\n\nName\n  joined 👩‍💻\nCount\n  2\n  3\n"
+    );
+    let empty = doc(vec![Block::Table {
+        columns: vec![Column {
+            heading: t("Name"),
+            alignment: Alignment::Right,
+        }],
+        rows: vec![],
+    }]);
+    assert_eq!(empty.render_flow(plain()).unwrap(), "Name\n");
+    let styled = t("hello")
+        .render_flow(Theme::new(true, false, None))
+        .unwrap();
+    assert!(styled.ends_with("\x1b[0m"));
+    assert!(!styled.contains('\n'));
+    let cross_span = Text::from_spans(vec![
+        Span::new(Role::Strong, "e").unwrap(),
+        Span::new(Role::Error, "\u{301}").unwrap(),
+    ])
+    .unwrap();
+    let styled = cross_span
+        .render_flow(Theme::new(true, false, None))
+        .unwrap();
+    assert!(
+        styled.contains("e\u{301}"),
+        "style must not split a grapheme: {styled:?}"
+    );
+}
+
+#[test]
+fn flow_capacity_refusal_does_not_touch_the_writer() {
+    // Aggregate text is legal, but its logical rows exceed the output budget.
+    let d = doc(vec![Block::Paragraph(t(&"\n".repeat(16 * 1024))); 5]);
+    let mut output = b"sentinel".to_vec();
+    assert!(matches!(
+        d.write_flow_to(&mut output, plain()),
+        Err(replai::Error::Edit(EditError::Capacity))
+    ));
+    assert_eq!(output, b"sentinel");
+    let mut output = Vec::new();
+    matrix().write_flow_to(&mut output, plain()).unwrap();
+    assert_eq!(output, matrix().render_flow(plain()).unwrap().as_bytes());
+}
+#[test]
 fn indented_records_use_the_same_bounded_geometry() {
     let d = doc(vec![Block::KeyValue(vec![
         (t("state"), t("READY")),

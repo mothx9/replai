@@ -21,6 +21,7 @@ commands = [
     ['cargo', 'fmt', '--check'],
     ['cargo', 'check', '--workspace', '--all-targets'],
     ['cargo', 'test', '--workspace', '--all-targets'],
+    ['node', 'tools/flow/check_reflow.cjs'],
     ['cargo', 'clippy', '--workspace', '--all-targets', '--all-features', '--', '-D', 'warnings'],
     ['cargo', 'test', '--doc'],
     ['cargo', 'test', '--test', 'capabilities_pty', '--', '--nocapture'],

@@ -537,6 +537,17 @@ impl Interaction {
         self.reap();
         result
     }
+    /// Present a bounded flow document and restore the draft/cursor.
+    /// Only logical line breaks are emitted; the terminal owns visual wrapping.
+    /// Facts/tables are stacked records. No transcript or resize replay is kept.
+    /// Validation completes before terminal I/O; hosts serialize all output.
+    pub fn output_flow(&mut self, document: &crate::Document) -> Result<(), Error> {
+        let terminal = self.terminal.as_mut().ok_or(Error::State)?;
+        let effects = self.engine.output_flow(document)?;
+        let result = terminal.apply(&mut self.engine, effects).map(|_| ());
+        self.reap();
+        result
+    }
     /// Present a bounded semantic document at the active terminal width, then
     /// restore the exact draft/cursor. Rejection is atomic; I/O failure cleans up.
     pub fn output_document(&mut self, document: &crate::Document) -> Result<(), Error> {

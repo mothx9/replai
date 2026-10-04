@@ -10,7 +10,7 @@
 | Most important structural gap | The expanded v0.1 product still needs long-lived output, Windows runtime, sensitive input, coherent UX, large-draft scaling, developer experience and agentic integration before final hardening/freeze. |
 | Executable foundation | Platform-neutral engine; bounded Unicode grapheme/word editor; history navigation/search; undo/redo; kill/yank; completion; paste, interrupts/EOF, resize, safe output and exact restoration. |
 | Qualified platforms | Linux/macOS: real Rust/C terminal runtime. Windows: portable engine/document tests only, no terminal backend. |
-| Current Rust surface | Editor/Interaction, blocking results, session events, portable wake/deadline/admission types, borrowed POSIX readiness, revision/snapshot/stale outcomes, bounded completion candidates/selection, submission requests/dispositions, diagnostics, editor analysis spans/hints, prompts/themes and structured documents. Pre-release, without API freeze. |
+| Current Rust surface | Editor/Interaction, blocking results, session events, portable wake/deadline/admission types, borrowed POSIX readiness, revision/snapshot/stale outcomes, bounded completion candidates/selection, submission requests/dispositions, diagnostics, editor analysis spans/hints, prompts/themes, structured documents and opt-in logical-line flow output. Pre-release, without API freeze. |
 | Current C surface | ABI 1 remains unchanged. Optional presentation extension 1 adds semantic documents/prompts, responsive records/tables, revision-bound rich candidates, driven interest/advance, Unicode cells and quiet feedback/restoration. Linux native and independent package consumers are qualified; no C validation/analysis-span API or Windows runtime is implied. |
 | Performance posture | P0/P1/P2 preserved at matched workloads; Q2 retains its 32-workload historical registration and adds 16 ergonomics workloads with separately recorded latency/allocation bounds. This is not a universal latency SLA or ranking. |
 | Presentation posture | Safe spans, headings, facts, lists, responsive tables/status, composed prompts/themes and deterministic plain output. Bounded completion and validated multiline interaction are qualified; bounded host editor spans/hints are qualified; broader visual refinement remains separate. |
@@ -71,7 +71,7 @@ ESTABLISHED=43 PARTIAL=11 OPEN=5 LATER=4 TOTAL=63
 | ID | Property | Maturity | Current truth / exact boundary | Promotion condition | Program | Evidence / owner |
 | --- | --- | --- | --- | --- | --- | --- |
 | presentation.prompt | U0 composed prompts | 🟢 ESTABLISHED | Safe primary/continuation spans and semantic roles; simple constructor retained. | Preserve cell geometry, default background and simple embedding across qualified terminals. | U | [Presentation][presentation]; [document tests][documents] |
-| presentation.structured_output | O0 semantic documents | 🟢 ESTABLISHED | Rust paragraphs/headings, key/value, lists, literal blocks and spacing; safe standalone/coordinated output. | Preserve bounds, no terminal injection and meaningful styled/plain forms. | O / U | [Presentation][presentation]; [document tests][documents] |
+| presentation.structured_output | O0 semantic documents | 🟢 ESTABLISHED | Rust paragraphs/headings, key/value, lists, literal blocks and spacing; fixed-width or logical-line flow output. Flow records avoid grid padding; emulator-owned reflow is bounded by the [flow contract](docs/presentation.md#flow-output-and-resize). | Preserve bounds, no terminal injection and meaningful styled/plain forms. | O / U | [Presentation][presentation]; [document tests][documents] |
 | presentation.table | Responsive tables | 🟢 ESTABLISHED | Cell-width layout, wrapped cells and narrow record stacking; no horizontal viewport. | Preserve content and bounded work under narrow/wide Unicode inputs. | U | [Document tests][documents]; [presentation][presentation] |
 | presentation.status | Semantic severity | 🟢 ESTABLISHED | Status has textual cues in plain output; color is not the only distinction. | Keep severity legible under NO_COLOR and captured output. | U | [Presentation][presentation]; [document tests][documents] |
 | presentation.theme | Theme foundation | 🟢 ESTABLISHED | Explicit role styles and emphasis, with terminal-default background and safe spans. | Preserve style inheritance and explicit default emphasis without ANSI injection. | U | [Presentation][presentation]; [document tests][documents] |
@@ -289,8 +289,9 @@ the authorized INTERFACES.CLI.REPLAI.PRODUCT.SURFACE.REFOUNDATION.0 producer
 boundary is complete at the [native C evidence](docs/engineering/c-presentation.md)
 scope. It closes the required bounded presentation/interaction/output subset,
 not every long-lived multi-producer arbitration property. Consumer qualification
-remains YVEX-owned; the producer selection is NONE and no further boundary has
-been started. Ten
+remains YVEX-owned; the producer selection is NONE. The bounded Rust flow-output
+correction adds logical-line encoding without selecting O1/O2 or retaining a
+transcript; consumer adoption and emulator behavior remain separately owned. Ten
 engineering/design/qualification boundaries remain before one separately
 authorized publication boundary:
 

@@ -44,6 +44,52 @@ output capability using `Theme::new` or `Theme::from_environment(is_tty)`.
 The same document, width and plain theme produce identical text under non-TTY,
 NO_COLOR and TERM=dumb. Styling adds only foreground/emphasis, never a background.
 
+### Flow output and resize
+
+`Text::render_flow(theme)` encodes one bounded styled fragment without adding a
+newline or wrapping at a stored width. LF/TAB remain literal content (CRLF is
+normalized when constructing spans); the terminal owns tab stops and visual
+wrapping. Empty text emits nothing. Safe roles and first-scalar grapheme styling
+use the same renderer as documents. Grapheme styling is resolved within one
+payload; callers should not split a styled grapheme across payloads when its
+first-scalar role must be preserved. REPLAI retains no stream or parser state.
+
+`Document::render_flow(theme)` and `write_flow_to(writer, theme)` emit logical
+document rows with a final LF per row. Paragraphs keep content line breaks;
+heading/list/status/literal markers and indentation apply to logical lines only.
+Facts and tables use stacked label/value records, including headings for empty
+tables, without grid alignment or width-dependent padding. TAB remains literal.
+This is an explicit projection choice: use `render(columns, theme)` for a
+fixed-width grid or deterministic captured report, and re-render retained semantic
+documents at the new width if the host owns a redrawable viewport.
+
+On Linux/macOS, `Interaction::output_flow(document)` performs the same serialized
+erase/output/restore transaction as `output_document`, preserving draft, cursor
+and revision. It emits CRLF only for logical document rows. All validation and
+bounded layout finish before output or editor mutation. Row/work/encoded-byte
+limits still apply; writer failures can leave partial bytes and follow the
+existing cleanup contract. Flow output does not add producer arbitration.
+
+Soft-wrapped lines can reflow in a supporting terminal emulator when its window
+changes width. REPLAI neither retains nor rewrites committed scrollback, inserts
+no resize escape sequence and cannot make an emulator reflow hard newlines.
+Editor resize remains separate: driven hosts deliver `Wake::Resize`, while
+polling observes geometry. Hosts must remove their own pre-wrapping/column caps;
+feeding already wrapped text into flow encoding preserves those hard breaks.
+Existing Rust fixed-width methods and C ABI 1/presentation extension 1 keep their
+behavior; these new flow entry points are Rust-only.
+
+Run the [flow example](../examples/flow.rs) with `cargo run --example flow` or
+`cargo run --example flow -- --fragments`, then resize a reflow-capable terminal.
+The [pinned emulator observer](../tools/flow/check_reflow.cjs) checks retained
+scrollback at 20, 60, 12, 100 and 20 columns, including a fixed-layout negative
+control. [PTY tests](../tests/pty.rs) independently check actual bytes, draft,
+cursor, revision, rejection silence and terminal restoration after resize.
+The pinned xterm version does not reflow the paragraph containing its active
+cursor; retained-scrollback checks move past the paragraph before resizing.
+New output is checked after a resize at a logical-line boundary. This evidence
+does not qualify every emulator, multiplexer or Unicode width policy.
+
 For example, a key/value block needs no host padding:
 
 ```rust

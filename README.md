@@ -140,6 +140,14 @@ All input, candidates, diagnostics, hints and documents are bounded. Rich result
 bind to `DraftRevision`; successful text or cursor changes invalidate earlier
 analysis automatically.
 
+Rust hosts can use `Text::render_flow` for streaming fragments and
+`Document::render_flow` or `Interaction::output_flow` for terminal-owned wrapping.
+Supporting emulators can reflow this text after resize; fixed-width rendering
+remains available for grids and captured reports. See the
+[flow contract](docs/presentation.md#flow-output-and-resize) and
+[runnable example](examples/flow.rs). These additions are not in the older
+installation checkpoint below; select a revision containing them explicitly.
+
 ## Where REPLAI fits
 
 **Good fits:** deterministic CLIs, database and admin consoles, debugger

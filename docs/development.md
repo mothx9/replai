@@ -29,9 +29,14 @@ installation (Mermaid 11.17.2 and jsdom 26.1.0):
 
 ```sh
 npm ci --prefix tools/docs --ignore-scripts
+npm ci --prefix tools/flow --ignore-scripts
 ```
 
-These are documentation-only dependencies. They are not required by Cargo or
+The second installation pins the xterm/headless 5.5.0 scrollback-reflow oracle.
+Run `node tools/flow/check_reflow.cjs` for flow-output changes; it executes the
+public Rust example, resizes already emitted scrollback and rejects the old
+hard-wrap output as a negative control. It is included in CI and full qualification.
+These are verification-only dependencies. They are not required by Cargo or
 installed Rust/C consumers. Mermaid parses actual fenced diagrams using a DOM
 provided by jsdom, without a browser, SVG copies or screenshot comparison.
 

@@ -6,6 +6,13 @@ next work. All entries below are unreleased and carry no compatibility promise.
 
 ## Unreleased
 
+- Added Rust `Text::render_flow`, `Document::render_flow`/`write_flow_to` and
+  `Interaction::output_flow`: logical line breaks stay distinct from terminal
+  wrapping, so supporting emulators can reflow committed text after resize.
+  Fragment output adds no newline; flow facts/tables use stacked records.
+  Existing fixed-width rendering and C ABI/presentation extension are unchanged.
+  Hosts still own serialization, resize delivery and removal of pre-wrapping.
+
 - Added optional C presentation extension 1 over unchanged base C ABI 1:
   bounded semantic documents/composed prompts, revision-ticket completion menus,
   driven readiness/resize/deadline notifications, shared Unicode cell measurement

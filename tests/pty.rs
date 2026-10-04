@@ -19,6 +19,72 @@ use std::{
 mod pty_support;
 
 static SERIAL: Mutex<()> = Mutex::new(());
+
+#[test]
+fn pty_flow_output_keeps_soft_wraps_and_restores_the_editor_after_resize() {
+    use replai::{Block, Document, Text, Theme, Wake};
+    let _serial = serial();
+    let (master, slave) = pty(20, 30);
+    let before = tcgetattr(&slave).unwrap();
+    let body = "abcdefghijklmnopqrstuvwxyz0123456789abcdefghij";
+    let document = Document::new(vec![Block::Paragraph(Text::new(body).unwrap())]).unwrap();
+    let mut interaction = Interaction::new(Editor::new(1024, 2));
+    assert!(matches!(
+        interaction.output_flow(&document),
+        Err(Error::State)
+    ));
+    interaction.editor_mut().unwrap().insert("café").unwrap();
+    interaction
+        .open_with_theme(
+            &slave,
+            &slave,
+            Prompt::new("demo").unwrap(),
+            Theme::new(false, false, None),
+        )
+        .unwrap();
+    drain(&master);
+    let revision = interaction.editor().revision();
+    for columns in [20, 60, 12, 40] {
+        resize(&slave, columns, 30);
+        interaction.advance(Wake::Resize).unwrap();
+        drain(&master);
+        interaction.output_flow(&document).unwrap();
+        let bytes = drain(&master);
+        assert!(
+            bytes
+                .windows(body.len() + 2)
+                .any(|w| w == format!("{body}\r\n").as_bytes()),
+            "width {columns}: {bytes:?}"
+        );
+        let mut screen = vt100::Parser::new(30, columns, 0);
+        screen.process(&bytes);
+        let mut expected = vt100::Parser::new(30, columns, 0);
+        expected.process(format!("{body}\r\ndemo> café").as_bytes());
+        assert_eq!(screen.screen().contents(), expected.screen().contents());
+        assert_eq!(
+            screen.screen().cursor_position(),
+            expected.screen().cursor_position()
+        );
+        assert_eq!(interaction.editor().revision(), revision);
+        assert_eq!(interaction.editor().text(), "café");
+        // Refusal must produce no bytes and preserve the active draft/revision.
+        let huge = Document::new(vec![
+            Block::Paragraph(
+                Text::new(&"\n".repeat(16384)).unwrap()
+            );
+            5
+        ])
+        .unwrap();
+        assert!(interaction.output_flow(&huge).is_err());
+        assert!(drain(&master).is_empty());
+        assert_eq!(interaction.editor().revision(), revision);
+    }
+    interaction.close().unwrap();
+    assert_eq!(
+        format!("{:?}", tcgetattr(&slave).unwrap()),
+        format!("{before:?}")
+    );
+}
 fn serial() -> MutexGuard<'static, ()> {
     SERIAL.lock().unwrap_or_else(|p| p.into_inner())
 }

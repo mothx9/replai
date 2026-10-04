@@ -76,6 +76,13 @@ jobs:
         run: cargo test --workspace --lib --test core --test foundation --test architecture --test document --test ergonomics
       - name: Rust PTY behavior
         run: cargo test -p replai --test pty
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "22"
+      - name: Retained scrollback reflow and hard-wrap negative control
+        run: |
+          npm ci --prefix tools/flow --ignore-scripts
+          node tools/flow/check_reflow.cjs
       - name: Rust release regressions
         run: cargo test --workspace --release
       - run: cargo clippy --workspace --all-targets --all-features -- -D warnings

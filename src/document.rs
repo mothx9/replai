@@ -58,6 +58,25 @@ impl Text {
         }
         Ok(Self { spans })
     }
+    /// Encode a safe styled fragment without width wrapping or a final newline.
+    /// LF and TAB remain content; the terminal owns visual wrapping and tab stops.
+    /// Use this for serialized streaming output. No terminal is acquired and no
+    /// earlier output is retained or redrawn. Scrollback reflow is emulator-owned.
+    /// Grapheme styling is resolved within this payload, not across calls.
+    ///
+    /// ```
+    /// use replai::{Text, Theme};
+    /// let fragment = Text::new("a long line\nnext\tpart")?;
+    /// assert_eq!(fragment.render_flow(Theme::new(false, false, None))?,
+    ///            "a long line\nnext\tpart");
+    /// # Ok::<(), replai::EditError>(())
+    /// ```
+    pub fn render_flow(&self, theme: Theme) -> Result<String, EditError> {
+        if self.bytes() == 0 {
+            return Ok(String::new());
+        }
+        encode_lines(&wrap(self, None, Role::Default)?, theme, 0, false)
+    }
     pub(crate) fn plain(&self) -> String {
         self.spans.iter().map(|s| s.text.as_str()).collect()
     }
@@ -227,23 +246,28 @@ impl Document {
             return Err(EditError::InvalidRange);
         }
         let lines = self.layout(columns - indent)?;
-        let mut out = String::new();
-        for line in &lines {
-            if !line.0.is_empty() {
-                out.push_str(&" ".repeat(indent));
-            }
-            for run in &line.0 {
-                match run {
-                    Run::Text(t) => out.push_str(t),
-                    Run::Style(r) => out.push_str(theme.sequence(*r)),
-                }
-            }
-            out.push('\n');
-        }
-        if out.len() > 8 * BUDGET {
-            return Err(EditError::Capacity);
-        }
-        Ok(out)
+        encode_lines(&lines, theme, indent, true)
+    }
+    /// Render logical lines without inserting width-dependent line breaks.
+    /// The terminal owns visual wrapping, tab stops and scrollback reflow.
+    /// Facts and tables use stacked label/value records, without column padding.
+    /// Prefixes/indentation apply to logical lines only, not terminal soft wraps.
+    /// Each logical document row ends in LF, including the final row.
+    /// Existing text/work/row/encoded-byte bounds still apply. This does not
+    /// retain output, handle resize events or promise reflow in every emulator.
+    pub fn render_flow(&self, theme: Theme) -> Result<String, EditError> {
+        encode_lines(&self.layout_with_width(None)?, theme, 0, true)
+    }
+    /// Fully validate flow output before touching the caller-owned writer.
+    /// I/O failures may leave partial output; the caller owns recovery.
+    pub fn write_flow_to(
+        &self,
+        writer: &mut impl std::io::Write,
+        theme: Theme,
+    ) -> Result<(), Error> {
+        let text = self.render_flow(theme)?;
+        writer.write_all(text.as_bytes())?;
+        Ok(())
     }
     /// Fully validate/layout before writing one batch. Writer failures propagate;
     /// the caller owns the writer and any policy for partially delivered output.
@@ -260,10 +284,16 @@ impl Document {
     pub(crate) fn mutations(&self, columns: usize) -> Result<Vec<Mutation>, EditError> {
         Ok(line_mutations(self.layout(columns)?))
     }
+    pub(crate) fn flow_mutations(&self) -> Result<Vec<Mutation>, EditError> {
+        Ok(line_mutations(self.layout_with_width(None)?))
+    }
     pub(crate) fn layout(&self, columns: usize) -> Result<Vec<Line>, EditError> {
         if !(2..=4096).contains(&columns) {
             return Err(EditError::InvalidRange);
         }
+        self.layout_with_width(Some(columns))
+    }
+    fn layout_with_width(&self, columns: Option<usize>) -> Result<Vec<Line>, EditError> {
         let mut out = Output::default();
         for block in &self.blocks {
             match block {
@@ -317,6 +347,32 @@ impl Document {
         }
         Ok(out.lines)
     }
+}
+fn encode_lines(
+    lines: &[Line],
+    theme: Theme,
+    indent: usize,
+    final_newline: bool,
+) -> Result<String, EditError> {
+    let mut out = String::new();
+    for (index, line) in lines.iter().enumerate() {
+        if !line.0.is_empty() {
+            out.push_str(&" ".repeat(indent));
+        }
+        for run in &line.0 {
+            match run {
+                Run::Text(t) => out.push_str(t),
+                Run::Style(r) => out.push_str(theme.sequence(*r)),
+            }
+        }
+        if final_newline || index + 1 < lines.len() {
+            out.push('\n');
+        }
+        if out.len() > 8 * BUDGET {
+            return Err(EditError::Capacity);
+        }
+    }
+    Ok(out)
 }
 #[derive(Default)]
 struct Output {
@@ -377,7 +433,7 @@ fn width(line: &Line) -> usize {
         })
         .sum()
 }
-fn wrap(text: &Text, columns: usize, default: Role) -> Result<Vec<Line>, EditError> {
+fn wrap(text: &Text, columns: Option<usize>, default: Role) -> Result<Vec<Line>, EditError> {
     let flat = text.plain();
     let mut rows = vec![Line::default()];
     let mut col = 0;
@@ -394,15 +450,17 @@ fn wrap(text: &Text, columns: usize, default: Role) -> Result<Vec<Line>, EditErr
             col = 0;
             continue;
         }
-        let spaces = " ".repeat(if g == "\t" { 4 - col % 4 } else { 0 });
-        let value = if g == "\t" { spaces.as_str() } else { g };
-        // Tabs expand as spaces; other extended graphemes stay indivisible.
+        let expand_tab = g == "\t" && columns.is_some();
+        let spaces = " ".repeat(if expand_tab { 4 - col % 4 } else { 0 });
+        let value = if expand_tab { spaces.as_str() } else { g };
+        // Fixed layout expands tabs; flow leaves tab stops to the terminal.
+        // Other extended graphemes stay indivisible.
         for part in value.graphemes(true) {
             let n = cells(part);
-            if n > columns {
+            if columns.is_some_and(|columns| n > columns) {
                 return Err(EditError::InvalidRange);
             }
-            if col + n > columns {
+            if columns.is_some_and(|columns| col + n > columns) {
                 rows.push(Line::default());
                 col = 0;
             }
@@ -422,18 +480,18 @@ fn prefixed(
     out: &mut Output,
     text: &Text,
     prefix: &str,
-    columns: usize,
+    columns: Option<usize>,
     role: Role,
 ) -> Result<(), EditError> {
     let indent = cells(prefix);
-    if indent + 2 > columns {
+    if columns.is_some_and(|columns| indent + 2 > columns) {
         append(
             out,
             wrap(&Text::styled(role, prefix.trim_end())?, columns, role)?,
         )?;
         return append(out, wrap(text, columns, Role::Default)?);
     }
-    let rows = wrap(text, columns - indent, role)?;
+    let rows = wrap(text, columns.map(|columns| columns - indent), role)?;
     let mut result = Vec::new();
     for (i, row) in rows.into_iter().enumerate() {
         let mut line = Line::default();
@@ -456,19 +514,20 @@ fn natural(text: &Text) -> usize {
 fn facts<'a>(
     out: &mut Output,
     fields: impl Iterator<Item = (&'a Text, &'a Text)> + Clone,
-    columns: usize,
+    columns: Option<usize>,
 ) -> Result<(), EditError> {
     let label = fields.clone().map(|(k, _)| natural(k)).max().unwrap_or(0);
-    if label + 2 + 4 > columns || label > columns / 2 {
+    if columns.is_none_or(|columns| label + 2 + 4 > columns || label > columns / 2) {
         for (k, v) in fields {
             append(out, wrap(k, columns, Role::Strong)?)?;
             prefixed(out, v, "  ", columns, Role::Default)?;
         }
         return Ok(());
     }
+    let columns = columns.unwrap();
     for (k, v) in fields {
-        let left = wrap(k, label.max(2), Role::Strong)?;
-        let right = wrap(v, columns - label - 2, Role::Default)?;
+        let left = wrap(k, Some(label.max(2)), Role::Strong)?;
+        let right = wrap(v, Some(columns - label - 2), Role::Default)?;
         for i in 0..left.len().max(right.len()) {
             let mut line = Line::default();
             if let Some(l) = left.get(i) {
@@ -488,11 +547,11 @@ fn table(
     out: &mut Output,
     cols: &[Column],
     rows: &[Vec<Text>],
-    columns: usize,
+    columns: Option<usize>,
 ) -> Result<(), EditError> {
     let n = cols.len();
     let gap = (n - 1) * 2;
-    if n * 4 + gap > columns {
+    if columns.is_none_or(|columns| n * 4 + gap > columns) {
         if rows.is_empty() {
             for col in cols {
                 append(out, wrap(&col.heading, columns, Role::Strong)?)?;
@@ -510,6 +569,7 @@ fn table(
         }
         return Ok(());
     }
+    let columns = columns.unwrap();
     let mut widths: Vec<usize> = cols
         .iter()
         .map(|c| natural(&c.heading).max(4).min(columns))
@@ -532,7 +592,7 @@ fn table(
             .map(|(i, t)| {
                 wrap(
                     t,
-                    widths[i],
+                    Some(widths[i]),
                     if index == 0 {
                         Role::Strong
                     } else {

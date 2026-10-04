@@ -854,6 +854,13 @@ impl Engine {
         let mutations = document.mutations(size.0)?;
         Ok(self.output_mutations(mutations))
     }
+    pub fn output_flow(&mut self, document: &crate::Document) -> Result<Effects, Error> {
+        if !self.is_open() {
+            return Err(Error::State);
+        }
+        let mutations = document.flow_mutations()?;
+        Ok(self.output_mutations(mutations))
+    }
     fn output_mutations(&mut self, content: Vec<Mutation>) -> Effects {
         let mut mutations = vec![Mutation::Paste(false)];
         mutations.extend(self.surface.as_mut().unwrap().renderer.erase());
