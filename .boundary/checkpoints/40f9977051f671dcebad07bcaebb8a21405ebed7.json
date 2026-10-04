@@ -650,9 +650,7 @@
         "https://github.com/mothx9/replai/blob/0abed4fa75a5684005c87df3bb36e2f997025d00/docs/engineering/validation-multiline.md",
         "https://github.com/mothx9/replai/actions/runs/34703095088",
         "https://github.com/mothx9/replai/actions/runs/34703089136",
-        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md",
-        "https://github.com/mothx9/replai/blob/6868aa7c42b3e8f212e81327c056d8a775faaf35/tools/validation_pty.py",
-        "https://github.com/mothx9/replai/blob/6868aa7c42b3e8f212e81327c056d8a775faaf35/docs/development.md"
+        "https://github.com/mothx9/replai/blob/7f8f696f98b33d8e4ea6f08e243fe0d5e5351724/docs/engineering/release-packaging.md"
       ],
       "guarantees": [
         "Host grammar and scheduling remain external; Enter emits an immutable snapshot when validation is enabled",
@@ -1012,29 +1010,68 @@
   ],
   "changes": [
     {
-      "capability": "analysis.validation",
+      "capability": "presentation.flow_output",
       "compatibility": "compatible",
-      "description": "Instrumented multiline observer checks exact draft/cursor after batches of at most 32 movements, retaining all 500 movements and native full-burst coverage. This bounds receipt backlog under Valgrind/leaks without changing the per-observation deadline, runtime, public API or ABI. Local plain/styled 10/100/1000-line native and Valgrind reruns pass.",
+      "description": "Add opt-in flow fragment/document and coordinated POSIX output through the existing bounded renderer. Fixed-width output and all C declarations/semantics are preserved. No consumer migration or pin is assigned.",
       "evidence": [
-        "https://github.com/mothx9/replai/blob/6868aa7c42b3e8f212e81327c056d8a775faaf35/tools/validation_pty.py",
-        "https://github.com/mothx9/replai/blob/6868aa7c42b3e8f212e81327c056d8a775faaf35/docs/development.md"
+        "https://github.com/mothx9/replai/blob/a94265dae932d3033a59009814405b82dddc40b1/tests/document.rs",
+        "https://github.com/mothx9/replai/blob/a94265dae932d3033a59009814405b82dddc40b1/tests/pty.rs",
+        "https://github.com/mothx9/replai/blob/a94265dae932d3033a59009814405b82dddc40b1/tools/flow/check_reflow.cjs",
+        "https://github.com/mothx9/replai/actions/runs/37213638790",
+        "https://github.com/mothx9/replai/blob/40f9977051f671dcebad07bcaebb8a21405ebed7/docs/presentation.md#flow-output-and-resize"
       ],
       "inputs": [
-        "tools/validation_pty.py",
-        "docs/development.md"
+        ".github/workflows/ci.yml",
+        "CHANGELOG.md",
+        "README.md",
+        "ROADMAP.md",
+        "docs/development.md",
+        "docs/presentation.md",
+        "docs/use-cases.md",
+        "examples/flow.rs",
+        "src/document.rs",
+        "src/engine.rs",
+        "src/interaction.rs",
+        "tests/document.rs",
+        "tests/pty.rs",
+        "tools/flow/check_reflow.cjs",
+        "tools/flow/package-lock.json",
+        "tools/flow/package.json",
+        "tools/qualify.py"
       ],
-      "kind": "QUALIFICATION_CHANGED",
+      "kind": "ADDED",
+      "platforms": [
+        "linux",
+        "macos",
+        "windows"
+      ],
+      "surfaces": [
+        "rust-native"
+      ]
+    },
+    {
+      "capability": "abi.c.presentation_v1",
+      "compatibility": "compatible",
+      "description": "Build compatibility repair: shared terminal session and C extension ticket counters use AtomicU64::try_update, available on the declared Rust 1.98.1 floor, instead of the alias deprecated by Rust 1.99. Runtime counter semantics, exhaustion refusal and ABI declarations are unchanged.",
+      "evidence": [
+        "https://github.com/mothx9/replai/commit/a94265dae932d3033a59009814405b82dddc40b1"
+      ],
+      "inputs": [
+        "src/terminal.rs",
+        "crates/replai-c/src/presentation.rs"
+      ],
+      "kind": "BEHAVIOR_CHANGED",
       "platforms": [
         "linux",
         "macos"
       ],
       "surfaces": [
-        "rust-native"
+        "c-presentation-v1"
       ]
     }
   ],
-  "generation": 21,
-  "id": "sha256:83191e4dabbde11c55ec7b585dc3b60560f01f06cd8360f52e9816126f9f5d8f",
+  "generation": 20,
+  "id": "sha256:4167dccb8064748fa20f84617b1b8ca867a3420b0f842f78b6c3d1490cb7d6e1",
   "inputs": [
     {
       "capabilities": [
@@ -4774,19 +4811,18 @@
       ],
       "category": "qualification",
       "path": "tools/validation_pty.py",
-      "sha256": "sha256:98373473ce9848f07a79e65544d4c24728a6a5edfbd793ae747d8a981a10acd9",
+      "sha256": "sha256:b8354eea0bc300a297d82222e0705323d67d353a38ed97e57c30ed5d02159da8",
       "surfaces": [
         "rust-native"
       ]
     },
     {
       "capabilities": [
-        "analysis.validation",
         "presentation.flow_output"
       ],
       "category": "documentation",
       "path": "docs/development.md",
-      "sha256": "sha256:bace3e869f3f66a3f7137b4787d82cb7eae395356712c60cdbb87d9f38c601cd",
+      "sha256": "sha256:6c6aa92f6bbe91d905cd863022223e27e557071731bd7753b1f87f969ac860fe",
       "surfaces": [
         "rust-native"
       ]
@@ -4897,17 +4933,17 @@
     }
   ],
   "predecessor": {
-    "contract_id": "sha256:4167dccb8064748fa20f84617b1b8ca867a3420b0f842f78b6c3d1490cb7d6e1",
+    "contract_id": "sha256:d1a6a372fb96af1c38f4d84551ae39a5a36ed725a596e54cc1276d7a20d8271e",
     "repository": "https://github.com/mothx9/replai",
-    "revision": "40f9977051f671dcebad07bcaebb8a21405ebed7",
-    "tree": "0028bfb075e79e5c2e3f404fe0fb399e4644cec0"
+    "revision": "c1e86e2707ef80e572c7df1501cb6d53dfe2927e",
+    "tree": "2fa789f198ee2e47e77d6d435174dca0bb7e9e75"
   },
   "repository": "https://github.com/mothx9/replai",
   "schema_version": 1,
   "source": {
     "dirty": false,
-    "revision": "6868aa7c42b3e8f212e81327c056d8a775faaf35",
-    "tree": "7970ed5db4aad477f83c6c21d1139e16877f5058"
+    "revision": "40f9977051f671dcebad07bcaebb8a21405ebed7",
+    "tree": "0028bfb075e79e5c2e3f404fe0fb399e4644cec0"
   },
   "surfaces": [
     {

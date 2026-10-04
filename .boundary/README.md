@@ -4,7 +4,15 @@ REPLAI owns these producer declarations. They describe generic capabilities,
 surfaces, qualification and changes; they assign no consumer paths, commands or
 migration work. Consumer profiles must be authored by their own repositories.
 
-- [Current producer snapshot](producer.json), generation 20: additive Rust flow
+- [Current producer snapshot](producer.json), generation 21: qualification-only
+  [multiline memory observer correction](deltas/validation-memory-observer.json).
+  Source `6868aa7c42b3e8f212e81327c056d8a775faaf35`, tree
+  `7970ed5db4aad477f83c6c21d1139e16877f5058`. Instrumented large-movement
+  workloads acknowledge at most 32 actions per batch with exact text/cursor
+  checks; all actions, native full-burst coverage and observation deadlines remain.
+  Local native and Valgrind plain/styled 10/100/1000-line reruns pass.
+  Runtime, API, ABI and the flow contract from generation 20 are unchanged.
+- [Previous flow snapshot](checkpoints/40f9977051f671dcebad07bcaebb8a21405ebed7.json), generation 20: additive Rust flow
   output, described by the [flow delta](deltas/flow-output.json). Source/document
   carrier `40f9977051f671dcebad07bcaebb8a21405ebed7`, tree
   `0028bfb075e79e5c2e3f404fe0fb399e4644cec0`; qualified runtime source
@@ -203,7 +211,7 @@ behavior, ABI and documentation inputs. Its external validation command is:
 
 ```sh
 boundary validate .boundary/producer.json --repo . \
-  --previous .boundary/checkpoints/c1e86e2707ef80e572c7df1501cb6d53dfe2927e.json
+  --previous .boundary/checkpoints/40f9977051f671dcebad07bcaebb8a21405ebed7.json
 ```
 
 Run from a clean REPLAI checkout with BOUNDARY installed separately. Validation
