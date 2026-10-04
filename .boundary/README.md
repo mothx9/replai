@@ -4,7 +4,22 @@ REPLAI owns these producer declarations. They describe generic capabilities,
 surfaces, qualification and changes; they assign no consumer paths, commands or
 migration work. Consumer profiles must be authored by their own repositories.
 
-- [Current producer snapshot](producer.json), generation 19: documentation-only
+- [Current producer snapshot](producer.json), generation 20: additive Rust flow
+  output, described by the [flow delta](deltas/flow-output.json). Source/document
+  carrier `40f9977051f671dcebad07bcaebb8a21405ebed7`, tree
+  `0028bfb075e79e5c2e3f404fe0fb399e4644cec0`; qualified runtime source
+  `a94265dae932d3033a59009814405b82dddc40b1`, tree
+  `bc20080324252425f4cf2476eb132119c5dfe7c2`, with unchanged Rust source tree
+  `86b4f18fb51e15b9225c2fbbdf06a0466fc3a27a` between those two revisions.
+  [Flow contract and evidence](../docs/presentation.md#flow-output-and-resize)
+  binds 23 local command gates plus clean closure, native C regressions and the
+  pinned retained-scrollback observer. [Runtime-source CI](https://github.com/mothx9/replai/actions/runs/37213638790)
+  records hosted platform results. Fixed-width methods and C output contracts
+  remain unchanged; a separate compiler-compatibility delta replaces the atomic
+  method alias deprecated by Rust 1.99 while retaining the Rust 1.98.1 floor.
+  No universal emulator reflow, retained transcript, producer arbitration,
+  consumer migration or release qualification is inferred.
+- [Previous producer snapshot](checkpoints/c1e86e2707ef80e572c7df1501cb6d53dfe2927e.json), generation 19: documentation-only
   closure reconciliation at `c1e86e2707ef80e572c7df1501cb6d53dfe2927e`, tree
   `2fa789f198ee2e47e77d6d435174dca0bb7e9e75`.
   The [closeout delta](deltas/presentation-closeout.json) changes project-control
@@ -188,7 +203,7 @@ behavior, ABI and documentation inputs. Its external validation command is:
 
 ```sh
 boundary validate .boundary/producer.json --repo . \
-  --previous .boundary/checkpoints/6ee2fe1e2006f940d0046676c73306bfc7da1070.json
+  --previous .boundary/checkpoints/c1e86e2707ef80e572c7df1501cb6d53dfe2927e.json
 ```
 
 Run from a clean REPLAI checkout with BOUNDARY installed separately. Validation

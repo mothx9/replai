@@ -975,107 +975,34 @@
         "rust-native",
         "c-presentation-v1"
       ]
-    },
-    {
-      "description": "Opt-in logical-line and fragment encoding for terminal-owned wrapping and emulator-owned scrollback reflow",
-      "documentation": [
-        "https://github.com/mothx9/replai/blob/40f9977051f671dcebad07bcaebb8a21405ebed7/docs/presentation.md#flow-output-and-resize"
-      ],
-      "evidence": [
-        "https://github.com/mothx9/replai/blob/a94265dae932d3033a59009814405b82dddc40b1/tests/document.rs",
-        "https://github.com/mothx9/replai/blob/a94265dae932d3033a59009814405b82dddc40b1/tests/pty.rs",
-        "https://github.com/mothx9/replai/blob/a94265dae932d3033a59009814405b82dddc40b1/tools/flow/check_reflow.cjs",
-        "https://github.com/mothx9/replai/actions/runs/37213638790",
-        "https://github.com/mothx9/replai/blob/40f9977051f671dcebad07bcaebb8a21405ebed7/docs/presentation.md#flow-output-and-resize"
-      ],
-      "guarantees": [
-        "Text::render_flow preserves logical LF/TAB and adds no newline; no stored width or hard-wrap insertion",
-        "Document flow uses logical prefixes and stacked label/value table records through the existing safe renderer",
-        "Interaction::output_flow serializes output and restores the draft/cursor/revision on Linux/macOS; rejection precedes terminal output",
-        "Existing fixed-width Rust rendering and C ABI 1/presentation extension 1 remain unchanged",
-        "Hosts own stream serialization and resize delivery; no transcript replay, producer arbitration, word-wrap or universal emulator reflow promise",
-        "Pinned xterm/headless observer qualifies retained scrollback, not reflow of the active cursor paragraph; Windows remains portable-core only"
-      ],
-      "id": "presentation.flow_output",
-      "maturity": "experimental",
-      "platforms": [
-        "linux",
-        "macos",
-        "windows"
-      ],
-      "surfaces": [
-        "rust-native"
-      ]
     }
   ],
   "changes": [
     {
-      "capability": "presentation.flow_output",
-      "compatibility": "compatible",
-      "description": "Add opt-in flow fragment/document and coordinated POSIX output through the existing bounded renderer. Fixed-width output and all C declarations/semantics are preserved. No consumer migration or pin is assigned.",
-      "evidence": [
-        "https://github.com/mothx9/replai/blob/a94265dae932d3033a59009814405b82dddc40b1/tests/document.rs",
-        "https://github.com/mothx9/replai/blob/a94265dae932d3033a59009814405b82dddc40b1/tests/pty.rs",
-        "https://github.com/mothx9/replai/blob/a94265dae932d3033a59009814405b82dddc40b1/tools/flow/check_reflow.cjs",
-        "https://github.com/mothx9/replai/actions/runs/37213638790",
-        "https://github.com/mothx9/replai/blob/40f9977051f671dcebad07bcaebb8a21405ebed7/docs/presentation.md#flow-output-and-resize"
-      ],
-      "inputs": [
-        ".github/workflows/ci.yml",
-        "CHANGELOG.md",
-        "README.md",
-        "ROADMAP.md",
-        "docs/development.md",
-        "docs/presentation.md",
-        "docs/use-cases.md",
-        "examples/flow.rs",
-        "src/document.rs",
-        "src/engine.rs",
-        "src/interaction.rs",
-        "tests/document.rs",
-        "tests/pty.rs",
-        "tools/flow/check_reflow.cjs",
-        "tools/flow/package-lock.json",
-        "tools/flow/package.json",
-        "tools/qualify.py"
-      ],
-      "kind": "ADDED",
-      "platforms": [
-        "linux",
-        "macos",
-        "windows"
-      ],
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
       "capability": "abi.c.presentation_v1",
       "compatibility": "compatible",
-      "description": "Build compatibility repair: shared terminal session and C extension ticket counters use AtomicU64::try_update, available on the declared Rust 1.98.1 floor, instead of the alias deprecated by Rust 1.99. Runtime counter semantics, exhaustion refusal and ABI declarations are unchanged.",
+      "description": "Documentation-only reconciliation of the completed producer gate and bounded Linux quiet feedback; runtime, ABI 1 and extension semantics are unchanged, with no additional execution qualification.",
       "evidence": [
-        "https://github.com/mothx9/replai/commit/a94265dae932d3033a59009814405b82dddc40b1"
+        "https://github.com/mothx9/replai/blob/c1e86e2707ef80e572c7df1501cb6d53dfe2927e/ROADMAP.md",
+        "https://github.com/mothx9/replai/blob/eb246d3fd81353fc3be27c8924ee2321067530bf/docs/engineering/c-presentation.md"
       ],
       "inputs": [
-        "src/terminal.rs",
-        "crates/replai-c/src/presentation.rs"
+        "ROADMAP.md"
       ],
-      "kind": "BEHAVIOR_CHANGED",
+      "kind": "QUALIFICATION_CHANGED",
       "platforms": [
-        "linux",
-        "macos"
+        "linux"
       ],
       "surfaces": [
         "c-presentation-v1"
       ]
     }
   ],
-  "generation": 20,
-  "id": "sha256:4167dccb8064748fa20f84617b1b8ca867a3420b0f842f78b6c3d1490cb7d6e1",
+  "generation": 19,
+  "id": "sha256:d1a6a372fb96af1c38f4d84551ae39a5a36ed725a596e54cc1276d7a20d8271e",
   "inputs": [
     {
       "capabilities": [
-        "abi.c.presentation_v1",
         "abi.c.v1",
         "analysis.hints_highlight",
         "analysis.revisions",
@@ -1098,7 +1025,6 @@
         "platform.posix_macos",
         "presentation.completion_ux",
         "presentation.composed_prompt",
-        "presentation.flow_output",
         "presentation.multiline_ux",
         "presentation.prompt",
         "presentation.status",
@@ -1107,15 +1033,16 @@
         "presentation.theme",
         "terminal.admission",
         "terminal.capability_snapshot",
-        "terminal.width_policy"
+        "terminal.width_policy",
+        "abi.c.presentation_v1"
       ],
       "category": "qualification",
       "path": ".github/workflows/ci.yml",
-      "sha256": "sha256:44ca5b2cffd8ee0bb01c4bb2ba285fd16ff11efc21977f2b808d139f73ff3eb4",
+      "sha256": "sha256:5cc912cde42ac7df65f1e24c6e115415c8a826183d6c2c338097d5bd503559e8",
       "surfaces": [
         "c-abi-v1",
-        "c-presentation-v1",
-        "rust-native"
+        "rust-native",
+        "c-presentation-v1"
       ]
     },
     {
@@ -1240,20 +1167,19 @@
     },
     {
       "capabilities": [
-        "abi.c.presentation_v1",
         "completion.candidates",
         "completion.helpers",
         "completion.large_sets",
         "editing.keymap",
-        "presentation.flow_output",
-        "suggestion.autosuggest"
+        "suggestion.autosuggest",
+        "abi.c.presentation_v1"
       ],
       "category": "documentation",
       "path": "CHANGELOG.md",
-      "sha256": "sha256:ec98dd31504f76c1c87fd99ace30399dbb5782079e0b2fc034841d23ec34c91b",
+      "sha256": "sha256:24a72a1c0979a967a0912a53756b2d9555d2a63977b3ec95d53aa2cb988a764e",
       "surfaces": [
-        "c-presentation-v1",
-        "rust-native"
+        "rust-native",
+        "c-presentation-v1"
       ]
     },
     {
@@ -1280,36 +1206,34 @@
     },
     {
       "capabilities": [
-        "abi.c.presentation_v1",
         "completion.helpers",
         "completion.large_sets",
         "editing.keymap",
-        "presentation.flow_output",
-        "suggestion.autosuggest"
+        "suggestion.autosuggest",
+        "abi.c.presentation_v1"
       ],
       "category": "documentation",
       "path": "README.md",
-      "sha256": "sha256:31d3414d8a231f0bab4be1e71da8daaf1c617fcee88c84f934d212c54d5f351e",
+      "sha256": "sha256:276e2fef70a2ae65f34c6a57b412bac2e81bd6e2f1624e522fe33c61af022afe",
       "surfaces": [
-        "c-presentation-v1",
-        "rust-native"
+        "rust-native",
+        "c-presentation-v1"
       ]
     },
     {
       "capabilities": [
-        "abi.c.presentation_v1",
         "completion.helpers",
         "completion.large_sets",
         "editing.keymap",
-        "presentation.flow_output",
-        "suggestion.autosuggest"
+        "suggestion.autosuggest",
+        "abi.c.presentation_v1"
       ],
       "category": "documentation",
       "path": "ROADMAP.md",
-      "sha256": "sha256:40560e40870b6be162bde48146c7546287786f0713d04242666be61763a4aac5",
+      "sha256": "sha256:9d6ec02305b03966ced8f1074ce708a0d0094365f3b7ad3ef46c2790bcb13304",
       "surfaces": [
-        "c-presentation-v1",
-        "rust-native"
+        "rust-native",
+        "c-presentation-v1"
       ]
     },
     {
@@ -1411,7 +1335,7 @@
       ],
       "category": "behavior",
       "path": "crates/replai-c/src/presentation.rs",
-      "sha256": "sha256:71ff2c448533e0dc50630c8518c2adccb8efae157eb5844c938d12c61d3389be",
+      "sha256": "sha256:eff8e4c164efc1107e3355336c2eb99a7d1498f35d24e25b42ae112388f70488",
       "surfaces": [
         "c-presentation-v1"
       ]
@@ -1708,7 +1632,6 @@
     },
     {
       "capabilities": [
-        "abi.c.presentation_v1",
         "analysis.hints_highlight",
         "analysis.validation",
         "completion.candidates",
@@ -1721,21 +1644,21 @@
         "platform.posix_macos",
         "presentation.completion_ux",
         "presentation.composed_prompt",
-        "presentation.flow_output",
         "presentation.multiline_ux",
         "presentation.prompt",
         "presentation.status",
         "presentation.structured_output",
         "presentation.table",
         "presentation.theme",
-        "terminal.width_policy"
+        "terminal.width_policy",
+        "abi.c.presentation_v1"
       ],
       "category": "documentation",
       "path": "docs/presentation.md",
-      "sha256": "sha256:bf67ed3598818006475fcee813d2e614974dcdd8dba5ccd06830e1490c6ea4df",
+      "sha256": "sha256:1152f340efab447d666a167f3a4099f8b7462f16ed4bc9db93c00b3f3e01a37c",
       "surfaces": [
-        "c-presentation-v1",
-        "rust-native"
+        "rust-native",
+        "c-presentation-v1"
       ]
     },
     {
@@ -1765,13 +1688,12 @@
         "editing.undo_redo",
         "editing.word_operations",
         "interaction.history_search",
-        "presentation.flow_output",
         "presentation.multiline_ux",
         "suggestion.autosuggest"
       ],
       "category": "documentation",
       "path": "docs/use-cases.md",
-      "sha256": "sha256:8fb600ebeda83990927470de35b87ee3a1bbcdea2022209455e892cae119cda0",
+      "sha256": "sha256:605bed197cc97bdd991fcc0d7b6a40ac46ec393b4379cd75397dd366ad9d03f1",
       "surfaces": [
         "rust-native"
       ]
@@ -2153,21 +2075,20 @@
     },
     {
       "capabilities": [
-        "abi.c.presentation_v1",
         "presentation.composed_prompt",
-        "presentation.flow_output",
         "presentation.status",
         "presentation.structured_output",
         "presentation.table",
         "presentation.theme",
-        "terminal.width_policy"
+        "terminal.width_policy",
+        "abi.c.presentation_v1"
       ],
       "category": "api",
       "path": "src/document.rs",
-      "sha256": "sha256:78ebafaccaec420c5c2f20ffc34fff668dc72c0dc50ed2155571f5b35d6ac32d",
+      "sha256": "sha256:8b98f4a53a3349a647c9afcbdf518e88d905ee8d05f51a1fa0aa1137a6a9b943",
       "surfaces": [
-        "c-presentation-v1",
-        "rust-native"
+        "rust-native",
+        "c-presentation-v1"
       ]
     },
     {
@@ -2188,7 +2109,6 @@
     },
     {
       "capabilities": [
-        "abi.c.presentation_v1",
         "analysis.hints_highlight",
         "analysis.revisions",
         "analysis.validation",
@@ -2208,21 +2128,21 @@
         "platform.posix_macos",
         "presentation.completion_ux",
         "presentation.composed_prompt",
-        "presentation.flow_output",
         "presentation.multiline_ux",
         "presentation.prompt",
         "presentation.status",
         "presentation.structured_output",
         "presentation.table",
         "presentation.theme",
-        "suggestion.autosuggest"
+        "suggestion.autosuggest",
+        "abi.c.presentation_v1"
       ],
       "category": "behavior",
       "path": "src/engine.rs",
-      "sha256": "sha256:c0d8c4dfba5795b5d54b506d07effd4590d7fb20518266eecb0f0823bb1d4ce5",
+      "sha256": "sha256:611f2e3146a3f1d8587c54e03caaa3562e60d8a8eebdbfda72fa1928c711e539",
       "surfaces": [
-        "c-presentation-v1",
-        "rust-native"
+        "rust-native",
+        "c-presentation-v1"
       ]
     },
     {
@@ -2330,7 +2250,6 @@
         "platform.posix_macos",
         "presentation.completion_ux",
         "presentation.composed_prompt",
-        "presentation.flow_output",
         "presentation.multiline_ux",
         "presentation.prompt",
         "presentation.status",
@@ -2343,7 +2262,7 @@
       ],
       "category": "api",
       "path": "src/interaction.rs",
-      "sha256": "sha256:fb7957ffce6ed6c49a7ae6ec7dc420cb3238f701d0998d4aeda5e66abc35d53d",
+      "sha256": "sha256:9002842e3e44ab57e11ea22999ef7d4f0c6d58b86bd699e83c9eff9792314d9f",
       "surfaces": [
         "rust-native"
       ]
@@ -2573,7 +2492,7 @@
       ],
       "category": "behavior",
       "path": "src/terminal.rs",
-      "sha256": "sha256:e30035830fe77f6748273d891bad3321b7fd1283d60366ad756f1e08114d1934",
+      "sha256": "sha256:ce7ee38ffecf6492f911f61b707cdbe1e70165a5c1f24cb2758cb665c299cd4f",
       "surfaces": [
         "rust-native",
         "c-presentation-v1"
@@ -2724,15 +2643,13 @@
     },
     {
       "capabilities": [
-        "abi.c.presentation_v1",
-        "presentation.flow_output"
+        "abi.c.presentation_v1"
       ],
       "category": "qualification",
       "path": "tests/document.rs",
-      "sha256": "sha256:75e50bb3400e0dcb39cbbd8a33768ef0cd264c9190f11741806e9288dcf1221f",
+      "sha256": "sha256:5299b1d8a6471e931cb4d25baf802d02af1a0ac8e38f8bacbdeb26acd49ab9df",
       "surfaces": [
-        "c-presentation-v1",
-        "rust-native"
+        "c-presentation-v1"
       ]
     },
     {
@@ -2778,7 +2695,6 @@
     },
     {
       "capabilities": [
-        "abi.c.presentation_v1",
         "completion.candidates",
         "completion.helpers",
         "completion.large_sets",
@@ -2789,15 +2705,15 @@
         "interaction.history_search",
         "platform.posix_linux",
         "presentation.completion_ux",
-        "presentation.flow_output",
-        "suggestion.autosuggest"
+        "suggestion.autosuggest",
+        "abi.c.presentation_v1"
       ],
       "category": "qualification",
       "path": "tests/pty.rs",
-      "sha256": "sha256:cab976bfd00b82106e42149f274d3690401fc55ddbc7dedc9b416abc2e0c64e7",
+      "sha256": "sha256:a025a5ce52eeadcd6adc0bc090e2906ae5dc31c178615486e2ae9b30779041bd",
       "surfaces": [
-        "c-presentation-v1",
-        "rust-native"
+        "rust-native",
+        "c-presentation-v1"
       ]
     },
     {
@@ -4662,12 +4578,11 @@
         "analysis.validation",
         "completion.candidates",
         "presentation.completion_ux",
-        "presentation.flow_output",
         "presentation.multiline_ux"
       ],
       "category": "qualification",
       "path": "tools/qualify.py",
-      "sha256": "sha256:4125139da35a2097251578ecb2386245eb334c5a8660115bb5a64c87a93209b7",
+      "sha256": "sha256:b2ca4697804098cf8ecb40e9655c6a6d6c37f2ee3a01093495c0401ce4c06cd0",
       "surfaces": [
         "c-abi-v1",
         "rust-native"
@@ -4815,61 +4730,6 @@
       "surfaces": [
         "rust-native"
       ]
-    },
-    {
-      "capabilities": [
-        "presentation.flow_output"
-      ],
-      "category": "documentation",
-      "path": "docs/development.md",
-      "sha256": "sha256:6c6aa92f6bbe91d905cd863022223e27e557071731bd7753b1f87f969ac860fe",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "presentation.flow_output"
-      ],
-      "category": "qualification",
-      "path": "examples/flow.rs",
-      "sha256": "sha256:9dc14430ac51ad3fd128fd4b2b746222263c266dd29db675beb3afa0f69b8e34",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "presentation.flow_output"
-      ],
-      "category": "qualification",
-      "path": "tools/flow/check_reflow.cjs",
-      "sha256": "sha256:384d87c83e395ffdf45a2a4a3bf2305568cef781166fc33b9fc4c7f91b520a38",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "presentation.flow_output"
-      ],
-      "category": "qualification",
-      "path": "tools/flow/package-lock.json",
-      "sha256": "sha256:6a3ba88fdec62cbe5e1703ecdab48b8be843e097df153d7dbb95c7ff07409070",
-      "surfaces": [
-        "rust-native"
-      ]
-    },
-    {
-      "capabilities": [
-        "presentation.flow_output"
-      ],
-      "category": "qualification",
-      "path": "tools/flow/package.json",
-      "sha256": "sha256:ea46b9978df96dcdb4205540202b4660943b754dc0989e8fc385b09a41a6d06d",
-      "surfaces": [
-        "rust-native"
-      ]
     }
   ],
   "kind": "producer",
@@ -4933,17 +4793,17 @@
     }
   ],
   "predecessor": {
-    "contract_id": "sha256:d1a6a372fb96af1c38f4d84551ae39a5a36ed725a596e54cc1276d7a20d8271e",
+    "contract_id": "sha256:9e519d4570c0f7c7b23b37faed4cf6cd2756336aedf2010ef81c5605a4def0fc",
     "repository": "https://github.com/mothx9/replai",
-    "revision": "c1e86e2707ef80e572c7df1501cb6d53dfe2927e",
-    "tree": "2fa789f198ee2e47e77d6d435174dca0bb7e9e75"
+    "revision": "eb246d3fd81353fc3be27c8924ee2321067530bf",
+    "tree": "646b95bc5a2cc555f59d0c6a8067095588c40811"
   },
   "repository": "https://github.com/mothx9/replai",
   "schema_version": 1,
   "source": {
     "dirty": false,
-    "revision": "40f9977051f671dcebad07bcaebb8a21405ebed7",
-    "tree": "0028bfb075e79e5c2e3f404fe0fb399e4644cec0"
+    "revision": "c1e86e2707ef80e572c7df1501cb6d53dfe2927e",
+    "tree": "2fa789f198ee2e47e77d6d435174dca0bb7e9e75"
   },
   "surfaces": [
     {
