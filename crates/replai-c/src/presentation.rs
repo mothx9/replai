@@ -15,7 +15,7 @@ unsafe fn extension_record<T: Copy>(p: *const T) -> Result<T, i32> {
 static TICKETS: AtomicU64 = AtomicU64::new(1);
 fn ticket() -> Result<u64, i32> {
     TICKETS
-        .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |n| n.checked_add(1))
+        .try_update(Ordering::Relaxed, Ordering::Relaxed, |n| n.checked_add(1))
         .map_err(|_| REPLAI_CAPACITY)
 }
 unsafe fn array<'a, T>(p: *const T, count: usize, limit: usize) -> Result<&'a [T], i32> {

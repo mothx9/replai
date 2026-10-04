@@ -94,7 +94,7 @@ impl<T: Transport> Terminal<T> {
         capabilities: Option<crate::TerminalCapabilities>,
     ) -> Result<Self, Error> {
         let session = NEXT_SESSION
-            .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |n| n.checked_add(1))
+            .try_update(Ordering::Relaxed, Ordering::Relaxed, |n| n.checked_add(1))
             .map_err(|_| io::Error::other("terminal session identity exhausted"))?;
         let mut terminal = Self {
             resource,
